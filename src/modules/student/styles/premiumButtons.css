@@ -325,7 +325,8 @@
 }
 
 .pricing-page-container {
-  max-width: 1360px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .pricing-pro-hero {

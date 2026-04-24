@@ -121,7 +121,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     name: 'Tiêu chuẩn',
     emoji: '⭐',
     monthlyPrice: 89000,
-    yearlyPrice: 699000,
+    yearlyPrice: 599000,
     lifetimePrice: 1299000,
     color: '#D97706',
     bgColor: '#FEF3C7',
@@ -325,6 +325,31 @@ function isStandardYearOneGradePlanId(planId: string | null | undefined): boolea
   return isStandardLike && hasOneGradeSignal && hasYearSignal;
 }
 
+function isStandardYearThreeGradePlanId(planId: string | null | undefined): boolean {
+  const normalized = String(planId || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+
+  if (!normalized) return false;
+  const isStandardLike = normalized.includes('standard') || normalized.includes('basic');
+  const hasThreeGradeSignal = normalized.includes('3grade') || normalized.includes('three_grade') || normalized.includes('3lop') || normalized.includes('three_class');
+  const hasYearSignal = normalized.includes('year') || normalized.includes('yearly') || normalized.includes('1y') || normalized.includes('12m') || normalized.includes('1nam');
+  return isStandardLike && hasThreeGradeSignal && hasYearSignal;
+}
+
+function isStandardLikePlanId(planId: string | null | undefined): boolean {
+  const normalized = String(planId || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+
+  if (!normalized) return false;
+  return normalized.includes('standard') || normalized.includes('basic') || normalized.includes('std');
+}
+
 function detectPlanFlowFromKey(inputKey: string): 'standard' | 'standard_1year_1grade' | 'premium' | null {
   const normalized = String(inputKey || '')
     .trim()
@@ -393,14 +418,16 @@ function playActivationTone(type: 'success' | 'error'): void {
 function getPlanHintFromLicensePayload(license: Record<string, unknown> | undefined): string {
   const metadata = (license?.metadata && typeof license.metadata === 'object') ? (license.metadata as Record<string, unknown>) : undefined;
   const candidates = [
+    metadata?.planId,
+    metadata?.productId,
+    metadata?.productCode,
+    metadata?.planCode,
+    license?.planId,
     license?.planCode,
     license?.plan,
-    license?.tier,
-    license?.planId,
     license?.productCode,
     license?.productId,
-    metadata?.planId,
-    metadata?.productCode,
+    license?.tier,
     license?.licenseKey,
   ];
 
@@ -414,15 +441,54 @@ function getPlanHintFromLicensePayload(license: Record<string, unknown> | undefi
 
 function normalizePlanId(planId: string | null | undefined): 'free' | 'standard' | 'premium' {
   if (planId === 'premium') return 'premium';
-  if (isStandardYearOneGradePlanId(planId)) return 'standard';
-  if (planId === 'standard' || planId === 'basic') return 'standard';
+  if (isStandardLikePlanId(planId)) return 'standard';
   return 'free';
 }
 
 function resolvePlanFromLicensePayload(
   license: Record<string, unknown> | undefined,
   featureList: string[] = [],
-): 'standard' | 'premium' | null {
+): 'standard' | 'standard_1year_1grade' | 'standard_1year_3grade' | 'premium' | null {
+  const metadata = (license?.metadata && typeof license.metadata === 'object')
+    ? (license.metadata as Record<string, unknown>)
+    : undefined;
+
+  const strongVariantCandidates = [
+    metadata?.planId,
+    license?.planId,
+    license?.planCode,
+    metadata?.productId,
+    license?.productId,
+    metadata?.productCode,
+    license?.productCode,
+  ];
+
+  const normalizeTokens = (value: unknown): string => String(value || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+
+  for (const value of strongVariantCandidates) {
+    const text = normalizeTokens(value);
+    if (!text) continue;
+
+    if (/\b(standard\s*1\s*year\s*1\s*grade|standard\s*1y\s*1g|1grade|single\s?grade|1lop|one\s?class|standard_1year_1grade)\b/.test(text)) {
+      return 'standard_1year_1grade';
+    }
+
+    if (/\b(standard\s*1\s*year\s*3\s*grade|standard\s*1y\s*3g|3grade|three\s?grade|3lop|three\s?class|standard_1year_3grade|prod\s*study\s*year)\b/.test(text)) {
+      return 'standard_1year_3grade';
+    }
+
+    if (/\b(premium|vip|advanced)\b/.test(text)) {
+      return 'premium';
+    }
+
+    if (/\b(standard|basic|starter|std)\b/.test(text)) {
+      return 'standard';
+    }
+  }
+
   const explicitPlanCandidates = [
     license?.planCode,
     license?.plan,
@@ -436,16 +502,8 @@ function resolvePlanFromLicensePayload(
     license?.productId,
   ];
 
-  const normalizeTokens = (value: unknown): string => String(value || '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim();
-
   const detectPlanFromText = (text: string): 'standard' | 'premium' | null => {
     if (!text) return null;
-    const hasOneGradeSignal = /\b(1grade|single\s?grade|1lop|one\s?class|1y1g)\b/.test(text);
-    const hasYearSignal = /\b(year|yearly|1y|12m|1nam)\b/.test(text);
-    if (hasOneGradeSignal && hasYearSignal) return 'standard';
     if (/\b(premium|vip|advanced)\b/.test(text)) return 'premium';
     if (/\b(standard|basic|starter|std)\b/.test(text)) return 'standard';
     return null;
@@ -826,11 +884,23 @@ export function PricingPage() {
       const resolvedPlan = resolvePlanFromLicensePayload(licensePayload, verifyResult.features || []);
       const planHint = getPlanHintFromLicensePayload(licensePayload);
       const detectedPlanByKey = detectPlanFlowFromKey(key);
-      const isStandardYearOneGrade = isStandardYearOneGradePlanId(planHint) || detectedPlanByKey === 'standard_1year_1grade';
+      const isStandardYearOneGrade = resolvedPlan === 'standard_1year_1grade'
+        || isStandardYearOneGradePlanId(planHint)
+        || detectedPlanByKey === 'standard_1year_1grade';
+      const isStandardYearThreeGrade = resolvedPlan === 'standard_1year_3grade'
+        || isStandardYearThreeGradePlanId(planHint);
       const detectedBasePlan = detectedPlanByKey === 'premium' ? 'premium' : detectedPlanByKey ? 'standard' : null;
-      const planId = resolvedPlan || detectedBasePlan || normalizePlanId(String(verifyResult.license?.planCode || '').toLowerCase());
+      const resolvedBasePlan = resolvedPlan ? normalizePlanId(resolvedPlan) : null;
+      const planId = resolvedBasePlan || detectedBasePlan || normalizePlanId(String(verifyResult.license?.planCode || '').toLowerCase());
       if (!planId || !['standard', 'premium'].includes(planId)) {
-        const debugPlanCode = String((verifyResult.license as any)?.planCode || (verifyResult.license as any)?.plan || (verifyResult.license as any)?.tier || 'n/a');
+        const debugPlanCode = String(
+          (verifyResult.license as any)?.metadata?.planId
+          || (verifyResult.license as any)?.planId
+          || (verifyResult.license as any)?.planCode
+          || (verifyResult.license as any)?.plan
+          || (verifyResult.license as any)?.tier
+          || 'n/a',
+        );
         setActivateMsg({ type: 'error', text: `❌ Key hợp lệ nhưng app chưa map được gói trả về (plan=${debugPlanCode}). Vui lòng gửi ảnh lỗi này để cập nhật mapping.` });
         playActivationTone('error');
         setTimeout(() => setActivateMsg(null), 6000);
@@ -870,7 +940,9 @@ export function PricingPage() {
 
       await dbRun(`UPDATE subscriptions SET status = 'expired', updatedAt = datetime('now') WHERE status = 'active'`);
 
-      const storagePlanId = planId === 'standard' && isStandardYearOneGrade ? 'standard_1year_1grade' : planId;
+      const storagePlanId = planId === 'standard'
+        ? (isStandardYearOneGrade ? 'standard_1year_1grade' : (isStandardYearThreeGrade ? 'standard_1year_3grade' : 'standard'))
+        : planId;
 
       await dbRun(
         `INSERT INTO subscriptions (planId, billingCycle, licenseKey, amount, status, activatedAt, expiresAt, paymentMethod, refundDeadline)
@@ -1023,7 +1095,7 @@ export function PricingPage() {
 
   return (
     <div className="pricing-page-shell h-screen overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
-      <div className="pricing-page-container fade-in flex flex-col items-center gap-6 p-4 md:p-5 pb-10 max-w-6xl mx-auto">
+      <div className="pricing-page-container fade-in flex flex-col items-center gap-6 p-4 md:p-5 pb-10 w-full">
       <section className="pricing-pro-hero w-full">
         <div className="pricing-pro-title-card">
           <div className="pricing-pro-mark">
