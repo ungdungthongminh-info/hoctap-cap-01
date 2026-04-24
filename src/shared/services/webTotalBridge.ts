@@ -17,6 +17,8 @@ function resolveBackendApiBase() {
     return configuredBase.replace(/\/+$/, '');
   }
 
+  const productionBridgeBase = 'https://www.ungdungthongminh.shop/api/v1';
+
   if (typeof window !== 'undefined') {
     const { protocol, hostname, port, origin } = window.location;
 
@@ -33,7 +35,13 @@ function resolveBackendApiBase() {
     }
 
     if (protocol === 'http:' || protocol === 'https:') {
-      return `${origin.replace(/\/+$/, '')}/api/v1`;
+      if (/vercel\.app$/i.test(hostname) || /hoctap-cap-01/i.test(hostname)) {
+        return productionBridgeBase;
+      }
+      if (/ungdungthongminh\.shop$/i.test(hostname)) {
+        return `${origin.replace(/\/+$/, '')}/api/v1`;
+      }
+      return productionBridgeBase;
     }
   }
 
