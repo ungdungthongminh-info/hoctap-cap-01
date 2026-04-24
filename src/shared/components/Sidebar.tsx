@@ -126,6 +126,9 @@ export function Sidebar() {
   const { state } = useAppData();
   const location = useLocation();
   const [online, setOnline] = useState(navigator.onLine);
+  const [isMobileNav, setIsMobileNav] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches,
+  );
   const [currentPlan, setCurrentPlan] = useState(() => getAccessPlan());
   const canSeeAdmin = isAdminUnlocked();
   const subject = getSubjectByCode(state.student.subjectCode);
@@ -166,6 +169,15 @@ export function Sidebar() {
     window.addEventListener('online', on);
     window.addEventListener('offline', off);
     return () => { window.removeEventListener('online', on); window.removeEventListener('offline', off); };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const media = window.matchMedia('(max-width: 768px)');
+    const onChange = (event: MediaQueryListEvent) => setIsMobileNav(event.matches);
+    setIsMobileNav(media.matches);
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
   }, []);
 
   useEffect(() => {
@@ -252,7 +264,7 @@ export function Sidebar() {
                   className={`nav-group-chevron ${isOpen ? 'open' : ''}`}
                 />
               </button>
-              {isOpen && (
+              {(isOpen || isMobileNav) && (
                 <div className="nav-group-items">
                   {group.items
                     .filter((item) => item.to !== '/admin' || canSeeAdmin)
