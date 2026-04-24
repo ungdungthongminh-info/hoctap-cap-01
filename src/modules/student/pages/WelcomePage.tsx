@@ -391,12 +391,8 @@ export function WelcomePage() {
               {/* Windows */}
               <button
                 type="button"
-                className="inline-flex items-center gap-3 rounded-2xl px-6 py-4 hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+                className="hhk-download-btn hhk-download-windows inline-flex items-center gap-3 rounded-2xl px-6 py-4 cursor-pointer"
                 style={{
-                  background: 'linear-gradient(135deg, #1b2f4a 0%, #0f1e35 100%)',
-                  color: 'white',
-                  border: '1px solid rgba(100,160,255,0.2)',
-                  boxShadow: '0 10px 22px rgba(0,0,0,0.28)',
                   minWidth: 196,
                 }}
               >
@@ -413,12 +409,8 @@ export function WelcomePage() {
               {/* Macbook */}
               <button
                 type="button"
-                className="inline-flex items-center gap-3 rounded-2xl px-6 py-4 hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+                className="hhk-download-btn hhk-download-mac inline-flex items-center gap-3 rounded-2xl px-6 py-4 cursor-pointer"
                 style={{
-                  background: 'linear-gradient(135deg, #1c1c1e 0%, #2d2d30 100%)',
-                  color: 'white',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  boxShadow: '0 10px 22px rgba(0,0,0,0.28)',
                   minWidth: 196,
                 }}
               >
