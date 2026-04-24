@@ -219,19 +219,19 @@ function writeStandardGradeLocks(items: StandardGradeLock[]): void {
   localStorage.setItem(STANDARD_GRADE_LOCKS_KEY, JSON.stringify(items));
 }
 
-function getStandardGradeLock(licenseKey: string, deviceId: string): StandardGradeLock | null {
+function getStandardGradeLock(licenseKey: string, deviceId: string, expectedCount = 3): StandardGradeLock | null {
   const key = licenseKey.trim().toUpperCase();
   if (!key) return null;
   const lock = readStandardGradeLocks().find((item) => item.key === key && item.deviceId === deviceId);
   if (!lock) return null;
   const grades = Array.from(new Set((lock.grades || []).map((g) => Number(g)).filter((g) => ALL_GRADE_OPTIONS.includes(g as any))));
-  if (grades.length !== 3) return null;
+  if (grades.length !== expectedCount) return null;
   return { ...lock, grades };
 }
 
-function saveStandardGradeLock(licenseKey: string, deviceId: string, grades: number[]): StandardGradeLock {
+function saveStandardGradeLock(licenseKey: string, deviceId: string, grades: number[], maxCount = 3): StandardGradeLock {
   const key = licenseKey.trim().toUpperCase();
-  const normalizedGrades = Array.from(new Set(grades.map((g) => Number(g)).filter((g) => ALL_GRADE_OPTIONS.includes(g as any)))).slice(0, 3);
+  const normalizedGrades = Array.from(new Set(grades.map((g) => Number(g)).filter((g) => ALL_GRADE_OPTIONS.includes(g as any)))).slice(0, maxCount);
   const next: StandardGradeLock = {
     key,
     deviceId,
@@ -289,6 +289,25 @@ function isStandardYearOneGradePlanId(planId: string | null | undefined): boolea
   return isStandardLike && hasOneGradeSignal && hasYearSignal;
 }
 
+function getPlanHintFromLicensePayload(license: Record<string, unknown> | undefined): string {
+  const metadata = (license?.metadata && typeof license.metadata === 'object') ? (license.metadata as Record<string, unknown>) : undefined;
+  const candidates = [
+    license?.planCode,
+    license?.plan,
+    license?.tier,
+    license?.planId,
+    metadata?.planId,
+    license?.licenseKey,
+  ];
+
+  for (const value of candidates) {
+    const text = String(value || '').trim();
+    if (text) return text;
+  }
+
+  return '';
+}
+
 function normalizePlanId(planId: string | null | undefined): 'free' | 'standard' | 'premium' {
   if (planId === 'premium') return 'premium';
   if (isStandardYearOneGradePlanId(planId)) return 'standard';
@@ -337,18 +356,8 @@ function resolvePlanFromLicensePayload(
     if (detected) return detected;
   }
 
-  // Fallback: infer from features when upstream does not expose plan identifiers consistently.
-  const normalizedFeatures = featureList.map((feature) => String(feature || '').toLowerCase());
-
-  // Chỉ coi là premium khi có feature premium đặc thù rõ ràng.
-  if (normalizedFeatures.some((f) => /(^|[._-])priority([._-])support($|[._-])/.test(f))) {
-    return 'premium';
-  }
-
-  // Có feature nhưng không có signal premium rõ ràng → mặc định standard.
-  if (normalizedFeatures.length > 0) {
-    return 'standard';
-  }
+  // Không nâng quyền chỉ dựa vào features.
+  // Silent launch yêu cầu payload phải cung cấp planCode/planId rõ ràng.
 
   // Legacy fallback giữ tương thích cho payload cũ.
   const candidates = [
@@ -367,12 +376,10 @@ function resolvePlanFromLicensePayload(
     if (/(standard|basic|std|starter)/.test(text)) return 'standard';
   }
 
+  const normalizedFeatures = featureList.map((feature) => String(feature || '').toLowerCase());
   const featureText = normalizedFeatures.join('|');
-  if (/(priority_support|premium)/.test(featureText)) {
+  if (/(priority_support|premium)/.test(featureText) && explicitPlanCandidates.some((value) => String(value || '').trim())) {
     return 'premium';
-  }
-  if (normalizedFeatures.length > 0) {
-    return 'standard';
   }
 
   return null;
@@ -634,7 +641,7 @@ export function PricingPage() {
       const normalizedPlanId = normalizePlanId(sub.planId);
       setActiveSub(sub);
       setSubExpiry(sub.expiresAt);
-      persistPaidPlan(normalizedPlanId, sub.licenseKey, sub.expiresAt, normalizeBillingCycle(sub.billingCycle));
+      persistPaidPlan(sub.planId || normalizedPlanId, sub.licenseKey, sub.expiresAt, normalizeBillingCycle(sub.billingCycle));
       setCurrentPlan(normalizedPlanId);
       setActivationGrades(getUnlockedGrades(state.student.grade, normalizedPlanId));
 
@@ -699,7 +706,10 @@ export function PricingPage() {
       deviceName: `${navigator.platform} / ${navigator.userAgent.slice(0, 80)}`,
     });
 
-    const resolvedPlan = resolvePlanFromLicensePayload(verifyResult.license as unknown as Record<string, unknown>, verifyResult.features || []);
+    const licensePayload = verifyResult.license as unknown as Record<string, unknown>;
+    const resolvedPlan = resolvePlanFromLicensePayload(licensePayload, verifyResult.features || []);
+    const planHint = getPlanHintFromLicensePayload(licensePayload);
+    const isStandardYearOneGrade = isStandardYearOneGradePlanId(planHint);
     const planId = resolvedPlan || normalizePlanId(String(verifyResult.license?.planCode || '').toLowerCase());
     if (!planId || !['standard', 'premium'].includes(planId)) {
       const debugPlanCode = String((verifyResult.license as any)?.planCode || (verifyResult.license as any)?.plan || (verifyResult.license as any)?.tier || 'n/a');
@@ -710,16 +720,22 @@ export function PricingPage() {
 
     let standardGradesToUse = activationGrades;
     if (planId === 'standard') {
-      const existingLock = getStandardGradeLock(key, currentDeviceId);
+      const requiredGradeCount = isStandardYearOneGrade ? 1 : 3;
+      const existingLock = getStandardGradeLock(key, currentDeviceId, requiredGradeCount);
       if (existingLock) {
         standardGradesToUse = existingLock.grades;
       } else {
-        if (activationGrades.length !== 3) {
-          setActivateMsg({ type: 'error', text: '❌ Gói Standard cần chọn đúng 3 lớp trước khi kích hoạt key.' });
+        if (activationGrades.length !== requiredGradeCount) {
+          setActivateMsg({
+            type: 'error',
+            text: isStandardYearOneGrade
+              ? '❌ Gói này yêu cầu chọn đúng 1 lớp trước khi kích hoạt key.'
+              : '❌ Gói Standard cần chọn đúng 3 lớp trước khi kích hoạt key.',
+          });
           setTimeout(() => setActivateMsg(null), 6000);
           return;
         }
-        const saved = saveStandardGradeLock(key, currentDeviceId, activationGrades);
+        const saved = saveStandardGradeLock(key, currentDeviceId, activationGrades, requiredGradeCount);
         standardGradesToUse = saved.grades;
       }
     }
@@ -736,13 +752,15 @@ export function PricingPage() {
     await dbRun(`UPDATE subscriptions SET status = 'expired', updatedAt = datetime('now') WHERE status = 'active'`);
 
     // Insert new subscription
+    const storagePlanId = planId === 'standard' && isStandardYearOneGrade ? 'standard_1year_1grade' : planId;
+
     await dbRun(
       `INSERT INTO subscriptions (planId, billingCycle, licenseKey, amount, status, activatedAt, expiresAt, paymentMethod, refundDeadline)
        VALUES (?, ?, ?, ?, 'active', datetime('now'), ?, 'license_key', ?)`,
-      [planId, cycle, key, amount, expiresAt, refundDeadline]
+      [storagePlanId, cycle, key, amount, expiresAt, refundDeadline]
     );
 
-    persistPaidPlan(planId, key, expiresAt, cycle);
+    persistPaidPlan(storagePlanId, key, expiresAt, cycle);
     setActivationGrades(unlockedGrades);
 
     const nextGrade = unlockedGrades[0] ?? state.student.grade;
