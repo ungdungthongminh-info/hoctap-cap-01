@@ -76,6 +76,11 @@ const WEB_TOTAL_PRODUCT_URLS = {
     yearly: `${WEB_TOTAL_SITE_URL}/product/prod-study-year`,
     lifetime: `${WEB_TOTAL_SITE_URL}/product/prod-study-standard-lifetime`,
   },
+  standard_1year_1grade: {
+    monthly: '',
+    yearly: `${WEB_TOTAL_SITE_URL}/product/prod-study-standard-1year-1grade`,
+    lifetime: '',
+  },
   premium: {
     monthly: `${WEB_TOTAL_SITE_URL}/product/prod-study-premium-month`,
     yearly: `${WEB_TOTAL_SITE_URL}/product/prod-study-premium-year`,
@@ -134,6 +139,35 @@ export const PRICING_PLANS: PricingPlan[] = [
     ],
     limits: {
       subjects: 'all', grades: 3, profiles: 3,
+      dailyChallenges: true, competition: true, avatarShop: true,
+      smartReview: true, memoryRoom: true, parentDashboard: true,
+      offlineMode: true, ttsVoice: true, exportData: true,
+      noAds: true, prioritySupport: false,
+    },
+  },
+  {
+    id: 'standard_1year_1grade',
+    name: 'Tiêu chuẩn 01 năm - 01 lớp',
+    emoji: '📘',
+    monthlyPrice: 0,
+    yearlyPrice: 299000,
+    lifetimePrice: 0,
+    color: '#2F6CB2',
+    bgColor: '#E9F2FF',
+    features: [
+      'Tất cả 5 môn học',
+      'Mở 01 lớp khi kích hoạt key',
+      '2 hồ sơ học sinh',
+      'Ôn tập thông minh AI',
+      'Thi đấu Bot & PvP',
+      'Cửa hàng Avatar',
+      'Bảng điều khiển phụ huynh',
+      'Chế độ ngoại tuyến',
+      'Xuất dữ liệu backup',
+      'Không quảng cáo',
+    ],
+    limits: {
+      subjects: 'all', grades: 1, profiles: 2,
       dailyChallenges: true, competition: true, avatarShop: true,
       smartReview: true, memoryRoom: true, parentDashboard: true,
       offlineMode: true, ttsVoice: true, exportData: true,
@@ -514,8 +548,9 @@ export function PricingPage() {
   const isStandardSelectionLocked = Boolean(lockedStandardGradeSelection);
   const visiblePlans = pricingPlans.filter((plan) => plan.id !== 'basic');
   const visibleComparisonPlans = PRICING_PLANS.filter((plan) => plan.id !== 'basic');
-  const currentPlanMeta = visiblePlans.find((plan) => plan.id === normalizePlanId(currentPlan)) || visiblePlans[0];
-  const activeSubPlanMeta = activeSub ? visiblePlans.find((plan) => plan.id === normalizePlanId(activeSub.planId)) : null;
+  const currentPlanStorageId = String(activeSub?.planId || localStorage.getItem(PLAN_KEY) || '').trim().toLowerCase();
+  const currentPlanMeta = visiblePlans.find((plan) => plan.id === currentPlanStorageId) || visiblePlans.find((plan) => plan.id === normalizePlanId(currentPlan)) || visiblePlans[0];
+  const activeSubPlanMeta = activeSub ? (visiblePlans.find((plan) => plan.id === String(activeSub.planId || '').trim().toLowerCase()) || visiblePlans.find((plan) => plan.id === normalizePlanId(activeSub.planId))) : null;
 
   const toggleActivationGrade = (grade: number) => {
     if (isPremiumKeyFlow) return;
@@ -681,7 +716,7 @@ export function PricingPage() {
       return;
     }
 
-    const planUrls = WEB_TOTAL_PRODUCT_URLS[plan.id as 'standard' | 'premium'];
+    const planUrls = WEB_TOTAL_PRODUCT_URLS[plan.id as keyof typeof WEB_TOTAL_PRODUCT_URLS];
     const productUrl = planUrls?.[billing];
     if (!productUrl) {
       setActivateMsg({ type: 'error', text: 'Không tìm thấy trang sản phẩm tương ứng trên Web Tổng.' });
@@ -856,6 +891,14 @@ export function PricingPage() {
         boxShadow: '0 12px 20px rgba(38,20,87,0.22), inset 0 1px 0 rgba(255,255,255,0.38), inset 0 -2px 0 rgba(50,26,107,0.42)',
       };
     }
+    if (plan.id === 'standard_1year_1grade') {
+      return {
+        background: 'linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.08) 42%, rgba(0,0,0,0.16) 100%), linear-gradient(135deg, #3E7ECB 0%, #285E9F 100%)',
+        color: '#FFFFFF',
+        border: '1px solid rgba(186,217,255,0.58)',
+        boxShadow: '0 12px 20px rgba(17,53,95,0.2), inset 0 1px 0 rgba(255,255,255,0.38), inset 0 -2px 0 rgba(16,48,87,0.34)',
+      };
+    }
     if (plan.id === 'standard') {
       return {
         background: 'linear-gradient(180deg, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.08) 42%, rgba(0,0,0,0.15) 100%), linear-gradient(135deg, #F0AB17 0%, #D58A06 100%)',
@@ -955,10 +998,11 @@ export function PricingPage() {
 
       <section className="pricing-grid-modern pricing-pro-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full items-stretch">
         {visiblePlans.map(plan => {
-          const isActive = plan.id === currentPlan;
+          const isActive = plan.id === currentPlan || (plan.id === 'standard_1year_1grade' && currentPlanStorageId === 'standard_1year_1grade');
           const price = getPrice(plan);
           const savings = getSavings(plan);
-          const canCheckout = plan.id !== 'free' && plan.pricingSource !== 'local-fallback';
+          const productUrl = WEB_TOTAL_PRODUCT_URLS[plan.id as keyof typeof WEB_TOTAL_PRODUCT_URLS]?.[billing];
+          const canCheckout = plan.id !== 'free' && plan.pricingSource !== 'local-fallback' && Boolean(productUrl);
 
           return (
             <div
@@ -1010,14 +1054,16 @@ export function PricingPage() {
                       style={getPlanPrimaryButtonStyle(plan)}
                       onClick={() => openQRPayment(plan)}
                     >
-                      <ExternalLink size={14} /> Xem gói {plan.id === 'premium' ? 'Premium' : 'Standard'}
+                      <ExternalLink size={14} /> Xem gói trên Web Tổng
                     </button>
                   ) : (
                     <div
                       className="w-full py-2.5 rounded-xl font-bold text-xs text-center"
                       style={{ background: '#FEF3C7', color: '#92400E' }}
                     >
-                      Chưa mở bán trực tuyến trên Web tổng
+                      {plan.id === 'standard_1year_1grade'
+                        ? 'Gói này chỉ bán theo năm trên Web Tổng'
+                        : 'Chưa mở bán trực tuyến trên Web tổng'}
                     </div>
                   )}
                   <button
@@ -1229,10 +1275,19 @@ export function PricingPage() {
           </button>
           <button
             className={`${premiumButtonPrimaryClass} w-full`}
-            style={getPlanPrimaryButtonStyle(PRICING_PLANS[2])}
+            style={getPlanPrimaryButtonStyle(PRICING_PLANS[3])}
             onClick={() => window.open(WEB_TOTAL_PRODUCT_URLS.premium[billing], '_blank', 'noopener,noreferrer')}
           >
             <ExternalLink size={15} /> Mở gói Premium trên Web Tổng
+          </button>
+        </div>
+        <div className="grid grid-cols-1 gap-3 mb-4">
+          <button
+            className={`${premiumButtonPrimaryClass} w-full`}
+            style={getPlanPrimaryButtonStyle(PRICING_PLANS[2])}
+            onClick={() => window.open(WEB_TOTAL_PRODUCT_URLS.standard_1year_1grade.yearly, '_blank', 'noopener,noreferrer')}
+          >
+            <ExternalLink size={15} /> Mở gói 01 năm - 01 lớp Full môn (299k)
           </button>
         </div>
         <div className="mb-3 rounded-2xl p-3" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
