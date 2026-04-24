@@ -17,19 +17,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <script>
-      (function() {
-        var isLocalViteDev =
-          window.location.hostname === 'localhost' ||
-          window.location.hostname === '127.0.0.1' ||
-          window.location.port === '5173';
-        var isBuiltPreview = /(^|\/)dist(\/|$)/.test(window.location.pathname);
-
-        if (!isLocalViteDev && !isBuiltPreview) {
-          window.location.replace(new URL('./dist/index.html', window.location.href).href);
-        }
-      })();
-    </script>
     <script type="module" src="./src/main.tsx"></script>
     <script>
       // Only register SW in production builds (not during Vite dev server)

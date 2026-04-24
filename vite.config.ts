@@ -3,13 +3,15 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
+const isWebBuild = process.env.VITE_WEB === 'true';
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 5173,
     strictPort: true,
   },
-  base: './',
+  base: isWebBuild ? '/' : './',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

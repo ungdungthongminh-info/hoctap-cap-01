@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:web": "cross-env VITE_WEB=true tsc && vite build",
     "build:noibo": "cross-env VITE_APP_TITLE=\"Học Hứng Khởi Tiểu Học_NoiBo\" VITE_INTERNAL_BUILD=true npm run build",
     "preview": "vite preview --host",
     "preview:local": "npm run build && vite preview --host",
