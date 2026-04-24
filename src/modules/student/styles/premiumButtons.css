@@ -508,6 +508,86 @@
   margin-top: -4px;
 }
 
+@media (min-width: 1280px) {
+  .pricing-pro-grid {
+    gap: 16px !important;
+  }
+
+  .pricing-pro-card {
+    min-height: 410px;
+    padding: 22px 18px 16px;
+  }
+
+  .pricing-pro-card-head {
+    padding-bottom: 14px;
+  }
+
+  .pricing-plan-icon {
+    font-size: 40px;
+    margin-bottom: 8px;
+  }
+
+  .pricing-plan-name {
+    font-size: 1.15rem;
+    line-height: 1.25;
+  }
+
+  .pricing-plan-price {
+    font-size: clamp(2.2rem, 2.6vw, 2.9rem);
+  }
+
+  .pricing-plan-cycle {
+    margin-top: 6px;
+    font-size: 0.9rem;
+  }
+
+  .pricing-savings,
+  .pricing-popular-badge,
+  .pricing-active-badge {
+    font-size: 11px;
+  }
+
+  .pricing-feature-list {
+    gap: 10px;
+    padding: 16px 0 18px;
+  }
+
+  .pricing-feature-list li {
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .pricing-card-actions {
+    gap: 8px;
+  }
+
+  .pricing-card-main-btn,
+  .pricing-card-sub-btn {
+    min-height: 44px;
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .pricing-pro-card {
+    min-height: 440px;
+    padding: 24px 22px 18px;
+  }
+
+  .pricing-plan-name {
+    font-size: 1.28rem;
+  }
+
+  .pricing-plan-price {
+    font-size: clamp(2.35rem, 2.8vw, 3.15rem);
+  }
+
+  .pricing-feature-list li {
+    font-size: 13.5px;
+  }
+}
+
 .pricing-pro-card {
   min-height: 460px;
   padding: 26px 26px 18px;

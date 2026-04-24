@@ -1160,7 +1160,7 @@ export function PricingPage() {
         </div>
       </section>
 
-      <section className="pricing-grid-modern pricing-pro-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full items-stretch">
+      <section className="pricing-grid-modern pricing-pro-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 w-full items-stretch">
         {visiblePlans.map(plan => {
           const isActive = plan.id === currentPlan || (plan.id === 'standard_1year_1grade' && currentPlanStorageId === 'standard_1year_1grade');
           const price = getPrice(plan);
