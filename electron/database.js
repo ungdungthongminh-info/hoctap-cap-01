@@ -2,6 +2,63 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const { app } = require('electron');
 
+const ALLOWED_SUBSCRIPTION_PLAN_IDS = [
+  'free',
+  'standard',
+  'standard_1year_1grade',
+  'standard_1year_3grade',
+  'premium',
+];
+
+function getSubscriptionsTableSql() {
+  const allowedPlans = ALLOWED_SUBSCRIPTION_PLAN_IDS.map((planId) => `'${planId}'`).join(',');
+  return `
+    CREATE TABLE IF NOT EXISTS subscriptions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      planId TEXT NOT NULL CHECK(planId IN (${allowedPlans})),
+      billingCycle TEXT NOT NULL CHECK(billingCycle IN ('monthly','yearly','lifetime')),
+      licenseKey TEXT NOT NULL UNIQUE,
+      amount INTEGER NOT NULL DEFAULT 0,
+      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','active','expired','cancelled','refunded')),
+      activatedAt TEXT,
+      expiresAt TEXT,
+      autoRenew INTEGER DEFAULT 0,
+      paymentMethod TEXT DEFAULT 'bank_transfer',
+      paymentRef TEXT,
+      refundDeadline TEXT,
+      createdAt TEXT DEFAULT (datetime('now')),
+      updatedAt TEXT DEFAULT (datetime('now'))
+    );
+  `;
+}
+
+function migrateSubscriptionsTable(db) {
+  const table = db.prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'subscriptions'").get();
+  if (!table?.sql) return;
+
+  const schemaSql = String(table.sql).toLowerCase();
+  const needsMigration = !schemaSql.includes('standard_1year_1grade') || !schemaSql.includes('standard_1year_3grade');
+  if (!needsMigration) return;
+
+  const migrate = db.transaction(() => {
+    db.exec('ALTER TABLE subscriptions RENAME TO subscriptions_legacy');
+    db.exec(getSubscriptionsTableSql());
+    db.exec(`
+      INSERT INTO subscriptions (
+        id, planId, billingCycle, licenseKey, amount, status, activatedAt, expiresAt,
+        autoRenew, paymentMethod, paymentRef, refundDeadline, createdAt, updatedAt
+      )
+      SELECT
+        id, planId, billingCycle, licenseKey, amount, status, activatedAt, expiresAt,
+        autoRenew, paymentMethod, paymentRef, refundDeadline, createdAt, updatedAt
+      FROM subscriptions_legacy
+    `);
+    db.exec('DROP TABLE subscriptions_legacy');
+  });
+
+  migrate();
+}
+
 function getDbPath() {
   const userDataPath = app.getPath('userData');
   return path.join(userDataPath, 'hoc-hung-khoi.db');
@@ -166,26 +223,13 @@ function initDatabase() {
     );
 
     -- 12. subscriptions — Quản lý gói dịch vụ & gia hạn
-    CREATE TABLE IF NOT EXISTS subscriptions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      planId TEXT NOT NULL CHECK(planId IN ('free','standard','premium')),
-      billingCycle TEXT NOT NULL CHECK(billingCycle IN ('monthly','yearly','lifetime')),
-      licenseKey TEXT NOT NULL UNIQUE,
-      amount INTEGER NOT NULL DEFAULT 0,
-      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','active','expired','cancelled','refunded')),
-      activatedAt TEXT,
-      expiresAt TEXT,
-      autoRenew INTEGER DEFAULT 0,
-      paymentMethod TEXT DEFAULT 'bank_transfer',
-      paymentRef TEXT,
-      refundDeadline TEXT,
-      createdAt TEXT DEFAULT (datetime('now')),
-      updatedAt TEXT DEFAULT (datetime('now'))
-    );
+    ${getSubscriptionsTableSql()}
 
     -- Seed default subject
     INSERT OR IGNORE INTO subjects (code, name, isActive) VALUES ('math', 'Toán', 1);
   `);
+
+  migrateSubscriptionsTable(db);
 
   return db;
 }

@@ -350,7 +350,7 @@ function isStandardLikePlanId(planId: string | null | undefined): boolean {
   return normalized.includes('standard') || normalized.includes('basic') || normalized.includes('std');
 }
 
-function detectPlanFlowFromKey(inputKey: string): 'standard' | 'standard_1year_1grade' | 'premium' | null {
+function detectPlanFlowFromKey(inputKey: string): 'standard' | 'standard_1year_1grade' | 'standard_1year_3grade' | 'premium' | null {
   const normalized = String(inputKey || '')
     .trim()
     .toUpperCase();
@@ -362,13 +362,20 @@ function detectPlanFlowFromKey(inputKey: string): 'standard' | 'standard_1year_1
   const hasOneGradeSignal = /1GRADE|SINGLEGRADE|1LOP|ONECLASS|ONE_GRADE|1_GRADE/.test(normalized);
   const hasYearSignal = /1YEAR|YEARLY|1Y|12M|1NAM/.test(normalized);
 
-  // Web Tong key prefix for current 01 nam - 01 lop variant.
-  if (normalized.startsWith('WSTL-') && normalized.includes('MOCNE1IP')) {
+  // Web Tong key prefixes for yearly standard variants.
+  if (normalized.startsWith('WSTL-') && /MOCNE1IP|MOCVQ2UB/.test(normalized)) {
     return 'standard_1year_1grade';
+  }
+
+  if (normalized.startsWith('WSTL-') && /MOCVPUX5/.test(normalized)) {
+    return 'standard_1year_3grade';
   }
 
   if ((hasStandardSignal && hasOneGradeSignal && hasYearSignal) || normalized.includes('1Y1G')) {
     return 'standard_1year_1grade';
+  }
+  if (hasStandardSignal && hasYearSignal && /3GRADE|THREEGRADE|3LOP|THREECLASS|3_GRADE/.test(normalized)) {
+    return 'standard_1year_3grade';
   }
   if (hasStandardSignal) return 'standard';
   return null;
@@ -660,22 +667,27 @@ export function PricingPage() {
   const [copied, setCopied] = useState(false);
   const [copiedDeviceId, setCopiedDeviceId] = useState(false);
   const [isActivating, setIsActivating] = useState(false);
+  const [gradeConfirmationChecked, setGradeConfirmationChecked] = useState(false);
+  const [isGradeSelectionConfirmed, setIsGradeSelectionConfirmed] = useState(false);
   // Subscription state
   const [activeSub, setActiveSub] = useState<Subscription | null>(null);
   const [subExpiry, setSubExpiry] = useState(localStorage.getItem(SUB_EXPIRY_KEY));
   const gradePickerRef = useRef<HTMLDivElement | null>(null);
-  const previousDetectedPlanRef = useRef<'standard' | 'standard_1year_1grade' | 'premium' | null>(null);
+  const previousDetectedPlanRef = useRef<'standard' | 'standard_1year_1grade' | 'standard_1year_3grade' | 'premium' | null>(null);
   const currentDeviceId = getDeviceId();
   const normalizedInputKey = licenseKey.trim().toUpperCase();
   const detectedPlanFromInput = detectPlanFlowFromKey(normalizedInputKey);
   const isStandardYearOneGradeKeyFlow = detectedPlanFromInput === 'standard_1year_1grade';
-  const isStandardKeyFlow = detectedPlanFromInput === 'standard' || isStandardYearOneGradeKeyFlow;
+  const isStandardYearThreeGradeKeyFlow = detectedPlanFromInput === 'standard_1year_3grade';
+  const isStandardKeyFlow = detectedPlanFromInput === 'standard' || isStandardYearOneGradeKeyFlow || isStandardYearThreeGradeKeyFlow;
+  const isConfirmedYearlyStandardKeyFlow = isStandardYearOneGradeKeyFlow || isStandardYearThreeGradeKeyFlow;
   const isPremiumKeyFlow = detectedPlanFromInput === 'premium';
   const requiredGradeCountForInput = isStandardYearOneGradeKeyFlow ? 1 : 3;
   const lockedStandardGradeSelection = isStandardKeyFlow
     ? getStandardGradeLock(normalizedInputKey, currentDeviceId, requiredGradeCountForInput)
     : null;
   const isStandardSelectionLocked = Boolean(lockedStandardGradeSelection);
+  const hasSelectedEnoughGrades = activationGrades.length === requiredGradeCountForInput;
   const visiblePlans = pricingPlans.filter((plan) => plan.id !== 'basic');
   const visibleComparisonPlans = PRICING_PLANS.filter((plan) => plan.id !== 'basic');
   const currentPlanStorageId = String(activeSub?.planId || localStorage.getItem(PLAN_KEY) || '').trim().toLowerCase();
@@ -692,35 +704,77 @@ export function PricingPage() {
 
     setActivationGrades((prev) => {
       if (prev.includes(grade)) {
+        setGradeConfirmationChecked(false);
+        setIsGradeSelectionConfirmed(false);
         return prev.filter((item) => item !== grade);
       }
 
       if (prev.length >= requiredGradeCountForInput) {
         const next = [...prev];
         next[next.length - 1] = grade;
+        setGradeConfirmationChecked(false);
+        setIsGradeSelectionConfirmed(false);
         setActivateMsg({ type: 'success', text: `Đã đổi 1 lớp mở khóa trong danh sách Standard (tối đa ${requiredGradeCountForInput} lớp).` });
         setTimeout(() => setActivateMsg(null), 2500);
         return next;
       }
 
+      setGradeConfirmationChecked(false);
+      setIsGradeSelectionConfirmed(false);
       return [...prev, grade];
     });
   };
 
+  const confirmSelectedGrades = () => {
+    if (!isStandardKeyFlow || isPremiumKeyFlow || isStandardSelectionLocked) return;
+    if (!hasSelectedEnoughGrades) {
+      setActivateMsg({
+        type: 'error',
+        text: isStandardYearOneGradeKeyFlow
+          ? '❌ Bạn cần chọn đủ 1 lớp trước khi xác nhận.'
+          : '❌ Bạn cần chọn đủ số lớp trước khi xác nhận.',
+      });
+      setTimeout(() => setActivateMsg(null), 3500);
+      return;
+    }
+
+    if (!gradeConfirmationChecked) {
+      setActivateMsg({ type: 'error', text: '❌ Vui lòng tick ô xác nhận trước khi chốt lựa chọn lớp.' });
+      setTimeout(() => setActivateMsg(null), 3500);
+      return;
+    }
+
+    const confirmText = `Bạn chắc chắn đồng ý lựa chọn ${activationGrades.map((grade) => getGradeLabel(grade)).join(', ')} cho key này? Sau khi kích hoạt lần đầu trên máy này sẽ không thể đổi lại.`;
+    const accepted = window.confirm(confirmText);
+
+    if (!accepted) {
+      setIsGradeSelectionConfirmed(false);
+      setActivateMsg({ type: 'error', text: 'Bạn chưa xác nhận lựa chọn lớp. Có thể chọn lại trước khi kích hoạt.' });
+      setTimeout(() => setActivateMsg(null), 3500);
+      return;
+    }
+
+    setIsGradeSelectionConfirmed(true);
+    setActivateMsg({ type: 'success', text: `✅ Đã xác nhận lựa chọn ${activationGrades.map((grade) => getGradeLabel(grade)).join(', ')}. Bạn có thể bấm Kích hoạt ngay.` });
+    setTimeout(() => setActivateMsg(null), 4000);
+  };
+
   useEffect(() => {
-    if (previousDetectedPlanRef.current !== detectedPlanFromInput && isStandardKeyFlow) {
+    if (previousDetectedPlanRef.current !== detectedPlanFromInput && isConfirmedYearlyStandardKeyFlow) {
       gradePickerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setActivateMsg({
         type: 'success',
         text: isStandardYearOneGradeKeyFlow
           ? 'Đã nhận diện key Standard 01 năm - 01 lớp. Vui lòng chọn đúng 1 lớp trước khi bấm kích hoạt.'
-          : 'Đã nhận diện key Standard. Vui lòng chọn đúng 3 lớp trước khi bấm kích hoạt.',
+          : isStandardYearThreeGradeKeyFlow
+            ? 'Đã nhận diện key Standard 01 năm - 03 lớp. Vui lòng chọn đúng 3 lớp trước khi bấm kích hoạt.'
+            : 'Đã nhận diện key Standard. Vui lòng chọn đúng 3 lớp trước khi bấm kích hoạt.',
       });
       setTimeout(() => setActivateMsg(null), 3500);
     }
 
     previousDetectedPlanRef.current = detectedPlanFromInput;
-  }, [detectedPlanFromInput, isStandardKeyFlow, isStandardYearOneGradeKeyFlow]);
+  }, [detectedPlanFromInput, isConfirmedYearlyStandardKeyFlow, isStandardYearOneGradeKeyFlow, isStandardYearThreeGradeKeyFlow]);
 
   useEffect(() => {
     if (!isStandardKeyFlow) return;
@@ -734,6 +788,17 @@ export function PricingPage() {
     // Key Standard mới trên ID máy này phải bắt đầu ở trạng thái trống để phụ huynh chọn lớp chủ động.
     setActivationGrades([]);
   }, [isStandardKeyFlow, normalizedInputKey, currentDeviceId]);
+
+  useEffect(() => {
+    if (isStandardSelectionLocked) {
+      setGradeConfirmationChecked(true);
+      setIsGradeSelectionConfirmed(true);
+      return;
+    }
+
+    setGradeConfirmationChecked(false);
+    setIsGradeSelectionConfirmed(false);
+  }, [normalizedInputKey, isStandardSelectionLocked]);
 
   // Load active subscription from DB on mount
   useEffect(() => {
@@ -914,6 +979,15 @@ export function PricingPage() {
         if (existingLock) {
           standardGradesToUse = existingLock.grades;
         } else {
+          if (!isGradeSelectionConfirmed) {
+            setActivateMsg({
+              type: 'error',
+              text: '❌ Bạn chưa xác nhận lựa chọn lớp. Vui lòng tick ô xác nhận rồi bấm nút xác nhận trước khi kích hoạt.',
+            });
+            playActivationTone('error');
+            setTimeout(() => setActivateMsg(null), 6000);
+            return;
+          }
           if (activationGrades.length !== requiredGradeCount) {
             setActivateMsg({
               type: 'error',
@@ -1457,19 +1531,23 @@ export function PricingPage() {
         <div className="mb-3 rounded-2xl p-3" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
           <div className="text-xs font-bold" style={{ color: '#0F172A' }}>Định dạng key</div>
           <div className="text-xs mt-1" style={{ color: 'var(--color-text-light)' }}>
-            Standard: HHK-STANDARD-XXXXXXXX • Standard 01 năm - 01 lớp: HHK-STANDARD-1Y1G-XXXXXXXX • Premium: HHK-PREMIUM-XXXXXXXX
+            Standard: HHK-STANDARD-XXXXXXXX • Standard 01 năm - 01 lớp: HHK-STANDARD-1Y1G-XXXXXXXX • Standard 01 năm - 03 lớp: WSTL-XXXXXXXX-XXXXXX • Premium: HHK-PREMIUM-XXXXXXXX
           </div>
           {detectedPlanFromInput && (
             <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold"
               style={
                 detectedPlanFromInput === 'premium'
                   ? { background: '#EDE9FE', color: '#6D28D9' }
+                  : detectedPlanFromInput === 'standard_1year_3grade'
+                    ? { background: '#DCFCE7', color: '#15803D' }
                   : detectedPlanFromInput === 'standard_1year_1grade'
                     ? { background: '#DBEAFE', color: '#1D4ED8' }
                     : { background: '#FEF3C7', color: '#B45309' }
               }>
               {detectedPlanFromInput === 'premium'
                 ? '👑 Phát hiện key Premium'
+                : detectedPlanFromInput === 'standard_1year_3grade'
+                  ? '📗 Phát hiện key Standard 01 năm - 03 lớp'
                 : detectedPlanFromInput === 'standard_1year_1grade'
                   ? '📘 Phát hiện key Standard 01 năm - 01 lớp'
                   : '⭐ Phát hiện key Standard'}
@@ -1512,7 +1590,7 @@ export function PricingPage() {
           <div
             className="text-xs mt-2 rounded-xl px-3 py-2 font-bold"
             style={
-              detectedPlanFromInput
+              isConfirmedYearlyStandardKeyFlow
                 ? {
                     color: '#065F46',
                     background: '#ECFDF5',
@@ -1525,12 +1603,12 @@ export function PricingPage() {
                   }
             }
           >
-            {isStandardKeyFlow
+            {isConfirmedYearlyStandardKeyFlow
               ? (isStandardYearOneGradeKeyFlow
                   ? '✅ Đã nhận diện Standard 01 năm - 01 lớp. Vui lòng chọn đúng 1 lớp bên dưới rồi bấm Kích hoạt ngay.'
-                  : '✅ Đã nhận diện Standard. Vui lòng chọn đúng 3 lớp bên dưới rồi bấm Kích hoạt ngay.')
-              : isPremiumKeyFlow
-                ? '✅ Đã nhận diện Premium. Không cần chọn lớp, hệ thống tự mở toàn bộ lớp.'
+                  : '✅ Đã nhận diện Standard 01 năm - 03 lớp. Vui lòng chọn đúng 3 lớp bên dưới rồi bấm Kích hoạt ngay.')
+              : detectedPlanFromInput
+                ? 'Key đã được nhập. Hệ thống sẽ kiểm tra chính xác khi bạn bấm Kích hoạt ngay.'
                 : 'Chưa nhận diện loại key: bạn vẫn có thể dán key để hệ thống tự nhận diện.'}
           </div>
         </div>
@@ -1539,6 +1617,8 @@ export function PricingPage() {
           <div className="text-sm mt-1" style={{ color: '#334155' }}>
             {isStandardYearOneGradeKeyFlow
               ? 'Key Standard 01 năm - 01 lớp: chọn đúng 1 lớp. Key Premium: tự mở tất cả lớp.'
+              : isStandardYearThreeGradeKeyFlow
+                ? 'Key Standard 01 năm - 03 lớp: chọn đúng 3 lớp. Key Premium: tự mở tất cả lớp.'
               : 'Key Standard: chọn đúng 3 lớp. Key Premium: tự mở tất cả lớp.'}
           </div>
           <div className="mt-2 rounded-xl px-3 py-2 text-sm font-bold" style={{ background: '#FEF3C7', color: '#92400E', border: '1px solid #FCD34D' }}>
@@ -1571,11 +1651,48 @@ export function PricingPage() {
                 ? `Đã khóa lựa chọn cho key này: ${activationGrades.map((grade) => getGradeLabel(grade)).join(', ')}.`
                 : `Đã chọn: ${activationGrades.length}/${requiredGradeCountForInput} lớp cho key Standard`}
           </div>
+          {!isPremiumKeyFlow && isStandardKeyFlow && !isStandardSelectionLocked && (
+            <div className="mt-3 rounded-xl px-3 py-3" style={{ background: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+              <label className="flex items-start gap-2 text-sm font-semibold" style={{ color: '#1E3A8A' }}>
+                <input
+                  type="checkbox"
+                  checked={gradeConfirmationChecked}
+                  onChange={(event) => {
+                    setGradeConfirmationChecked(event.target.checked);
+                    if (!event.target.checked) {
+                      setIsGradeSelectionConfirmed(false);
+                    }
+                  }}
+                  disabled={!hasSelectedEnoughGrades}
+                  style={{ marginTop: 3 }}
+                />
+                <span>Tôi xác nhận đây là các lớp muốn khóa cho key này trên thiết bị hiện tại.</span>
+              </label>
+              <div className="mt-2 flex flex-wrap items-center gap-3">
+                <button
+                  className={`${premiumButtonBaseClass} px-4 py-2.5 text-sm`}
+                  style={hasSelectedEnoughGrades ? darkPrimaryButtonStyle : neutralGhostButtonStyle}
+                  onClick={confirmSelectedGrades}
+                  disabled={!hasSelectedEnoughGrades}
+                >
+                  <Check size={16} />
+                  Xác nhận lựa chọn lớp
+                </button>
+                <div className="text-sm font-semibold" style={{ color: isGradeSelectionConfirmed ? '#047857' : '#475569' }}>
+                  {isGradeSelectionConfirmed
+                    ? `Đã xác nhận: ${activationGrades.map((grade) => getGradeLabel(grade)).join(', ')}`
+                    : 'Chưa xác nhận lựa chọn lớp.'}
+                </div>
+              </div>
+            </div>
+          )}
           <div className="text-sm mt-1" style={{ color: '#475569' }}>
             {isPremiumKeyFlow
               ? 'Bạn có thể bấm Kích hoạt ngay.'
               : isStandardSelectionLocked
-                ? 'Hệ thống sẽ dùng đúng 3 lớp đã khóa khi kích hoạt.'
+                ? `Hệ thống sẽ dùng đúng ${requiredGradeCountForInput} lớp đã khóa khi kích hoạt.`
+                : isGradeSelectionConfirmed
+                  ? 'Lựa chọn lớp đã được xác nhận. Bạn có thể kích hoạt key.'
                 : 'Lớp đứng đầu danh sách sẽ là lớp hiện tại sau khi kích hoạt.'}
           </div>
         </div>

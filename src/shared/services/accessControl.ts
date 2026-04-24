@@ -34,6 +34,14 @@ const STANDARD_YEAR_ONE_GRADE_PLAN_ALIASES = new Set([
   'standard_yearly_1grade',
   'standard_single_grade_yearly',
 ]);
+const STANDARD_YEAR_THREE_GRADE_PLAN_ALIASES = new Set([
+  'standard_1year_3grade',
+  'standard_1y_3grade',
+  'standard_1nam_3lop',
+  'standard_yearly_3grade',
+  'standard_three_grade_yearly',
+  'prod_study_year',
+]);
 
 const PLAN_LIMITS: Record<AccessPlan, PlanLimits> = {
   free: {
@@ -112,6 +120,17 @@ function isStandardYearOneGradePlanId(planId: string | null | undefined): boolea
   return isStandardLike && hasOneGradeSignal && hasYearSignal;
 }
 
+function isStandardYearThreeGradePlanId(planId: string | null | undefined): boolean {
+  const normalized = normalizePlanToken(planId);
+  if (!normalized) return false;
+  if (STANDARD_YEAR_THREE_GRADE_PLAN_ALIASES.has(normalized)) return true;
+
+  const isStandardLike = normalized.includes('standard') || normalized.includes('basic') || normalized.includes('study');
+  const hasThreeGradeSignal = normalized.includes('3grade') || normalized.includes('three_grade') || normalized.includes('3lop') || normalized.includes('three_class');
+  const hasYearSignal = normalized.includes('year') || normalized.includes('yearly') || normalized.includes('1y') || normalized.includes('12m') || normalized.includes('1nam');
+  return isStandardLike && hasThreeGradeSignal && hasYearSignal;
+}
+
 function getStoredPlanId(): string {
   return localStorage.getItem(PLAN_KEY) || 'free';
 }
@@ -119,6 +138,7 @@ function getStoredPlanId(): string {
 function normalizeAccessPlan(planId: string | null): AccessPlan {
   if (planId === 'premium') return 'premium';
   if (isStandardYearOneGradePlanId(planId)) return 'standard';
+  if (isStandardYearThreeGradePlanId(planId)) return 'standard';
   if (planId === 'standard' || planId === 'basic') return 'standard';
   return 'free';
 }
