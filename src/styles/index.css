@@ -1982,6 +1982,17 @@ button.card-flat:active {
    RESPONSIVE — Mobile / Tablet
    ============================================ */
 @media (max-width: 768px) {
+  .hhk-download-btn {
+    width: 100%;
+    animation-duration: 3.4s;
+  }
+  .hhk-download-btn::after {
+    animation-duration: 4.1s;
+    opacity: 0.6;
+  }
+  .hhk-shimmer-text {
+    line-height: 1.2;
+  }
   .app-layout {
     flex-direction: column;
   }

@@ -200,9 +200,9 @@ export function WelcomePage() {
         background: 'radial-gradient(circle at 12% -10%, rgba(227,181,86,0.24) 0%, rgba(18,38,76,0) 38%), radial-gradient(circle at 88% 2%, rgba(89,162,255,0.2) 0%, rgba(12,28,62,0) 32%), linear-gradient(180deg, #050F24 0%, #0C2754 42%, #164381 65%, #EAF2FC 100%)',
       }}
     >
-      <div className="w-full min-h-screen px-4 pb-12 pt-4 md:px-8 md:pt-6 xl:px-12">
+      <div className="w-full min-h-screen px-3 pb-10 pt-3 sm:px-4 md:px-8 md:pt-6 xl:px-12">
         <section
-          className="w-full rounded-[30px] px-5 py-6 md:px-8 lg:px-10"
+          className="w-full rounded-2xl md:rounded-[30px] px-4 py-5 sm:px-5 sm:py-6 md:px-8 lg:px-10"
           style={{
             background: 'linear-gradient(112deg, #03142F 0%, #072B5D 48%, #0F3A79 100%)',
             border: '1px solid rgba(201,160,70,0.32)',
@@ -210,18 +210,18 @@ export function WelcomePage() {
           }}
         >
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-start gap-3 sm:items-center">
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center"
+                className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0"
                 style={{ background: 'linear-gradient(140deg, #EEDAA0, #C99C46)', color: '#16213D' }}
               >
                 <MascotCharacter size="sm" />
               </div>
               <div>
-                <div className="text-[1.65rem] md:text-[2.4rem] font-bold tracking-[-0.025em]" style={{ color: '#E9D39A' }}>
+                <div className="text-[1.3rem] leading-tight sm:text-[1.65rem] md:text-[2.4rem] font-bold tracking-[-0.025em]" style={{ color: '#E9D39A' }}>
                   Chào mừng đến với Học Hứng Khởi
                 </div>
-                <div className="text-sm mt-1" style={{ color: '#D7E3FF' }}>
+                <div className="text-[13px] sm:text-sm mt-1" style={{ color: '#D7E3FF' }}>
                   Chọn một thao tác nhanh để bắt đầu.
                 </div>
               </div>
@@ -229,7 +229,7 @@ export function WelcomePage() {
 
             <div className="flex flex-col items-stretch gap-2.5 md:items-end">
               <div
-                className="rounded-2xl px-3.5 py-3 min-w-[280px]"
+                className="rounded-2xl px-3.5 py-3 w-full max-w-full sm:max-w-[360px] md:min-w-[280px]"
                 style={{
                   background: statusTheme.bg,
                   border: `1px solid ${statusTheme.border}`,
@@ -253,23 +253,23 @@ export function WelcomePage() {
                 </button>
               )}
 
-              <div className="flex flex-wrap items-center justify-end gap-2">
+              <div className="flex flex-col sm:flex-row sm:flex-wrap w-full sm:w-auto items-stretch sm:items-center justify-end gap-2">
                 <button
-                  className={`${glossyButtonBaseClass} premium-btn-sheen px-6 py-3.5 text-base font-extrabold inline-flex items-center gap-2 hover:brightness-105`}
+                  className={`${glossyButtonBaseClass} premium-btn-sheen px-6 py-3.5 text-base font-extrabold inline-flex items-center justify-center gap-2 hover:brightness-105 w-full sm:w-auto`}
                   style={heroPrimaryButtonStyle}
                   onClick={() => navigate('/pricing')}
                 >
                   Xem gói ngay <ArrowRight size={18} />
                 </button>
                 <button
-                  className={`${glossyButtonBaseClass} px-6 py-3.5 text-base inline-flex items-center gap-2 hover:brightness-110`}
+                  className={`${glossyButtonBaseClass} px-6 py-3.5 text-base inline-flex items-center justify-center gap-2 hover:brightness-110 w-full sm:w-auto`}
                   style={heroSecondaryButtonStyle}
                   onClick={() => navigate('/pricing#activate-section')}
                 >
                   <KeyRound size={18} /> Nhập key ngay
                 </button>
                 <button
-                  className={`${glossyButtonBaseClass} px-6 py-3.5 text-base hover:brightness-110`}
+                  className={`${glossyButtonBaseClass} px-6 py-3.5 text-base hover:brightness-110 w-full sm:w-auto`}
                   style={heroGhostButtonStyle}
                   onClick={() => navigate('/home')}
                 >
@@ -280,9 +280,9 @@ export function WelcomePage() {
           </div>
         </section>
 
-        <section className="mt-6 w-full rounded-[24px] p-4 md:p-6 lg:p-7" style={{ background: 'rgba(255,255,255,0.9)', border: '1px solid #CFDDF6', boxShadow: '0 20px 44px rgba(12,35,75,0.18)' }}>
+        <section className="mt-5 sm:mt-6 w-full rounded-[20px] md:rounded-[24px] p-3.5 sm:p-4 md:p-6 lg:p-7" style={{ background: 'rgba(255,255,255,0.9)', border: '1px solid #CFDDF6', boxShadow: '0 20px 44px rgba(12,35,75,0.18)' }}>
           <div className="text-xs uppercase tracking-[0.18em] font-bold" style={{ color: '#6B7FA3' }}>Bắt đầu nhanh</div>
-          <div className="text-2xl md:text-4xl font-bold tracking-[-0.03em]" style={{ color: '#123E72' }}>
+          <div className="text-[1.65rem] leading-tight sm:text-2xl md:text-4xl font-bold tracking-[-0.03em]" style={{ color: '#123E72' }}>
             2 bước để dùng đầy đủ tính năng
           </div>
 
@@ -332,7 +332,7 @@ export function WelcomePage() {
 
         {/* ===================== MASCOT WELCOME SHOWCASE ===================== */}
         <section
-          className="mt-6 w-full rounded-[28px] px-5 py-10 md:px-10 md:py-12 text-center overflow-hidden relative"
+          className="mt-5 sm:mt-6 w-full rounded-[22px] md:rounded-[28px] px-4 py-7 sm:px-5 sm:py-10 md:px-10 md:py-12 text-center overflow-hidden relative"
           style={{
             background: 'linear-gradient(135deg, #04122B 0%, #081F4A 48%, #0C2E68 100%)',
             border: '1px solid rgba(140,185,255,0.18)',
@@ -340,28 +340,31 @@ export function WelcomePage() {
           }}
         >
           {/* Trang trí ngôi sao nền */}
-          <span aria-hidden="true" style={{ position: 'absolute', top: '10%',  left: '6%',  fontSize: '2rem', opacity: 0.3, animation: 'hhk-float-star 5s ease-in-out infinite' }}>✦</span>
-          <span aria-hidden="true" style={{ position: 'absolute', top: '15%',  right: '8%', fontSize: '1.5rem', opacity: 0.25, animation: 'hhk-float-star 4s ease-in-out infinite 0.8s' }}>✦</span>
-          <span aria-hidden="true" style={{ position: 'absolute', bottom: '14%', left: '12%', fontSize: '1.2rem', opacity: 0.2, animation: 'hhk-spin-star 10s linear infinite' }}>⭐</span>
-          <span aria-hidden="true" style={{ position: 'absolute', bottom: '18%', right: '10%', fontSize: '1.8rem', opacity: 0.25, animation: 'hhk-float-star 3.5s ease-in-out infinite 1.2s' }}>🌟</span>
-          <span aria-hidden="true" style={{ position: 'absolute', top: '45%', left: '2%', fontSize: '1rem', opacity: 0.18, animation: 'hhk-spin-star 7s linear infinite reverse' }}>✦</span>
-          <span aria-hidden="true" style={{ position: 'absolute', top: '40%', right: '2%', fontSize: '1rem', opacity: 0.18, animation: 'hhk-spin-star 9s linear infinite' }}>✦</span>
+          <span aria-hidden="true" className="hidden sm:block" style={{ position: 'absolute', top: '10%',  left: '6%',  fontSize: '2rem', opacity: 0.3, animation: 'hhk-float-star 5s ease-in-out infinite' }}>✦</span>
+          <span aria-hidden="true" className="hidden sm:block" style={{ position: 'absolute', top: '15%',  right: '8%', fontSize: '1.5rem', opacity: 0.25, animation: 'hhk-float-star 4s ease-in-out infinite 0.8s' }}>✦</span>
+          <span aria-hidden="true" className="hidden sm:block" style={{ position: 'absolute', bottom: '14%', left: '12%', fontSize: '1.2rem', opacity: 0.2, animation: 'hhk-spin-star 10s linear infinite' }}>⭐</span>
+          <span aria-hidden="true" className="hidden sm:block" style={{ position: 'absolute', bottom: '18%', right: '10%', fontSize: '1.8rem', opacity: 0.25, animation: 'hhk-float-star 3.5s ease-in-out infinite 1.2s' }}>🌟</span>
+          <span aria-hidden="true" className="hidden sm:block" style={{ position: 'absolute', top: '45%', left: '2%', fontSize: '1rem', opacity: 0.18, animation: 'hhk-spin-star 7s linear infinite reverse' }}>✦</span>
+          <span aria-hidden="true" className="hidden sm:block" style={{ position: 'absolute', top: '40%', right: '2%', fontSize: '1rem', opacity: 0.18, animation: 'hhk-spin-star 9s linear infinite' }}>✦</span>
 
           <div className="relative z-10">
             <div className="text-xs uppercase tracking-[0.22em] font-bold mb-2" style={{ color: '#7FB4FF', opacity: 0.85 }}>
               Đồng hành cùng bạn mỗi ngày
             </div>
-            <h2 className="hhk-shimmer-text text-[2rem] md:text-[2.8rem] lg:text-[3.2rem] font-black tracking-[-0.03em] leading-tight">
+            <h2 className="hhk-shimmer-text text-[1.6rem] sm:text-[2rem] md:text-[2.8rem] lg:text-[3.2rem] font-black tracking-[-0.03em] leading-tight">
               Chào mừng bạn đến với<br />Học Hứng Khởi!
             </h2>
             <p className="mt-3 text-sm md:text-base max-w-[520px] mx-auto" style={{ color: '#B0CCEE', lineHeight: 1.7 }}>
               6 người bạn đồng hành sẽ luôn bên cạnh bạn —<br className="hidden md:block" />
               mỗi giao diện một cá tính riêng, thay đổi bất cứ lúc nào!
             </p>
-            <div className="mt-10">
+            <div className="mt-8 md:hidden">
+              <AllMascotsParade size={72} />
+            </div>
+            <div className="mt-10 hidden md:block">
               <AllMascotsParade size={104} />
             </div>
-            <div className="mt-6 inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold"
+            <div className="mt-6 inline-flex max-w-full items-center justify-center gap-2 rounded-full px-4 sm:px-5 py-2 text-[13px] sm:text-sm font-bold"
               style={{ background: 'rgba(100,160,255,0.12)', color: '#90BFFF', border: '1px solid rgba(100,160,255,0.25)' }}>
               <Sparkles size={14} /> Đổi giao diện trong mục Cài đặt → Giao diện
             </div>
@@ -370,7 +373,7 @@ export function WelcomePage() {
 
         {/* ===================== APP DOWNLOAD SECTION ===================== */}
         <section
-          className="mt-6 w-full rounded-[24px] px-5 py-6 md:px-8 md:py-7"
+          className="mt-5 sm:mt-6 w-full rounded-[20px] md:rounded-[24px] px-4 py-5 sm:px-5 sm:py-6 md:px-8 md:py-7"
           style={{
             background: 'rgba(255,255,255,0.93)',
             border: '1px solid #CFDDF6',
@@ -387,13 +390,13 @@ export function WelcomePage() {
                 Trải nghiệm đầy đủ tính năng, tốc độ nhanh hơn, không cần trình duyệt.
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
               {/* Windows */}
               <button
                 type="button"
-                className="hhk-download-btn hhk-download-windows inline-flex items-center gap-3 rounded-2xl px-6 py-4 cursor-pointer"
+                className="hhk-download-btn hhk-download-windows inline-flex items-center justify-center sm:justify-start gap-3 rounded-2xl px-5 sm:px-6 py-3.5 sm:py-4 cursor-pointer w-full sm:w-auto sm:min-w-[196px]"
                 style={{
-                  minWidth: 196,
+                  minWidth: 'unset',
                 }}
               >
                 {/* Windows logo SVG */}
@@ -409,9 +412,9 @@ export function WelcomePage() {
               {/* Macbook */}
               <button
                 type="button"
-                className="hhk-download-btn hhk-download-mac inline-flex items-center gap-3 rounded-2xl px-6 py-4 cursor-pointer"
+                className="hhk-download-btn hhk-download-mac inline-flex items-center justify-center sm:justify-start gap-3 rounded-2xl px-5 sm:px-6 py-3.5 sm:py-4 cursor-pointer w-full sm:w-auto sm:min-w-[196px]"
                 style={{
-                  minWidth: 196,
+                  minWidth: 'unset',
                 }}
               >
                 {/* Apple logo SVG */}
