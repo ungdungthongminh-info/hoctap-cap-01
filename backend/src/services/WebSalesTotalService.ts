@@ -83,7 +83,15 @@ async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
   const data: any = await res.json().catch(() => ({}));
   if (!res.ok) {
     const msg = data?.message || data?.error || `HTTP ${res.status}`;
-    throw new Error(String(msg));
+    const error = new Error(String(msg)) as Error & {
+      statusCode?: number;
+      errorCode?: string;
+      details?: any;
+    };
+    error.statusCode = res.status;
+    error.errorCode = data?.errorCode;
+    error.details = data;
+    throw error;
   }
 
   return data as T;
@@ -311,11 +319,7 @@ export class WebAiAppLicenseService {
     deviceName?: string;
   }): Promise<AiAppVerifyResponse> {
     const baseUrl = WebSalesTotalService.getBaseUrl();
-    const verifyPaths = [
-      '/api/ai-app/licenses/verify',
-      '/api/v1/ai-app/licenses/verify',
-      '/ai-app/licenses/verify',
-    ];
+    const verifyPaths = ['/api/ai-app/licenses/verify'];
     const verifyUrls = verifyPaths.map((path) => `${baseUrl}${path}`);
 
     return fetchJsonWithFallback<AiAppVerifyResponse>(verifyUrls, {

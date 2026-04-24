@@ -269,6 +269,30 @@ export async function getPricingPlans(req: Request, res: Response) {
             source: catalogPrices['standard:monthly'] || catalogPrices['standard:yearly'] || catalogPrices['standard:lifetime'] ? 'web-total' : 'local-fallback',
             features: PRICING_PLANS.standard.features,
           },
+          standard_1year_1grade: {
+            id: 'standard_1year_1grade',
+            name: PRICING_PLANS.standard_1year_1grade.name,
+            prices: {
+              monthly: 0,
+              yearly: catalogPrices['standard_1year_1grade:yearly']?.price ?? PRICING_PLANS.standard_1year_1grade.billingCycles.yearly,
+              lifetime: 0,
+            },
+            source: catalogPrices['standard_1year_1grade:yearly'] ? 'web-total' : 'local-fallback',
+            features: PRICING_PLANS.standard_1year_1grade.features,
+          },
+          standard_1year_3grade: {
+            id: 'standard_1year_3grade',
+            name: PRICING_PLANS.standard_1year_3grade.name,
+            prices: {
+              monthly: 0,
+              yearly: catalogPrices['standard_1year_3grade:yearly']?.price
+                ?? catalogPrices['standard:yearly']?.price
+                ?? PRICING_PLANS.standard_1year_3grade.billingCycles.yearly,
+              lifetime: 0,
+            },
+            source: catalogPrices['standard_1year_3grade:yearly'] || catalogPrices['standard:yearly'] ? 'web-total' : 'local-fallback',
+            features: PRICING_PLANS.standard_1year_3grade.features,
+          },
           premium: {
             id: 'premium',
             name: PRICING_PLANS.premium.name,
@@ -304,6 +328,26 @@ export async function getPricingPlans(req: Request, res: Response) {
           lifetime: getPlanPrice('standard', 'lifetime')
         },
         features: { subjects: null, grades: null, profiles: 3 }
+      },
+      standard_1year_1grade: {
+        id: 'standard_1year_1grade',
+        name: 'Standard 01 năm - 01 lớp',
+        prices: {
+          monthly: 0,
+          yearly: getPlanPrice('standard_1year_1grade', 'yearly'),
+          lifetime: 0
+        },
+        features: { subjects: null, grades: 1, profiles: 1 }
+      },
+      standard_1year_3grade: {
+        id: 'standard_1year_3grade',
+        name: 'Standard 01 năm - 03 lớp',
+        prices: {
+          monthly: 0,
+          yearly: getPlanPrice('standard_1year_3grade', 'yearly'),
+          lifetime: 0
+        },
+        features: { subjects: null, grades: 3, profiles: 3 }
       },
       premium: {
         id: 'premium',

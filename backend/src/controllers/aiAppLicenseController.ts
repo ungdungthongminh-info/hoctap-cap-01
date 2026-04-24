@@ -1,6 +1,27 @@
 import { Request, Response } from 'express';
 import { WebAiAppLicenseService } from '../services/WebSalesTotalService';
 
+function mapError(err: any): { status: number; errorCode: string; message: string } {
+  const status = Number(err?.statusCode || 500);
+  const details = err?.details || {};
+  const message = String(details?.message || details?.error || err?.message || 'Internal error');
+
+  if (status === 400) {
+    return { status, errorCode: 'INVALID_REQUEST', message };
+  }
+  if (status === 401 || status === 403) {
+    return { status: 401, errorCode: 'UNAUTHORIZED_APP_KEY', message };
+  }
+  if (status === 404) {
+    return { status, errorCode: 'LICENSE_NOT_FOUND_OR_INVALID', message };
+  }
+  if (status === 409) {
+    return { status, errorCode: 'DEVICE_MISMATCH', message };
+  }
+
+  return { status: status >= 500 ? status : 500, errorCode: 'INTERNAL_ERROR', message };
+}
+
 /**
  * GET /api/v1/ai-app/customers/:customerId/licenses?appId=
  * Proxy → Web tổng /api/ai-app/customers/:customerId/licenses
@@ -12,21 +33,22 @@ export async function proxyGetCustomerLicenses(req: Request, res: Response): Pro
   const appId = req.query.appId as string | undefined;
 
   if (!customerId) {
-    res.status(400).json({ success: false, error: 'customerId is required' });
+    res.status(400).json({ ok: false, success: false, errorCode: 'INVALID_REQUEST', message: 'customerId is required' });
     return;
   }
 
   if (!WebAiAppLicenseService.isEnabled()) {
     // Fallback khi chưa có AI app key → trả empty (app sẽ dùng local feature map)
-    res.json({ success: true, data: { customerId, appId: appId ?? null, licenses: [] } });
+    res.json({ ok: true, success: true, data: { customerId, appId: appId ?? null, licenses: [] } });
     return;
   }
 
   try {
     const result = await WebAiAppLicenseService.getCustomerLicenses(customerId, appId);
-    res.json({ success: true, data: result });
+    res.json({ ok: true, success: true, data: result });
   } catch (err: any) {
-    res.status(502).json({ success: false, error: err?.message || 'Upstream license error' });
+    const mapped = mapError(err);
+    res.status(mapped.status).json({ ok: false, success: false, errorCode: mapped.errorCode, message: mapped.message });
   }
 }
 
@@ -38,13 +60,13 @@ export async function proxyGetCustomerLicenses(req: Request, res: Response): Pro
 export async function proxyVerifyLicense(req: Request, res: Response): Promise<void> {
   const { licenseKey, appId, customerId, deviceId, deviceName } = req.body || {};
 
-  if (!licenseKey) {
-    res.status(400).json({ success: false, error: 'licenseKey is required' });
+  if (!licenseKey || !String(appId || '').trim()) {
+    res.status(400).json({ ok: false, success: false, errorCode: 'INVALID_REQUEST', message: 'appId and licenseKey are required' });
     return;
   }
 
   if (!WebAiAppLicenseService.isEnabled()) {
-    res.status(503).json({ success: false, error: 'License service not configured' });
+    res.status(503).json({ ok: false, success: false, errorCode: 'INTERNAL_ERROR', message: 'License service not configured' });
     return;
   }
 
@@ -56,9 +78,9 @@ export async function proxyVerifyLicense(req: Request, res: Response): Promise<v
       deviceId,
       deviceName,
     });
-    res.json({ success: true, data: result });
+    res.json({ ok: true, success: true, data: result });
   } catch (err: any) {
-    const status = err?.message?.includes('404') || err?.message?.includes('invalid') ? 404 : 502;
-    res.status(status).json({ success: false, error: err?.message || 'License verify error' });
+    const mapped = mapError(err);
+    res.status(mapped.status).json({ ok: false, success: false, errorCode: mapped.errorCode, message: mapped.message });
   }
 }

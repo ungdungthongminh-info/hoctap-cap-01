@@ -21,7 +21,7 @@ export const PRICING_PLANS = {
     currency: 'VND',
     billingCycles: {
       monthly: 89000,
-      yearly: 699000,
+      yearly: 599000,
       lifetime: 1299000
     },
     features: {
@@ -38,9 +38,9 @@ export const PRICING_PLANS = {
     name: 'Premium',
     currency: 'VND',
     billingCycles: {
-      monthly: 149000,
-      yearly: 1190000,
-      lifetime: 1990000
+      monthly: 119000,
+      yearly: 899000,
+      lifetime: 1599000
     },
     features: {
       subjects: null, // unlimited
@@ -49,6 +49,38 @@ export const PRICING_PLANS = {
       ai_chat: true,
       weak_priority: true,
       priority_support: true
+    }
+  },
+  standard_1year_1grade: {
+    id: 'standard_1year_1grade',
+    name: 'Standard 01 nam - 01 lop',
+    currency: 'VND',
+    billingCycles: {
+      yearly: 299000
+    },
+    features: {
+      subjects: null,
+      grades: 1,
+      profiles: 1,
+      ai_chat: true,
+      weak_priority: true,
+      priority_support: false
+    }
+  },
+  standard_1year_3grade: {
+    id: 'standard_1year_3grade',
+    name: 'Standard 01 nam - 03 lop',
+    currency: 'VND',
+    billingCycles: {
+      yearly: 599000
+    },
+    features: {
+      subjects: null, // unlimited
+      grades: 3,
+      profiles: 3,
+      ai_chat: true,
+      weak_priority: true,
+      priority_support: false
     }
   }
 };

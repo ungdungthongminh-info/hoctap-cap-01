@@ -381,6 +381,12 @@ function detectPlanFlowFromKey(inputKey: string): 'standard' | 'standard_1year_1
   return null;
 }
 
+function hasRecognizableLicensePrefix(inputKey: string): boolean {
+  const normalized = String(inputKey || '').trim().toUpperCase();
+  if (!normalized) return false;
+  return normalized.startsWith('WSTL-') || normalized.startsWith('HHK-');
+}
+
 function playActivationTone(type: 'success' | 'error'): void {
   try {
     const AudioContextRef = (window as any).AudioContext || (window as any).webkitAudioContext;
@@ -679,6 +685,8 @@ export function PricingPage() {
   const currentDeviceId = getDeviceId();
   const normalizedInputKey = licenseKey.trim().toUpperCase();
   const detectedPlanFromInput = detectPlanFlowFromKey(normalizedInputKey);
+  const hasRecognizedKeyPrefix = hasRecognizableLicensePrefix(normalizedInputKey);
+  const shouldShowRecognizedKeyHint = Boolean(detectedPlanFromInput || hasRecognizedKeyPrefix);
   const isStandardYearOneGradeKeyFlow = detectedPlanFromInput === 'standard_1year_1grade';
   const isStandardYearThreeGradeKeyFlow = detectedPlanFromInput === 'standard_1year_3grade';
   const isStandardKeyFlow = detectedPlanFromInput === 'standard' || isStandardYearOneGradeKeyFlow || isStandardYearThreeGradeKeyFlow;
@@ -695,6 +703,35 @@ export function PricingPage() {
   const currentPlanStorageId = String(activeSub?.planId || localStorage.getItem(PLAN_KEY) || '').trim().toLowerCase();
   const currentPlanMeta = visiblePlans.find((plan) => plan.id === currentPlanStorageId) || visiblePlans.find((plan) => plan.id === normalizePlanId(currentPlan)) || visiblePlans[0];
   const activeSubPlanMeta = activeSub ? (visiblePlans.find((plan) => plan.id === String(activeSub.planId || '').trim().toLowerCase()) || visiblePlans.find((plan) => plan.id === normalizePlanId(activeSub.planId))) : null;
+  const detectedKeyBadgeStyle = detectedPlanFromInput === 'premium'
+    ? { background: '#EDE9FE', color: '#6D28D9' }
+    : detectedPlanFromInput === 'standard_1year_1grade'
+      ? { background: '#DBEAFE', color: '#1D4ED8' }
+      : { background: '#DCFCE7', color: '#15803D' };
+  const detectedKeyBadgeText = detectedPlanFromInput === 'premium'
+    ? '👑 Phát hiện key Premium'
+    : detectedPlanFromInput === 'standard_1year_3grade'
+      ? '📗 Phát hiện key Standard 01 năm - 03 lớp'
+      : detectedPlanFromInput === 'standard_1year_1grade'
+        ? '📘 Phát hiện key Standard 01 năm - 01 lớp'
+        : detectedPlanFromInput === 'standard'
+          ? '⭐ Phát hiện key Standard'
+          : normalizedInputKey.startsWith('WSTL-')
+            ? '🟢 Phát hiện key bản quyền Web Tổng'
+            : '🟢 Phát hiện key bản quyền HHK';
+  const detectedKeyDetailText = isStandardKeyFlow
+    ? (isStandardYearOneGradeKeyFlow
+        ? '✅ Key thuộc gói Standard 01 năm - 01 lớp.'
+        : isStandardYearThreeGradeKeyFlow
+          ? '✅ Key thuộc gói Standard 01 năm - 03 lớp.'
+          : '✅ Key thuộc gói Standard.')
+    : isPremiumKeyFlow
+      ? '✅ Key thuộc gói Premium.'
+      : normalizedInputKey.startsWith('WSTL-')
+        ? '✅ Đã nhận diện key bản quyền Web Tổng. Gói chính xác sẽ được xác định khi verify với backend.'
+        : normalizedInputKey.startsWith('HHK-')
+          ? '✅ Đã nhận diện key bản quyền HHK. Gói chính xác sẽ được xác định khi verify với backend.'
+          : 'Chưa nhận diện loại key: bạn vẫn có thể dán key để hệ thống tự nhận diện.';
 
   const toggleActivationGrade = (grade: number) => {
     if (isPremiumKeyFlow) return;
@@ -1541,24 +1578,10 @@ export function PricingPage() {
           <div className="text-xs mt-1" style={{ color: 'var(--color-text-light)' }}>
             Standard: HHK-STANDARD-XXXXXXXX • Standard 01 năm - 01 lớp: HHK-STANDARD-1Y1G-XXXXXXXX • Standard 01 năm - 03 lớp: WSTL-XXXXXXXX-XXXXXX • Premium: HHK-PREMIUM-XXXXXXXX
           </div>
-          {detectedPlanFromInput && (
+          {shouldShowRecognizedKeyHint && (
             <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold"
-              style={
-                detectedPlanFromInput === 'premium'
-                  ? { background: '#EDE9FE', color: '#6D28D9' }
-                  : detectedPlanFromInput === 'standard_1year_3grade'
-                    ? { background: '#DCFCE7', color: '#15803D' }
-                  : detectedPlanFromInput === 'standard_1year_1grade'
-                    ? { background: '#DBEAFE', color: '#1D4ED8' }
-                    : { background: '#FEF3C7', color: '#B45309' }
-              }>
-              {detectedPlanFromInput === 'premium'
-                ? '👑 Phát hiện key Premium'
-                : detectedPlanFromInput === 'standard_1year_3grade'
-                  ? '📗 Phát hiện key Standard 01 năm - 03 lớp'
-                : detectedPlanFromInput === 'standard_1year_1grade'
-                  ? '📘 Phát hiện key Standard 01 năm - 01 lớp'
-                  : '⭐ Phát hiện key Standard'}
+              style={detectedKeyBadgeStyle}>
+              {detectedKeyBadgeText}
             </div>
           )}
         </div>
@@ -1598,7 +1621,7 @@ export function PricingPage() {
           <div
             className="text-xs mt-2 rounded-xl px-3 py-2 font-bold"
             style={
-              detectedPlanFromInput
+              shouldShowRecognizedKeyHint
                 ? {
                     color: '#065F46',
                     background: '#ECFDF5',
@@ -1611,17 +1634,7 @@ export function PricingPage() {
                   }
             }
           >
-            {isStandardKeyFlow
-              ? (isStandardYearOneGradeKeyFlow
-                  ? '✅ Key thuộc gói Standard 01 năm - 01 lớp.'
-                  : isStandardYearThreeGradeKeyFlow
-                    ? '✅ Key thuộc gói Standard 01 năm - 03 lớp.'
-                    : '✅ Key thuộc gói Standard.')
-              : isPremiumKeyFlow
-                ? '✅ Key thuộc gói Premium.'
-              : detectedPlanFromInput
-                ? '✅ Đã nhận diện loại key.'
-                : 'Chưa nhận diện loại key: bạn vẫn có thể dán key để hệ thống tự nhận diện.'}
+            {detectedKeyDetailText}
           </div>
         </div>
         <div ref={gradePickerRef} className="mb-4 rounded-2xl p-4 activation-grade-card" style={{ background: '#F8FBFF', border: '2px solid #93C5FD', opacity: isPremiumKeyFlow ? 0.72 : 1 }}>
