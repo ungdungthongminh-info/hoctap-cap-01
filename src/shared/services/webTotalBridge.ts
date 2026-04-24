@@ -408,6 +408,20 @@ export async function verifyLicenseKey(params: {
       || payload?.data?.message
       || '',
     ).trim();
+    const rawLower = rawText.toLowerCase();
+    const backendLower = backendError.toLowerCase();
+
+    if (backendLower.includes('license invalid') || backendLower.includes('expired or revoked')) {
+      throw new Error('Key không hợp lệ, đã hết hạn, hoặc đã bị thu hồi trên hệ thống cấp key (Web Tổng).');
+    }
+
+    if (rawLower.includes('page could not be found') || rawLower.includes('not_found sin1::')) {
+      throw new Error(
+        `Đang gọi sai endpoint backend/bridge (base hiện tại: ${BACKEND_API_BASE}). `
+        + 'Vui lòng kiểm tra lại URL backend và làm mới app để bỏ cache cũ.',
+      );
+    }
+
     const fallbackError = rawText && !payload?.success
       ? `License verify lỗi HTTP ${res.status}: ${rawText.slice(0, 180)}`
       : `License verify lỗi HTTP ${res.status}.`;

@@ -1437,13 +1437,28 @@ export function PricingPage() {
               Đang kiểm tra key với hệ thống, vui lòng không tắt ứng dụng...
             </div>
           )}
-          <div className="text-xs mt-2" style={{ color: '#9A3412' }}>
+          <div
+            className="text-xs mt-2 rounded-xl px-3 py-2 font-bold"
+            style={
+              detectedPlanFromInput
+                ? {
+                    color: '#065F46',
+                    background: '#ECFDF5',
+                    border: '1px solid #A7F3D0',
+                  }
+                : {
+                    color: '#9A3412',
+                    background: '#FFF7ED',
+                    border: '1px solid #FDBA74',
+                  }
+            }
+          >
             {isStandardKeyFlow
               ? (isStandardYearOneGradeKeyFlow
-                  ? 'Đã nhận diện Standard 01 năm - 01 lớp: cần chọn đúng 1 lớp bên dưới rồi bấm Kích hoạt ngay.'
-                  : 'Đã nhận diện Standard: cần chọn đúng 3 lớp bên dưới rồi bấm Kích hoạt ngay.')
+                  ? '✅ Đã nhận diện Standard 01 năm - 01 lớp. Vui lòng chọn đúng 1 lớp bên dưới rồi bấm Kích hoạt ngay.'
+                  : '✅ Đã nhận diện Standard. Vui lòng chọn đúng 3 lớp bên dưới rồi bấm Kích hoạt ngay.')
               : isPremiumKeyFlow
-                ? 'Đã nhận diện Premium: không cần chọn lớp, hệ thống tự mở toàn bộ lớp.'
+                ? '✅ Đã nhận diện Premium. Không cần chọn lớp, hệ thống tự mở toàn bộ lớp.'
                 : 'Chưa nhận diện loại key: bạn vẫn có thể dán key để hệ thống tự nhận diện.'}
           </div>
         </div>

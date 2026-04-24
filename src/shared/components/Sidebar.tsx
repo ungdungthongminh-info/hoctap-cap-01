@@ -55,6 +55,7 @@ interface NavGroup {
 // Top-level items (always visible)
 const topItems: NavItem[] = [
   { to: '/home', icon: Home, label: 'Trang chủ' },
+  { to: '/pricing', icon: Crown, label: 'Cài đặt & Gói' },
 ];
 
 // Grouped items (collapsible)
@@ -226,7 +227,8 @@ export function Sidebar() {
             key={item.to}
             to={item.to}
             end
-            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            data-group="top"
+            className={({ isActive }) => `nav-item nav-item-top ${isActive ? 'active' : ''}`}
           >
             <item.icon size={20} />
             <span>{item.label}</span>
@@ -238,7 +240,7 @@ export function Sidebar() {
           const isOpen = openGroups.has(group.id);
           const hasActive = groupContainsPath(group, location.pathname);
           return (
-            <div key={group.id} className="nav-group">
+            <div key={group.id} className={`nav-group nav-group-${group.id}`}>
               <button
                 className={`nav-group-header ${hasActive && !isOpen ? 'has-active' : ''}`}
                 onClick={() => toggleGroup(group.id)}
@@ -258,6 +260,7 @@ export function Sidebar() {
                     <NavLink
                       key={item.to}
                       to={item.to}
+                      data-group={group.id}
                       className={({ isActive }) => `nav-item nav-item-child ${isActive ? 'active' : ''}`}
                     >
                       <item.icon size={16} />
