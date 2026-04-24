@@ -194,7 +194,7 @@ const SUB_BILLING_KEY = 'hhk_sub_billing_cycle';
 const ACTIVATION_SOURCE_KEY = 'hhk_activation_source';
 const STANDARD_GRADE_LOCKS_KEY = 'hhk_standard_grade_locks_v1';
 const REFUND_DAYS = 3;
-const PAID_LICENSE_PATTERN = /^HHK-(STANDARD|PREMIUM)-[A-Z0-9]{8}$/;
+const PAID_LICENSE_PATTERN = /^HHK-[A-Z0-9_]+-[A-Z0-9]{8}$/;
 const ALL_GRADE_OPTIONS = [0, 1, 2, 3, 4, 5] as const;
 
 interface StandardGradeLock {
@@ -275,8 +275,23 @@ function hasKeyActivatedPaidPlan(planId: string, status: string | null, licenseK
   return PAID_LICENSE_PATTERN.test((licenseKey || '').toUpperCase());
 }
 
+function isStandardYearOneGradePlanId(planId: string | null | undefined): boolean {
+  const normalized = String(planId || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+
+  if (!normalized) return false;
+  const isStandardLike = normalized.includes('standard') || normalized.includes('basic');
+  const hasOneGradeSignal = normalized.includes('1grade') || normalized.includes('single_grade') || normalized.includes('1lop') || normalized.includes('one_class');
+  const hasYearSignal = normalized.includes('year') || normalized.includes('yearly') || normalized.includes('1y') || normalized.includes('12m') || normalized.includes('1nam');
+  return isStandardLike && hasOneGradeSignal && hasYearSignal;
+}
+
 function normalizePlanId(planId: string | null | undefined): 'free' | 'standard' | 'premium' {
   if (planId === 'premium') return 'premium';
+  if (isStandardYearOneGradePlanId(planId)) return 'standard';
   if (planId === 'standard' || planId === 'basic') return 'standard';
   return 'free';
 }

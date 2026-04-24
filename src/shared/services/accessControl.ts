@@ -25,8 +25,15 @@ const SUB_STATUS_KEY = 'hhk_sub_status';
 const ACTIVATION_SOURCE_KEY = 'hhk_activation_source';
 const UNLOCKED_GRADES_KEY = 'hhk_unlocked_grades';
 const APP_STATE_KEY = 'hhk_app_state';
-const PAID_LICENSE_PATTERN = /^HHK-(STANDARD|PREMIUM)-[A-Z0-9]{8}$/;
+const PAID_LICENSE_PATTERN = /^HHK-[A-Z0-9_]+-[A-Z0-9]{8}$/;
 const ALL_GRADES = [0, 1, 2, 3, 4, 5] as const;
+const STANDARD_YEAR_ONE_GRADE_PLAN_ALIASES = new Set([
+  'standard_1year_1grade',
+  'standard_1y_1grade',
+  'standard_1nam_1lop',
+  'standard_yearly_1grade',
+  'standard_single_grade_yearly',
+]);
 
 const PLAN_LIMITS: Record<AccessPlan, PlanLimits> = {
   free: {
@@ -86,8 +93,32 @@ function hasKeyActivatedPaidPlan(planId: string, status: string | null, licenseK
   return PAID_LICENSE_PATTERN.test((licenseKey || '').toUpperCase());
 }
 
+function normalizePlanToken(raw: string | null | undefined): string {
+  return String(raw || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
+function isStandardYearOneGradePlanId(planId: string | null | undefined): boolean {
+  const normalized = normalizePlanToken(planId);
+  if (!normalized) return false;
+  if (STANDARD_YEAR_ONE_GRADE_PLAN_ALIASES.has(normalized)) return true;
+
+  const isStandardLike = normalized.includes('standard') || normalized.includes('basic');
+  const hasOneGradeSignal = normalized.includes('1grade') || normalized.includes('single_grade') || normalized.includes('1lop') || normalized.includes('one_class');
+  const hasYearSignal = normalized.includes('year') || normalized.includes('yearly') || normalized.includes('1y') || normalized.includes('12m') || normalized.includes('1nam');
+  return isStandardLike && hasOneGradeSignal && hasYearSignal;
+}
+
+function getStoredPlanId(): string {
+  return localStorage.getItem(PLAN_KEY) || 'free';
+}
+
 function normalizeAccessPlan(planId: string | null): AccessPlan {
   if (planId === 'premium') return 'premium';
+  if (isStandardYearOneGradePlanId(planId)) return 'standard';
   if (planId === 'standard' || planId === 'basic') return 'standard';
   return 'free';
 }
@@ -160,12 +191,20 @@ function normalizeUnlockedGrades(grades: number[], maxCount: number | 'all', fal
 
 export function getGradeSlotsForPlan(plan: AccessPlan = getAccessPlan()): number | 'all' {
   if (INTERNAL_BUILD || plan === 'premium') return 'all';
+  if (plan === 'standard' && isStandardYearOneGradePlanId(getStoredPlanId())) return 1;
   if (plan === 'standard') return 3;
   return 1;
 }
 
 export function getPlanLimits(plan: AccessPlan = getAccessPlan()): PlanLimits {
   if (INTERNAL_BUILD) return PLAN_LIMITS.premium;
+  if (plan === 'standard' && isStandardYearOneGradePlanId(getStoredPlanId())) {
+    return {
+      ...PLAN_LIMITS.standard,
+      grades: 1,
+      profiles: 2,
+    };
+  }
   return PLAN_LIMITS[plan];
 }
 
@@ -216,7 +255,11 @@ export function canAccessLesson(
   student: { grade: number },
   plan: AccessPlan = getAccessPlan(),
 ): boolean {
-  if (INTERNAL_BUILD || plan !== 'free') return true;
+  if (INTERNAL_BUILD) return true;
+  if (plan === 'standard' && isStandardYearOneGradePlanId(getStoredPlanId())) {
+    return canAccessSubjectCode(lesson.subjectCode, plan) && canAccessStudentGrade(lesson.grade, student.grade, plan);
+  }
+  if (plan !== 'free') return true;
   return canAccessSubjectCode(lesson.subjectCode, plan) && canAccessStudentGrade(lesson.grade, student.grade, plan);
 }
 
