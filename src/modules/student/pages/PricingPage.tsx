@@ -370,17 +370,10 @@ function detectPlanFlowFromKey(inputKey: string): 'standard' | 'standard_1year_1
   const hasOneGradeSignal = /1GRADE|SINGLEGRADE|1LOP|ONECLASS|ONE_GRADE|1_GRADE/.test(normalized);
   const hasYearSignal = /1YEAR|YEARLY|1Y|12M|1NAM/.test(normalized);
 
-  // Web Tong key prefixes for yearly standard variants.
-  if (normalized.startsWith('WSTL-') && /MOCNE1IP|MOCVQ2UB/.test(normalized)) {
-    return 'standard_1year_1grade';
-  }
-
-  if (normalized.startsWith('WSTL-') && /MOCVPUX5/.test(normalized)) {
-    return 'standard_1year_3grade';
-  }
-
+  // WSTL key chỉ là định dạng key Web Tổng, không chứa thông tin gói.
+  // Không được suy đoán 299/599 từ prefix này vì sẽ làm lệch toàn bộ key thực tế.
   if (normalized.startsWith('WSTL-')) {
-    return 'standard_1year_3grade';
+    return null;
   }
 
   if ((hasStandardSignal && hasOneGradeSignal && hasYearSignal) || normalized.includes('1Y1G')) {
