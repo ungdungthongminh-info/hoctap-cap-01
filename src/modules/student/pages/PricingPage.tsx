@@ -323,6 +323,66 @@ function isStandardYearOneGradePlanId(planId: string | null | undefined): boolea
   return isStandardLike && hasOneGradeSignal && hasYearSignal;
 }
 
+function detectPlanFlowFromKey(inputKey: string): 'standard' | 'standard_1year_1grade' | 'premium' | null {
+  const normalized = String(inputKey || '')
+    .trim()
+    .toUpperCase();
+  if (!normalized) return null;
+
+  if (normalized.includes('-PREMIUM-') || normalized.includes('-VIP-')) return 'premium';
+
+  const hasStandardSignal = normalized.includes('-STANDARD-') || normalized.includes('-BASIC-') || normalized.includes('-STD-');
+  const hasOneGradeSignal = /1GRADE|SINGLEGRADE|1LOP|ONECLASS|ONE_GRADE|1_GRADE/.test(normalized);
+  const hasYearSignal = /1YEAR|YEARLY|1Y|12M|1NAM/.test(normalized);
+
+  if ((hasStandardSignal && hasOneGradeSignal && hasYearSignal) || normalized.includes('1Y1G')) {
+    return 'standard_1year_1grade';
+  }
+  if (hasStandardSignal) return 'standard';
+  return null;
+}
+
+function playActivationTone(type: 'success' | 'error'): void {
+  try {
+    const AudioContextRef = (window as any).AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContextRef) return;
+
+    const context = new AudioContextRef();
+    const master = context.createGain();
+    master.gain.value = 0.06;
+    master.connect(context.destination);
+
+    const createBeep = (frequency: number, start: number, duration: number) => {
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(frequency, start);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.18, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+      oscillator.connect(gain);
+      gain.connect(master);
+      oscillator.start(start);
+      oscillator.stop(start + duration + 0.03);
+    };
+
+    const now = context.currentTime + 0.01;
+    if (type === 'success') {
+      createBeep(700, now, 0.12);
+      createBeep(980, now + 0.13, 0.16);
+    } else {
+      createBeep(320, now, 0.18);
+      createBeep(220, now + 0.16, 0.2);
+    }
+
+    window.setTimeout(() => {
+      void context.close().catch(() => undefined);
+    }, 1200);
+  } catch {
+    // Ignore audio errors to avoid blocking activation flow.
+  }
+}
+
 function getPlanHintFromLicensePayload(license: Record<string, unknown> | undefined): string {
   const metadata = (license?.metadata && typeof license.metadata === 'object') ? (license.metadata as Record<string, unknown>) : undefined;
   const candidates = [
@@ -330,7 +390,10 @@ function getPlanHintFromLicensePayload(license: Record<string, unknown> | undefi
     license?.plan,
     license?.tier,
     license?.planId,
+    license?.productCode,
+    license?.productId,
     metadata?.planId,
+    metadata?.productCode,
     license?.licenseKey,
   ];
 
@@ -373,6 +436,9 @@ function resolvePlanFromLicensePayload(
 
   const detectPlanFromText = (text: string): 'standard' | 'premium' | null => {
     if (!text) return null;
+    const hasOneGradeSignal = /\b(1grade|single\s?grade|1lop|one\s?class|1y1g)\b/.test(text);
+    const hasYearSignal = /\b(year|yearly|1y|12m|1nam)\b/.test(text);
+    if (hasOneGradeSignal && hasYearSignal) return 'standard';
     if (/\b(premium|vip|advanced)\b/.test(text)) return 'premium';
     if (/\b(standard|basic|starter|std)\b/.test(text)) return 'standard';
     return null;
@@ -528,22 +594,21 @@ export function PricingPage() {
   const [showComparison, setShowComparison] = useState(false);
   const [copied, setCopied] = useState(false);
   const [copiedDeviceId, setCopiedDeviceId] = useState(false);
+  const [isActivating, setIsActivating] = useState(false);
   // Subscription state
   const [activeSub, setActiveSub] = useState<Subscription | null>(null);
   const [subExpiry, setSubExpiry] = useState(localStorage.getItem(SUB_EXPIRY_KEY));
   const gradePickerRef = useRef<HTMLDivElement | null>(null);
-  const previousDetectedPlanRef = useRef<'standard' | 'premium' | null>(null);
+  const previousDetectedPlanRef = useRef<'standard' | 'standard_1year_1grade' | 'premium' | null>(null);
   const currentDeviceId = getDeviceId();
   const normalizedInputKey = licenseKey.trim().toUpperCase();
-  const detectedPlanFromInput = normalizedInputKey.includes('-PREMIUM-')
-    ? 'premium'
-    : normalizedInputKey.includes('-STANDARD-') || normalizedInputKey.includes('-BASIC-')
-      ? 'standard'
-      : null;
-  const isStandardKeyFlow = detectedPlanFromInput === 'standard';
+  const detectedPlanFromInput = detectPlanFlowFromKey(normalizedInputKey);
+  const isStandardYearOneGradeKeyFlow = detectedPlanFromInput === 'standard_1year_1grade';
+  const isStandardKeyFlow = detectedPlanFromInput === 'standard' || isStandardYearOneGradeKeyFlow;
   const isPremiumKeyFlow = detectedPlanFromInput === 'premium';
+  const requiredGradeCountForInput = isStandardYearOneGradeKeyFlow ? 1 : 3;
   const lockedStandardGradeSelection = isStandardKeyFlow
-    ? getStandardGradeLock(normalizedInputKey, currentDeviceId)
+    ? getStandardGradeLock(normalizedInputKey, currentDeviceId, requiredGradeCountForInput)
     : null;
   const isStandardSelectionLocked = Boolean(lockedStandardGradeSelection);
   const visiblePlans = pricingPlans.filter((plan) => plan.id !== 'basic');
@@ -565,10 +630,10 @@ export function PricingPage() {
         return prev.filter((item) => item !== grade);
       }
 
-      if (prev.length >= 3) {
+      if (prev.length >= requiredGradeCountForInput) {
         const next = [...prev];
         next[next.length - 1] = grade;
-        setActivateMsg({ type: 'success', text: 'Đã đổi 1 lớp mở khóa trong danh sách Standard (tối đa 3 lớp).' });
+        setActivateMsg({ type: 'success', text: `Đã đổi 1 lớp mở khóa trong danh sách Standard (tối đa ${requiredGradeCountForInput} lớp).` });
         setTimeout(() => setActivateMsg(null), 2500);
         return next;
       }
@@ -578,14 +643,19 @@ export function PricingPage() {
   };
 
   useEffect(() => {
-    if (previousDetectedPlanRef.current !== detectedPlanFromInput && detectedPlanFromInput === 'standard') {
+    if (previousDetectedPlanRef.current !== detectedPlanFromInput && isStandardKeyFlow) {
       gradePickerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setActivateMsg({ type: 'success', text: 'Đã nhận diện key Standard. Vui lòng chọn đúng 3 lớp trước khi bấm kích hoạt.' });
+      setActivateMsg({
+        type: 'success',
+        text: isStandardYearOneGradeKeyFlow
+          ? 'Đã nhận diện key Standard 01 năm - 01 lớp. Vui lòng chọn đúng 1 lớp trước khi bấm kích hoạt.'
+          : 'Đã nhận diện key Standard. Vui lòng chọn đúng 3 lớp trước khi bấm kích hoạt.',
+      });
       setTimeout(() => setActivateMsg(null), 3500);
     }
 
     previousDetectedPlanRef.current = detectedPlanFromInput;
-  }, [detectedPlanFromInput]);
+  }, [detectedPlanFromInput, isStandardKeyFlow, isStandardYearOneGradeKeyFlow]);
 
   useEffect(() => {
     if (!isStandardKeyFlow) return;
@@ -733,90 +803,104 @@ export function PricingPage() {
   const activateLicense = async () => {
     const key = licenseKey.trim().toUpperCase();
     if (!key) return;
+    setIsActivating(true);
+    setActivateMsg({ type: 'success', text: '⏳ Đang xác minh key, vui lòng chờ...' });
 
-    const verifyResult = await verifyLicenseKey({
-      licenseKey: key,
-      appId: 'app-study-12',
-      deviceId: getDeviceId(),
-      deviceName: `${navigator.platform} / ${navigator.userAgent.slice(0, 80)}`,
-    });
+    try {
+      const verifyResult = await verifyLicenseKey({
+        licenseKey: key,
+        appId: 'app-study-12',
+        deviceId: getDeviceId(),
+        deviceName: `${navigator.platform} / ${navigator.userAgent.slice(0, 80)}`,
+      });
 
-    const licensePayload = verifyResult.license as unknown as Record<string, unknown>;
-    const resolvedPlan = resolvePlanFromLicensePayload(licensePayload, verifyResult.features || []);
-    const planHint = getPlanHintFromLicensePayload(licensePayload);
-    const isStandardYearOneGrade = isStandardYearOneGradePlanId(planHint);
-    const planId = resolvedPlan || normalizePlanId(String(verifyResult.license?.planCode || '').toLowerCase());
-    if (!planId || !['standard', 'premium'].includes(planId)) {
-      const debugPlanCode = String((verifyResult.license as any)?.planCode || (verifyResult.license as any)?.plan || (verifyResult.license as any)?.tier || 'n/a');
-      setActivateMsg({ type: 'error', text: `❌ Key hợp lệ nhưng app chưa map được gói trả về (plan=${debugPlanCode}). Vui lòng gửi ảnh lỗi này để cập nhật mapping.` });
-      setTimeout(() => setActivateMsg(null), 6000);
-      return;
-    }
-
-    let standardGradesToUse = activationGrades;
-    if (planId === 'standard') {
-      const requiredGradeCount = isStandardYearOneGrade ? 1 : 3;
-      const existingLock = getStandardGradeLock(key, currentDeviceId, requiredGradeCount);
-      if (existingLock) {
-        standardGradesToUse = existingLock.grades;
-      } else {
-        if (activationGrades.length !== requiredGradeCount) {
-          setActivateMsg({
-            type: 'error',
-            text: isStandardYearOneGrade
-              ? '❌ Gói này yêu cầu chọn đúng 1 lớp trước khi kích hoạt key.'
-              : '❌ Gói Standard cần chọn đúng 3 lớp trước khi kích hoạt key.',
-          });
-          setTimeout(() => setActivateMsg(null), 6000);
-          return;
-        }
-        const saved = saveStandardGradeLock(key, currentDeviceId, activationGrades, requiredGradeCount);
-        standardGradesToUse = saved.grades;
+      const licensePayload = verifyResult.license as unknown as Record<string, unknown>;
+      const resolvedPlan = resolvePlanFromLicensePayload(licensePayload, verifyResult.features || []);
+      const planHint = getPlanHintFromLicensePayload(licensePayload);
+      const detectedPlanByKey = detectPlanFlowFromKey(key);
+      const isStandardYearOneGrade = isStandardYearOneGradePlanId(planHint) || detectedPlanByKey === 'standard_1year_1grade';
+      const detectedBasePlan = detectedPlanByKey === 'premium' ? 'premium' : detectedPlanByKey ? 'standard' : null;
+      const planId = resolvedPlan || detectedBasePlan || normalizePlanId(String(verifyResult.license?.planCode || '').toLowerCase());
+      if (!planId || !['standard', 'premium'].includes(planId)) {
+        const debugPlanCode = String((verifyResult.license as any)?.planCode || (verifyResult.license as any)?.plan || (verifyResult.license as any)?.tier || 'n/a');
+        setActivateMsg({ type: 'error', text: `❌ Key hợp lệ nhưng app chưa map được gói trả về (plan=${debugPlanCode}). Vui lòng gửi ảnh lỗi này để cập nhật mapping.` });
+        playActivationTone('error');
+        setTimeout(() => setActivateMsg(null), 6000);
+        return;
       }
+
+      let standardGradesToUse = activationGrades;
+      if (planId === 'standard') {
+        const requiredGradeCount = isStandardYearOneGrade ? 1 : 3;
+        const existingLock = getStandardGradeLock(key, currentDeviceId, requiredGradeCount);
+        if (existingLock) {
+          standardGradesToUse = existingLock.grades;
+        } else {
+          if (activationGrades.length !== requiredGradeCount) {
+            setActivateMsg({
+              type: 'error',
+              text: isStandardYearOneGrade
+                ? '❌ Gói này yêu cầu chọn đúng 1 lớp trước khi kích hoạt key.'
+                : '❌ Gói Standard cần chọn đúng 3 lớp trước khi kích hoạt key.',
+            });
+            playActivationTone('error');
+            setTimeout(() => setActivateMsg(null), 6000);
+            return;
+          }
+          const saved = saveStandardGradeLock(key, currentDeviceId, activationGrades, requiredGradeCount);
+          standardGradesToUse = saved.grades;
+        }
+      }
+
+      const cycle = normalizeBillingCycle(verifyResult.license?.billingCycle);
+      const expiresAt = verifyResult.license?.expiresAt || null;
+      const refundDeadline = addDays(new Date(), REFUND_DAYS);
+      const amount = getPriceForCycle(pricingPlans.find((p) => p.id === planId), cycle);
+      const unlockedGrades = planId === 'premium'
+        ? persistUnlockedGrades([...ALL_GRADE_OPTIONS], 'premium', state.student.grade)
+        : persistUnlockedGrades(standardGradesToUse, 'standard', state.student.grade);
+
+      await dbRun(`UPDATE subscriptions SET status = 'expired', updatedAt = datetime('now') WHERE status = 'active'`);
+
+      const storagePlanId = planId === 'standard' && isStandardYearOneGrade ? 'standard_1year_1grade' : planId;
+
+      await dbRun(
+        `INSERT INTO subscriptions (planId, billingCycle, licenseKey, amount, status, activatedAt, expiresAt, paymentMethod, refundDeadline)
+         VALUES (?, ?, ?, ?, 'active', datetime('now'), ?, 'license_key', ?)`,
+        [storagePlanId, cycle, key, amount, expiresAt, refundDeadline],
+      );
+
+      persistPaidPlan(storagePlanId, key, expiresAt, cycle);
+      setActivationGrades(unlockedGrades);
+
+      const nextGrade = unlockedGrades[0] ?? state.student.grade;
+      const subjectsOfGrade = getSubjectsForGrade(nextGrade);
+      const firstReadySubject = subjectsOfGrade.find((subject) =>
+        state.lessons.some((lesson) => lesson.grade === nextGrade && lesson.subjectCode === subject.code),
+      );
+
+      updateStudent({
+        grade: nextGrade,
+        subjectCode: firstReadySubject?.code || subjectsOfGrade[0]?.code || 'math',
+      });
+
+      setCurrentPlan(planId);
+      setActivateMsg({
+        type: 'success',
+        text: `✅ Kích hoạt thành công gói ${pricingPlans.find((p) => p.id === storagePlanId)?.name || pricingPlans.find((p) => p.id === planId)?.name || planId}! ${planId === 'standard' ? `Đã mở khóa ${unlockedGrades.map((grade) => getGradeLabel(grade)).join(', ')}.` : 'Đã mở toàn bộ lớp.'} ${expiresAt ? `Hết hạn: ${formatDate(expiresAt)}` : '(Trọn đời)'}`,
+      });
+      playActivationTone('success');
+      setLicenseKey('');
+      await loadActiveSub();
+      setTimeout(() => setActivateMsg(null), 6000);
+    } catch (error) {
+      const message = (error as any)?.message ? String((error as any).message) : 'Không thể xác minh key. Vui lòng kiểm tra mạng hoặc thử lại sau.';
+      setActivateMsg({ type: 'error', text: `❌ Kích hoạt thất bại: ${message}` });
+      playActivationTone('error');
+      setTimeout(() => setActivateMsg(null), 7000);
+    } finally {
+      setIsActivating(false);
     }
-
-    const cycle = normalizeBillingCycle(verifyResult.license?.billingCycle);
-    const expiresAt = verifyResult.license?.expiresAt || null;
-    const refundDeadline = addDays(new Date(), REFUND_DAYS);
-    const amount = getPriceForCycle(pricingPlans.find(p => p.id === planId), cycle);
-    const unlockedGrades = planId === 'premium'
-      ? persistUnlockedGrades([...ALL_GRADE_OPTIONS], 'premium', state.student.grade)
-      : persistUnlockedGrades(standardGradesToUse, 'standard', state.student.grade);
-
-    // Deactivate old subscription
-    await dbRun(`UPDATE subscriptions SET status = 'expired', updatedAt = datetime('now') WHERE status = 'active'`);
-
-    // Insert new subscription
-    const storagePlanId = planId === 'standard' && isStandardYearOneGrade ? 'standard_1year_1grade' : planId;
-
-    await dbRun(
-      `INSERT INTO subscriptions (planId, billingCycle, licenseKey, amount, status, activatedAt, expiresAt, paymentMethod, refundDeadline)
-       VALUES (?, ?, ?, ?, 'active', datetime('now'), ?, 'license_key', ?)`,
-      [storagePlanId, cycle, key, amount, expiresAt, refundDeadline]
-    );
-
-    persistPaidPlan(storagePlanId, key, expiresAt, cycle);
-    setActivationGrades(unlockedGrades);
-
-    const nextGrade = unlockedGrades[0] ?? state.student.grade;
-    const subjectsOfGrade = getSubjectsForGrade(nextGrade);
-    const firstReadySubject = subjectsOfGrade.find((subject) =>
-      state.lessons.some((lesson) => lesson.grade === nextGrade && lesson.subjectCode === subject.code),
-    );
-
-    updateStudent({
-      grade: nextGrade,
-      subjectCode: firstReadySubject?.code || subjectsOfGrade[0]?.code || 'math',
-    });
-
-    setCurrentPlan(planId);
-    setActivateMsg({
-      type: 'success',
-      text: `✅ Kích hoạt thành công gói ${pricingPlans.find(p => p.id === planId)?.name || planId}! ${planId === 'standard' ? `Đã mở khóa ${unlockedGrades.map((grade) => getGradeLabel(grade)).join(', ')}.` : 'Đã mở toàn bộ lớp.'} ${expiresAt ? `Hết hạn: ${formatDate(expiresAt)}` : '(Trọn đời)'}`,
-    });
-    setLicenseKey('');
-    await loadActiveSub();
-    setTimeout(() => setActivateMsg(null), 6000);
   };
 
   // ========== REFUND ==========
@@ -1293,12 +1377,22 @@ export function PricingPage() {
         <div className="mb-3 rounded-2xl p-3" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
           <div className="text-xs font-bold" style={{ color: '#0F172A' }}>Định dạng key</div>
           <div className="text-xs mt-1" style={{ color: 'var(--color-text-light)' }}>
-            Standard: HHK-STANDARD-XXXXXXXX • Premium: HHK-PREMIUM-XXXXXXXX
+            Standard: HHK-STANDARD-XXXXXXXX • Standard 01 năm - 01 lớp: HHK-STANDARD-1Y1G-XXXXXXXX • Premium: HHK-PREMIUM-XXXXXXXX
           </div>
           {detectedPlanFromInput && (
             <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold"
-              style={detectedPlanFromInput === 'premium' ? { background: '#EDE9FE', color: '#6D28D9' } : { background: '#FEF3C7', color: '#B45309' }}>
-              {detectedPlanFromInput === 'premium' ? '👑 Phát hiện key Premium' : '⭐ Phát hiện key Standard'}
+              style={
+                detectedPlanFromInput === 'premium'
+                  ? { background: '#EDE9FE', color: '#6D28D9' }
+                  : detectedPlanFromInput === 'standard_1year_1grade'
+                    ? { background: '#DBEAFE', color: '#1D4ED8' }
+                    : { background: '#FEF3C7', color: '#B45309' }
+              }>
+              {detectedPlanFromInput === 'premium'
+                ? '👑 Phát hiện key Premium'
+                : detectedPlanFromInput === 'standard_1year_1grade'
+                  ? '📘 Phát hiện key Standard 01 năm - 01 lớp'
+                  : '⭐ Phát hiện key Standard'}
             </div>
           )}
         </div>
@@ -1307,7 +1401,15 @@ export function PricingPage() {
           <div className="text-xs mt-1 mb-3" style={{ color: '#7C2D12' }}>
             Sau khi nhập key, hệ thống tự nhận diện gói và hướng dẫn bước tiếp theo.
           </div>
-          <div className="flex gap-2 items-stretch rounded-2xl p-2" style={{ background: '#FFFFFF', border: '1px solid #FED7AA', boxShadow: '0 10px 24px rgba(251,146,60,0.14)' }}>
+          <div className="flex gap-2 items-stretch rounded-2xl p-2" style={{
+            background: '#FFFFFF',
+            border: activateMsg?.type === 'error' ? '1px solid #FCA5A5' : activateMsg?.type === 'success' ? '1px solid #86EFAC' : '1px solid #FED7AA',
+            boxShadow: activateMsg?.type === 'error'
+              ? '0 10px 24px rgba(239,68,68,0.14)'
+              : activateMsg?.type === 'success'
+                ? '0 10px 24px rgba(16,185,129,0.15)'
+                : '0 10px 24px rgba(251,146,60,0.14)',
+          }}>
           <input
             type="text"
             className="premium-input flex-1 px-4 py-3 rounded-xl text-sm uppercase"
@@ -1315,14 +1417,23 @@ export function PricingPage() {
             value={licenseKey}
             onChange={e => setLicenseKey(e.target.value.toUpperCase())}
             maxLength={25}
+            disabled={isActivating}
           />
-            <button className={premiumButtonPrimaryClass} onClick={activateLicense} disabled={!licenseKey.trim()} style={{ ...darkPrimaryButtonStyle, minWidth: 170 }}>
-              <Unlock size={16} /> Kích hoạt ngay
+            <button className={premiumButtonPrimaryClass} onClick={activateLicense} disabled={!licenseKey.trim() || isActivating} style={{ ...darkPrimaryButtonStyle, minWidth: 170 }}>
+              {isActivating ? <RefreshCw size={16} className="animate-spin" /> : <Unlock size={16} />}
+              {isActivating ? 'Đang xác minh...' : 'Kích hoạt ngay'}
             </button>
           </div>
+          {isActivating && (
+            <div className="mt-2 text-xs font-bold" style={{ color: '#1D4ED8' }}>
+              Đang kiểm tra key với hệ thống, vui lòng không tắt ứng dụng...
+            </div>
+          )}
           <div className="text-xs mt-2" style={{ color: '#9A3412' }}>
             {isStandardKeyFlow
-              ? 'Đã nhận diện Standard: cần chọn đúng 3 lớp bên dưới rồi bấm Kích hoạt ngay.'
+              ? (isStandardYearOneGradeKeyFlow
+                  ? 'Đã nhận diện Standard 01 năm - 01 lớp: cần chọn đúng 1 lớp bên dưới rồi bấm Kích hoạt ngay.'
+                  : 'Đã nhận diện Standard: cần chọn đúng 3 lớp bên dưới rồi bấm Kích hoạt ngay.')
               : isPremiumKeyFlow
                 ? 'Đã nhận diện Premium: không cần chọn lớp, hệ thống tự mở toàn bộ lớp.'
                 : 'Chưa nhận diện loại key: bạn vẫn có thể dán key để hệ thống tự nhận diện.'}
@@ -1331,7 +1442,9 @@ export function PricingPage() {
         <div ref={gradePickerRef} className="mb-4 rounded-2xl p-4 activation-grade-card" style={{ background: '#F8FBFF', border: '2px solid #93C5FD', opacity: isPremiumKeyFlow ? 0.72 : 1 }}>
           <div className="text-base font-extrabold" style={{ color: '#0F172A' }}>Bước 2: Chọn lớp muốn mở</div>
           <div className="text-sm mt-1" style={{ color: '#334155' }}>
-            Key Standard: chọn đúng 3 lớp. Key Premium: tự mở tất cả lớp.
+            {isStandardYearOneGradeKeyFlow
+              ? 'Key Standard 01 năm - 01 lớp: chọn đúng 1 lớp. Key Premium: tự mở tất cả lớp.'
+              : 'Key Standard: chọn đúng 3 lớp. Key Premium: tự mở tất cả lớp.'}
           </div>
           <div className="mt-2 rounded-xl px-3 py-2 text-sm font-bold" style={{ background: '#FEF3C7', color: '#92400E', border: '1px solid #FCD34D' }}>
             ⚠️ Lưu ý quan trọng: Với key Standard, lựa chọn 3 lớp chỉ áp dụng 1 lần đầu theo ID máy này và không thể thay đổi.
@@ -1356,12 +1469,12 @@ export function PricingPage() {
               );
             })}
           </div>
-          <div className="text-sm mt-2 font-extrabold" style={{ color: activationGrades.length === 3 ? '#059669' : '#1D4ED8' }}>
+          <div className="text-sm mt-2 font-extrabold" style={{ color: activationGrades.length === requiredGradeCountForInput ? '#059669' : '#1D4ED8' }}>
             {isPremiumKeyFlow
               ? 'Premium: tự mở toàn bộ lớp, không cần chọn thủ công.'
               : isStandardSelectionLocked
                 ? `Đã khóa lựa chọn cho key này: ${activationGrades.map((grade) => getGradeLabel(grade)).join(', ')}.`
-                : `Đã chọn: ${activationGrades.length}/3 lớp cho key Standard`}
+                : `Đã chọn: ${activationGrades.length}/${requiredGradeCountForInput} lớp cho key Standard`}
           </div>
           <div className="text-sm mt-1" style={{ color: '#475569' }}>
             {isPremiumKeyFlow
@@ -1373,8 +1486,12 @@ export function PricingPage() {
         </div>
         {activateMsg && (
           <div className="mt-3 flex flex-col gap-2">
-            <div className="text-sm font-bold" style={{ color: activateMsg.type === 'success' ? '#059669' : '#DC2626' }}>
-              {activateMsg.text}
+            <div className="rounded-xl px-3 py-2 text-sm font-bold" style={{
+              color: activateMsg.type === 'success' ? '#065F46' : '#991B1B',
+              background: activateMsg.type === 'success' ? '#ECFDF5' : '#FEF2F2',
+              border: activateMsg.type === 'success' ? '1px solid #A7F3D0' : '1px solid #FCA5A5',
+            }}>
+              {activateMsg.type === 'success' ? '✅ ' : '❌ '}{activateMsg.text}
             </div>
             {activateMsg.actionUrl && activateMsg.actionLabel && (
               <div>
