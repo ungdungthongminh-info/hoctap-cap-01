@@ -378,9 +378,26 @@ export async function verifyLicenseKey(params: {
     },
     body: JSON.stringify(params),
   });
-  const payload = await res.json().catch(() => ({}));
+  const rawText = await res.text().catch(() => '');
+  let payload: any = {};
+  try {
+    payload = rawText ? JSON.parse(rawText) : {};
+  } catch {
+    payload = {};
+  }
+
   if (!res.ok || !payload?.success) {
-    throw new Error(payload?.error || 'License verify thất bại.');
+    const backendError = String(
+      payload?.error
+      || payload?.message
+      || payload?.data?.error
+      || payload?.data?.message
+      || '',
+    ).trim();
+    const fallbackError = rawText && !payload?.success
+      ? `License verify lỗi HTTP ${res.status}: ${rawText.slice(0, 180)}`
+      : `License verify lỗi HTTP ${res.status}.`;
+    throw new Error(backendError || fallbackError || 'License verify thất bại.');
   }
   return {
     ok: true,

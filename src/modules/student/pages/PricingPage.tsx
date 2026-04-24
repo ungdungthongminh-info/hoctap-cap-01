@@ -13,6 +13,7 @@ import { useAppData } from '../../../shared/providers/AppDataProvider';
 import { getGradeLabel, getSubjectsForGrade } from '../../../data/subjects';
 import {
   fetchPricingPlans,
+  getBridgeCustomer,
   verifyLicenseKey,
   type PricingPlanCatalogEntry,
 } from '../../../shared/services/webTotalBridge';
@@ -230,6 +231,7 @@ const STANDARD_GRADE_LOCKS_KEY = 'hhk_standard_grade_locks_v1';
 const REFUND_DAYS = 3;
 const PAID_LICENSE_PATTERN = /^HHK-[A-Z0-9_]+-[A-Z0-9]{8}$/;
 const ALL_GRADE_OPTIONS = [0, 1, 2, 3, 4, 5] as const;
+const WEB_TOTAL_APP_ID = String(import.meta.env.VITE_WEBTOTAL_APP_ID || '').trim();
 
 interface StandardGradeLock {
   key: string;
@@ -334,6 +336,11 @@ function detectPlanFlowFromKey(inputKey: string): 'standard' | 'standard_1year_1
   const hasStandardSignal = normalized.includes('-STANDARD-') || normalized.includes('-BASIC-') || normalized.includes('-STD-');
   const hasOneGradeSignal = /1GRADE|SINGLEGRADE|1LOP|ONECLASS|ONE_GRADE|1_GRADE/.test(normalized);
   const hasYearSignal = /1YEAR|YEARLY|1Y|12M|1NAM/.test(normalized);
+
+  // Web Tong key prefix for current 01 nam - 01 lop variant.
+  if (normalized.startsWith('WSTL-') && normalized.includes('MOCNE1IP')) {
+    return 'standard_1year_1grade';
+  }
 
   if ((hasStandardSignal && hasOneGradeSignal && hasYearSignal) || normalized.includes('1Y1G')) {
     return 'standard_1year_1grade';
@@ -809,7 +816,8 @@ export function PricingPage() {
     try {
       const verifyResult = await verifyLicenseKey({
         licenseKey: key,
-        appId: 'app-study-12',
+        ...(WEB_TOTAL_APP_ID ? { appId: WEB_TOTAL_APP_ID } : {}),
+        ...(getBridgeCustomer()?.id ? { customerId: getBridgeCustomer()!.id } : {}),
         deviceId: getDeviceId(),
         deviceName: `${navigator.platform} / ${navigator.userAgent.slice(0, 80)}`,
       });
@@ -1401,7 +1409,7 @@ export function PricingPage() {
           <div className="text-xs mt-1 mb-3" style={{ color: '#7C2D12' }}>
             Sau khi nhập key, hệ thống tự nhận diện gói và hướng dẫn bước tiếp theo.
           </div>
-          <div className="flex gap-2 items-stretch rounded-2xl p-2" style={{
+          <div className={`flex gap-2 items-stretch rounded-2xl p-2 activation-key-input-shell ${activateMsg?.type === 'error' ? 'is-error' : activateMsg?.type === 'success' ? 'is-success' : ''}`} style={{
             background: '#FFFFFF',
             border: activateMsg?.type === 'error' ? '1px solid #FCA5A5' : activateMsg?.type === 'success' ? '1px solid #86EFAC' : '1px solid #FED7AA',
             boxShadow: activateMsg?.type === 'error'
@@ -1412,7 +1420,7 @@ export function PricingPage() {
           }}>
           <input
             type="text"
-            className="premium-input flex-1 px-4 py-3 rounded-xl text-sm uppercase"
+            className={`premium-input flex-1 px-4 py-3 rounded-xl text-sm uppercase ${activateMsg?.type === 'error' ? 'activation-key-input-error' : activateMsg?.type === 'success' ? 'activation-key-input-success' : ''}`}
             placeholder="Ví dụ: HHK-STANDARD-AB12CD34"
             value={licenseKey}
             onChange={e => setLicenseKey(e.target.value.toUpperCase())}
@@ -1447,7 +1455,7 @@ export function PricingPage() {
               : 'Key Standard: chọn đúng 3 lớp. Key Premium: tự mở tất cả lớp.'}
           </div>
           <div className="mt-2 rounded-xl px-3 py-2 text-sm font-bold" style={{ background: '#FEF3C7', color: '#92400E', border: '1px solid #FCD34D' }}>
-            ⚠️ Lưu ý quan trọng: Với key Standard, lựa chọn 3 lớp chỉ áp dụng 1 lần đầu theo ID máy này và không thể thay đổi.
+            ⚠️ Lưu ý quan trọng: Với key Standard, lựa chọn {requiredGradeCountForInput} lớp chỉ áp dụng 1 lần đầu theo ID máy này và không thể thay đổi.
           </div>
           <div className="flex flex-wrap gap-2 mt-3">
             {ALL_GRADE_OPTIONS.map((grade) => {
