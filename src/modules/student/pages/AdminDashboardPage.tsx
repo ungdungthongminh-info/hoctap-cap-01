@@ -10,8 +10,9 @@ import {
   Users, BarChart2, Bell, CheckCircle, XCircle, RefreshCw,
   Copy, ChevronDown, ChevronUp, AlertTriangle, Key, MessageCircle, Phone, Search, Clock3
 } from 'lucide-react';
+import { BACKEND_API_BASE } from '@shared/services/webTotalBridge';
 
-const API_BASE = 'http://localhost:5000/api/v1';
+const API_BASE = BACKEND_API_BASE;
 
 // ── Types ──────────────────────────────────────────────────────────────────
 

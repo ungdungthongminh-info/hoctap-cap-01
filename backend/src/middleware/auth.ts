@@ -56,7 +56,22 @@ export function corsMiddleware(req: Request, res: Response, next: NextFunction) 
   const allowedOrigins = envOrigins.length > 0 ? envOrigins : defaultOrigins;
   const origin = req.headers.origin as string | undefined;
 
-  if (origin && allowedOrigins.includes(origin)) {
+  const isPrivateNetworkOrigin = (value: string): boolean => {
+    try {
+      const parsed = new URL(value);
+      const host = parsed.hostname;
+      return host === 'localhost'
+        || host === '127.0.0.1'
+        || host === '::1'
+        || /^10\./.test(host)
+        || /^192\.168\./.test(host)
+        || /^172\.(1[6-9]|2\d|3[0-1])\./.test(host);
+    } catch {
+      return false;
+    }
+  };
+
+  if (origin && (allowedOrigins.includes(origin) || isPrivateNetworkOrigin(origin))) {
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Vary', 'Origin');
   }

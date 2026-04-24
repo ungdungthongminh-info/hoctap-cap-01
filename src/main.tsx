@@ -41,9 +41,14 @@ window.addEventListener('unhandledrejection', (event) => {
 // ==================== SW CLEANUP ====================
 async function cleanupLocalPwaArtifacts() {
   try {
+    const hostname = window.location.hostname;
     const isLocalHost =
-      window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1';
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname === '::1' ||
+      /^10\./.test(hostname) ||
+      /^192\.168\./.test(hostname) ||
+      /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname);
 
     if (!isLocalHost) return;
 

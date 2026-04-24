@@ -1,3 +1,16 @@
+function isPrivateNetworkHostname(hostname: string): boolean {
+  if (!hostname) return false;
+  if (['localhost', '127.0.0.1', '::1'].includes(hostname)) return true;
+  if (/^10\./.test(hostname)) return true;
+  if (/^192\.168\./.test(hostname)) return true;
+  if (/^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname)) return true;
+  return false;
+}
+
+function isCommonDevPort(port: string): boolean {
+  return ['3000', '3900', '4173', '5173', '5174'].includes(port);
+}
+
 function resolveBackendApiBase() {
   const configuredBase = import.meta.env.VITE_BACKEND_API_BASE?.trim();
   if (configuredBase) {
@@ -5,17 +18,18 @@ function resolveBackendApiBase() {
   }
 
   if (typeof window !== 'undefined') {
-    const { protocol, hostname, origin } = window.location;
+    const { protocol, hostname, port, origin } = window.location;
 
     // file:// = Electron app
     if (protocol === 'file:') {
       return 'http://localhost:5000/api/v1';
     }
 
-    // Bất kỳ localhost/127.0.0.1 nào đều dùng backend local port 5000
-    // (kể cả khi truy cập qua Web Tổng local server ở port 3900 hoặc cổng khác)
-    if (['localhost', '127.0.0.1'].includes(hostname)) {
-      return 'http://localhost:5000/api/v1';
+    // Dev local/LAN: frontend có thể mở từ Vite, Web Tong local hoặc IP nội bộ.
+    // Trong các case này, backend bridge luôn chạy riêng ở cổng 5000 trên cùng máy.
+    if (isPrivateNetworkHostname(hostname) || isCommonDevPort(port)) {
+      const backendHost = hostname || 'localhost';
+      return `http://${backendHost}:5000/api/v1`;
     }
 
     if (protocol === 'http:' || protocol === 'https:') {
