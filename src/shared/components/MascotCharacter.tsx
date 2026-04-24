@@ -395,3 +395,40 @@ const mascotMap: Record<string, React.ComponentType<SVGMascotProps>> = {
   galaxy: OwlMascot,
   sunny: DogMascot,
 };
+
+/* ============================================
+   AllMascotsParade — Showcase toàn bộ 6 nhân vật
+   ============================================ */
+const MASCOT_PARADE_DATA = [
+  { id: 'ocean',  color: '#0EA5E9', name: 'Dopi',  Mascot: DolphinMascot },
+  { id: 'garden', color: '#EC4899', name: 'Bông',  Mascot: BunnyMascot   },
+  { id: 'forest', color: '#22C55E', name: 'Mochi', Mascot: BearMascot    },
+  { id: 'sunset', color: '#F97316', name: 'Miu',   Mascot: CatMascot     },
+  { id: 'galaxy', color: '#8B5CF6', name: 'Zizi',  Mascot: OwlMascot     },
+  { id: 'sunny',  color: '#EAB308', name: 'Lucky', Mascot: DogMascot     },
+] as const;
+
+/** Hiển thị 6 nhân vật mascot cùng lúc, mỗi con tự chạy animation riêng. */
+export function AllMascotsParade({ size = 96 }: { size?: number }) {
+  return (
+    <div className="flex flex-wrap items-end justify-center gap-4 md:gap-7">
+      {MASCOT_PARADE_DATA.map(({ id, color, name, Mascot }) => (
+        <div key={id} className="flex flex-col items-center gap-2">
+          <span style={{ display: 'inline-flex', width: size, height: size }}>
+            <Mascot size={size} color={color} />
+          </span>
+          <span
+            className="text-[13px] font-extrabold tracking-wider px-2.5 py-0.5 rounded-full"
+            style={{
+              color,
+              background: `${color}22`,
+              border: `1px solid ${color}55`,
+            }}
+          >
+            {name}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}

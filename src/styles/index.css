@@ -1881,6 +1881,33 @@ button.card-flat:active {
 }
 
 /* ============================================
+   WELCOME PAGE — Mascot Showcase & Download
+   ============================================ */
+@keyframes hhk-welcome-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+@keyframes hhk-float-star {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
+  50%       { transform: translateY(-12px) rotate(20deg); opacity: 0.7; }
+}
+@keyframes hhk-spin-star {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.hhk-shimmer-text {
+  background: linear-gradient(
+    120deg,
+    #F5DD7F 0%, #FBBF24 30%, #FDE68A 50%, #F59E0B 70%, #E9D39A 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: hhk-welcome-shimmer 3.5s ease-in-out infinite;
+}
+
+/* ============================================
    RESPONSIVE — Mobile / Tablet
    ============================================ */
 @media (max-width: 768px) {

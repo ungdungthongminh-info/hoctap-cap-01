@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, BadgeCheck, Clock3, KeyRound, MonitorSmartphone, Shield, Sparkles } from 'lucide-react';
-import { MascotCharacter } from '../../../shared/components';
+import { MascotCharacter, AllMascotsParade } from '../../../shared/components';
 import { getAccessPlan, type AccessPlan } from '../../../shared/services/accessControl';
 import '../styles/premiumButtons.css';
 
@@ -327,6 +327,111 @@ export function WelcomePage() {
             >
               Mở trang gói dịch vụ
             </button>
+          </div>
+        </section>
+
+        {/* ===================== MASCOT WELCOME SHOWCASE ===================== */}
+        <section
+          className="mt-6 w-full rounded-[28px] px-5 py-10 md:px-10 md:py-12 text-center overflow-hidden relative"
+          style={{
+            background: 'linear-gradient(135deg, #04122B 0%, #081F4A 48%, #0C2E68 100%)',
+            border: '1px solid rgba(140,185,255,0.18)',
+            boxShadow: '0 28px 56px rgba(1,8,26,0.56)',
+          }}
+        >
+          {/* Trang trí ngôi sao nền */}
+          <span aria-hidden="true" style={{ position: 'absolute', top: '10%',  left: '6%',  fontSize: '2rem', opacity: 0.3, animation: 'hhk-float-star 5s ease-in-out infinite' }}>✦</span>
+          <span aria-hidden="true" style={{ position: 'absolute', top: '15%',  right: '8%', fontSize: '1.5rem', opacity: 0.25, animation: 'hhk-float-star 4s ease-in-out infinite 0.8s' }}>✦</span>
+          <span aria-hidden="true" style={{ position: 'absolute', bottom: '14%', left: '12%', fontSize: '1.2rem', opacity: 0.2, animation: 'hhk-spin-star 10s linear infinite' }}>⭐</span>
+          <span aria-hidden="true" style={{ position: 'absolute', bottom: '18%', right: '10%', fontSize: '1.8rem', opacity: 0.25, animation: 'hhk-float-star 3.5s ease-in-out infinite 1.2s' }}>🌟</span>
+          <span aria-hidden="true" style={{ position: 'absolute', top: '45%', left: '2%', fontSize: '1rem', opacity: 0.18, animation: 'hhk-spin-star 7s linear infinite reverse' }}>✦</span>
+          <span aria-hidden="true" style={{ position: 'absolute', top: '40%', right: '2%', fontSize: '1rem', opacity: 0.18, animation: 'hhk-spin-star 9s linear infinite' }}>✦</span>
+
+          <div className="relative z-10">
+            <div className="text-xs uppercase tracking-[0.22em] font-bold mb-2" style={{ color: '#7FB4FF', opacity: 0.85 }}>
+              Đồng hành cùng bạn mỗi ngày
+            </div>
+            <h2 className="hhk-shimmer-text text-[2rem] md:text-[2.8rem] lg:text-[3.2rem] font-black tracking-[-0.03em] leading-tight">
+              Chào mừng bạn đến với<br />Học Hứng Khởi!
+            </h2>
+            <p className="mt-3 text-sm md:text-base max-w-[520px] mx-auto" style={{ color: '#B0CCEE', lineHeight: 1.7 }}>
+              6 người bạn đồng hành sẽ luôn bên cạnh bạn —<br className="hidden md:block" />
+              mỗi giao diện một cá tính riêng, thay đổi bất cứ lúc nào!
+            </p>
+            <div className="mt-10">
+              <AllMascotsParade size={104} />
+            </div>
+            <div className="mt-6 inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold"
+              style={{ background: 'rgba(100,160,255,0.12)', color: '#90BFFF', border: '1px solid rgba(100,160,255,0.25)' }}>
+              <Sparkles size={14} /> Đổi giao diện trong mục Cài đặt → Giao diện
+            </div>
+          </div>
+        </section>
+
+        {/* ===================== APP DOWNLOAD SECTION ===================== */}
+        <section
+          className="mt-6 w-full rounded-[24px] px-5 py-6 md:px-8 md:py-7"
+          style={{
+            background: 'rgba(255,255,255,0.93)',
+            border: '1px solid #CFDDF6',
+            boxShadow: '0 16px 36px rgba(12,35,75,0.14)',
+          }}
+        >
+          <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+            <div>
+              <div className="text-xs uppercase tracking-[0.18em] font-bold" style={{ color: '#6B7FA3' }}>Tải về máy tính</div>
+              <div className="text-2xl md:text-3xl font-bold tracking-[-0.03em]" style={{ color: '#123E72' }}>
+                Dùng App để học tốt hơn
+              </div>
+              <div className="mt-1 text-sm" style={{ color: '#5A6F92' }}>
+                Trải nghiệm đầy đủ tính năng, tốc độ nhanh hơn, không cần trình duyệt.
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              {/* Windows */}
+              <button
+                type="button"
+                className="inline-flex items-center gap-3 rounded-2xl px-6 py-4 hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+                style={{
+                  background: 'linear-gradient(135deg, #1b2f4a 0%, #0f1e35 100%)',
+                  color: 'white',
+                  border: '1px solid rgba(100,160,255,0.2)',
+                  boxShadow: '0 10px 22px rgba(0,0,0,0.28)',
+                  minWidth: 196,
+                }}
+              >
+                {/* Windows logo SVG */}
+                <svg viewBox="0 0 24 24" width={26} height={26} fill="currentColor" aria-hidden="true">
+                  <path d="M3 5.6 10.9 4.4V11.5H3V5.6ZM11.8 4.2 21 2.7V11.5H11.8V4.2ZM3 12.5H10.9V19.6L3 18.4V12.5ZM11.8 12.5H21V21.3L11.8 19.8V12.5Z"/>
+                </svg>
+                <div className="text-left">
+                  <div className="text-[11px] font-normal opacity-60">Tải xuống cho</div>
+                  <div className="text-[1rem] font-extrabold tracking-wide">Windows</div>
+                </div>
+              </button>
+
+              {/* Macbook */}
+              <button
+                type="button"
+                className="inline-flex items-center gap-3 rounded-2xl px-6 py-4 hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+                style={{
+                  background: 'linear-gradient(135deg, #1c1c1e 0%, #2d2d30 100%)',
+                  color: 'white',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  boxShadow: '0 10px 22px rgba(0,0,0,0.28)',
+                  minWidth: 196,
+                }}
+              >
+                {/* Apple logo SVG */}
+                <svg viewBox="0 0 24 24" width={26} height={26} fill="currentColor" aria-hidden="true">
+                  <path d="M14.94 5.19A4.38 4.38 0 0016 2a4.44 4.44 0 00-2.85 1.03A4.13 4.13 0 0012 6a3.7 3.7 0 002.94-.81zm2.52 7.44a4.51 4.51 0 012.16-3.81 4.66 4.66 0 00-3.66-2c-1.56-.16-3 .91-3.83.91s-2-.89-3.3-.87a4.92 4.92 0 00-4.14 2.53C2.93 12.45 4.24 17 6 19.47c.8 1.21 1.8 2.58 3.12 2.53s1.75-.82 3.28-.82 2 .82 3.3.79 2.22-1.24 3.06-2.45a11 11 0 001.38-2.85 4.41 4.41 0 01-2.68-4.04z"/>
+                </svg>
+                <div className="text-left">
+                  <div className="text-[11px] font-normal opacity-60">Tải xuống cho</div>
+                  <div className="text-[1rem] font-extrabold tracking-wide">Macbook</div>
+                </div>
+              </button>
+            </div>
           </div>
         </section>
       </div>

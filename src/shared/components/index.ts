@@ -5,5 +5,5 @@ export { ToastProvider, useToast } from './Toast';
 export { Skeleton, SkeletonCard, SkeletonGrid, SkeletonStat } from './Skeleton';
 export { EmptyState } from './EmptyState';
 export { PageTransition } from './PageTransition';
-export { MascotCharacter } from './MascotCharacter';
+export { MascotCharacter, AllMascotsParade } from './MascotCharacter';
 export { LoginGuard, FeatureGuard, InternalBuildBanner, LessonAccessGuard } from './AccessGuard';
