@@ -680,7 +680,6 @@ export function PricingPage() {
   const isStandardYearOneGradeKeyFlow = detectedPlanFromInput === 'standard_1year_1grade';
   const isStandardYearThreeGradeKeyFlow = detectedPlanFromInput === 'standard_1year_3grade';
   const isStandardKeyFlow = detectedPlanFromInput === 'standard' || isStandardYearOneGradeKeyFlow || isStandardYearThreeGradeKeyFlow;
-  const isConfirmedYearlyStandardKeyFlow = isStandardYearOneGradeKeyFlow || isStandardYearThreeGradeKeyFlow;
   const isPremiumKeyFlow = detectedPlanFromInput === 'premium';
   const requiredGradeCountForInput = isStandardYearOneGradeKeyFlow ? 1 : 3;
   const lockedStandardGradeSelection = isStandardKeyFlow
@@ -760,7 +759,7 @@ export function PricingPage() {
   };
 
   useEffect(() => {
-    if (previousDetectedPlanRef.current !== detectedPlanFromInput && isConfirmedYearlyStandardKeyFlow) {
+    if (previousDetectedPlanRef.current !== detectedPlanFromInput && isStandardKeyFlow) {
       gradePickerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setActivateMsg({
         type: 'success',
@@ -774,7 +773,7 @@ export function PricingPage() {
     }
 
     previousDetectedPlanRef.current = detectedPlanFromInput;
-  }, [detectedPlanFromInput, isConfirmedYearlyStandardKeyFlow, isStandardYearOneGradeKeyFlow, isStandardYearThreeGradeKeyFlow]);
+  }, [detectedPlanFromInput, isStandardKeyFlow, isStandardYearOneGradeKeyFlow, isStandardYearThreeGradeKeyFlow]);
 
   useEffect(() => {
     if (!isStandardKeyFlow) return;
@@ -1590,7 +1589,7 @@ export function PricingPage() {
           <div
             className="text-xs mt-2 rounded-xl px-3 py-2 font-bold"
             style={
-              isConfirmedYearlyStandardKeyFlow
+              detectedPlanFromInput
                 ? {
                     color: '#065F46',
                     background: '#ECFDF5',
@@ -1603,12 +1602,16 @@ export function PricingPage() {
                   }
             }
           >
-            {isConfirmedYearlyStandardKeyFlow
+            {isStandardKeyFlow
               ? (isStandardYearOneGradeKeyFlow
                   ? '✅ Đã nhận diện Standard 01 năm - 01 lớp. Vui lòng chọn đúng 1 lớp bên dưới rồi bấm Kích hoạt ngay.'
-                  : '✅ Đã nhận diện Standard 01 năm - 03 lớp. Vui lòng chọn đúng 3 lớp bên dưới rồi bấm Kích hoạt ngay.')
+                  : isStandardYearThreeGradeKeyFlow
+                    ? '✅ Đã nhận diện Standard 01 năm - 03 lớp. Vui lòng chọn đúng 3 lớp bên dưới rồi bấm Kích hoạt ngay.'
+                    : '✅ Đã nhận diện Standard. Vui lòng chọn đúng 3 lớp bên dưới rồi bấm Kích hoạt ngay.')
+              : isPremiumKeyFlow
+                ? '✅ Đã nhận diện Premium. Không cần chọn lớp, hệ thống tự mở toàn bộ lớp.'
               : detectedPlanFromInput
-                ? 'Key đã được nhập. Hệ thống sẽ kiểm tra chính xác khi bạn bấm Kích hoạt ngay.'
+                ? '✅ Đã nhận diện key. Vui lòng kiểm tra gói và bấm Kích hoạt ngay.'
                 : 'Chưa nhận diện loại key: bạn vẫn có thể dán key để hệ thống tự nhận diện.'}
           </div>
         </div>

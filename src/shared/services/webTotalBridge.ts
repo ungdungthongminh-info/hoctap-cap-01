@@ -415,10 +415,16 @@ export async function verifyLicenseKey(params: {
       throw new Error('Key không hợp lệ, đã hết hạn, hoặc đã bị thu hồi trên hệ thống cấp key (Web Tổng).');
     }
 
-    if (rawLower.includes('page could not be found') || rawLower.includes('not_found sin1::')) {
+    if (
+      rawLower.includes('page could not be found')
+      || rawLower.includes('not_found sin1::')
+      || rawLower.includes('"message":"not found"')
+      || backendLower === 'not found'
+    ) {
       throw new Error(
         `Đang gọi sai endpoint backend/bridge (base hiện tại: ${BACKEND_API_BASE}). `
-        + 'Vui lòng kiểm tra lại URL backend và làm mới app để bỏ cache cũ.',
+        + 'Web/mobile cần trỏ tới backend bridge có route /api/v1/ai-app/licenses/verify, không phải web tĩnh. '
+        + 'Vui lòng cấu hình VITE_BACKEND_API_BASE đúng môi trường deploy và làm mới app để bỏ cache cũ.',
       );
     }
 
