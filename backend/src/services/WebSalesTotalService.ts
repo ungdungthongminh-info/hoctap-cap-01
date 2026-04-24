@@ -89,6 +89,27 @@ async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
   return data as T;
 }
 
+async function fetchJsonWithFallback<T>(urls: string[], init?: RequestInit): Promise<T> {
+  const attempts: string[] = [];
+
+  for (const url of urls) {
+    try {
+      return await fetchJson<T>(url, init);
+    } catch (error: any) {
+      const message = String(error?.message || 'Unknown error');
+      attempts.push(`${url} -> ${message}`);
+
+      // Retry next URL only for route-not-found style errors.
+      const isNotFound = /\b404\b|\bNOT_FOUND\b|page could not be found/i.test(message);
+      if (!isNotFound) {
+        throw error;
+      }
+    }
+  }
+
+  throw new Error(`Verify endpoint not found on Web Tong. Attempts: ${attempts.join(' | ')}`);
+}
+
 export class WebSalesTotalService {
   static isEnabled(): boolean {
     return normalizeBaseUrl(process.env.WEB_TOTAL_BASE_URL).length > 0;
@@ -290,7 +311,14 @@ export class WebAiAppLicenseService {
     deviceName?: string;
   }): Promise<AiAppVerifyResponse> {
     const baseUrl = WebSalesTotalService.getBaseUrl();
-    return fetchJson<AiAppVerifyResponse>(`${baseUrl}/api/ai-app/licenses/verify`, {
+    const verifyPaths = [
+      '/api/ai-app/licenses/verify',
+      '/api/v1/ai-app/licenses/verify',
+      '/ai-app/licenses/verify',
+    ];
+    const verifyUrls = verifyPaths.map((path) => `${baseUrl}${path}`);
+
+    return fetchJsonWithFallback<AiAppVerifyResponse>(verifyUrls, {
       method: 'POST',
       headers: aiAppHeaders(),
       body: JSON.stringify({
