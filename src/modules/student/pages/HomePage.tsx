@@ -106,12 +106,12 @@ export function HomePage() {
   }, []);
 
   return (
-    <div className="fade-in flex flex-col items-center justify-center h-full gap-8">
+    <div className="fade-in flex flex-col items-center gap-8 w-full max-w-[1480px] mx-auto pb-8">
       {/* Notifications */}
       <StudyReminder streak={streak} studiedToday={studiedToday} needsReviewCount={needsReview.length} />
 
       {/* Hero mascot */}
-      <div className="text-center">
+      <div className="text-center mt-2">
         <MascotCharacter size="xl" />
         <h1 className="text-3xl font-bold mt-4" style={{ color: 'var(--color-primary-dark)' }}>
           Chào <strong style={{ color: 'var(--color-primary)' }}>{state.student.fullName}</strong>! 🎉
@@ -183,7 +183,7 @@ export function HomePage() {
       {/* Streak warning — handled by StudyReminder above */}
 
       {/* Stats mini */}
-      <div className="flex gap-4 flex-wrap justify-center">
+      <div className="flex gap-4 flex-wrap justify-center w-full">
         <div className="card-flat text-center px-5 py-3">
           <div className="text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>{completed}/{total}</div>
           <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Bài đã học</div>
@@ -205,7 +205,7 @@ export function HomePage() {
       </div>
 
       {/* Quick actions */}
-      <div className="flex gap-4 flex-wrap justify-center">
+      <div className="flex gap-4 flex-wrap justify-center w-full">
         <button
           className="card-action-btn"
           onClick={() => navigate('/subjects')}

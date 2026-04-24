@@ -197,16 +197,16 @@ export function WelcomePage() {
     <div
       className="fade-in min-h-screen"
       style={{
-        background: 'radial-gradient(circle at 20% -15%, rgba(201,160,70,0.16) 0%, rgba(4,16,43,0) 42%), linear-gradient(180deg, #071631 0%, #0D1F46 56%, #EAF2FC 56%, #EDF4FF 100%)',
+        background: 'radial-gradient(circle at 12% -10%, rgba(227,181,86,0.24) 0%, rgba(18,38,76,0) 38%), radial-gradient(circle at 88% 2%, rgba(89,162,255,0.2) 0%, rgba(12,28,62,0) 32%), linear-gradient(180deg, #050F24 0%, #0C2754 42%, #164381 65%, #EAF2FC 100%)',
       }}
     >
-      <div className="mx-auto w-full max-w-[1240px] px-4 pb-10 md:px-6">
+      <div className="w-full min-h-screen px-4 pb-12 pt-4 md:px-8 md:pt-6 xl:px-12">
         <section
-          className="rounded-b-[30px] px-5 py-6 md:px-8"
+          className="w-full rounded-[30px] px-5 py-6 md:px-8 lg:px-10"
           style={{
-            background: 'linear-gradient(110deg, #031329 0%, #07224A 45%, #0D2D5D 100%)',
+            background: 'linear-gradient(112deg, #03142F 0%, #072B5D 48%, #0F3A79 100%)',
             border: '1px solid rgba(201,160,70,0.32)',
-            boxShadow: '0 26px 48px rgba(1,8,25,0.55)',
+            boxShadow: '0 28px 56px rgba(1,8,25,0.52)',
           }}
         >
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -218,7 +218,7 @@ export function WelcomePage() {
                 <MascotCharacter size="sm" />
               </div>
               <div>
-                <div className="text-xl md:text-[2.1rem] font-bold tracking-[-0.02em]" style={{ color: '#E9D39A' }}>
+                <div className="text-[1.65rem] md:text-[2.4rem] font-bold tracking-[-0.025em]" style={{ color: '#E9D39A' }}>
                   Chào mừng đến với Học Hứng Khởi
                 </div>
                 <div className="text-sm mt-1" style={{ color: '#D7E3FF' }}>
@@ -229,7 +229,7 @@ export function WelcomePage() {
 
             <div className="flex flex-col items-stretch gap-2.5 md:items-end">
               <div
-                className="rounded-2xl px-3.5 py-3 min-w-[240px]"
+                className="rounded-2xl px-3.5 py-3 min-w-[280px]"
                 style={{
                   background: statusTheme.bg,
                   border: `1px solid ${statusTheme.border}`,
@@ -280,13 +280,13 @@ export function WelcomePage() {
           </div>
         </section>
 
-        <section className="mt-5 rounded-[24px] p-4 md:p-6" style={{ background: 'rgba(255,255,255,0.88)', border: '1px solid #CFDDF6' }}>
+        <section className="mt-6 w-full rounded-[24px] p-4 md:p-6 lg:p-7" style={{ background: 'rgba(255,255,255,0.9)', border: '1px solid #CFDDF6', boxShadow: '0 20px 44px rgba(12,35,75,0.18)' }}>
           <div className="text-xs uppercase tracking-[0.18em] font-bold" style={{ color: '#6B7FA3' }}>Bắt đầu nhanh</div>
           <div className="text-2xl md:text-4xl font-bold tracking-[-0.03em]" style={{ color: '#123E72' }}>
             2 bước để dùng đầy đủ tính năng
           </div>
 
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-3">
             <div className="rounded-2xl p-4" style={{ background: '#F7FAFF', border: '1px solid #D5E4FC' }}>
               <div className="text-sm font-extrabold" style={{ color: '#1E3A8A' }}>Bước 1: Xem gói trên Pricing</div>
               <div className="text-sm mt-2" style={{ color: '#475569' }}>
@@ -301,7 +301,7 @@ export function WelcomePage() {
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
             {QUICK_NOTES.map((item) => {
               const Icon = item.icon;
               return (
