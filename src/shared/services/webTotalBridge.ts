@@ -110,6 +110,7 @@ export interface VerifyLicenseResult {
   features: string[];
   grace?: { allowed: boolean; graceDays: number; offlineUntil?: string };
   license?: {
+    productId?: string | null;
     planCode?: string | null;
     billingCycle?: string | null;
     expiresAt?: string | null;
@@ -400,9 +401,13 @@ export async function verifyLicenseKey(params: {
     payload = {};
   }
 
-  if (!res.ok || !payload?.success) {
+  const isSuccess = Boolean(payload?.success ?? payload?.ok);
+  const dataNode = (payload?.data && typeof payload.data === 'object') ? payload.data : payload;
+
+  if (!res.ok || !isSuccess) {
     const backendError = String(
       payload?.error
+      || payload?.errorCode
       || payload?.message
       || payload?.data?.error
       || payload?.data?.message
@@ -435,9 +440,9 @@ export async function verifyLicenseKey(params: {
   }
   return {
     ok: true,
-    features: (payload.data?.features ?? []) as string[],
-    grace: payload.data?.grace,
-    license: payload.data?.license,
+    features: (dataNode?.features ?? []) as string[],
+    grace: dataNode?.grace,
+    license: dataNode?.license,
   };
 }
 

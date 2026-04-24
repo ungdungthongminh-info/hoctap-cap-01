@@ -79,7 +79,7 @@ const WEB_TOTAL_PRODUCT_URLS = {
   },
   standard_1year_1grade: {
     monthly: '',
-    yearly: `${WEB_TOTAL_SITE_URL}/product/prod-study-standard-1year-1grade`,
+    yearly: `${WEB_TOTAL_SITE_URL}/product/standard_1year_1grade`,
     lifetime: '',
   },
   premium: {
@@ -231,13 +231,21 @@ const STANDARD_GRADE_LOCKS_KEY = 'hhk_standard_grade_locks_v1';
 const REFUND_DAYS = 3;
 const PAID_LICENSE_PATTERN = /^HHK-[A-Z0-9_]+-[A-Z0-9]{8}$/;
 const ALL_GRADE_OPTIONS = [0, 1, 2, 3, 4, 5] as const;
-const WEB_TOTAL_APP_ID = String(import.meta.env.VITE_WEBTOTAL_APP_ID || '').trim();
+const WEB_TOTAL_APP_ID = String(import.meta.env.VITE_WEBTOTAL_APP_ID || 'app-study-12').trim() || 'app-study-12';
 
 interface StandardGradeLock {
   key: string;
   deviceId: string;
   grades: number[];
   lockedAt: string;
+}
+
+interface PendingStandardActivation {
+  key: string;
+  cycle: 'monthly' | 'yearly' | 'lifetime';
+  expiresAt: string | null;
+  storagePlanId: 'standard' | 'standard_1year_1grade' | 'standard_1year_3grade';
+  requiredGradeCount: number;
 }
 
 function readStandardGradeLocks(): StandardGradeLock[] {
@@ -371,6 +379,10 @@ function detectPlanFlowFromKey(inputKey: string): 'standard' | 'standard_1year_1
     return 'standard_1year_3grade';
   }
 
+  if (normalized.startsWith('WSTL-')) {
+    return 'standard_1year_3grade';
+  }
+
   if ((hasStandardSignal && hasOneGradeSignal && hasYearSignal) || normalized.includes('1Y1G')) {
     return 'standard_1year_1grade';
   }
@@ -489,7 +501,12 @@ function resolvePlanFromLicensePayload(
       return 'standard_1year_1grade';
     }
 
-    if (/\b(standard\s*1\s*year\s*3\s*grade|standard\s*1y\s*3g|3grade|three\s?grade|3lop|three\s?class|standard_1year_3grade|prod\s*study\s*year)\b/.test(text)) {
+    if (/\b(standard\s*1\s*year\s*3\s*grade|standard\s*1y\s*3g|3grade|three\s?grade|3lop|three\s?class|standard_1year_3grade)\b/.test(text)) {
+      return 'standard_1year_3grade';
+    }
+
+    // Legacy Web Tong SKU for standard yearly 3-grade.
+    if (/\bprod\s*study\s*year\b/.test(text)) {
       return 'standard_1year_3grade';
     }
 
@@ -677,6 +694,7 @@ export function PricingPage() {
   const [isGradeSelectionConfirmed, setIsGradeSelectionConfirmed] = useState(false);
   const [showGradeConfirmModal, setShowGradeConfirmModal] = useState(false);
   const [gradeConfirmDone, setGradeConfirmDone] = useState(false);
+  const [pendingStandardActivation, setPendingStandardActivation] = useState<PendingStandardActivation | null>(null);
   // Subscription state
   const [activeSub, setActiveSub] = useState<Subscription | null>(null);
   const [subExpiry, setSubExpiry] = useState(localStorage.getItem(SUB_EXPIRY_KEY));
@@ -686,7 +704,7 @@ export function PricingPage() {
   const normalizedInputKey = licenseKey.trim().toUpperCase();
   const detectedPlanFromInput = detectPlanFlowFromKey(normalizedInputKey);
   const hasRecognizedKeyPrefix = hasRecognizableLicensePrefix(normalizedInputKey);
-  const shouldShowRecognizedKeyHint = Boolean(detectedPlanFromInput || hasRecognizedKeyPrefix);
+  const shouldShowRecognizedKeyHint = normalizedInputKey.length > 0 || Boolean(detectedPlanFromInput || hasRecognizedKeyPrefix);
   const isStandardYearOneGradeKeyFlow = detectedPlanFromInput === 'standard_1year_1grade';
   const isStandardYearThreeGradeKeyFlow = detectedPlanFromInput === 'standard_1year_3grade';
   const isStandardKeyFlow = detectedPlanFromInput === 'standard' || isStandardYearOneGradeKeyFlow || isStandardYearThreeGradeKeyFlow;
@@ -698,6 +716,8 @@ export function PricingPage() {
     : null;
   const isStandardSelectionLocked = Boolean(lockedStandardGradeSelection);
   const hasSelectedEnoughGrades = activationGrades.length === requiredGradeCountForInput;
+  const hasPendingStandardActivation = Boolean(pendingStandardActivation && pendingStandardActivation.key === normalizedInputKey);
+  const canSelectGradesNow = isStandardKeyFlow && !isPremiumKeyFlow && !isStandardSelectionLocked && hasPendingStandardActivation;
   const visiblePlans = pricingPlans.filter((plan) => plan.id !== 'basic');
   const visibleComparisonPlans = PRICING_PLANS.filter((plan) => plan.id !== 'basic');
   const currentPlanStorageId = String(activeSub?.planId || localStorage.getItem(PLAN_KEY) || '').trim().toLowerCase();
@@ -731,10 +751,15 @@ export function PricingPage() {
         ? '✅ Đã nhận diện key bản quyền Web Tổng. Gói chính xác sẽ được xác định khi verify với backend.'
         : normalizedInputKey.startsWith('HHK-')
           ? '✅ Đã nhận diện key bản quyền HHK. Gói chính xác sẽ được xác định khi verify với backend.'
-          : 'Chưa nhận diện loại key: bạn vẫn có thể dán key để hệ thống tự nhận diện.';
+          : 'Đang nhận diện loại key. Vui lòng bấm Kích hoạt để xác thực chính xác với backend.';
 
   const toggleActivationGrade = (grade: number) => {
     if (isPremiumKeyFlow) return;
+    if (!canSelectGradesNow) {
+      setActivateMsg({ type: 'error', text: '❌ Vui lòng bấm Kích hoạt thành công trước, sau đó mới chọn lớp.' });
+      setTimeout(() => setActivateMsg(null), 3500);
+      return;
+    }
     if (isStandardSelectionLocked) {
       setActivateMsg({ type: 'error', text: '🔒 Key Standard này đã chốt lớp ở lần đầu trên ID máy này. Không thể đổi lại.' });
       setTimeout(() => setActivateMsg(null), 3500);
@@ -769,6 +794,11 @@ export function PricingPage() {
 
   const confirmSelectedGrades = () => {
     if (!isStandardKeyFlow || isPremiumKeyFlow || isStandardSelectionLocked) return;
+    if (!hasPendingStandardActivation) {
+      setActivateMsg({ type: 'error', text: '❌ Hãy bấm Kích hoạt thành công trước khi xác nhận lựa chọn lớp.' });
+      setTimeout(() => setActivateMsg(null), 3500);
+      return;
+    }
     if (!hasSelectedEnoughGrades) {
       setActivateMsg({
         type: 'error',
@@ -790,10 +820,32 @@ export function PricingPage() {
     setGradeConfirmDone(false);
   };
 
-  const acceptGradeConfirmation = () => {
+  const acceptGradeConfirmation = async () => {
     setIsGradeSelectionConfirmed(true);
     setGradeConfirmDone(true);
-    setActivateMsg({ type: 'success', text: `✅ Đã xác nhận lựa chọn ${activationGrades.map((grade) => getGradeLabel(grade)).join(', ')}. Bạn có thể bấm Kích hoạt ngay.` });
+    if (!pendingStandardActivation) {
+      setActivateMsg({ type: 'error', text: '❌ Không tìm thấy thông tin key đã xác thực. Vui lòng bấm Kích hoạt lại.' });
+      setTimeout(() => setActivateMsg(null), 4000);
+      return;
+    }
+
+    const saved = saveStandardGradeLock(
+      pendingStandardActivation.key,
+      currentDeviceId,
+      activationGrades,
+      pendingStandardActivation.requiredGradeCount,
+    );
+
+    await completeActivation({
+      key: pendingStandardActivation.key,
+      planId: 'standard',
+      storagePlanId: pendingStandardActivation.storagePlanId,
+      cycle: pendingStandardActivation.cycle,
+      expiresAt: pendingStandardActivation.expiresAt,
+      standardGrades: saved.grades,
+    });
+    setPendingStandardActivation(null);
+    setActivateMsg({ type: 'success', text: `✅ Đã xác nhận và kích hoạt thành công với các lớp: ${saved.grades.map((grade) => getGradeLabel(grade)).join(', ')}.` });
     setTimeout(() => setActivateMsg(null), 4000);
   };
 
@@ -817,7 +869,8 @@ export function PricingPage() {
   useEffect(() => {
     if (!isStandardKeyFlow) return;
 
-    const existingLock = getStandardGradeLock(normalizedInputKey, currentDeviceId);
+    const requiredGradeCount = isStandardYearOneGradeKeyFlow ? 1 : 3;
+    const existingLock = getStandardGradeLock(normalizedInputKey, currentDeviceId, requiredGradeCount);
     if (existingLock) {
       setActivationGrades(existingLock.grades);
       return;
@@ -826,6 +879,13 @@ export function PricingPage() {
     // Key Standard mới trên ID máy này phải bắt đầu ở trạng thái trống để phụ huynh chọn lớp chủ động.
     setActivationGrades([]);
   }, [isStandardKeyFlow, normalizedInputKey, currentDeviceId]);
+
+  useEffect(() => {
+    setPendingStandardActivation(null);
+    setGradeConfirmationChecked(false);
+    setIsGradeSelectionConfirmed(false);
+    setGradeConfirmDone(false);
+  }, [normalizedInputKey]);
 
   useEffect(() => {
     if (isStandardSelectionLocked) {
@@ -941,6 +1001,48 @@ export function PricingPage() {
     return getPriceForCycle(plan, billing);
   };
 
+  const completeActivation = useCallback(async (payload: {
+    key: string;
+    planId: 'standard' | 'premium';
+    storagePlanId: 'standard' | 'standard_1year_1grade' | 'standard_1year_3grade' | 'premium';
+    cycle: 'monthly' | 'yearly' | 'lifetime';
+    expiresAt: string | null;
+    standardGrades: number[];
+  }) => {
+    const { key, planId, storagePlanId, cycle, expiresAt, standardGrades } = payload;
+    const refundDeadline = addDays(new Date(), REFUND_DAYS);
+    const amount = getPriceForCycle(pricingPlans.find((p) => p.id === storagePlanId || p.id === planId), cycle);
+    const unlockedGrades = planId === 'premium'
+      ? persistUnlockedGrades([...ALL_GRADE_OPTIONS], 'premium', state.student.grade)
+      : persistUnlockedGrades(standardGrades, 'standard', state.student.grade);
+
+    await dbRun(`UPDATE subscriptions SET status = 'expired', updatedAt = datetime('now') WHERE status = 'active'`);
+
+    await dbRun(
+      `INSERT INTO subscriptions (planId, billingCycle, licenseKey, amount, status, activatedAt, expiresAt, paymentMethod, refundDeadline)
+       VALUES (?, ?, ?, ?, 'active', datetime('now'), ?, 'license_key', ?)`,
+      [storagePlanId, cycle, key, amount, expiresAt, refundDeadline],
+    );
+
+    persistPaidPlan(storagePlanId, key, expiresAt, cycle);
+    setActivationGrades(unlockedGrades);
+
+    const nextGrade = unlockedGrades[0] ?? state.student.grade;
+    const subjectsOfGrade = getSubjectsForGrade(nextGrade);
+    const firstReadySubject = subjectsOfGrade.find((subject) =>
+      state.lessons.some((lesson) => lesson.grade === nextGrade && lesson.subjectCode === subject.code),
+    );
+
+    updateStudent({
+      grade: nextGrade,
+      subjectCode: firstReadySubject?.code || subjectsOfGrade[0]?.code || 'math',
+    });
+
+    setCurrentPlan(planId);
+    setLicenseKey('');
+    await loadActiveSub();
+  }, [loadActiveSub, pricingPlans, state.lessons, state.student.grade, updateStudent]);
+
   const getSavings = (plan: PricingPlan) => {
     if (billing === 'yearly' && plan.monthlyPrice > 0) {
       const fullYear = plan.monthlyPrice * 12;
@@ -989,11 +1091,16 @@ export function PricingPage() {
       const resolvedPlan = resolvePlanFromLicensePayload(licensePayload, verifyResult.features || []);
       const planHint = getPlanHintFromLicensePayload(licensePayload);
       const detectedPlanByKey = detectPlanFlowFromKey(key);
-      const isStandardYearOneGrade = resolvedPlan === 'standard_1year_1grade'
+      const isStandardYearOneGrade = detectedPlanByKey === 'standard_1year_1grade'
+        || resolvedPlan === 'standard_1year_1grade'
         || isStandardYearOneGradePlanId(planHint)
-        || detectedPlanByKey === 'standard_1year_1grade';
-      const isStandardYearThreeGrade = resolvedPlan === 'standard_1year_3grade'
-        || isStandardYearThreeGradePlanId(planHint);
+        || String(verifyResult.license?.productId || '').trim().toLowerCase() === 'standard_1year_1grade';
+      const isStandardYearThreeGrade = !isStandardYearOneGrade && (
+        detectedPlanByKey === 'standard_1year_3grade'
+        || resolvedPlan === 'standard_1year_3grade'
+        || isStandardYearThreeGradePlanId(planHint)
+        || String(verifyResult.license?.productId || '').trim().toLowerCase() === 'prod-study-year'
+      );
       const detectedBasePlan = detectedPlanByKey === 'premium' ? 'premium' : detectedPlanByKey ? 'standard' : null;
       const resolvedBasePlan = resolvedPlan ? normalizePlanId(resolvedPlan) : null;
       const planId = resolvedBasePlan || detectedBasePlan || normalizePlanId(String(verifyResult.license?.planCode || '').toLowerCase());
@@ -1019,73 +1126,60 @@ export function PricingPage() {
         if (existingLock) {
           standardGradesToUse = existingLock.grades;
         } else {
-          if (!isGradeSelectionConfirmed) {
-            setActivateMsg({
-              type: 'error',
-              text: '❌ Bạn chưa xác nhận lựa chọn lớp. Vui lòng tick ô xác nhận rồi bấm nút xác nhận trước khi kích hoạt.',
-            });
-            playActivationTone('error');
-            setTimeout(() => setActivateMsg(null), 6000);
-            return;
-          }
-          if (activationGrades.length !== requiredGradeCount) {
-            setActivateMsg({
-              type: 'error',
-              text: isStandardYearOneGrade
-                ? '❌ Gói này yêu cầu chọn đúng 1 lớp trước khi kích hoạt key.'
-                : '❌ Gói Standard cần chọn đúng 3 lớp trước khi kích hoạt key.',
-            });
-            playActivationTone('error');
-            setTimeout(() => setActivateMsg(null), 6000);
-            return;
-          }
-          const saved = saveStandardGradeLock(key, currentDeviceId, activationGrades, requiredGradeCount);
-          standardGradesToUse = saved.grades;
+          const cycle = normalizeBillingCycle(verifyResult.license?.billingCycle);
+          const expiresAt = verifyResult.license?.expiresAt || null;
+          const storagePlanId: 'standard_1year_1grade' | 'standard_1year_3grade' | 'standard' =
+            isStandardYearOneGrade ? 'standard_1year_1grade' : (isStandardYearThreeGrade ? 'standard_1year_3grade' : 'standard');
+
+          setPendingStandardActivation({
+            key,
+            cycle,
+            expiresAt,
+            storagePlanId,
+            requiredGradeCount,
+          });
+          setActivationGrades([]);
+          setGradeConfirmationChecked(false);
+          setIsGradeSelectionConfirmed(false);
+          setGradeConfirmDone(false);
+          setActivateMsg({
+            type: 'success',
+            text: isStandardYearOneGrade
+              ? '✅ Kích hoạt key thành công. Vui lòng chọn 1 lớp, tick xác nhận và bấm "Xác nhận lựa chọn lớp".'
+              : '✅ Kích hoạt key thành công. Vui lòng chọn lớp theo gói, tick xác nhận và bấm "Xác nhận lựa chọn lớp".',
+          });
+          playActivationTone('success');
+          setTimeout(() => setActivateMsg(null), 7000);
+          return;
         }
       }
 
       const cycle = normalizeBillingCycle(verifyResult.license?.billingCycle);
       const expiresAt = verifyResult.license?.expiresAt || null;
-      const refundDeadline = addDays(new Date(), REFUND_DAYS);
-      const amount = getPriceForCycle(pricingPlans.find((p) => p.id === planId), cycle);
-      const unlockedGrades = planId === 'premium'
-        ? persistUnlockedGrades([...ALL_GRADE_OPTIONS], 'premium', state.student.grade)
-        : persistUnlockedGrades(standardGradesToUse, 'standard', state.student.grade);
-
-      await dbRun(`UPDATE subscriptions SET status = 'expired', updatedAt = datetime('now') WHERE status = 'active'`);
-
       const storagePlanId = planId === 'standard'
         ? (isStandardYearOneGrade ? 'standard_1year_1grade' : (isStandardYearThreeGrade ? 'standard_1year_3grade' : 'standard'))
         : planId;
 
-      await dbRun(
-        `INSERT INTO subscriptions (planId, billingCycle, licenseKey, amount, status, activatedAt, expiresAt, paymentMethod, refundDeadline)
-         VALUES (?, ?, ?, ?, 'active', datetime('now'), ?, 'license_key', ?)`,
-        [storagePlanId, cycle, key, amount, expiresAt, refundDeadline],
-      );
+      const finalPlanId: 'standard' | 'premium' = planId === 'premium' ? 'premium' : 'standard';
+      const finalStoragePlanId: 'standard' | 'standard_1year_1grade' | 'standard_1year_3grade' | 'premium' =
+        finalPlanId === 'premium'
+          ? 'premium'
+          : (isStandardYearOneGrade ? 'standard_1year_1grade' : (isStandardYearThreeGrade ? 'standard_1year_3grade' : 'standard'));
 
-      persistPaidPlan(storagePlanId, key, expiresAt, cycle);
-      setActivationGrades(unlockedGrades);
-
-      const nextGrade = unlockedGrades[0] ?? state.student.grade;
-      const subjectsOfGrade = getSubjectsForGrade(nextGrade);
-      const firstReadySubject = subjectsOfGrade.find((subject) =>
-        state.lessons.some((lesson) => lesson.grade === nextGrade && lesson.subjectCode === subject.code),
-      );
-
-      updateStudent({
-        grade: nextGrade,
-        subjectCode: firstReadySubject?.code || subjectsOfGrade[0]?.code || 'math',
+      await completeActivation({
+        key,
+        planId: finalPlanId,
+        storagePlanId: finalStoragePlanId,
+        cycle,
+        expiresAt,
+        standardGrades: standardGradesToUse,
       });
 
-      setCurrentPlan(planId);
       setActivateMsg({
         type: 'success',
-        text: `✅ Kích hoạt thành công gói ${pricingPlans.find((p) => p.id === storagePlanId)?.name || pricingPlans.find((p) => p.id === planId)?.name || planId}! ${planId === 'standard' ? `Đã mở khóa ${unlockedGrades.map((grade) => getGradeLabel(grade)).join(', ')}.` : 'Đã mở toàn bộ lớp.'} ${expiresAt ? `Hết hạn: ${formatDate(expiresAt)}` : '(Trọn đời)'}`,
+        text: `✅ Kích hoạt thành công gói ${pricingPlans.find((p) => p.id === storagePlanId)?.name || pricingPlans.find((p) => p.id === planId)?.name || planId}! ${planId === 'standard' ? `Đã mở khóa ${standardGradesToUse.map((grade) => getGradeLabel(grade)).join(', ')}.` : 'Đã mở toàn bộ lớp.'} ${expiresAt ? `Hết hạn: ${formatDate(expiresAt)}` : '(Trọn đời)'}`,
       });
       playActivationTone('success');
-      setLicenseKey('');
-      await loadActiveSub();
       setTimeout(() => setActivateMsg(null), 6000);
     } catch (error) {
       const message = (error as any)?.message ? String((error as any).message) : 'Không thể xác minh key. Vui lòng kiểm tra mạng hoặc thử lại sau.';
@@ -1674,6 +1768,8 @@ export function PricingPage() {
               ? 'Premium: tự mở toàn bộ lớp, không cần chọn thủ công.'
               : isStandardSelectionLocked
                 ? `Đã khóa lựa chọn cho key này: ${activationGrades.map((grade) => getGradeLabel(grade)).join(', ')}.`
+                : !hasPendingStandardActivation
+                  ? 'Bấm Kích hoạt thành công trước, sau đó mới chọn lớp.'
                 : `Đã chọn: ${activationGrades.length}/${requiredGradeCountForInput} lớp cho key Standard`}
           </div>
           {hasTypedLicenseKey && !isPremiumKeyFlow && !isStandardSelectionLocked && (
@@ -1689,7 +1785,7 @@ export function PricingPage() {
                       setGradeConfirmDone(false);
                     }
                   }}
-                  disabled={!hasSelectedEnoughGrades}
+                  disabled={!hasSelectedEnoughGrades || !hasPendingStandardActivation}
                   style={{ marginTop: 3 }}
                 />
                 <span>Tôi xác nhận đây là các lớp muốn khóa cho key này trên thiết bị hiện tại.</span>
@@ -1697,9 +1793,9 @@ export function PricingPage() {
               <div className="mt-2 flex flex-wrap items-center gap-3">
                 <button
                   className={`${premiumButtonBaseClass} px-4 py-2.5 text-sm`}
-                  style={hasSelectedEnoughGrades ? darkPrimaryButtonStyle : neutralGhostButtonStyle}
+                  style={hasSelectedEnoughGrades && hasPendingStandardActivation ? darkPrimaryButtonStyle : neutralGhostButtonStyle}
                   onClick={confirmSelectedGrades}
-                  disabled={!hasSelectedEnoughGrades}
+                  disabled={!hasSelectedEnoughGrades || !hasPendingStandardActivation}
                 >
                   <Check size={16} />
                   Xác nhận lựa chọn lớp
@@ -1783,7 +1879,7 @@ export function PricingPage() {
                   <button
                     className={`${premiumButtonBaseClass} px-4 py-2 text-sm`}
                     style={darkPrimaryButtonStyle}
-                    onClick={acceptGradeConfirmation}
+                    onClick={() => { void acceptGradeConfirmation(); }}
                   >
                     Đồng ý xác nhận
                   </button>
