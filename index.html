@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Học Hứng Khởi Tiểu Học</title>
+    <meta name="description" content="Ứng dụng học tập vui nhộn cho học sinh tiểu học" />
+    <meta name="theme-color" content="#F97316" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" href="./icon-192.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      (function() {
+        var isLocalViteDev =
+          window.location.hostname === 'localhost' ||
+          window.location.hostname === '127.0.0.1' ||
+          window.location.port === '5173';
+        var isBuiltPreview = /(^|\/)dist(\/|$)/.test(window.location.pathname);
+
+        if (!isLocalViteDev && !isBuiltPreview) {
+          window.location.replace(new URL('./dist/index.html', window.location.href).href);
+        }
+      })();
+    </script>
+    <script type="module" src="./src/main.tsx"></script>
+    <script>
+      // Only register SW in production builds (not during Vite dev server)
+      if ('serviceWorker' in navigator && !window.electronAPI) {
+        // Vite dev server injects import.meta — production builds use compiled JS without it
+        var isDev = document.querySelector('script[src*="main.tsx"]') !== null;
+        if (!isDev) {
+          window.addEventListener('load', function() {
+            navigator.serviceWorker.register('./sw.js').catch(function() {});
+          });
+        }
+      }
+    </script>
+  </body>
+</html>

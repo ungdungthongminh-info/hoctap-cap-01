@@ -1,0 +1,5 @@
+Macbook build requires macOS.
+Run this on a Mac from the project root:
+npm run build:noibo
+npx electron-builder --mac zip
+Expected artifact name: HocHungKhoi_Desktopapp-Macbook_NoiBo.zip

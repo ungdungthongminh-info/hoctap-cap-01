@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.db
+.DS_Store
+backups/
+.env.local
+.env.*.local
+release-noibo/win-unpacked/
+release-noibo/*.exe
+*.asar

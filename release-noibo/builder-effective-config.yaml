@@ -1,0 +1,29 @@
+directories:
+  output: release-noibo
+  buildResources: build
+appId: com.hochungkhoi.noibo
+productName: Hoc Hung Khoi Tieu Hoc_NoiBo
+asar: true
+files:
+  - filter:
+      - dist/**/*
+      - electron/**/*
+      - package.json
+extraMetadata:
+  name: hoc-hung-khoi-noibo
+  productName: Hoc Hung Khoi Tieu Hoc_NoiBo
+  main: electron/main.js
+win:
+  target:
+    - target: portable
+      arch:
+        - x64
+  artifactName: HocHungKhoi_Desktopapp-Win_NoiBo.${ext}
+mac:
+  target:
+    - target: zip
+      arch:
+        - x64
+        - arm64
+  artifactName: HocHungKhoi_Desktopapp-Macbook_NoiBo.${ext}
+electronVersion: 41.2.1

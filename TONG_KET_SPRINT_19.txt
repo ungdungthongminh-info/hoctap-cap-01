@@ -1,0 +1,216 @@
+================================================================================
+  TỔNG KẾT TOÀN BỘ CÔNG VIỆC — SPRINT 19
+  Dự án: Học Hứng Khởi Tiểu Học
+  Ngày: 19/04/2026
+  Tech: Electron + React 18 + TypeScript 6.0.3 + Vite 8 + TailwindCSS + SQLite
+================================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ I. DANH SÁCH CÔNG VIỆC ĐÃ HOÀN THÀNH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[✅] 1. GEMINI AI CHAT — Tích hợp chat AI với mascot
+[✅] 2. SỬA LỖI HIỂN THỊ CHƯƠNG — Fix chapter display
+[✅] 3. COMPETITION PAGE UI — Làm lại giao diện thi đấu
+[✅] 4. MỞ RỘNG NỘI DUNG 20→35 bài/lớp/môn (525 bài mới, ~2100 cards, ~1500+ câu hỏi)
+[✅] 5. SVG ANIMATED MASCOTS — Thay 26+ emoji bằng 6 mascot SVG động (22+ files)
+[✅] 6. NÚT BẤM & TAB HIỆN ĐẠI — Nâng cấp toàn bộ .btn, .chip-tab, .chip-card (7 pages)
+[✅] 7. CHAT PANEL UI OVERHAUL — Thiết kế lại hoàn toàn khung chat + sửa bug {hint}
+[✅] 8. MỞ RỘNG MINI-GAMES — Từ 1 game lên 5 games + hub page
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ II. CHI TIẾT TỪNG HẠNG MỤC
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+──────────────────────────────────────────
+ 1. GEMINI AI CHAT
+──────────────────────────────────────────
+- Tích hợp Gemini API vào MascotChatPanel
+- Chat thông minh với mascot theo chủ đề/môn học
+- Backup: sprint19-gemini-ai-chat_20260419_1622.zip (750 KB)
+
+──────────────────────────────────────────
+ 2. SỬA LỖI CHƯƠNG + GEMINI
+──────────────────────────────────────────
+- Fix hiển thị chapter trong curriculum
+- Backup: sprint19-fix-chapters-gemini_20260419_1625.zip (750 KB)
+
+──────────────────────────────────────────
+ 3. COMPETITION PAGE UI
+──────────────────────────────────────────
+- Làm lại toàn bộ giao diện trang Thi Đấu
+- Backup: sprint19-competition-ui-fix_20260419_1627.zip (751 KB)
+
+──────────────────────────────────────────
+ 4. MỞ RỘNG NỘI DUNG 20 → 35 BÀI
+──────────────────────────────────────────
+- 9 môn × 5 lớp × 15 bài mới = 525 bài học mới
+- ~2100 flashcards mới
+- ~1500+ câu hỏi mới (single_choice, true_false, fill_text, fill_number, ordering, matching)
+- 9 môn: Toán, Tiếng Việt, TNXH, Đạo đức, Tiếng Anh, Khoa học, Lịch sử-Địa lý, Tin học, Mỹ thuật
+- 5 lớp: Lớp 1 → Lớp 5
+- Backup: sprint19-content-expand-35_20260419_1703.zip (842 KB)
+
+──────────────────────────────────────────
+ 5. SVG ANIMATED MASCOTS
+──────────────────────────────────────────
+- Tạo component MascotCharacter.tsx với 6 SVG động:
+  • 🐬 Dopi (Ocean) — bơi lắc lư
+  • 🐰 Bông (Garden) — nhảy nhẹ, tai lắc
+  • 🐻 Mochi (Forest) — vẫy tay
+  • 🐱 Miu (Sunset) — đuôi lắc, nháy mắt
+  • 🦉 Zizi (Galaxy) — xoay đầu, mắt to
+  • 🐶 Lucky (Sunny) — vẫy đuôi, lè lưỡi
+- Thay thế 26+ emoji trong 22+ files
+- Backup: sprint19-mascot-svg-animated_20260419_1714.zip (846 KB)
+
+──────────────────────────────────────────
+ 6. NÚT BẤM & TAB HIỆN ĐẠI (UI MODERNIZE)
+──────────────────────────────────────────
+Vấn đề: "CLICK CỨ NHƯ WIN 94"
+
+Giải pháp:
+- .btn: Ripple effect, hover lift (-2px), active bounce, scale animation
+- .chip-tab / .chip-tab-sm: Tab pills với ripple, bottom indicator, transition mượt
+- .chip-card: Card selector với ripple, hover lift (-3px), active bounce, data-active shadow
+
+Files đã sửa (7 pages):
+  • CurriculumPage.tsx — chip-tab cho chọn lớp
+  • LessonsPage.tsx — chip-tab cho filter
+  • AchievementPage.tsx — chip-tab cho tab achievements
+  • AvatarShopPage.tsx — chip-tab-sm cho categories
+  • CompetitionPage.tsx — chip-tab cho tab modes
+  • QuizPage.tsx — chip-card cho chọn quiz type
+  • src/styles/index.css — thêm ~80 dòng CSS mới
+
+Backup: sprint19-button-ui-modernize_20260419_1723.zip (791 KB)
+
+──────────────────────────────────────────
+ 7. CHAT PANEL UI OVERHAUL + FIX BUG
+──────────────────────────────────────────
+Vấn đề: "UI HƠI TỆ, CẢ NGƯỜI LỚN CÒN CHÁN HUỐNG GÌ TRẺ EM, API CHƯA HOẠT ĐỘNG"
+
+Bug fix:
+- Template {hint} không bao giờ được thay thế
+- handleQuickAction('hint') gọi getMascotMessage('hint', {name}) nhưng không truyền biến hint
+- Fix: Cascade 3 bước — weaknesses → recommendations → random lesson title → fallback 'encourage'
+
+UI Rewrite hoàn toàn MascotChatPanel.tsx:
+  • FAB button: 64px, bounce animation, glow pulse, badge indicator
+  • Panel: 370px, shadow layers, slide-up animation, gradient header, glass avatar box
+  • Messages: mascot avatar mini bên cạnh bubbles, gradient user bubbles, slide-in
+  • Loading: Bouncing dots (TypingDots component)
+  • Quick actions: Mỗi button màu riêng, hover lift, border accent
+  • Input: Focus glow ring, 40px send button
+  • CTA bar: Gradient + arrow nudge animation
+  • Settings: Toggle switch iOS-style
+  • ~250 dòng CSS mới cho .chat-* classes
+
+Backup: sprint19-chat-ui-overhaul_20260419_1728.zip (793 KB)
+
+──────────────────────────────────────────
+ 8. MỞ RỘNG MINI-GAMES (1 → 5 GAMES)
+──────────────────────────────────────────
+Vấn đề: "CẦN THÊM MINI GAME (TRONG MỖI MINI GAME NÊN RANDOM CÂU HỎI/... TRÁNH NHÀM CHÁN)"
+
+Trước: Chỉ có 1 game (MatchGamePage — Ghép Cặp)
+Sau: 5 games + 1 hub page
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ #  │ Game              │ Mô tả                    │ Route            │
+├──────────────────────────────────────────────────────────────────────┤
+│ HUB│ Mini-Game Hub     │ Trang chọn game          │ /mini-games      │
+│ 1  │ 🃏 Ghép Cặp       │ Memory matching cards    │ /match-game      │
+│ 2  │ 🔤 Xếp Chữ        │ Xáo trộn chữ, ghép từ   │ /mini/word-scramble │
+│ 3  │ ⚡ Tốc Độ          │ 15 câu, 8 giây/câu       │ /mini/speed-quiz │
+│ 4  │ ✅ Đúng hay Sai    │ True/False nhanh, combo  │ /mini/true-false │
+│ 5  │ ✏️ Điền Từ         │ Nhập đáp án, gợi ý       │ /mini/fill-blank │
+└──────────────────────────────────────────────────────────────────────┘
+
+Files MỚI tạo (6 files):
+  • src/modules/student/pages/MiniGameHubPage.tsx — Hub 5 game cards gradient
+  • src/modules/student/pages/WordScramblePage.tsx — ~250 dòng, tap chữ cái
+  • src/modules/student/pages/SpeedQuizPage.tsx — ~280 dòng, timer bar đổi màu
+  • src/modules/student/pages/TrueFalseBlitzPage.tsx — ~200 dòng, 2 nút Đúng/Sai
+  • src/modules/student/pages/FillBlankPage.tsx — ~220 dòng, input + gợi ý
+
+Files ĐÃ SỬA:
+  • src/App.tsx — thêm 5 imports + 6 routes mới
+  • src/shared/components/Sidebar.tsx — đổi /match-game → /mini-games
+
+Tính năng chung mỗi game:
+  ✓ Random câu hỏi từ bài học hiện tại (theo môn + lớp)
+  ✓ Timer đếm thời gian
+  ✓ Star rating (⭐⭐⭐ dựa trên % đúng)
+  ✓ Combo/streak tracking
+  ✓ Animation feedback (bounce đúng, shake sai)
+  ✓ Nút Chơi lại + Trở về hub
+  ✓ Fallback khi không đủ câu hỏi
+
+Backup: sprint19-mini-games-expand_20260419_1737.zip (808 KB)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ III. TƯ VẤN GIỌNG ĐỌC (CHƯA THỰC HIỆN — CHỜ DUYỆT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Yêu cầu: Cần giọng nữ chuyên nghiệp hơn giọng Google Translate hiện tại.
+
+Hiện tại: Google Translate TTS (giọng robot) + Web Speech API (fallback)
+
+5 phương án đề xuất:
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ #  │ Phương án              │ Giọng nữ Việt        │ Miễn phí     │ Chất lượng │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ 1  │ Google Cloud TTS       │ vi-VN-Neural2-A      │ 1M chars/mo  │ ⭐⭐⭐⭐    │
+│ 2  │ Azure Speech           │ vi-VN-HoaiMyNeural   │ 500K chars/mo│ ⭐⭐⭐⭐⭐  │
+│ 3  │ FPT.AI                 │ banmai, linhsan       │ Có giới hạn  │ ⭐⭐⭐⭐    │
+│ 4  │ Zalo AI                │ Nhiều giọng nữ       │ Free tier    │ ⭐⭐⭐      │
+│ 5  │ Edge TTS (miễn phí)    │ vi-VN-HoaiMyNeural   │ Unlimited    │ ⭐⭐⭐⭐⭐  │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Khuyến nghị:
+  → Edge TTS: Miễn phí 100%, giọng HoaiMyNeural cực hay, tích hợp nhanh
+  → Azure Speech: Ổn định nhất, giọng Việt tốt nhất, free 500K chars/tháng
+  → Google Cloud TTS: Free 1M chars/tháng, ổn định
+
+Trạng thái: CHỜ XÁC NHẬN PHƯƠNG ÁN để code tích hợp.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ IV. DANH SÁCH BACKUP FILES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Sprint 19 Backups (theo thứ tự):
+  1. sprint19-gemini-ai-chat_20260419_1622.zip          (750 KB)
+  2. sprint19-fix-chapters-gemini_20260419_1625.zip      (750 KB)
+  3. sprint19-competition-ui-fix_20260419_1627.zip       (751 KB)
+  4. sprint19-content-expand-35_20260419_1703.zip        (842 KB)
+  5. sprint19-mascot-svg-animated_20260419_1714.zip      (846 KB)
+  6. sprint19-button-ui-modernize_20260419_1723.zip      (791 KB)
+  7. sprint19-chat-ui-overhaul_20260419_1728.zip         (793 KB)
+  8. sprint19-mini-games-expand_20260419_1737.zip        (808 KB)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ V. THỐNG KÊ DỰ ÁN HIỆN TẠI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Tổng pages: 30 pages trong src/modules/student/pages/
+- Tổng routes: 27 routes trong App.tsx
+- Môn học: 9 (Toán, Tiếng Việt, TNXH, Đạo đức, Anh, Khoa học, Sử-Địa, Tin, Mỹ thuật)
+- Lớp: 5 (Lớp 1 → Lớp 5)
+- Bài học: 35 bài/lớp/môn = 1575 bài tổng
+- Mini-games: 5 games + 1 hub page
+- Themes/Mascots: 6 (Dopi, Bông, Mochi, Miu, Zizi, Lucky)
+- CSS classes mới: .btn (ripple), .chip-tab, .chip-tab-sm, .chip-card, .chat-* (~330 dòng)
+- Build: ✅ TypeScript pass, Vite build OK (2566 KB bundle)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ VI. VIỆC CẦN LÀM TIẾP (CHỜ LỆNH)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ ] Nâng cấp giọng đọc TTS (chọn phương án: Edge TTS / Azure / Google Cloud / FPT.AI)
+[ ] Bất kỳ yêu cầu nào khác từ người dùng
+
+================================================================================
+  END OF REPORT
+================================================================================

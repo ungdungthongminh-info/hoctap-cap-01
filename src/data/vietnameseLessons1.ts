@@ -1,0 +1,118 @@
+/**
+ * TIẾNG VIỆT LỚP 1 — 20 bài (GDPT 2018)
+ * 5 chương: Âm vần, Đọc hiểu, Viết, Luyện từ-câu, Kể chuyện
+ */
+import { Lesson } from './seedData';
+
+let sid = 0;
+const L = (
+  unit: string, code: string, title: string, obj: string, summary: string,
+  tips: string, diff: 'easy' | 'medium' | 'hard', mins: number,
+): Lesson => ({
+  id: 100 + (++sid),
+  grade: 1,
+  subjectCode: 'vietnamese',
+  unitCode: unit,
+  lessonCode: code,
+  title,
+  objective: obj,
+  summarySimple: summary,
+  tips,
+  difficulty: diff,
+  estimatedMinutes: mins,
+  status: 'ready',
+  sortOrder: sid,
+  isActive: 1,
+});
+
+export const vietnameseLessons1: Lesson[] = [
+  // ===== CHƯƠNG 1: Âm – Vần cơ bản (6 bài) =====
+  L('C1', 'TV1-01', 'Các nguyên âm a, o, ô, ơ',
+    'Nhận biết và phát âm đúng các nguyên âm a, o, ô, ơ',
+    'Học 4 nguyên âm đầu tiên, tập phát âm và nhận diện chữ cái',
+    'Cho bé nhìn khẩu hình miệng khi phát âm', 'easy', 5),
+  L('C1', 'TV1-02', 'Các nguyên âm e, ê, i, u, ư',
+    'Nhận biết và phát âm đúng e, ê, i, u, ư',
+    'Tiếp tục học nguyên âm, phân biệt e/ê, u/ư',
+    'So sánh cặp e-ê, u-ư để bé phân biệt', 'easy', 5),
+  L('C1', 'TV1-03', 'Phụ âm b, c, d, đ',
+    'Nhận biết phụ âm b, c, d, đ và ghép với nguyên âm',
+    'Học 4 phụ âm đầu, tập ghép vần đơn giản: ba, ca, da, đa',
+    'Dùng hình ảnh quen thuộc: bà, cá, dê, đèn', 'easy', 5),
+  L('C1', 'TV1-04', 'Phụ âm g, h, k, l, m, n',
+    'Nhận biết phụ âm g, h, k, l, m, n và đọc tiếng đơn',
+    'Ghép phụ âm với nguyên âm thành tiếng: ga, ha, la, ma, na',
+    'Cho bé đọc to từng tiếng ghép', 'easy', 6),
+  L('C1', 'TV1-05', 'Vần có âm cuối n, m, ng',
+    'Đọc và viết các tiếng có vần kết thúc bằng n, m, ng',
+    'Học vần: an, am, ang — ban, bàn, bạn, bảng',
+    'Tập đánh vần từng âm rồi ghép lại', 'easy', 6),
+  L('C1', 'TV1-06', 'Vần có âm cuối t, c, ch, nh',
+    'Đọc và viết các tiếng có vần phức tạp hơn',
+    'Học vần: at, ac, ach, anh — bát, các, sách, xanh',
+    'Phân biệt âm cuối bằng cách nói chậm', 'medium', 7),
+
+  // ===== CHƯƠNG 2: Đọc hiểu đơn giản (5 bài) =====
+  L('C2', 'TV1-07', 'Đọc câu ngắn 3-5 từ',
+    'Đọc trôi chảy câu ngắn có 3-5 từ đơn giản',
+    'Bé đọc các câu như: "Bé đi học." "Mẹ nấu cơm."',
+    'Cho bé chỉ tay vào từng từ khi đọc', 'easy', 5),
+  L('C2', 'TV1-08', 'Đọc hiểu đoạn văn ngắn',
+    'Đọc đoạn 2-3 câu và trả lời câu hỏi đơn giản',
+    'Đọc đoạn ngắn rồi chọn đáp án đúng về nội dung',
+    'Hỏi bé "Ai?" "Làm gì?" sau khi đọc', 'easy', 6),
+  L('C2', 'TV1-09', 'Đọc thơ — Vần điệu',
+    'Nhận biết vần trong thơ và đọc diễn cảm',
+    'Đọc bài thơ ngắn 4 dòng, tìm cặp từ vần với nhau',
+    'Đọc thơ có nhịp điệu giúp bé nhớ vần', 'easy', 5),
+  L('C2', 'TV1-10', 'Đọc truyện ngắn có tranh',
+    'Đọc truyện tranh ngắn và hiểu nội dung chính',
+    'Đọc truyện kèm hình, trả lời "Chuyện gì xảy ra?"',
+    'Cho bé xem tranh trước rồi đoán nội dung', 'medium', 7),
+  L('C2', 'TV1-11', 'Sắp xếp câu thành đoạn',
+    'Sắp xếp đúng thứ tự các câu thành đoạn có ý nghĩa',
+    'Cho 3-4 câu lộn xộn, bé sắp xếp đúng trình tự',
+    'Gợi ý bé tìm câu mở đầu trước', 'medium', 6),
+
+  // ===== CHƯƠNG 3: Luyện viết (3 bài) =====
+  L('C3', 'TV1-12', 'Viết chữ hoa A-H',
+    'Viết đúng nét các chữ cái hoa từ A đến H',
+    'Tập viết chữ hoa theo mẫu, chú ý nét lên nét xuống',
+    'Viết trên giấy ô ly để bé căn nét', 'easy', 6),
+  L('C3', 'TV1-13', 'Viết câu ngắn hoàn chỉnh',
+    'Viết câu ngắn 3-5 từ đúng chính tả và dấu câu',
+    'Bé viết câu có chủ ngữ + vị ngữ, dấu chấm cuối câu',
+    'Nhắc bé viết hoa chữ đầu câu', 'medium', 7),
+  L('C3', 'TV1-14', 'Chính tả — Nghe viết',
+    'Nghe và viết đúng đoạn ngắn 2-3 câu',
+    'Luyện nghe viết, chú ý phân biệt d/gi, s/x, ch/tr',
+    'Đọc chậm, rõ từng từ cho bé viết theo', 'medium', 8),
+
+  // ===== CHƯƠNG 4: Luyện từ và câu (3 bài) =====
+  L('C4', 'TV1-15', 'Từ chỉ sự vật — Danh từ đơn giản',
+    'Nhận biết và phân loại từ chỉ người, con vật, đồ vật',
+    'Phân biệt: người (bố, mẹ), con vật (chó, mèo), đồ vật (bàn, ghế)',
+    'Cho bé chỉ vào đồ vật quanh nhà và gọi tên', 'easy', 5),
+  L('C4', 'TV1-16', 'Từ chỉ hoạt động — Động từ đơn giản',
+    'Nhận biết từ chỉ hoạt động: ăn, uống, chạy, nhảy',
+    'Tìm từ chỉ hành động trong câu, nối từ với hình ảnh',
+    'Bé làm động tác theo từ để nhớ', 'easy', 5),
+  L('C4', 'TV1-17', 'Đặt câu với từ cho sẵn',
+    'Đặt câu đúng ngữ pháp với từ cho trước',
+    'Cho từ "mèo", bé đặt: "Con mèo đang ngủ."',
+    'Gợi ý bé theo mẫu Ai + Làm gì', 'medium', 6),
+
+  // ===== CHƯƠNG 5: Kể chuyện — Giao tiếp (3 bài) =====
+  L('C5', 'TV1-18', 'Kể lại câu chuyện đã nghe',
+    'Kể lại nội dung chính của truyện ngắn',
+    'Nghe/đọc truyện, sau đó chọn đáp án sắp xếp đúng diễn biến',
+    'Hỏi: đầu tiên gì, sau đó gì, cuối cùng gì?', 'medium', 7),
+  L('C5', 'TV1-19', 'Hội thoại — Chào hỏi lịch sự',
+    'Sử dụng lời chào hỏi lịch sự phù hợp hoàn cảnh',
+    'Chọn câu chào đúng: với thầy cô, bạn bè, người lớn',
+    'Cho bé tập nói lời chào hàng ngày', 'easy', 5),
+  L('C5', 'TV1-20', 'Kể về bản thân và gia đình',
+    'Trả lời câu hỏi về bản thân: tên, tuổi, sở thích, gia đình',
+    'Bé điền/chọn thông tin đúng về mình và gia đình',
+    'Tạo không khí vui vẻ khi bé chia sẻ', 'easy', 5),
+];

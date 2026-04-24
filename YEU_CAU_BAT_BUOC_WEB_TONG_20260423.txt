@@ -1,0 +1,22 @@
+YEU CAU BAT BUOC WEB TONG - 2026-04-23
+
+1. Scope integration cua app-study-12 chi con: free, standard, premium. Bo Basic khoi pricing/activation integration.
+2. Giu on dinh contract AI-app:
+   - GET /api/ai-app/customers/:customerId/licenses
+   - POST /api/ai-app/licenses/verify
+   - x-ai-app-key giu server-side
+3. Giu gia goc catalog dung cho AI-app:
+   - Standard: 89.000 / 599.000 / 999.000
+   - Premium: 119.000 / 899.000 / 1.599.000
+4. Giu dung product map:
+   - standard:monthly -> prod-study-month
+   - standard:yearly -> prod-study-year
+   - standard:lifetime -> prod-study-standard-lifetime
+   - premium:monthly -> prod-study-premium-month
+   - premium:yearly -> prod-study-premium-year
+   - premium:lifetime -> prod-study-premium-lifetime
+5. Login chi de xac dinh customer dung chung cho webapp + desktop app; login KHONG tu mo goi tra phi.
+6. Checkout phai tao theo customerId cua Web Tong; AI-app da bam theo rule nay.
+7. Verify license phai tra on dinh: license.planCode, license.billingCycle, license.expiresAt, license.customerId, features, grace.
+8. Chi key verify thanh cong moi mo Standard/Premium.
+9. Tieu chi nghiem thu: key dung verify thanh cong, gia AI-app trung catalog Web Tong, login/admin khong regression.

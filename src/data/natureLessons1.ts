@@ -1,0 +1,118 @@
+/**
+ * TỰ NHIÊN & XÃ HỘI LỚP 1 — 20 bài (GDPT 2018)
+ * 5 chủ đề: Gia đình, Trường học, Cộng đồng, Thực vật-Động vật, Trái đất-Bầu trời
+ */
+import type { Lesson } from './seedData';
+
+let sid = 0;
+const L = (
+  unit: string, code: string, title: string, obj: string, summary: string,
+  tips: string, diff: 'easy' | 'medium' | 'hard', mins: number,
+): Lesson => ({
+  id: 200 + (++sid),
+  grade: 1,
+  subjectCode: 'nature',
+  unitCode: unit,
+  lessonCode: code,
+  title,
+  objective: obj,
+  summarySimple: summary,
+  tips,
+  difficulty: diff,
+  estimatedMinutes: mins,
+  status: 'ready',
+  sortOrder: sid,
+  isActive: 1,
+});
+
+export const natureLessons1: Lesson[] = [
+  // ===== CHỦ ĐỀ 1: Gia đình (4 bài) =====
+  L('GD', 'TN1-01', 'Gia đình của em',
+    'Nhận biết các thành viên trong gia đình và vai trò của họ',
+    'Học về bố, mẹ, ông, bà, anh, chị, em trong gia đình',
+    'Cho bé kể về gia đình mình', 'easy', 5),
+  L('GD', 'TN1-02', 'Cơ thể của em',
+    'Nhận biết các bộ phận cơ thể: đầu, mình, tay, chân',
+    'Tìm hiểu các bộ phận cơ thể và chức năng cơ bản',
+    'Chỉ vào từng bộ phận và gọi tên', 'easy', 5),
+  L('GD', 'TN1-03', 'Giữ gìn vệ sinh cá nhân',
+    'Biết cách giữ vệ sinh: rửa tay, đánh răng, tắm rửa',
+    'Học thói quen vệ sinh hàng ngày để khỏe mạnh',
+    'Thực hành rửa tay 6 bước', 'easy', 5),
+  L('GD', 'TN1-04', 'An toàn trong nhà',
+    'Nhận biết nguy hiểm trong nhà: điện, lửa, vật sắc nhọn',
+    'Biết cách phòng tránh tai nạn thường gặp ở nhà',
+    'Dạy bé không chạm ổ điện, bếp nóng', 'easy', 6),
+
+  // ===== CHỦ ĐỀ 2: Trường học (4 bài) =====
+  L('TH', 'TN1-05', 'Trường học của em',
+    'Nhận biết trường học, lớp học và các khu vực',
+    'Tìm hiểu về trường: sân, lớp, thư viện, nhà vệ sinh',
+    'Dẫn bé tham quan trường', 'easy', 5),
+  L('TH', 'TN1-06', 'Thầy cô và bạn bè',
+    'Biết cách ứng xử lịch sự với thầy cô và bạn bè',
+    'Học cách chào hỏi, hợp tác với bạn và tôn trọng thầy cô',
+    'Nhắc bé chào thầy cô mỗi ngày', 'easy', 5),
+  L('TH', 'TN1-07', 'Đồ dùng học tập',
+    'Nhận biết và giữ gìn đồ dùng học tập',
+    'Sách, vở, bút, thước, cặp — cách sắp xếp gọn gàng',
+    'Cho bé tự sắp cặp sách', 'easy', 5),
+  L('TH', 'TN1-08', 'An toàn giao thông',
+    'Biết quy tắc an toàn khi đi đường',
+    'Đèn xanh-đỏ-vàng, đi bộ trên vỉa hè, qua đường đúng cách',
+    'Thực hành các tình huống qua đường', 'easy', 6),
+
+  // ===== CHỦ ĐỀ 3: Cộng đồng (4 bài) =====
+  L('CD', 'TN1-09', 'Bưu điện, bệnh viện, chợ',
+    'Nhận biết các địa điểm công cộng và công dụng',
+    'Bưu điện gửi thư, bệnh viện khám bệnh, chợ mua đồ',
+    'Cho bé kể về nơi đã đi', 'easy', 5),
+  L('CD', 'TN1-10', 'Nghề nghiệp quanh em',
+    'Nhận biết một số nghề nghiệp phổ biến',
+    'Bác sĩ, giáo viên, nông dân, công nhân, cảnh sát',
+    'Hỏi bé "Con muốn làm nghề gì?"', 'easy', 5),
+  L('CD', 'TN1-11', 'Giữ gìn môi trường',
+    'Biết cách bảo vệ môi trường xung quanh',
+    'Không vứt rác bừa, trồng cây, tiết kiệm nước',
+    'Cho bé thực hành phân loại rác', 'easy', 6),
+  L('CD', 'TN1-12', 'Các mùa trong năm',
+    'Nhận biết 4 mùa và đặc điểm thời tiết',
+    'Xuân ấm, hạ nóng, thu mát, đông lạnh',
+    'Cho bé quan sát thời tiết mỗi ngày', 'easy', 5),
+
+  // ===== CHỦ ĐỀ 4: Thực vật - Động vật (4 bài) =====
+  L('Thực vật', 'TN1-13', 'Cây xanh quanh em',
+    'Nhận biết các bộ phận của cây: rễ, thân, lá, hoa, quả',
+    'Tìm hiểu cấu tạo cây và lợi ích của cây xanh',
+    'Quan sát cây trong vườn, công viên', 'easy', 5),
+  L('Thực vật', 'TN1-14', 'Hoa và quả',
+    'Nhận biết một số loại hoa và quả phổ biến',
+    'Hoa hồng, hoa sen, quả cam, quả chuối — đặc điểm',
+    'Cho bé ngửi hoa, nếm trái cây', 'easy', 5),
+  L('Thực vật', 'TN1-15', 'Con vật nuôi',
+    'Nhận biết các con vật nuôi trong nhà',
+    'Chó, mèo, gà, vịt, lợn — đặc điểm và ích lợi',
+    'Cho bé quan sát con vật thật', 'easy', 5),
+  L('Thực vật', 'TN1-16', 'Con vật hoang dã',
+    'Nhận biết một số con vật hoang dã',
+    'Voi, hổ, khỉ, rắn — sống ở đâu, đặc điểm',
+    'Xem tranh/video về động vật hoang dã', 'easy', 6),
+
+  // ===== CHỦ ĐỀ 5: Trái đất - Bầu trời (4 bài) =====
+  L('Bài tập', 'TN1-17', 'Mặt trời và mặt trăng',
+    'Nhận biết mặt trời (ngày) và mặt trăng (đêm)',
+    'Mặt trời cho ánh sáng ban ngày, mặt trăng sáng ban đêm',
+    'Quan sát bầu trời sáng và tối', 'easy', 5),
+  L('Bài tập', 'TN1-18', 'Nước quanh em',
+    'Biết nước quan trọng với sự sống',
+    'Nước để uống, tắm, tưới cây — tiết kiệm nước',
+    'Cho bé tập khóa vòi nước', 'easy', 5),
+  L('Bài tập', 'TN1-19', 'Không khí quanh em',
+    'Biết không khí cần thiết để thở',
+    'Không khí ở khắp nơi, cần giữ không khí sạch',
+    'Bé hít thở sâu ngoài trời', 'easy', 5),
+  L('Bài tập', 'TN1-20', 'Thời tiết hàng ngày',
+    'Quan sát và mô tả thời tiết: nắng, mưa, gió, mây',
+    'Mỗi ngày thời tiết khác nhau — ảnh hưởng đến sinh hoạt',
+    'Cho bé ghi nhật ký thời tiết', 'easy', 6),
+];

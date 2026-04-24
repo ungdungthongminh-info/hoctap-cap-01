@@ -1,0 +1,73 @@
+{
+  "app": {
+    "name": "Học Hùng Khởi",
+    "description": "Ứng dụng học tập thông minh cho học sinh tiểu học lớp 1–5",
+    "version": "1.0.0",
+    "updated": "2026-04-21"
+  },
+  "chatAI": {
+    "description": "Tính năng Chat AI tích hợp trong ứng dụng, hỗ trợ học sinh đặt câu hỏi, nhận gợi ý bài học và động viên từ trợ lý thông minh.",
+    "note": "Người dùng tự nhập API key riêng. Ứng dụng không lưu key trên server — chỉ lưu ở localStorage trên thiết bị của người dùng.",
+    "authMethod": "Bearer API Key (người dùng tự cung cấp)",
+    "maxTokensPerRequest": 512,
+    "conversationHistoryLength": 20,
+    "systemPromptLanguage": "vi"
+  },
+  "providers": [
+    {
+      "id": "gemini",
+      "name": "Google Gemini",
+      "defaultModel": "gemini-2.0-flash",
+      "endpoint": "https://generativelanguage.googleapis.com/v1beta",
+      "callPattern": "POST {endpoint}/models/{model}:generateContent?key={apiKey}",
+      "authType": "query_param_key",
+      "requestFormat": "google_generateContent",
+      "models": [
+        { "id": "gemini-2.0-flash", "label": "Gemini 2.0 Flash (khuyến nghị)", "speed": "fast" },
+        { "id": "gemini-1.5-flash", "label": "Gemini 1.5 Flash", "speed": "fast" },
+        { "id": "gemini-1.5-pro", "label": "Gemini 1.5 Pro", "speed": "medium" }
+      ],
+      "getKeyUrl": "https://aistudio.google.com/app/apikey",
+      "description": "Dịch vụ AI của Google. Tốc độ nhanh, miễn phí ở mức quota cơ bản."
+    },
+    {
+      "id": "gpt",
+      "name": "GPT (OpenAI)",
+      "defaultModel": "gpt-4o-mini",
+      "endpoint": "https://api.openai.com/v1",
+      "callPattern": "POST {endpoint}/chat/completions",
+      "authType": "bearer_header",
+      "requestFormat": "openai_chat_completions",
+      "models": [
+        { "id": "gpt-4o-mini", "label": "GPT-4o Mini (khuyến nghị)", "speed": "fast" },
+        { "id": "gpt-4o", "label": "GPT-4o", "speed": "medium" },
+        { "id": "gpt-3.5-turbo", "label": "GPT-3.5 Turbo", "speed": "fast" }
+      ],
+      "getKeyUrl": "https://platform.openai.com/api-keys",
+      "description": "Dịch vụ AI của OpenAI. Tương thích với nhiều API proxy trung gian."
+    },
+    {
+      "id": "grok",
+      "name": "Grok (xAI)",
+      "defaultModel": "grok-3-mini",
+      "endpoint": "https://api.x.ai/v1",
+      "callPattern": "POST {endpoint}/chat/completions",
+      "authType": "bearer_header",
+      "requestFormat": "openai_chat_completions",
+      "models": [
+        { "id": "grok-3-mini", "label": "Grok 3 Mini (khuyến nghị)", "speed": "fast" },
+        { "id": "grok-3", "label": "Grok 3", "speed": "medium" }
+      ],
+      "getKeyUrl": "https://console.x.ai/",
+      "description": "Dịch vụ AI của xAI (Elon Musk). Giao thức tương thích OpenAI."
+    }
+  ],
+  "integration": {
+    "settingsStorageKey": "ai_chat_settings",
+    "storageType": "localStorage",
+    "fields": ["enabled", "provider", "apiKey", "model", "endpoint", "apiStoreUrl"],
+    "corsNote": "Tất cả request AI gọi thẳng từ trình duyệt người dùng — không qua server trung gian.",
+    "customEndpointSupported": true,
+    "customEndpointNote": "Hỗ trợ endpoint tùy chỉnh, cho phép dùng API proxy (ví dụ API bán lại qua web tổng)."
+  }
+}

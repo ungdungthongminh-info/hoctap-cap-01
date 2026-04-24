@@ -1,0 +1,36 @@
+name: Data Quality
+
+on:
+  pull_request:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  curriculum-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Curriculum Audit
+        run: npm run data:audit
+
+      - name: Curriculum Check (baseline gate)
+        env:
+          MIN_QUESTIONS_PER_LESSON: 1
+        run: npm run data:check
+
+      - name: Build Strict
+        env:
+          MIN_QUESTIONS_PER_LESSON: 1
+        run: npm run build:strict

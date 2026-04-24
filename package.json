@@ -1,0 +1,97 @@
+{
+  "name": "hoc-hung-khoi",
+  "version": "0.1.0",
+  "productName": "Học Hứng Khởi Tiểu Học",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:noibo": "cross-env VITE_APP_TITLE=\"Học Hứng Khởi Tiểu Học_NoiBo\" VITE_INTERNAL_BUILD=true npm run build",
+    "preview": "vite preview --host",
+    "preview:local": "npm run build && vite preview --host",
+    "build:strict": "npm run data:check && npm run build",
+    "electron:dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:build": "npm run build && electron-builder",
+    "package:noibo": "node scripts/package-noibo.mjs all",
+    "package:noibo:web": "node scripts/package-noibo.mjs web",
+    "package:noibo:win": "node scripts/package-noibo.mjs win",
+    "package:noibo:mac": "node scripts/package-noibo.mjs mac",
+    "db:seed": "node scripts/seed.js",
+    "data:audit": "tsx scripts/audit-curriculum.ts",
+    "data:check": "cross-env STRICT_DATA_CHECK=1 tsx scripts/audit-curriculum.ts",
+    "data:plan": "tsx scripts/generate-sparse-plan.ts",
+    "data:assign": "tsx scripts/generate-content-assignment.ts",
+    "data:templates": "tsx scripts/generate-question-templates.ts",
+    "data:patch:drafts": "tsx scripts/generate-subject-patch-files.ts",
+    "data:patch:apply": "tsx scripts/apply-question-patches.ts"
+  },
+  "keywords": ["education", "kids", "math"],
+  "author": "",
+  "license": "ISC",
+  "description": "Ứng dụng học tập vui nhộn cho học sinh tiểu học",
+  "build": {
+    "appId": "com.hochungkhoi.noibo",
+    "productName": "Hoc Hung Khoi Tieu Hoc_NoiBo",
+    "asar": true,
+    "directories": {
+      "output": "release-noibo"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "extraMetadata": {
+      "name": "hoc-hung-khoi-noibo",
+      "productName": "Hoc Hung Khoi Tieu Hoc_NoiBo",
+      "main": "electron/main.js"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "HocHungKhoi_Desktopapp-Win_NoiBo.${ext}"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "artifactName": "HocHungKhoi_Desktopapp-Macbook_NoiBo.${ext}"
+    }
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.9.0",
+    "lucide-react": "^1.8.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-router-dom": "^7.14.1"
+  },
+  "devDependencies": {
+      "cross-env": "^10.1.0",
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "autoprefixer": "^10.5.0",
+    "concurrently": "^9.2.1",
+    "electron": "^41.2.1",
+    "electron-builder": "^26.8.1",
+    "tailwindcss": "^4.2.2",
+    "tsx": "^4.20.6",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.8",
+    "wait-on": "^9.0.5"
+  }
+}
