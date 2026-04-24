@@ -669,6 +669,8 @@ export function PricingPage() {
   const [isActivating, setIsActivating] = useState(false);
   const [gradeConfirmationChecked, setGradeConfirmationChecked] = useState(false);
   const [isGradeSelectionConfirmed, setIsGradeSelectionConfirmed] = useState(false);
+  const [showGradeConfirmModal, setShowGradeConfirmModal] = useState(false);
+  const [gradeConfirmDone, setGradeConfirmDone] = useState(false);
   // Subscription state
   const [activeSub, setActiveSub] = useState<Subscription | null>(null);
   const [subExpiry, setSubExpiry] = useState(localStorage.getItem(SUB_EXPIRY_KEY));
@@ -706,6 +708,7 @@ export function PricingPage() {
       if (prev.includes(grade)) {
         setGradeConfirmationChecked(false);
         setIsGradeSelectionConfirmed(false);
+        setGradeConfirmDone(false);
         return prev.filter((item) => item !== grade);
       }
 
@@ -714,6 +717,7 @@ export function PricingPage() {
         next[next.length - 1] = grade;
         setGradeConfirmationChecked(false);
         setIsGradeSelectionConfirmed(false);
+        setGradeConfirmDone(false);
         setActivateMsg({ type: 'success', text: `Đã đổi 1 lớp mở khóa trong danh sách Standard (tối đa ${requiredGradeCountForInput} lớp).` });
         setTimeout(() => setActivateMsg(null), 2500);
         return next;
@@ -721,6 +725,7 @@ export function PricingPage() {
 
       setGradeConfirmationChecked(false);
       setIsGradeSelectionConfirmed(false);
+      setGradeConfirmDone(false);
       return [...prev, grade];
     });
   };
@@ -744,17 +749,13 @@ export function PricingPage() {
       return;
     }
 
-    const confirmText = `Bạn chắc chắn đồng ý lựa chọn ${activationGrades.map((grade) => getGradeLabel(grade)).join(', ')} cho key này? Sau khi kích hoạt lần đầu trên máy này sẽ không thể đổi lại.`;
-    const accepted = window.confirm(confirmText);
+    setShowGradeConfirmModal(true);
+    setGradeConfirmDone(false);
+  };
 
-    if (!accepted) {
-      setIsGradeSelectionConfirmed(false);
-      setActivateMsg({ type: 'error', text: 'Bạn chưa xác nhận lựa chọn lớp. Có thể chọn lại trước khi kích hoạt.' });
-      setTimeout(() => setActivateMsg(null), 3500);
-      return;
-    }
-
+  const acceptGradeConfirmation = () => {
     setIsGradeSelectionConfirmed(true);
+    setGradeConfirmDone(true);
     setActivateMsg({ type: 'success', text: `✅ Đã xác nhận lựa chọn ${activationGrades.map((grade) => getGradeLabel(grade)).join(', ')}. Bạn có thể bấm Kích hoạt ngay.` });
     setTimeout(() => setActivateMsg(null), 4000);
   };
@@ -793,11 +794,13 @@ export function PricingPage() {
     if (isStandardSelectionLocked) {
       setGradeConfirmationChecked(true);
       setIsGradeSelectionConfirmed(true);
+      setGradeConfirmDone(true);
       return;
     }
 
     setGradeConfirmationChecked(false);
     setIsGradeSelectionConfirmed(false);
+    setGradeConfirmDone(false);
   }, [normalizedInputKey, isStandardSelectionLocked]);
 
   // Load active subscription from DB on mount
@@ -1160,12 +1163,17 @@ export function PricingPage() {
   });
   const gradeButtonStyle = (selected: boolean) => selected
     ? {
-        background: 'linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.06) 44%, rgba(0,0,0,0.16) 100%), linear-gradient(135deg, #2A63C7 0%, #184AAB 100%)',
-        color: '#FFFFFF',
-        border: '1px solid rgba(181,212,255,0.65)',
-        boxShadow: '0 10px 18px rgba(20,62,139,0.26), inset 0 1px 0 rgba(255,255,255,0.36)',
+        background: '#FFFFFF',
+        color: '#1D4ED8',
+        border: '2px solid #60A5FA',
+        boxShadow: '0 8px 16px rgba(37,99,235,0.16)',
       }
-    : neutralGhostButtonStyle;
+    : {
+        background: '#FFFFFF',
+        color: '#475569',
+        border: '1px solid #CBD5E1',
+        boxShadow: '0 4px 10px rgba(15,23,42,0.08)',
+      };
 
   return (
     <div className="pricing-page-shell h-screen overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
@@ -1605,14 +1613,14 @@ export function PricingPage() {
           >
             {isStandardKeyFlow
               ? (isStandardYearOneGradeKeyFlow
-                  ? '✅ Đã nhận diện Standard 01 năm - 01 lớp. Vui lòng chọn đúng 1 lớp bên dưới rồi bấm Kích hoạt ngay.'
+                  ? '✅ Key thuộc gói Standard 01 năm - 01 lớp.'
                   : isStandardYearThreeGradeKeyFlow
-                    ? '✅ Đã nhận diện Standard 01 năm - 03 lớp. Vui lòng chọn đúng 3 lớp bên dưới rồi bấm Kích hoạt ngay.'
-                    : '✅ Đã nhận diện Standard. Vui lòng chọn đúng 3 lớp bên dưới rồi bấm Kích hoạt ngay.')
+                    ? '✅ Key thuộc gói Standard 01 năm - 03 lớp.'
+                    : '✅ Key thuộc gói Standard.')
               : isPremiumKeyFlow
-                ? '✅ Đã nhận diện Premium. Không cần chọn lớp, hệ thống tự mở toàn bộ lớp.'
+                ? '✅ Key thuộc gói Premium.'
               : detectedPlanFromInput
-                ? '✅ Đã nhận diện key. Vui lòng kiểm tra gói và bấm Kích hoạt ngay.'
+                ? '✅ Đã nhận diện loại key.'
                 : 'Chưa nhận diện loại key: bạn vẫn có thể dán key để hệ thống tự nhận diện.'}
           </div>
         </div>
@@ -1665,6 +1673,7 @@ export function PricingPage() {
                     setGradeConfirmationChecked(event.target.checked);
                     if (!event.target.checked) {
                       setIsGradeSelectionConfirmed(false);
+                      setGradeConfirmDone(false);
                     }
                   }}
                   disabled={!hasSelectedEnoughGrades}
@@ -1723,6 +1732,80 @@ export function PricingPage() {
           </div>
         )}
       </div>
+
+      {showGradeConfirmModal && (
+        <div
+          className="fixed inset-0 z-[90] flex items-center justify-center px-4"
+          style={{ background: 'rgba(2, 6, 23, 0.55)', backdropFilter: 'blur(2px)' }}
+        >
+          <div
+            className="w-full max-w-md rounded-2xl p-5"
+            style={{
+              background: '#FFFFFF',
+              border: '1px solid #BFDBFE',
+              boxShadow: '0 24px 48px rgba(15, 23, 42, 0.32)',
+              animation: 'fadeIn 0.18s ease-out',
+            }}
+          >
+            {!gradeConfirmDone ? (
+              <>
+                <div className="text-base font-extrabold" style={{ color: '#0F172A' }}>Xác nhận lựa chọn lớp</div>
+                <div className="text-sm mt-2" style={{ color: '#334155' }}>
+                  Bạn chắc chắn đồng ý khóa các lớp: <strong>{activationGrades.map((grade) => getGradeLabel(grade)).join(', ')}</strong> cho key này?
+                </div>
+                <div className="text-xs mt-2" style={{ color: '#B45309' }}>
+                  Sau khi kích hoạt lần đầu theo ID máy này, danh sách lớp sẽ không thể thay đổi.
+                </div>
+                <div className="mt-4 flex items-center justify-end gap-2">
+                  <button
+                    className={`${premiumButtonBaseClass} px-4 py-2 text-sm`}
+                    style={neutralGhostButtonStyle}
+                    onClick={() => {
+                      setShowGradeConfirmModal(false);
+                      setIsGradeSelectionConfirmed(false);
+                    }}
+                  >
+                    Chưa đồng ý
+                  </button>
+                  <button
+                    className={`${premiumButtonBaseClass} px-4 py-2 text-sm`}
+                    style={darkPrimaryButtonStyle}
+                    onClick={acceptGradeConfirmation}
+                  >
+                    Đồng ý xác nhận
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="text-base font-extrabold" style={{ color: '#047857' }}>✅ Đã xác nhận thành công</div>
+                <div className="text-sm mt-2" style={{ color: '#334155' }}>
+                  Lựa chọn lớp đã được chốt. Bạn có thể kích hoạt key ngay hoặc vào học.
+                </div>
+                <div className="mt-4 flex items-center justify-end gap-2">
+                  <button
+                    className={`${premiumButtonBaseClass} px-4 py-2 text-sm`}
+                    style={neutralGhostButtonStyle}
+                    onClick={() => setShowGradeConfirmModal(false)}
+                  >
+                    Ở lại kích hoạt key
+                  </button>
+                  <button
+                    className={`${premiumButtonBaseClass} px-4 py-2 text-sm`}
+                    style={topPrimaryButtonStyle}
+                    onClick={() => {
+                      setShowGradeConfirmModal(false);
+                      navigate('/home');
+                    }}
+                  >
+                    Vào học ngay
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Purchase info */}
       <div className="pricing-section-card card w-full p-6">
