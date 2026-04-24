@@ -1979,6 +1979,13 @@ button.card-flat:active {
 }
 
 /* ============================================
+   HOME PAGE — Mobile calming pass
+   ============================================ */
+.home-quick-actions .card-action-btn {
+  min-width: 180px;
+}
+
+/* ============================================
    RESPONSIVE — Mobile / Tablet
    ============================================ */
 @media (max-width: 768px) {
@@ -1992,6 +1999,99 @@ button.card-flat:active {
   }
   .hhk-shimmer-text {
     line-height: 1.2;
+  }
+  .app-main {
+    background: linear-gradient(180deg, #E9F6FF 0%, #DBF0FC 52%, #D2EBFA 100%) !important;
+  }
+  .home-page-shell {
+    gap: 16px;
+    padding-bottom: 12px;
+  }
+  .home-hero {
+    margin-top: 0;
+  }
+  .home-hero h1 {
+    font-size: 1.55rem;
+    line-height: 1.2;
+    margin-top: 10px;
+  }
+  .home-hero p {
+    font-size: 0.95rem;
+    margin-top: 6px;
+  }
+  .home-plan-card {
+    border-width: 1px !important;
+    border-radius: 18px;
+    padding: 14px 12px;
+  }
+  .home-plan-card .premium-btn-base {
+    width: 100%;
+    justify-content: center;
+  }
+  .home-stats {
+    gap: 10px;
+  }
+  .home-stats .card-flat {
+    min-width: calc(50% - 10px);
+    padding: 12px 10px;
+    border-radius: 16px;
+  }
+  .home-quick-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+    justify-items: stretch;
+  }
+  .home-quick-actions .card-action-btn {
+    min-width: 0 !important;
+    width: 100%;
+    padding: 14px 10px;
+    gap: 8px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(8, 47, 73, 0.08), 0 1px 2px rgba(8, 47, 73, 0.06);
+  }
+  .home-quick-actions .card-action-btn > div {
+    width: 46px !important;
+    height: 46px !important;
+  }
+  .home-quick-actions .card-action-btn svg {
+    width: 22px;
+    height: 22px;
+  }
+  .home-quick-actions .card-action-btn > span:first-of-type {
+    font-size: 1.25rem;
+    line-height: 1.1;
+    text-align: center;
+  }
+  .home-quick-actions .card-action-btn > span:last-of-type {
+    font-size: 12px;
+    line-height: 1.3;
+    text-align: center;
+  }
+  .home-info-bar {
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  .home-info-bar span:nth-child(2) {
+    display: none;
+  }
+  .chat-suggestion-dock,
+  .chat-idle-bubble {
+    display: none;
+  }
+  .chat-launcher {
+    right: 10px;
+    bottom: 12px;
+  }
+  .chat-fab {
+    width: 50px;
+    height: 50px;
+    opacity: 0.94;
   }
   .app-layout {
     flex-direction: column;

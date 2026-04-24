@@ -106,12 +106,12 @@ export function HomePage() {
   }, []);
 
   return (
-    <div className="fade-in flex flex-col items-center gap-8 w-full max-w-[1480px] mx-auto pb-8">
+    <div className="home-page-shell fade-in flex flex-col items-center gap-8 w-full max-w-[1480px] mx-auto pb-8">
       {/* Notifications */}
       <StudyReminder streak={streak} studiedToday={studiedToday} needsReviewCount={needsReview.length} />
 
       {/* Hero mascot */}
-      <div className="text-center mt-2">
+      <div className="home-hero text-center mt-2">
         <MascotCharacter size="xl" />
         <h1 className="text-3xl font-bold mt-4" style={{ color: 'var(--color-primary-dark)' }}>
           Chào <strong style={{ color: 'var(--color-primary)' }}>{state.student.fullName}</strong>! 🎉
@@ -122,7 +122,7 @@ export function HomePage() {
       </div>
 
       <div
-        className="card relative w-full max-w-3xl px-5 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
+        className="home-plan-card card relative w-full max-w-3xl px-5 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
         style={{
           borderColor: currentPlan === 'free' ? '#BFDBFE' : '#A7F3D0',
           borderWidth: 2,
@@ -183,7 +183,7 @@ export function HomePage() {
       {/* Streak warning — handled by StudyReminder above */}
 
       {/* Stats mini */}
-      <div className="flex gap-4 flex-wrap justify-center w-full">
+      <div className="home-stats flex gap-4 flex-wrap justify-center w-full">
         <div className="card-flat text-center px-5 py-3">
           <div className="text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>{completed}/{total}</div>
           <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Bài đã học</div>
@@ -205,11 +205,10 @@ export function HomePage() {
       </div>
 
       {/* Quick actions */}
-      <div className="flex gap-4 flex-wrap justify-center w-full">
+      <div className="home-quick-actions flex gap-4 flex-wrap justify-center w-full">
         <button
           className="card-action-btn"
           onClick={() => navigate('/subjects')}
-          style={{ minWidth: '180px' }}
         >
           <div className="w-14 h-14 rounded-full flex items-center justify-center"
             style={{ background: '#FEF3C7' }}>
@@ -224,7 +223,6 @@ export function HomePage() {
         <button
           className="card-action-btn"
           onClick={() => navigate('/lessons')}
-          style={{ minWidth: '180px' }}
         >
           <div className="w-14 h-14 rounded-full flex items-center justify-center"
             style={{ background: currentSubject?.bgColor || 'var(--color-primary-light)' }}>
@@ -241,7 +239,6 @@ export function HomePage() {
         <button
           className="card-action-btn"
           onClick={() => navigate('/quiz')}
-          style={{ minWidth: '180px' }}
         >
           <div className="w-14 h-14 rounded-full flex items-center justify-center"
             style={{ background: '#EDE9FE' }}>
@@ -255,7 +252,6 @@ export function HomePage() {
           <button
             className="card-action-btn"
             onClick={() => navigate('/progress')}
-            style={{ minWidth: '180px' }}
           >
             <div className="w-14 h-14 rounded-full flex items-center justify-center"
               style={{ background: '#FEE2E2' }}>
@@ -271,7 +267,6 @@ export function HomePage() {
         <button
           className="card-action-btn"
           onClick={() => navigate('/progress')}
-          style={{ minWidth: '180px' }}
         >
           <div className="w-14 h-14 rounded-full flex items-center justify-center"
             style={{ background: '#D1FAE5' }}>
@@ -284,7 +279,6 @@ export function HomePage() {
         <button
           className="card-action-btn"
           onClick={() => navigate('/themes')}
-          style={{ minWidth: '180px' }}
         >
           <div className="w-14 h-14 rounded-full flex items-center justify-center"
             style={{ background: '#FEF3C7' }}>
@@ -297,7 +291,6 @@ export function HomePage() {
         <button
           className="card-action-btn"
           onClick={() => navigate('/daily')}
-          style={{ minWidth: '180px' }}
         >
           <div className="w-14 h-14 rounded-full flex items-center justify-center"
             style={{ background: '#F3E8FF' }}>
@@ -310,7 +303,6 @@ export function HomePage() {
         <button
           className="card-action-btn"
           onClick={() => navigate('/match-game')}
-          style={{ minWidth: '180px' }}
         >
           <div className="w-14 h-14 rounded-full flex items-center justify-center"
             style={{ background: '#FCE7F3' }}>
@@ -323,7 +315,6 @@ export function HomePage() {
         <button
           className="card-action-btn"
           onClick={() => navigate('/drawing')}
-          style={{ minWidth: '180px' }}
         >
           <div className="w-14 h-14 rounded-full flex items-center justify-center"
             style={{ background: '#DBEAFE' }}>
@@ -336,7 +327,6 @@ export function HomePage() {
         <button
           className="card-action-btn"
           onClick={() => navigate('/achievements')}
-          style={{ minWidth: '180px' }}
         >
           <div className="w-14 h-14 rounded-full flex items-center justify-center"
             style={{ background: '#FEF3C7' }}>
@@ -349,7 +339,6 @@ export function HomePage() {
         <button
           className="card-action-btn"
           onClick={() => navigate('/memory')}
-          style={{ minWidth: '180px' }}
         >
           <div className="w-14 h-14 rounded-full flex items-center justify-center"
             style={{ background: '#E0E7FF' }}>
@@ -362,7 +351,6 @@ export function HomePage() {
         <button
           className="card-action-btn"
           onClick={() => navigate('/competition')}
-          style={{ minWidth: '180px' }}
         >
           <div className="w-14 h-14 rounded-full flex items-center justify-center"
             style={{ background: '#FEE2E2' }}>
@@ -375,7 +363,6 @@ export function HomePage() {
         <button
           className="card-action-btn"
           onClick={() => navigate('/avatar-shop')}
-          style={{ minWidth: '180px' }}
         >
           <div className="w-14 h-14 rounded-full flex items-center justify-center"
             style={{ background: '#D1FAE5' }}>
@@ -387,7 +374,7 @@ export function HomePage() {
       </div>
 
       {/* Info bar */}
-      <div className="card-flat flex items-center gap-4 px-6 py-3 mt-4">
+      <div className="home-info-bar card-flat flex items-center gap-4 px-6 py-3 mt-4">
         <span className="text-sm" style={{ color: 'var(--color-text-light)' }}>
           📅 {new Date().toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
         </span>
