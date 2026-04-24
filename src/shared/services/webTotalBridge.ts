@@ -5,16 +5,16 @@ function resolveBackendApiBase() {
   }
 
   if (typeof window !== 'undefined') {
-    const { protocol, hostname, port, origin } = window.location;
+    const { protocol, hostname, origin } = window.location;
 
+    // file:// = Electron app
     if (protocol === 'file:') {
       return 'http://localhost:5000/api/v1';
     }
 
-    const isLocalFrontend = ['localhost', '127.0.0.1'].includes(hostname)
-      && ['3000', '4173', '5173', '5174'].includes(port);
-
-    if (isLocalFrontend) {
+    // Bất kỳ localhost/127.0.0.1 nào đều dùng backend local port 5000
+    // (kể cả khi truy cập qua Web Tổng local server ở port 3900 hoặc cổng khác)
+    if (['localhost', '127.0.0.1'].includes(hostname)) {
       return 'http://localhost:5000/api/v1';
     }
 
