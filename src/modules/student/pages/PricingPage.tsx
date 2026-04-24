@@ -681,6 +681,7 @@ export function PricingPage() {
   const isStandardYearThreeGradeKeyFlow = detectedPlanFromInput === 'standard_1year_3grade';
   const isStandardKeyFlow = detectedPlanFromInput === 'standard' || isStandardYearOneGradeKeyFlow || isStandardYearThreeGradeKeyFlow;
   const isPremiumKeyFlow = detectedPlanFromInput === 'premium';
+  const hasTypedLicenseKey = normalizedInputKey.length > 0;
   const requiredGradeCountForInput = isStandardYearOneGradeKeyFlow ? 1 : 3;
   const lockedStandardGradeSelection = isStandardKeyFlow
     ? getStandardGradeLock(normalizedInputKey, currentDeviceId, requiredGradeCountForInput)
@@ -1654,7 +1655,7 @@ export function PricingPage() {
                 ? `Đã khóa lựa chọn cho key này: ${activationGrades.map((grade) => getGradeLabel(grade)).join(', ')}.`
                 : `Đã chọn: ${activationGrades.length}/${requiredGradeCountForInput} lớp cho key Standard`}
           </div>
-          {!isPremiumKeyFlow && isStandardKeyFlow && !isStandardSelectionLocked && (
+          {hasTypedLicenseKey && !isPremiumKeyFlow && !isStandardSelectionLocked && (
             <div className="mt-3 rounded-xl px-3 py-3" style={{ background: '#EFF6FF', border: '1px solid #BFDBFE' }}>
               <label className="flex items-start gap-2 text-sm font-semibold" style={{ color: '#1E3A8A' }}>
                 <input
