@@ -118,6 +118,7 @@ export interface VerifyLicenseResult {
   features: string[];
   grace?: { allowed: boolean; graceDays: number; offlineUntil?: string };
   license?: {
+    planId?: string | null;
     productId?: string | null;
     planCode?: string | null;
     billingCycle?: string | null;
