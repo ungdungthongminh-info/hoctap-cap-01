@@ -13,6 +13,7 @@ import { useAppData } from '../../../shared/providers/AppDataProvider';
 import { getGradeLabel, getSubjectsForGrade } from '../../../data/subjects';
 import {
   fetchPricingPlans,
+  fetchAndCacheLicenses,
   getBridgeCustomer,
   verifyLicenseKey,
   type PricingPlanCatalogEntry,
@@ -1083,10 +1084,11 @@ export function PricingPage() {
     setActivateMsg({ type: 'success', text: '⏳ Đang xác minh key, vui lòng chờ...' });
 
     try {
+      const bridgeCustomerId = getBridgeCustomer()?.id ? String(getBridgeCustomer()!.id) : undefined;
       const verifyResult = await verifyLicenseKey({
         licenseKey: key,
         ...(WEB_TOTAL_APP_ID ? { appId: WEB_TOTAL_APP_ID } : {}),
-        ...(getBridgeCustomer()?.id ? { customerId: getBridgeCustomer()!.id } : {}),
+        ...(bridgeCustomerId ? { customerId: bridgeCustomerId } : {}),
         deviceId: getDeviceId(),
         deviceName: `${navigator.platform} / ${navigator.userAgent.slice(0, 80)}`,
       });
@@ -1180,6 +1182,16 @@ export function PricingPage() {
         expiresAt,
         standardGrades: standardGradesToUse,
       });
+
+      // Đồng bộ lại licenses/features vào cache ngay sau khi verify thành công,
+      // tránh trạng thái UI yêu cầu kích hoạt lặp lại ở các màn hình có gate theo cache.
+      if (bridgeCustomerId) {
+        try {
+          await fetchAndCacheLicenses(bridgeCustomerId, WEB_TOTAL_APP_ID);
+        } catch {
+          // Không chặn flow kích hoạt local nếu refresh cache tạm thời lỗi mạng.
+        }
+      }
 
       setActivateMsg({
         type: 'success',

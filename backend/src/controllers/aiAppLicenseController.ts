@@ -59,9 +59,10 @@ export async function proxyGetCustomerLicenses(req: Request, res: Response): Pro
  */
 export async function proxyVerifyLicense(req: Request, res: Response): Promise<void> {
   const { licenseKey, appId, customerId, deviceId, deviceName } = req.body || {};
+  const resolvedAppId = String(appId || process.env.WEB_TOTAL_APP_ID || 'app-study-12').trim();
 
-  if (!licenseKey || !String(appId || '').trim()) {
-    res.status(400).json({ ok: false, success: false, errorCode: 'INVALID_REQUEST', message: 'appId and licenseKey are required' });
+  if (!licenseKey) {
+    res.status(400).json({ ok: false, success: false, errorCode: 'INVALID_REQUEST', message: 'licenseKey is required' });
     return;
   }
 
@@ -73,7 +74,7 @@ export async function proxyVerifyLicense(req: Request, res: Response): Promise<v
   try {
     const result = await WebAiAppLicenseService.verifyLicense({
       licenseKey,
-      appId,
+      appId: resolvedAppId,
       customerId,
       deviceId,
       deviceName,
