@@ -61,18 +61,14 @@ export function useLicense(): UseLicenseReturn {
     }
   }, []);
 
-  // Auto-refresh khi cache cũ đã đủ lâu và còn customerId để đồng bộ lại.
+  // Luôn refresh khi app mở để bắt revoke/expire sớm, tránh giữ quyền local quá lâu.
   useEffect(() => {
     const cache = readLicenseCache();
     setLicenseCache(cache);
 
     if (!cache?.customerId) return;
 
-    const cacheAge = cache ? Date.now() - new Date(cache.cachedAt).getTime() : Infinity;
-    const ONE_HOUR = 60 * 60 * 1000;
-    if (cacheAge > ONE_HOUR) {
-      void refreshLicenses();
-    }
+    void refreshLicenses();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const hasFeature = useCallback((featureKey: string) => checkFeature(featureKey), [licenseCache]); // eslint-disable-line react-hooks/exhaustive-deps

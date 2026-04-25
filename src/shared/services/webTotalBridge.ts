@@ -55,6 +55,8 @@ const BRIDGE_CUSTOMER_KEY = 'hhk_web_total_customer';
 const PENDING_CHECKOUT_KEY = 'hhk_web_total_pending_checkout';
 const LICENSE_KEY = 'hhk_license';
 const PLAN_KEY = 'hhk_plan';
+const SUB_EXPIRY_KEY = 'hhk_sub_expiry';
+const SUB_BILLING_KEY = 'hhk_sub_billing_cycle';
 const SUB_STATUS_KEY = 'hhk_sub_status';
 const ACTIVATION_SOURCE_KEY = 'hhk_activation_source';
 const PAID_LICENSE_PATTERN = /^HHK-(STANDARD|PREMIUM)-[A-Z0-9]{8}$/;
@@ -334,6 +336,31 @@ export function clearLicenseCache(): void {
   localStorage.removeItem(LICENSE_CACHE_KEY);
 }
 
+function syncLocalActivationFromServerLicenses(licenses: AppLicense[]): void {
+  const now = Date.now();
+  const activeLicenses = (licenses || []).filter((license) => {
+    if (String(license?.status || '').toLowerCase() !== 'active') {
+      return false;
+    }
+    if (!license?.expiresAt) {
+      return true;
+    }
+    return new Date(license.expiresAt).getTime() > now;
+  });
+
+  if (activeLicenses.length > 0) {
+    return;
+  }
+
+  // Server says user has no active license => clear local paid state immediately.
+  localStorage.setItem(SUB_STATUS_KEY, 'revoked');
+  localStorage.setItem(PLAN_KEY, 'free');
+  localStorage.removeItem(ACTIVATION_SOURCE_KEY);
+  localStorage.removeItem(SUB_EXPIRY_KEY);
+  localStorage.removeItem(SUB_BILLING_KEY);
+  localStorage.removeItem(LICENSE_KEY);
+}
+
 /** Kiểm tra cache còn hiệu lực trong offline grace không */
 export function isCacheWithinGrace(): boolean {
   const cache = readLicenseCache();
@@ -355,8 +382,11 @@ export async function fetchAndCacheLicenses(customerId: string, appId?: string):
   const payload = await res.json().catch(() => ({}));
 
   let licenses: AppLicense[] = [];
+  let loadedFromServer = false;
   if (res.ok && payload?.success && Array.isArray(payload?.data?.licenses)) {
     licenses = payload.data.licenses as AppLicense[];
+    loadedFromServer = true;
+    syncLocalActivationFromServerLicenses(licenses);
   }
 
   // Tổng hợp features từ tất cả license đang active
@@ -368,12 +398,35 @@ export async function fetchAndCacheLicenses(customerId: string, appId?: string):
     )
   );
 
-  // Tính offlineUntil: lấy max offlineUntil từ grace các licenses
-  let offlineMs = Date.now() + OFFLINE_GRACE_MS;
+  // Tính offlineUntil: chỉ cấp grace khi license thật sự được phép grace.
+  let offlineMs = Date.now();
+  let hasAllowedGrace = false;
   for (const lic of licenses) {
-    if (lic.grace?.offlineUntil) {
-      const t = new Date(lic.grace.offlineUntil).getTime();
-      if (t > offlineMs) offlineMs = t;
+    if (!lic.grace?.allowed || !lic.grace?.offlineUntil) {
+      continue;
+    }
+    const t = new Date(lic.grace.offlineUntil).getTime();
+    if (Number.isFinite(t) && t > offlineMs) {
+      offlineMs = t;
+      hasAllowedGrace = true;
+    }
+  }
+
+  if (!hasAllowedGrace) {
+    const hasActiveLicense = licenses.some((license) => String(license?.status || '').toLowerCase() === 'active');
+    if (hasActiveLicense) {
+      offlineMs = Date.now() + OFFLINE_GRACE_MS;
+    }
+  }
+
+  if (!loadedFromServer) {
+    // Preserve previous offlineUntil on network failure to avoid destructive fallback.
+    const oldCache = readLicenseCache();
+    if (oldCache?.offlineUntil) {
+      const oldMs = new Date(oldCache.offlineUntil).getTime();
+      if (Number.isFinite(oldMs) && oldMs > offlineMs) {
+        offlineMs = oldMs;
+      }
     }
   }
 
