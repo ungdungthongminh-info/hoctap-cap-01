@@ -416,8 +416,8 @@ export async function verifyLicenseKey(params: {
   if (!res.ok || !isSuccess) {
     const backendError = String(
       payload?.error
-      || payload?.errorCode
       || payload?.message
+      || payload?.errorCode
       || payload?.data?.error
       || payload?.data?.message
       || '',

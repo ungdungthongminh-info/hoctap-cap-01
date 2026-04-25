@@ -324,7 +324,7 @@ export class WebAiAppLicenseService {
 
     return fetchJsonWithFallback<AiAppVerifyResponse>(verifyUrls, {
       method: 'POST',
-      headers: aiAppHeaders(),
+      headers: { ...aiAppHeaders(), 'x-ai-app-profile': 'desktop' },
       body: JSON.stringify({
         licenseKey: params.licenseKey,
         appId: params.appId || WebSalesTotalService.getAppId(),
