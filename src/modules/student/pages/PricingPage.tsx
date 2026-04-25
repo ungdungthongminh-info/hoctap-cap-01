@@ -1114,6 +1114,9 @@ export function PricingPage() {
         clientProfile,
       });
 
+      const wasAlreadyActivated = String(verifyResult.license?.status || '').trim().toLowerCase() === 'active'
+        && Boolean(verifyResult.license?.activatedAt);
+
       const licensePayload = verifyResult.license as unknown as Record<string, unknown>;
       const resolvedPlan = resolvePlanFromLicensePayload(licensePayload, verifyResult.features || []);
       const planHint = getPlanHintFromLicensePayload(licensePayload);
@@ -1150,7 +1153,21 @@ export function PricingPage() {
 
       let standardGradesToUse = activationGrades;
       if (planId === 'standard') {
+        const serverLockedGrades = Array.isArray((verifyResult.license as any)?.metadata?.standardGrades)
+          ? (verifyResult.license as any).metadata.standardGrades
+              .map((grade: unknown) => Number(grade))
+              .filter((grade: number) => Number.isInteger(grade) && ALL_GRADE_OPTIONS.includes(grade as (typeof ALL_GRADE_OPTIONS)[number]))
+          : [];
         const requiredGradeCount = isStandardYearOneGrade ? 1 : 3;
+        const serverRequiredGradeCount = Number((verifyResult.license as any)?.metadata?.standardGradesRequiredCount || 0);
+        const effectiveRequiredCount = Number.isInteger(serverRequiredGradeCount) && serverRequiredGradeCount > 0
+          ? serverRequiredGradeCount
+          : (serverLockedGrades.length > 0 ? serverLockedGrades.length : requiredGradeCount);
+
+        if (serverLockedGrades.length > 0) {
+          const saved = saveStandardGradeLock(key, currentDeviceId, serverLockedGrades, effectiveRequiredCount);
+          standardGradesToUse = saved.grades;
+        } else {
         const existingLock = getStandardGradeLock(key, currentDeviceId, requiredGradeCount);
         if (existingLock) {
           standardGradesToUse = existingLock.grades;
@@ -1180,6 +1197,7 @@ export function PricingPage() {
           playActivationTone('success');
           setTimeout(() => setActivateMsg(null), 7000);
           return;
+        }
         }
       }
 
@@ -1216,7 +1234,7 @@ export function PricingPage() {
 
       setActivateMsg({
         type: 'success',
-        text: `✅ Kích hoạt thành công gói ${pricingPlans.find((p) => p.id === storagePlanId)?.name || pricingPlans.find((p) => p.id === planId)?.name || planId}! ${planId === 'standard' ? `Đã mở khóa ${standardGradesToUse.map((grade) => getGradeLabel(grade)).join(', ')}.` : 'Đã mở toàn bộ lớp. Mời vào học ngay.'} ${expiresAt ? `Hết hạn: ${formatDate(expiresAt)}` : '(Trọn đời)'}`,
+        text: `${wasAlreadyActivated ? '✅ Key này đã kích hoạt trước đó.' : '✅ Kích hoạt thành công'} Gói ${pricingPlans.find((p) => p.id === storagePlanId)?.name || pricingPlans.find((p) => p.id === planId)?.name || planId}! ${planId === 'standard' ? `Đã mở khóa ${standardGradesToUse.map((grade) => getGradeLabel(grade)).join(', ')}.` : 'Đã mở toàn bộ lớp. Mời vào học ngay.'} ${expiresAt ? `Còn ${daysLeft(expiresAt)} ngày (đến ${formatDate(expiresAt)})` : '(Trọn đời)'}`,
       });
       playActivationTone('success');
       setTimeout(() => setActivateMsg(null), 6000);
