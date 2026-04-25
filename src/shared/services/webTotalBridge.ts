@@ -124,6 +124,7 @@ export interface VerifyLicenseResult {
     productId?: string | null;
     planCode?: string | null;
     billingCycle?: string | null;
+    activatedAt?: string | null;
     expiresAt?: string | null;
     status?: string;
     licenseKey?: string;
