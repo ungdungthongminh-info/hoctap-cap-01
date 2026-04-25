@@ -684,6 +684,7 @@ export function PricingPage() {
   const [showComparison, setShowComparison] = useState(false);
   const [copied, setCopied] = useState(false);
   const [copiedDeviceId, setCopiedDeviceId] = useState(false);
+  const [copiedActiveKey, setCopiedActiveKey] = useState(false);
   const [isActivating, setIsActivating] = useState(false);
   const [gradeConfirmationChecked, setGradeConfirmationChecked] = useState(false);
   const [isGradeSelectionConfirmed, setIsGradeSelectionConfirmed] = useState(false);
@@ -1262,6 +1263,17 @@ export function PricingPage() {
     }).catch(() => {});
   };
 
+  const copyActiveLicenseKey = () => {
+    const activeKey = String(activeSub?.licenseKey || '').trim();
+    if (!activeKey) {
+      return;
+    }
+    navigator.clipboard.writeText(activeKey).then(() => {
+      setCopiedActiveKey(true);
+      setTimeout(() => setCopiedActiveKey(false), 2000);
+    }).catch(() => {});
+  };
+
   const remaining = subExpiry ? daysLeft(subExpiry) : null;
   const canRefund = activeSub?.refundDeadline ? new Date(activeSub.refundDeadline).getTime() > Date.now() : false;
   const premiumButtonBaseClass = 'premium-btn-base inline-flex items-center justify-center gap-2 rounded-[14px] font-bold';
@@ -1597,6 +1609,23 @@ export function PricingPage() {
           <h3 className="text-base font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--color-primary-dark)' }}>
             <CreditCard size={18} /> Quản lý gói đăng ký
           </h3>
+          <div className="mb-4 rounded-2xl p-3" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+            <div className="text-xs font-bold" style={{ color: '#0F172A' }}>Key đang kích hoạt</div>
+            <div className="mt-1 text-[12px] break-all" style={{ color: '#334155', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>
+              {activeSub.licenseKey || 'Chưa có key'}
+            </div>
+            <div className="mt-2">
+              <button
+                className={`${premiumButtonBaseClass} px-3 py-2 text-xs whitespace-nowrap`}
+                style={neutralGhostButtonStyle}
+                onClick={copyActiveLicenseKey}
+                title="Copy key đang kích hoạt"
+              >
+                {copiedActiveKey ? <CheckCircle size={14} /> : <Copy size={14} />}
+                {copiedActiveKey ? 'Đã copy key' : 'Copy key để test vô hiệu hóa'}
+              </button>
+            </div>
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm mb-4">
             <div className="p-3 rounded-lg" style={{ background: 'var(--color-surface)' }}>
               <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Gói</div>
