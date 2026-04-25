@@ -15,6 +15,7 @@ import {
   fetchPricingPlans,
   fetchAndCacheLicenses,
   getBridgeCustomer,
+  lockStandardGrades,
   verifyLicenseKey,
   type PricingPlanCatalogEntry,
 } from '../../../shared/services/webTotalBridge';
@@ -695,6 +696,7 @@ export function PricingPage() {
   const gradePickerRef = useRef<HTMLDivElement | null>(null);
   const previousDetectedPlanRef = useRef<'standard' | 'standard_1year_1grade' | 'standard_1year_3grade' | 'premium' | null>(null);
   const currentDeviceId = getDeviceId();
+  const clientProfile: 'web' | 'desktop' = dbAvailable() ? 'desktop' : 'web';
   const normalizedInputKey = licenseKey.trim().toUpperCase();
   const detectedPlanFromInput = detectPlanFlowFromKey(normalizedInputKey);
   const hasRecognizedKeyPrefix = hasRecognizableLicensePrefix(normalizedInputKey);
@@ -831,6 +833,23 @@ export function PricingPage() {
     if (!pendingStandardActivation) {
       setActivateMsg({ type: 'error', text: '❌ Không tìm thấy thông tin key đã xác thực. Vui lòng bấm Kích hoạt lại.' });
       setTimeout(() => setActivateMsg(null), 4000);
+      return;
+    }
+
+    try {
+      const bridgeCustomerId = getBridgeCustomer()?.id ? String(getBridgeCustomer()!.id) : undefined;
+      await lockStandardGrades({
+        licenseKey: pendingStandardActivation.key,
+        appId: WEB_TOTAL_APP_ID,
+        ...(bridgeCustomerId ? { customerId: bridgeCustomerId } : {}),
+        selectedGrades: activationGrades,
+        requiredGradeCount: pendingStandardActivation.requiredGradeCount,
+        clientProfile,
+      });
+    } catch (error) {
+      const message = (error as any)?.message ? String((error as any).message) : 'Không thể chốt lớp cho key này trên hệ thống.';
+      setActivateMsg({ type: 'error', text: `❌ ${message}` });
+      setTimeout(() => setActivateMsg(null), 5000);
       return;
     }
 
@@ -1091,6 +1110,7 @@ export function PricingPage() {
         ...(bridgeCustomerId ? { customerId: bridgeCustomerId } : {}),
         deviceId: getDeviceId(),
         deviceName: `${navigator.platform} / ${navigator.userAgent.slice(0, 80)}`,
+        clientProfile,
       });
 
       const licensePayload = verifyResult.license as unknown as Record<string, unknown>;

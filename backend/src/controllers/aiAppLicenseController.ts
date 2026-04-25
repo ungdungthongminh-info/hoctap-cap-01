@@ -58,8 +58,13 @@ export async function proxyGetCustomerLicenses(req: Request, res: Response): Pro
  * Body: { licenseKey, appId?, customerId?, deviceId?, deviceName? }
  */
 export async function proxyVerifyLicense(req: Request, res: Response): Promise<void> {
-  const { licenseKey, appId, customerId, deviceId, deviceName } = req.body || {};
+  const { licenseKey, appId, customerId, deviceId, deviceName, clientProfile } = req.body || {};
   const resolvedAppId = String(appId || process.env.WEB_TOTAL_APP_ID || 'app-study-12').trim();
+  const resolvedClientProfile = String(clientProfile || '').trim().toLowerCase();
+  const finalClientProfile: 'web' | 'desktop' | 'shared' =
+    resolvedClientProfile === 'web' || resolvedClientProfile === 'desktop' || resolvedClientProfile === 'shared'
+      ? resolvedClientProfile
+      : 'desktop';
 
   if (!licenseKey) {
     res.status(400).json({ ok: false, success: false, errorCode: 'INVALID_REQUEST', message: 'licenseKey is required' });
@@ -78,6 +83,56 @@ export async function proxyVerifyLicense(req: Request, res: Response): Promise<v
       customerId,
       deviceId,
       deviceName,
+      clientProfile: finalClientProfile,
+    });
+    res.json({ ok: true, success: true, data: result });
+  } catch (err: any) {
+    const mapped = mapError(err);
+    res.status(mapped.status).json({ ok: false, success: false, errorCode: mapped.errorCode, message: mapped.message });
+  }
+}
+
+/**
+ * POST /api/v1/ai-app/licenses/lock-standard-grades
+ * Proxy → Web tổng /api/ai-app/licenses/lock-standard-grades
+ * Body: { licenseKey, appId?, customerId?, selectedGrades, requiredGradeCount, clientProfile? }
+ */
+export async function proxyLockStandardGrades(req: Request, res: Response): Promise<void> {
+  const { licenseKey, appId, customerId, selectedGrades, requiredGradeCount, clientProfile } = req.body || {};
+  const resolvedAppId = String(appId || process.env.WEB_TOTAL_APP_ID || 'app-study-12').trim();
+  const resolvedClientProfile = String(clientProfile || '').trim().toLowerCase();
+  const finalClientProfile: 'web' | 'desktop' | 'shared' =
+    resolvedClientProfile === 'web' || resolvedClientProfile === 'desktop' || resolvedClientProfile === 'shared'
+      ? resolvedClientProfile
+      : 'desktop';
+
+  if (!licenseKey) {
+    res.status(400).json({ ok: false, success: false, errorCode: 'INVALID_REQUEST', message: 'licenseKey is required' });
+    return;
+  }
+  if (!Array.isArray(selectedGrades) || !Number.isInteger(Number(requiredGradeCount)) || Number(requiredGradeCount) <= 0) {
+    res.status(400).json({
+      ok: false,
+      success: false,
+      errorCode: 'INVALID_REQUEST',
+      message: 'selectedGrades and requiredGradeCount are required'
+    });
+    return;
+  }
+
+  if (!WebAiAppLicenseService.isEnabled()) {
+    res.status(503).json({ ok: false, success: false, errorCode: 'INTERNAL_ERROR', message: 'License service not configured' });
+    return;
+  }
+
+  try {
+    const result = await WebAiAppLicenseService.lockStandardGrades({
+      licenseKey,
+      appId: resolvedAppId,
+      customerId,
+      selectedGrades,
+      requiredGradeCount: Number(requiredGradeCount),
+      clientProfile: finalClientProfile,
     });
     res.json({ ok: true, success: true, data: result });
   } catch (err: any) {

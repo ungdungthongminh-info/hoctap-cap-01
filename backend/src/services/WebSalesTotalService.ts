@@ -234,6 +234,13 @@ export interface AiAppVerifyResponse {
   grace: { allowed: boolean; graceDays: number; offlineUntil?: string };
 }
 
+export interface AiAppLockStandardGradesResponse {
+  ok: boolean;
+  lockedGrades: number[];
+  requiredGradeCount: number;
+  license: AiAppLicense;
+}
+
 export interface AiAppCustomerAuthResponse {
   ok: boolean;
   customer?: {
@@ -317,6 +324,7 @@ export class WebAiAppLicenseService {
     customerId?: string;
     deviceId?: string;
     deviceName?: string;
+    clientProfile?: 'web' | 'desktop' | 'shared';
   }): Promise<AiAppVerifyResponse> {
     const baseUrl = WebSalesTotalService.getBaseUrl();
     const verifyPaths = ['/api/ai-app/licenses/verify'];
@@ -324,13 +332,45 @@ export class WebAiAppLicenseService {
 
     return fetchJsonWithFallback<AiAppVerifyResponse>(verifyUrls, {
       method: 'POST',
-      headers: { ...aiAppHeaders(), 'x-ai-app-profile': 'desktop' },
+      headers: {
+        ...aiAppHeaders(),
+        'x-ai-app-profile': params.clientProfile || 'desktop'
+      },
       body: JSON.stringify({
         licenseKey: params.licenseKey,
         appId: params.appId || WebSalesTotalService.getAppId(),
         ...(params.customerId ? { customerId: params.customerId } : {}),
         ...(params.deviceId ? { deviceId: params.deviceId } : {}),
         ...(params.deviceName ? { deviceName: params.deviceName } : {}),
+      }),
+    });
+  }
+
+  /** POST /api/ai-app/licenses/lock-standard-grades */
+  static async lockStandardGrades(params: {
+    licenseKey: string;
+    selectedGrades: number[];
+    requiredGradeCount: number;
+    appId?: string;
+    customerId?: string;
+    clientProfile?: 'web' | 'desktop' | 'shared';
+  }): Promise<AiAppLockStandardGradesResponse> {
+    const baseUrl = WebSalesTotalService.getBaseUrl();
+    const lockPaths = ['/api/ai-app/licenses/lock-standard-grades'];
+    const lockUrls = lockPaths.map((path) => `${baseUrl}${path}`);
+
+    return fetchJsonWithFallback<AiAppLockStandardGradesResponse>(lockUrls, {
+      method: 'POST',
+      headers: {
+        ...aiAppHeaders(),
+        'x-ai-app-profile': params.clientProfile || 'desktop'
+      },
+      body: JSON.stringify({
+        licenseKey: params.licenseKey,
+        appId: params.appId || WebSalesTotalService.getAppId(),
+        ...(params.customerId ? { customerId: params.customerId } : {}),
+        selectedGrades: Array.isArray(params.selectedGrades) ? params.selectedGrades : [],
+        requiredGradeCount: params.requiredGradeCount,
       }),
     });
   }

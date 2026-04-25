@@ -129,6 +129,12 @@ export interface VerifyLicenseResult {
   };
 }
 
+export interface LockStandardGradesResult {
+  ok: boolean;
+  lockedGrades: number[];
+  requiredGradeCount: number;
+}
+
 export class BridgeLoginError extends Error {
   needsPassword?: boolean;
 
@@ -392,6 +398,7 @@ export async function verifyLicenseKey(params: {
   customerId?: string;
   deviceId?: string;
   deviceName?: string;
+  clientProfile?: 'web' | 'desktop' | 'shared';
 }): Promise<VerifyLicenseResult> {
   const bridgeToken = getBridgeToken();
   const res = await fetch(`${BACKEND_API_BASE}/ai-app/licenses/verify`, {
@@ -452,6 +459,46 @@ export async function verifyLicenseKey(params: {
     features: (dataNode?.features ?? []) as string[],
     grace: dataNode?.grace,
     license: dataNode?.license,
+  };
+}
+
+export async function lockStandardGrades(params: {
+  licenseKey: string;
+  appId?: string;
+  customerId?: string;
+  selectedGrades: number[];
+  requiredGradeCount: number;
+  clientProfile?: 'web' | 'desktop' | 'shared';
+}): Promise<LockStandardGradesResult> {
+  const bridgeToken = getBridgeToken();
+  const res = await fetch(`${BACKEND_API_BASE}/ai-app/licenses/lock-standard-grades`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(bridgeToken ? { Authorization: `Bearer ${bridgeToken}` } : {}),
+    },
+    body: JSON.stringify(params),
+  });
+
+  const payload: any = await res.json().catch(() => ({}));
+  const isSuccess = Boolean(payload?.success ?? payload?.ok);
+  const dataNode = (payload?.data && typeof payload.data === 'object') ? payload.data : payload;
+  if (!res.ok || !isSuccess) {
+    const backendError = String(
+      payload?.error
+      || payload?.message
+      || payload?.errorCode
+      || payload?.data?.error
+      || payload?.data?.message
+      || 'Khóa lớp theo key thất bại.'
+    ).trim();
+    throw new Error(backendError);
+  }
+
+  return {
+    ok: true,
+    lockedGrades: Array.isArray(dataNode?.lockedGrades) ? dataNode.lockedGrades : [],
+    requiredGradeCount: Number(dataNode?.requiredGradeCount || 0),
   };
 }
 

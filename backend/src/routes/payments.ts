@@ -24,6 +24,7 @@ import {
 import {
   proxyGetCustomerLicenses,
   proxyVerifyLicense,
+  proxyLockStandardGrades,
 } from '../controllers/aiAppLicenseController';
 import { authMiddleware } from '../middleware/auth';
 
@@ -73,6 +74,7 @@ router.get('/customer/snapshot', bridgeCustomerSnapshot);
 // ===== AI APP LICENSE (proxy — x-ai-app-key giữ server-side) =====
 router.get('/ai-app/customers/:customerId/licenses', proxyGetCustomerLicenses);
 router.post('/ai-app/licenses/verify', proxyVerifyLicense);
+router.post('/ai-app/licenses/lock-standard-grades', proxyLockStandardGrades);
 
 // ===== ADMIN ENDPOINTS (no auth – internal tool) =====
 router.get('/admin/subscriptions', getCustomerSubscriptions);
