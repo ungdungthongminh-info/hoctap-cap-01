@@ -24,15 +24,15 @@
 
   /* Sizing */
   --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
   --radius-full: 9999px;
 
   /* Shadows - friendly soft */
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06);
-  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.1);
-  --shadow-button: 0 4px 14px rgba(0, 0, 0, 0.15);
+  --shadow-card: 0 10px 28px rgba(15, 23, 42, 0.07), 0 1px 3px rgba(15, 23, 42, 0.04);
+  --shadow-hover: 0 16px 36px rgba(15, 23, 42, 0.11), 0 2px 8px rgba(15, 23, 42, 0.05);
+  --shadow-button: 0 10px 22px rgba(15, 23, 42, 0.12);
 }
 
 * {
@@ -50,6 +50,7 @@ html, body, #root {
 body {
   font-family: 'Quicksand', 'Segoe UI', system-ui, sans-serif;
   font-weight: 500;
+  line-height: 1.5;
   color: var(--color-text);
   background: var(--color-background);
   transition: background 0.4s ease, color 0.3s ease;
@@ -137,6 +138,15 @@ body.pattern-sunny::before {
   opacity: 0.12;
 }
 
+body.pattern-ocean::before,
+body.pattern-garden::before,
+body.pattern-forest::before,
+body.pattern-sunset::before,
+body.pattern-galaxy::before,
+body.pattern-sunny::before {
+  opacity: 0.055;
+}
+
 /* ============================================
    APP LAYOUT
    ============================================ */
@@ -154,21 +164,31 @@ body.pattern-sunny::before {
 }
 
 .app-sidebar {
-  width: 220px;
+  width: 248px;
   height: 100vh;
-  background: var(--color-background-card);
-  border-right: 1px solid var(--color-surface);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.93) 100%),
+    var(--color-background-card);
+  border-right: 1px solid color-mix(in srgb, var(--color-primary-light) 28%, white);
   display: flex;
   flex-direction: column;
-  padding: 16px 12px;
-  gap: 8px;
-  box-shadow: 2px 0 20px rgba(0,0,0,0.04);
+  padding: 18px 14px;
+  gap: 10px;
+  box-shadow: 8px 0 30px rgba(15, 23, 42, 0.06);
   z-index: 10;
   overflow-y: auto;
   overflow-x: hidden;
   flex-shrink: 0;
   scrollbar-width: thin;
   scrollbar-color: var(--color-primary-light) transparent;
+}
+
+.app-sidebar > .flex.flex-col.items-center {
+  background: linear-gradient(180deg, #FFFFFF 0%, color-mix(in srgb, var(--color-surface) 34%, white) 100%);
+  border: 1px solid color-mix(in srgb, var(--color-primary-light) 22%, white);
+  border-radius: 18px;
+  padding: 14px 12px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.055);
 }
 
 .app-sidebar::-webkit-scrollbar {
@@ -188,8 +208,12 @@ body.pattern-sunny::before {
 .app-main {
   flex: 1;
   overflow-y: auto;
-  padding: 24px 32px;
-  background: var(--gradient-bg);
+  padding: 28px 36px;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--color-background) 70%, #ffffff) 0%,
+      color-mix(in srgb, var(--color-background) 82%, #f8fafc) 52%,
+      color-mix(in srgb, var(--color-surface) 56%, #ffffff) 100%);
   position: relative;
 }
 
@@ -197,12 +221,16 @@ body.pattern-sunny::before {
    GLOBAL GRADE SELECTOR
    ============================================ */
 .global-grade-panel {
-  border-radius: 14px;
-  padding: 8px;
+  width: 100%;
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 16px;
+  padding: 10px;
   background:
-    linear-gradient(145deg, color-mix(in srgb, var(--color-background-card) 94%, #ffffff), color-mix(in srgb, var(--color-surface) 55%, white));
-  border: 1px solid color-mix(in srgb, var(--color-primary-light) 38%, white);
-  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.10);
+    linear-gradient(145deg, rgba(255,255,255,0.98), color-mix(in srgb, var(--color-surface) 30%, #ffffff));
+  border: 1px solid color-mix(in srgb, var(--color-primary-light) 24%, white);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
 }
 
 .global-grade-panel__header {
@@ -235,12 +263,13 @@ body.pattern-sunny::before {
 
 .global-grade-panel__zones {
   display: grid;
-  gap: 5px;
+  grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
+  gap: 8px;
 }
 
 .global-grade-zone {
-  border-radius: 10px;
-  padding: 6px 7px;
+  border-radius: 12px;
+  padding: 8px;
 }
 
 .global-grade-zone--pre {
@@ -264,15 +293,15 @@ body.pattern-sunny::before {
 
 .global-grade-grid {
   display: grid;
-  gap: 4px;
+  gap: 6px;
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .global-grade-pill {
   width: 100%;
-  border-radius: 8px;
-  border: 1.5px solid transparent;
-  padding: 5px 7px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  padding: 7px 9px;
   text-align: left;
   display: inline-flex;
   flex-direction: column;
@@ -326,7 +355,7 @@ body.pattern-sunny::before {
 
 .global-grade-pill:not(:disabled):hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 14px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.10);
 }
 
 .global-grade-pill:disabled {
@@ -426,20 +455,24 @@ body.pattern-sunny::before {
 .card {
   background: var(--color-background-card);
   border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--color-primary-light) 18%, white);
   box-shadow: var(--shadow-card);
   padding: 20px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: var(--shadow-hover);
+  border-color: color-mix(in srgb, var(--color-primary-light) 34%, white);
 }
 
 .card-flat {
-  background: var(--color-surface);
+  background: color-mix(in srgb, var(--color-surface) 48%, white);
+  border: 1px solid color-mix(in srgb, var(--color-primary-light) 22%, white);
   border-radius: var(--radius-md);
   padding: 16px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.045);
 }
 
 /* ============================================
@@ -1089,30 +1122,33 @@ button.card-flat:active {
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: var(--radius-md);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--color-text-light);
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--color-text) 70%, #64748B);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: transform 0.18s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.16s ease;
   text-decoration: none;
-  border: none;
-  background: none;
+  border: 1px solid transparent;
+  background: transparent;
   width: 100%;
   text-align: left;
 }
 
 .nav-item:hover {
-  background: var(--color-surface);
+  background: color-mix(in srgb, var(--color-surface) 52%, white);
   color: var(--color-text);
+  border-color: color-mix(in srgb, var(--color-primary-light) 22%, white);
+  transform: translateX(1px);
 }
 
 .nav-item.active {
-  background: var(--color-primary);
-  color: white;
-  box-shadow: var(--shadow-button);
+  background: color-mix(in srgb, var(--color-primary) 13%, white);
+  color: var(--color-primary-dark);
+  border-color: color-mix(in srgb, var(--color-primary) 24%, white);
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--color-primary) 13%, transparent);
 }
 
 /* ============================================
@@ -1127,20 +1163,21 @@ button.card-flat:active {
   align-items: center;
   gap: 8px;
   width: 100%;
-  padding: 8px 12px;
-  border: none;
+  padding: 8px 10px;
+  border: 1px solid transparent;
   background: none;
   cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: all 0.2s ease;
+  border-radius: 12px;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .nav-group-header:hover {
-  background: var(--color-surface);
+  background: color-mix(in srgb, var(--color-surface) 42%, white);
+  border-color: color-mix(in srgb, var(--color-primary-light) 18%, white);
 }
 
 .nav-group-header.has-active {
-  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  background: color-mix(in srgb, var(--color-primary) 10%, white);
 }
 
 .nav-group-emoji {
@@ -1150,10 +1187,10 @@ button.card-flat:active {
 
 .nav-group-label {
   flex: 1;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.06em;
   color: var(--color-text-light);
   text-align: left;
 }
@@ -1171,18 +1208,18 @@ button.card-flat:active {
 .nav-group-items {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  padding-left: 8px;
-  margin-bottom: 4px;
+  gap: 3px;
+  padding-left: 6px;
+  margin-bottom: 6px;
   animation: navSlideDown 0.2s ease;
 }
 
 .nav-item-child {
-  padding: 8px 12px;
+  padding: 8px 10px;
   font-size: 13px;
-  gap: 10px;
+  gap: 9px;
   border-left: 2px solid transparent;
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  border-radius: 10px;
 }
 
 .nav-item-child:hover {
@@ -1190,7 +1227,7 @@ button.card-flat:active {
 }
 
 .nav-item-child.active {
-  border-left-color: white;
+  border-left-color: var(--color-primary);
 }
 
 @keyframes navSlideDown {
@@ -1981,8 +2018,140 @@ button.card-flat:active {
 /* ============================================
    HOME PAGE — Mobile calming pass
    ============================================ */
+.home-page-shell {
+  align-items: stretch;
+  gap: 20px;
+}
+
+.home-hero {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-items: center;
+  gap: 4px 20px;
+  text-align: left;
+  padding: 24px 28px;
+  border-radius: 22px;
+  border: 1px solid color-mix(in srgb, var(--color-primary-light) 24%, white);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.62) 100%),
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--color-surface) 42%, white) 0%,
+      color-mix(in srgb, var(--color-background) 62%, white) 58%,
+      color-mix(in srgb, var(--color-accent) 10%, white) 100%);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.07);
+  overflow: hidden;
+}
+
+.home-hero > .mascot-character {
+  grid-row: 1 / span 2;
+  width: 92px !important;
+  height: 92px !important;
+  filter: drop-shadow(0 10px 18px rgba(15, 23, 42, 0.12));
+}
+
+.home-hero h1 {
+  margin: 0;
+  font-size: 2.1rem;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.home-hero p {
+  margin: 0;
+  max-width: 760px;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.home-plan-card {
+  max-width: 1180px !important;
+  border-radius: 18px !important;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.07);
+}
+
+.home-stats {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(160px, 1fr));
+  gap: 14px;
+}
+
+.home-stats .card-flat {
+  min-height: 104px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: rgba(255,255,255,0.92);
+  border-radius: 18px;
+}
+
+.home-quick-actions {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+  justify-content: stretch;
+}
+
 .home-quick-actions .card-action-btn {
-  min-width: 180px;
+  width: 100%;
+  min-width: 0;
+  min-height: 108px;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-items: center;
+  gap: 3px 16px;
+  padding: 18px;
+  text-align: left;
+  border-radius: 18px;
+}
+
+.home-quick-actions .card-action-btn > div {
+  grid-row: 1 / span 2;
+  width: 52px !important;
+  height: 52px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.72), 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.home-quick-actions .card-action-btn svg {
+  width: 25px;
+  height: 25px;
+}
+
+.home-quick-actions .card-action-btn > span:first-of-type {
+  grid-column: 2;
+  align-self: end;
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.home-quick-actions .card-action-btn > span:last-of-type {
+  grid-column: 2;
+  align-self: start;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.home-info-bar {
+  width: 100%;
+  justify-content: center;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.76);
+  border-color: color-mix(in srgb, var(--color-primary-light) 20%, white);
+}
+
+.chat-launcher {
+  right: 20px;
+  bottom: 18px;
+}
+
+.chat-fab {
+  width: 62px;
+  height: 62px;
+  border: 4px solid rgba(255,255,255,0.96);
+  background: color-mix(in srgb, var(--color-primary) 12%, white);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.16);
 }
 
 /* ============================================
@@ -2009,6 +2178,18 @@ button.card-flat:active {
   }
   .home-hero {
     margin-top: 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    justify-items: center;
+    text-align: center;
+    padding: 18px 14px;
+    gap: 8px;
+    border-radius: 18px;
+  }
+  .home-hero > .mascot-character {
+    grid-row: auto;
+    width: 62px !important;
+    height: 62px !important;
   }
   .home-hero h1 {
     font-size: 1.55rem;
@@ -2029,6 +2210,7 @@ button.card-flat:active {
     justify-content: center;
   }
   .home-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
   }
   .home-stats .card-flat {
@@ -2044,6 +2226,11 @@ button.card-flat:active {
     justify-items: stretch;
   }
   .home-quick-actions .card-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 132px;
     min-width: 0 !important;
     width: 100%;
     padding: 14px 10px;
@@ -2052,6 +2239,7 @@ button.card-flat:active {
     box-shadow: 0 4px 12px rgba(8, 47, 73, 0.08), 0 1px 2px rgba(8, 47, 73, 0.06);
   }
   .home-quick-actions .card-action-btn > div {
+    grid-row: auto;
     width: 46px !important;
     height: 46px !important;
   }
@@ -2060,11 +2248,13 @@ button.card-flat:active {
     height: 22px;
   }
   .home-quick-actions .card-action-btn > span:first-of-type {
+    grid-column: auto;
     font-size: 1.25rem;
     line-height: 1.1;
     text-align: center;
   }
   .home-quick-actions .card-action-btn > span:last-of-type {
+    grid-column: auto;
     font-size: 12px;
     line-height: 1.3;
     text-align: center;
@@ -2215,6 +2405,10 @@ button.card-flat:active {
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 8px;
+  }
+
+  .global-grade-panel__zones {
+    grid-template-columns: 1fr;
   }
 
   .global-grade-grid {
