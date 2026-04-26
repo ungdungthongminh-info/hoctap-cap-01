@@ -173,10 +173,6 @@ export function HomePage() {
 
   return (
     <div className="home-page-shell fade-in w-full max-w-[1480px] mx-auto pb-8">
-      <div className="home-reminder-slot">
-        <StudyReminder streak={streak} studiedToday={studiedToday} needsReviewCount={needsReview.length} />
-      </div>
-
       <section className="home-hero">
         <div className="home-hero-art">
           <MascotCharacter size="xl" />
@@ -212,6 +208,10 @@ export function HomePage() {
           )}
         </div>
       </section>
+
+      <div className="home-reminder-slot">
+        <StudyReminder streak={streak} studiedToday={studiedToday} needsReviewCount={needsReview.length} />
+      </div>
 
       <section className="home-stats">
         <div className="home-stat-card">
