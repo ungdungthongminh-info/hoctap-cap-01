@@ -2704,6 +2704,33 @@ button.card-flat:active {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 6px 16px rgba(15,23,42,0.045);
 }
 
+.sidebar-mobile-toggle,
+.sidebar-mobile-backdrop {
+  display: none;
+}
+
+.sidebar-mobile-toggle {
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--color-primary-light) 30%, white);
+  background: rgba(255,255,255,0.96);
+  color: var(--color-primary-dark);
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+}
+
+.sidebar-mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  border: none;
+  background: rgba(15, 23, 42, 0.38);
+  z-index: 59;
+}
+
 .sidebar-nav {
   display: flex;
   min-height: 0;
@@ -4273,76 +4300,111 @@ button.card-flat:active {
     text-align: left;
   }
 
+  .sidebar-mobile-toggle {
+    display: inline-flex;
+  }
+
   .sidebar-brand-card,
-  .sidebar-profile-card {
-    display: none;
-  }
-
+  .sidebar-profile-card,
   .sidebar-nav {
-    width: 100%;
-    gap: 8px;
-  }
-
-  .sidebar-primary-nav,
-  .sidebar-secondary-nav {
-    display: flex;
-    flex-direction: row;
-    gap: 6px;
-    width: max-content;
-    padding-bottom: 2px;
-  }
-
-  .sidebar-secondary-nav {
-    padding-top: 0;
-    border-top: none;
-  }
-
-  .nav-group-header {
     display: none;
   }
 
-  .nav-group,
-  .nav-group-items {
+  .app-sidebar.mobile-nav-open {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(86vw, 320px);
+    min-height: 100dvh;
+    max-height: 100dvh;
+    padding: 14px 12px 18px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 60;
+    border-right: 1px solid color-mix(in srgb, var(--color-primary-light) 28%, white);
+    border-bottom: none;
+    box-shadow: 22px 0 48px rgba(15, 23, 42, 0.24);
+    touch-action: auto;
+  }
+
+  .app-sidebar.mobile-nav-open .sidebar-brand-card,
+  .app-sidebar.mobile-nav-open .sidebar-profile-card {
+    display: grid;
+  }
+
+  .app-sidebar.mobile-nav-open .sidebar-nav {
     display: flex;
-    flex-direction: row;
+    width: 100%;
+    gap: 12px;
+    overflow: visible;
+  }
+
+  .app-sidebar.mobile-nav-open .sidebar-primary-nav,
+  .app-sidebar.mobile-nav-open .sidebar-secondary-nav {
+    display: grid;
+    width: 100%;
     gap: 6px;
-    margin-top: 0;
+    padding-bottom: 0;
+  }
+
+  .app-sidebar.mobile-nav-open .sidebar-secondary-nav {
+    padding-top: 8px;
+    border-top: 1px solid color-mix(in srgb, var(--color-primary-light) 20%, white);
+  }
+
+  .app-sidebar.mobile-nav-open .nav-group-header {
+    display: flex;
+  }
+
+  .app-sidebar.mobile-nav-open .nav-group {
+    display: block;
+  }
+
+  .app-sidebar.mobile-nav-open .nav-group-items {
+    display: grid;
+    gap: 6px;
+    margin-top: 6px;
     margin-bottom: 0;
     padding-left: 0;
     animation: none;
   }
 
-  .app-sidebar .nav-item {
-    width: auto;
-    min-width: max-content;
+  .app-sidebar.mobile-nav-open .nav-item {
+    width: 100%;
+    min-width: 0;
     min-height: 44px;
     padding: 0 12px;
     gap: 8px;
     font-size: 12px;
     flex-direction: row;
+    justify-content: flex-start;
     white-space: nowrap;
     border-radius: 14px;
     box-shadow: none;
   }
 
-  .app-sidebar .nav-item svg {
+  .app-sidebar.mobile-nav-open .nav-item svg {
     width: 16px;
     height: 16px;
   }
 
-  .app-sidebar .nav-item.active {
+  .app-sidebar.mobile-nav-open .nav-item.active {
     transform: translateY(-1px);
     box-shadow: 0 12px 20px rgba(15, 23, 42, 0.10);
   }
 
-  .nav-item-primary {
+  .app-sidebar.mobile-nav-open .nav-item-primary {
     background: rgba(255,255,255,0.96);
   }
 
-  .nav-item-child {
+  .app-sidebar.mobile-nav-open .nav-item-child {
     padding: 0 12px;
     font-size: 12px;
-    border-left: none;
+    border-left: 2px solid transparent;
     background: color-mix(in srgb, var(--color-surface) 58%, white);
   }
 
@@ -4481,11 +4543,15 @@ button.card-flat:active {
     gap: 5px;
   }
 
-  .app-sidebar .nav-item {
+  .app-sidebar.mobile-nav-open .nav-item {
     min-height: 40px;
     padding: 0 10px;
     font-size: 11px;
     gap: 6px;
+  }
+
+  .app-sidebar.mobile-nav-open {
+    width: min(92vw, 300px);
   }
 
   .home-stats,

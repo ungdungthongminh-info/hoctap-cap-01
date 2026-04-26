@@ -13,42 +13,75 @@ function isCommonDevPort(port: string): boolean {
 
 const PRODUCTION_BRIDGE_BASE = 'https://www.ungdungthongminh.shop/api/v1';
 
-function resolveBackendApiBase() {
-  const configuredBase = import.meta.env.VITE_BACKEND_API_BASE?.trim();
-  if (configuredBase) {
-    return configuredBase.replace(/\/+$/, '');
+function normalizeApiBase(value?: string | null): string {
+  return String(value || '').trim().replace(/\/+$/, '');
+}
+
+function isLikelyLocalBridgeBase(value?: string | null): boolean {
+  const normalized = normalizeApiBase(value);
+  if (!normalized) return false;
+
+  try {
+    const parsed = new URL(normalized);
+    return isPrivateNetworkHostname(parsed.hostname) || isCommonDevPort(parsed.port) || parsed.port === '5000';
+  } catch {
+    return /localhost|127\.0\.0\.1|0\.0\.0\.0|192\.168\.|10\.|172\.(1[6-9]|2\d|3[0-1])\./i.test(normalized);
   }
+}
+
+function buildBackendApiBases(): string[] {
+  const bases: string[] = [];
+  const pushBase = (value?: string | null) => {
+    const normalized = normalizeApiBase(value);
+    if (normalized && !bases.includes(normalized)) {
+      bases.push(normalized);
+    }
+  };
+
+  const configuredBase = normalizeApiBase(import.meta.env.VITE_BACKEND_API_BASE);
 
   if (typeof window !== 'undefined') {
     const { protocol, hostname, port, origin } = window.location;
 
-    // file:// = Electron app
     if (protocol === 'file:') {
-      return PRODUCTION_BRIDGE_BASE;
+      if (configuredBase && !isLikelyLocalBridgeBase(configuredBase)) {
+        pushBase(configuredBase);
+      }
+      pushBase(PRODUCTION_BRIDGE_BASE);
+      return bases;
     }
 
-    // Dev local/LAN: frontend có thể mở từ Vite, Web Tong local hoặc IP nội bộ.
-    // Trong các case này, backend bridge luôn chạy riêng ở cổng 5000 trên cùng máy.
+    if (configuredBase) {
+      pushBase(configuredBase);
+    }
+
     if (isPrivateNetworkHostname(hostname) || isCommonDevPort(port)) {
       const backendHost = hostname || 'localhost';
-      return `http://${backendHost}:5000/api/v1`;
+      pushBase(`http://${backendHost}:5000/api/v1`);
+      pushBase(PRODUCTION_BRIDGE_BASE);
+      return bases;
     }
 
     if (protocol === 'http:' || protocol === 'https:') {
-      if (/vercel\.app$/i.test(hostname) || /hoctap-cap-01/i.test(hostname)) {
-        return PRODUCTION_BRIDGE_BASE;
-      }
       if (/ungdungthongminh\.shop$/i.test(hostname)) {
-        return `${origin.replace(/\/+$/, '')}/api/v1`;
+        pushBase(`${origin.replace(/\/+$/, '')}/api/v1`);
       }
-      return PRODUCTION_BRIDGE_BASE;
+      pushBase(PRODUCTION_BRIDGE_BASE);
+      return bases;
     }
   }
 
-  return PRODUCTION_BRIDGE_BASE;
+  pushBase(configuredBase);
+  pushBase(PRODUCTION_BRIDGE_BASE);
+  return bases;
+}
+
+function resolveBackendApiBase() {
+  return buildBackendApiBases()[0] || PRODUCTION_BRIDGE_BASE;
 }
 
 export const BACKEND_API_BASE = resolveBackendApiBase();
+const BACKEND_API_BASE_CANDIDATES = buildBackendApiBases();
 const INTERNAL_BUILD = import.meta.env.VITE_INTERNAL_BUILD === 'true';
 const BRIDGE_TOKEN_KEY = 'hhk_web_total_bridge_token';
 const BRIDGE_CUSTOMER_KEY = 'hhk_web_total_customer';
@@ -146,6 +179,45 @@ export class BridgeLoginError extends Error {
     this.name = 'BridgeLoginError';
     this.needsPassword = options?.needsPassword;
   }
+}
+
+function isRetryableBridgeResponse(base: string, response: Response, rawText: string): boolean {
+  if (base === PRODUCTION_BRIDGE_BASE) {
+    return false;
+  }
+
+  const rawLower = String(rawText || '').toLowerCase();
+  return response.status === 404
+    || rawLower.includes('page could not be found')
+    || rawLower.includes('not_found sin1::')
+    || rawLower.includes('"message":"not found"');
+}
+
+async function fetchBridgeResponse(
+  path: string,
+  init?: RequestInit,
+  options: { retryOnNotFound?: boolean } = {},
+): Promise<{ response: Response; rawText: string; base: string }> {
+  let lastFailure: Error | null = null;
+
+  for (let index = 0; index < BACKEND_API_BASE_CANDIDATES.length; index += 1) {
+    const base = BACKEND_API_BASE_CANDIDATES[index];
+    try {
+      const response = await fetch(`${base}${path}`, init);
+      const rawText = await response.text().catch(() => '');
+      if (options.retryOnNotFound && isRetryableBridgeResponse(base, response, rawText) && index < BACKEND_API_BASE_CANDIDATES.length - 1) {
+        continue;
+      }
+      return { response, rawText, base };
+    } catch (error) {
+      lastFailure = error as Error;
+      if (index < BACKEND_API_BASE_CANDIDATES.length - 1) {
+        continue;
+      }
+    }
+  }
+
+  throw lastFailure ?? new Error('Không kết nối được backend bridge.');
 }
 
 function getNetworkErrorMessage() {
@@ -376,11 +448,21 @@ export function isCacheWithinGrace(): boolean {
 export async function fetchAndCacheLicenses(customerId: string, appId?: string): Promise<LicenseCache> {
   const bridgeToken = getBridgeToken();
   const aid = appId || 'app-study-12';
-  const res = await fetch(
-    `${BACKEND_API_BASE}/ai-app/customers/${encodeURIComponent(customerId)}/licenses?appId=${encodeURIComponent(aid)}`,
-    bridgeToken ? { headers: { Authorization: `Bearer ${bridgeToken}` } } : {}
-  );
-  const payload = await res.json().catch(() => ({}));
+  let res: Response;
+  let payload: any = {};
+
+  try {
+    const result = await fetchBridgeResponse(
+      `/ai-app/customers/${encodeURIComponent(customerId)}/licenses?appId=${encodeURIComponent(aid)}`,
+      bridgeToken ? { headers: { Authorization: `Bearer ${bridgeToken}` } } : {},
+      { retryOnNotFound: true },
+    );
+    res = result.response;
+    payload = result.rawText ? JSON.parse(result.rawText) : {};
+  } catch {
+    res = new Response(null, { status: 503, statusText: 'Bridge unavailable' });
+    payload = {};
+  }
 
   let licenses: AppLicense[] = [];
   let loadedFromServer = false;
@@ -455,15 +537,26 @@ export async function verifyLicenseKey(params: {
   clientProfile?: 'web' | 'desktop' | 'shared';
 }): Promise<VerifyLicenseResult> {
   const bridgeToken = getBridgeToken();
-  const res = await fetch(`${BACKEND_API_BASE}/ai-app/licenses/verify`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(bridgeToken ? { Authorization: `Bearer ${bridgeToken}` } : {}),
-    },
-    body: JSON.stringify(params),
-  });
-  const rawText = await res.text().catch(() => '');
+  let result;
+
+  try {
+    result = await fetchBridgeResponse('/ai-app/licenses/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(bridgeToken ? { Authorization: `Bearer ${bridgeToken}` } : {}),
+      },
+      body: JSON.stringify(params),
+    }, { retryOnNotFound: true });
+  } catch {
+    throw new Error(
+      `Không kết nối được máy chủ kích hoạt của Web Tổng. App sẽ tự ưu tiên bridge production nếu build cũ còn giữ cấu hình sai, nhưng hiện vẫn không chạm được mạng. Base đang thử: ${BACKEND_API_BASE_CANDIDATES.join(' | ')}`,
+    );
+  }
+
+  const res = result.response;
+  const rawText = result.rawText;
+  const resolvedBase = result.base;
   let payload: any = {};
   try {
     payload = rawText ? JSON.parse(rawText) : {};
@@ -497,7 +590,7 @@ export async function verifyLicenseKey(params: {
       || backendLower === 'not found'
     ) {
       throw new Error(
-        `Đang gọi sai endpoint backend/bridge (base hiện tại: ${BACKEND_API_BASE}). `
+        `Đang gọi sai endpoint backend/bridge (base hiện tại: ${resolvedBase}). `
         + 'Web/mobile cần trỏ tới backend bridge có route /api/v1/ai-app/licenses/verify, không phải web tĩnh. '
         + 'Vui lòng cấu hình VITE_BACKEND_API_BASE đúng môi trường deploy và làm mới app để bỏ cache cũ.',
       );
@@ -525,25 +618,27 @@ export async function lockStandardGrades(params: {
   clientProfile?: 'web' | 'desktop' | 'shared';
 }): Promise<LockStandardGradesResult> {
   const bridgeToken = getBridgeToken();
-  let res: Response;
+  let result;
 
   try {
-    res = await fetch(`${BACKEND_API_BASE}/ai-app/licenses/lock-standard-grades`, {
+    result = await fetchBridgeResponse('/ai-app/licenses/lock-standard-grades', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         ...(bridgeToken ? { Authorization: `Bearer ${bridgeToken}` } : {}),
       },
       body: JSON.stringify(params),
-    });
+    }, { retryOnNotFound: true });
   } catch {
     throw new Error(
-      `Không kết nối được endpoint khóa lớp của Web Tổng (base hiện tại: ${BACKEND_API_BASE}). `
+      `Không kết nối được endpoint khóa lớp của Web Tổng. Base đang thử: ${BACKEND_API_BASE_CANDIDATES.join(' | ')}. `
       + 'Nếu đây là bản desktop đóng gói, app đang không chạm được backend bridge production.',
     );
   }
 
-  const rawText = await res.text().catch(() => '');
+  const res = result.response;
+  const rawText = result.rawText;
+  const resolvedBase = result.base;
   let payload: any = {};
   try {
     payload = rawText ? JSON.parse(rawText) : {};
@@ -571,7 +666,7 @@ export async function lockStandardGrades(params: {
       || backendLower === 'not found'
     ) {
       throw new Error(
-        `Đang gọi sai endpoint khóa lớp trên backend/bridge (base hiện tại: ${BACKEND_API_BASE}). `
+        `Đang gọi sai endpoint khóa lớp trên backend/bridge (base hiện tại: ${resolvedBase}). `
         + 'App cần trỏ tới backend có route /api/v1/ai-app/licenses/lock-standard-grades.',
       );
     }

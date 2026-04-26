@@ -32,6 +32,8 @@ import {
   Crown,
   TrendingUp,
   BookMarked,
+  Menu,
+  X,
   type LucideIcon,
 } from 'lucide-react';
 import { useAppData } from '../providers/AppDataProvider';
@@ -133,6 +135,7 @@ export function Sidebar() {
   const [isMobileNav, setIsMobileNav] = useState(() =>
     typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches,
   );
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(() => getAccessPlan());
   const canSeeAdmin = isAdminUnlocked();
   const subject = getSubjectByCode(state.student.subjectCode);
@@ -208,11 +211,22 @@ export function Sidebar() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const media = window.matchMedia('(max-width: 768px)');
-    const onChange = (event: MediaQueryListEvent) => setIsMobileNav(event.matches);
+    const onChange = (event: MediaQueryListEvent) => {
+      setIsMobileNav(event.matches);
+      if (!event.matches) {
+        setIsMobileMenuOpen(false);
+      }
+    };
     setIsMobileNav(media.matches);
     media.addEventListener('change', onChange);
     return () => media.removeEventListener('change', onChange);
   }, []);
+
+  useEffect(() => {
+    if (isMobileNav) {
+      setIsMobileMenuOpen(false);
+    }
+  }, [isMobileNav, location.pathname]);
 
   useEffect(() => {
     const syncPlan = () => setCurrentPlan(getAccessPlan());
@@ -224,8 +238,33 @@ export function Sidebar() {
     };
   }, []);
 
+  const handleNavItemClick = () => {
+    if (isMobileNav) {
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   return (
-    <aside className="app-sidebar">
+    <>
+      {isMobileNav && isMobileMenuOpen && (
+        <button
+          type="button"
+          className="sidebar-mobile-backdrop"
+          aria-label="Đóng menu điều hướng"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+      <aside className={`app-sidebar ${isMobileMenuOpen ? 'mobile-nav-open' : ''}`}>
+      <button
+        type="button"
+        className="sidebar-mobile-toggle"
+        aria-label={isMobileMenuOpen ? 'Đóng menu' : 'Mở menu'}
+        aria-expanded={isMobileMenuOpen}
+        onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+      >
+        {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+        <span>{isMobileMenuOpen ? 'Đóng menu' : 'Menu'}</span>
+      </button>
       <div className="sidebar-brand-card">
         <div className="sidebar-brand-main">
           <MascotCharacter size="sm" />
@@ -285,6 +324,7 @@ export function Sidebar() {
               to={item.to}
               end={item.to === '/home'}
               data-group="primary"
+              onClick={handleNavItemClick}
               className={({ isActive }) => `nav-item nav-item-primary ${isActive ? 'active' : ''}`}
             >
               <item.icon size={20} />
@@ -314,6 +354,7 @@ export function Sidebar() {
                         key={item.to}
                         to={item.to}
                         data-group={group.id}
+                        onClick={handleNavItemClick}
                         className={({ isActive }) => `nav-item nav-item-child ${isActive ? 'active' : ''}`}
                       >
                         <item.icon size={16} />
@@ -336,6 +377,7 @@ export function Sidebar() {
         </span>
         <ChevronDown size={14} />
       </NavLink>
-    </aside>
+      </aside>
+    </>
   );
 }
