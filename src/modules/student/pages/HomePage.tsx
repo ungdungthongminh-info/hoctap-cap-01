@@ -155,6 +155,17 @@ export function HomePage() {
     : subjectProgressPercent;
   const remainingLessons = Math.max(total - completed, 0);
   const planName = currentPlan === 'free' ? 'Free' : currentPlan === 'standard' ? 'Standard' : 'Premium';
+  const planActionTarget = currentPlan === 'free' ? '/pricing#activate-section' : '/pricing';
+  const focusBadgeText = reviewLesson ? 'Cần ôn lại' : 'Tiếp tục học';
+  const focusHint = reviewLesson
+    ? 'Ôn lại bài này trước để giữ vững điểm số và chuỗi học tập.'
+    : 'Hoàn thành bài tiếp theo để mở thêm thử thách và tăng XP.';
+  const boardSummary = total > 0 ? `${completed}/${total}` : '0/0';
+  const heroChips = [
+    { value: `${remainingLessons}`, label: 'bài chờ học' },
+    { value: `${needsReview.length}`, label: 'bài cần ôn' },
+    { value: planName, label: 'gói hiện tại' },
+  ];
 
   useEffect(() => {
     const syncPlan = () => {
@@ -185,13 +196,21 @@ export function HomePage() {
           <p>
             Cùng bạn <strong>{theme.mascotName}</strong> học {currentSubject?.name || 'Toán'} thật vui nào!
           </p>
+          <div className="home-hero-chips">
+            {heroChips.map((chip) => (
+              <span key={chip.label} className="home-hero-chip">
+                <strong>{chip.value}</strong>
+                <small>{chip.label}</small>
+              </span>
+            ))}
+          </div>
         </div>
         <div className="home-hero-actions">
-          <button className="home-plan-pill" onClick={() => navigate('/pricing')}>
+          <button className="home-plan-pill" onClick={() => navigate(planActionTarget)}>
             {currentPlan === 'free' ? <Shield size={18} /> : <Crown size={18} />}
             <span>
               <strong>Gói {planName}</strong>
-              <small>{currentPlan === 'free' ? 'Xem gói & nhập key' : 'Key đang hoạt động'}</small>
+              <small>{currentPlan === 'free' ? 'Xem gói & nhập key' : 'Quản lý key đang hoạt động'}</small>
             </span>
           </button>
           {keyExpiryBadge && (
@@ -212,6 +231,34 @@ export function HomePage() {
       <div className="home-reminder-slot">
         <StudyReminder streak={streak} studiedToday={studiedToday} needsReviewCount={needsReview.length} />
       </div>
+
+      <section className="home-focus-card card">
+        <div className="home-focus-visual">
+          <div className="home-board-mini">
+            <small>Tiến độ</small>
+            <strong>{boardSummary}</strong>
+            <span>{remainingLessons} bài còn lại</span>
+          </div>
+          <MascotCharacter size="md" />
+        </div>
+        <div className="home-focus-content">
+          <span className="home-focus-badge">{focusBadgeText}</span>
+          <h2>{nextLesson?.title || `${currentSubject?.name || 'Toán'} ${getGradeLabel(state.student.grade)}`}</h2>
+          <p>{currentSubject?.name || 'Toán'} · {nextLesson ? `Bài ${nextLesson.sortOrder || nextLesson.id}` : `${remainingLessons} bài chưa học`}</p>
+          <div className="home-focus-note">{focusHint}</div>
+          <div className="home-focus-progress">
+            <i style={{ width: `${nextLessonPercent}%` }} />
+            <span>{nextLessonPercent}%</span>
+          </div>
+        </div>
+        <button
+          className="home-focus-button"
+          onClick={() => navigate(nextLesson ? `/lessons/${nextLesson.id}` : '/lessons')}
+        >
+          <PlayCircle size={20} />
+          Tiếp tục học
+        </button>
+      </section>
 
       <section className="home-stats">
         <div className="home-stat-card">
@@ -245,32 +292,6 @@ export function HomePage() {
             <strong>{xpData.levelEmoji} Lv.{xpData.level}</strong>
           </div>
           <small>{xpData.totalXp} XP</small>
-        </button>
-      </section>
-
-      <section className="home-focus-card card">
-        <div className="home-focus-visual">
-          <div className="home-board-mini">
-            <span>245</span>
-            <span>+127</span>
-          </div>
-          <MascotCharacter size="md" />
-        </div>
-        <div className="home-focus-content">
-          <span className="home-focus-badge">{reviewLesson ? 'Cần ôn lại' : 'Tiếp tục học'}</span>
-          <h2>{nextLesson?.title || `${currentSubject?.name || 'Toán'} ${getGradeLabel(state.student.grade)}`}</h2>
-          <p>{currentSubject?.name || 'Toán'} · {nextLesson ? `Bài ${nextLesson.sortOrder || nextLesson.id}` : `${remainingLessons} bài chưa học`}</p>
-          <div className="home-focus-progress">
-            <i style={{ width: `${nextLessonPercent}%` }} />
-            <span>{nextLessonPercent}%</span>
-          </div>
-        </div>
-        <button
-          className="home-focus-button"
-          onClick={() => navigate(nextLesson ? `/lessons/${nextLesson.id}` : '/lessons')}
-        >
-          <PlayCircle size={20} />
-          Tiếp tục học
         </button>
       </section>
 

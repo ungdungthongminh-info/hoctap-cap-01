@@ -725,6 +725,45 @@ export function PricingPage() {
   const currentPlanStorageId = String(activeSub?.planId || localStorage.getItem(PLAN_KEY) || '').trim().toLowerCase();
   const currentPlanMeta = visiblePlans.find((plan) => plan.id === currentPlanStorageId) || visiblePlans.find((plan) => plan.id === normalizePlanId(currentPlan)) || visiblePlans[0];
   const activeSubPlanMeta = activeSub ? (visiblePlans.find((plan) => plan.id === String(activeSub.planId || '').trim().toLowerCase()) || visiblePlans.find((plan) => plan.id === normalizePlanId(activeSub.planId))) : null;
+  const heroHighlights = [
+    'Dùng Free ngay, không cần tài khoản',
+    'Mua trên web, nhận key và quay lại app để học',
+    'Chỉ cần đúng key là mở đúng gói',
+  ];
+  const activationShortcutPlans = [
+    {
+      id: 'standard',
+      title: 'Gói Standard',
+      badge: 'Phù hợp nhất cho đa số gia đình',
+      description: 'Mở 3 lớp tùy chọn, đủ các tính năng học tập và theo dõi tiến bộ.',
+      billingCycle: billing,
+      productUrl: WEB_TOTAL_PRODUCT_URLS.standard[billing],
+    },
+    {
+      id: 'standard_1year_1grade',
+      title: 'Gói 1 khóa',
+      badge: 'Tiết kiệm cho nhu cầu 1 lớp',
+      description: '01 năm - 01 lớp, đủ môn và hợp khi chỉ cần học tập trung theo một khối.',
+      billingCycle: 'yearly' as const,
+      productUrl: WEB_TOTAL_PRODUCT_URLS.standard_1year_1grade.yearly,
+    },
+    {
+      id: 'premium',
+      title: 'Gói Premium',
+      badge: 'Đầy đủ quyền lợi nhất',
+      description: 'Mở toàn bộ lớp, thêm báo cáo chi tiết, nội dung sớm và hỗ trợ ưu tiên.',
+      billingCycle: billing,
+      productUrl: WEB_TOTAL_PRODUCT_URLS.premium[billing],
+    },
+  ].map((item) => {
+    const plan = pricingPlans.find((entry) => entry.id === item.id) || PRICING_PLANS.find((entry) => entry.id === item.id);
+    return {
+      ...item,
+      plan,
+      priceLabel: plan ? formatVND(getPriceForCycle(plan, item.billingCycle)) : '',
+      cycleLabel: item.billingCycle === 'monthly' ? '/ tháng' : item.billingCycle === 'yearly' ? '/ năm' : '/ trọn đời',
+    };
+  });
   const detectedKeyBadgeStyle = detectedPlanFromInput === 'premium'
     ? { background: '#EDE9FE', color: '#6D28D9' }
     : detectedPlanFromInput === 'standard_1year_1grade'
@@ -924,6 +963,26 @@ export function PricingPage() {
     setIsGradeSelectionConfirmed(false);
     setGradeConfirmDone(false);
   }, [normalizedInputKey, isStandardSelectionLocked]);
+
+  useEffect(() => {
+    const scrollToHashTarget = () => {
+      const hashParts = window.location.hash.split('#').filter(Boolean);
+      const targetId = hashParts[hashParts.length - 1];
+      if (!targetId || targetId === '/pricing') return;
+
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      }
+    };
+
+    const timeoutId = window.setTimeout(scrollToHashTarget, 180);
+    window.addEventListener('hashchange', scrollToHashTarget);
+    return () => {
+      window.clearTimeout(timeoutId);
+      window.removeEventListener('hashchange', scrollToHashTarget);
+    };
+  }, []);
 
   // Load active subscription from DB on mount
   useEffect(() => {
@@ -1383,8 +1442,14 @@ export function PricingPage() {
             <span>🎓</span>
           </div>
           <div>
-            <h1>Nâng tầm Học Tập Của Bạn</h1>
-            <p>Khám phá các gói đăng ký linh hoạt cho học sinh.</p>
+            <div className="pricing-section-kicker pricing-section-kicker--hero">Mua trên web, học trong app</div>
+            <h1>Chọn gói phù hợp, kích hoạt trong 1 phút</h1>
+            <p>Free để bắt đầu ngay. Standard và Premium mở bằng key, không cần tạo tài khoản hay đăng nhập rườm rà.</p>
+            <div className="pricing-hero-pills">
+              {heroHighlights.map((item) => (
+                <span key={item} className="pricing-hero-pill">{item}</span>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -1407,7 +1472,7 @@ export function PricingPage() {
           <div className={`pricing-sync-note ${pricingSynced ? 'is-synced' : ''}`}>
             {pricingSynced ? 'Giá đang đồng bộ từ Web Tổng' : 'Đang dùng giá cục bộ dự phòng'}
           </div>
-          <p>Trạng thái ổn định. Có thể học tiếp bình thường.</p>
+          <p>Mua đúng gói trên web, lấy key và quay lại đây để mở khóa ngay.</p>
           <div className="pricing-key-actions">
             <button className={premiumButtonPrimaryClass} style={topPrimaryButtonStyle} onClick={() => navigate('/home')}>
               Vào học ngay →
@@ -1542,21 +1607,21 @@ export function PricingPage() {
 
       <section className="pricing-proof-row w-full">
         <div className="proof-item">
-          <div className="proof-icon">⇩</div>
+          <div className="proof-icon">⚡</div>
           <div>
             <strong>Tải về là dùng được ngay</strong>
             <p>Không cần tạo tài khoản. Mở app lên là vào được gói Free để trải nghiệm tức thì.</p>
           </div>
         </div>
         <div className="proof-item">
-          <div className="proof-icon proof-icon-gold">⌘</div>
+          <div className="proof-icon proof-icon-gold">🎯</div>
           <div>
             <strong>Chọn gói theo đúng nhu cầu</strong>
             <p>Free cho khởi đầu nhanh. Khi cần thêm tính năng, chỉ việc mua key và kích hoạt.</p>
           </div>
         </div>
         <div className="proof-item">
-          <div className="proof-icon proof-icon-green">◇</div>
+          <div className="proof-icon proof-icon-green">🔑</div>
           <div>
             <strong>Mua trên web, mở bằng key</strong>
             <p>Web Tổng dùng để xem gói, mua key và tra cứu đơn hàng. App tập trung vào việc học.</p>
@@ -1567,17 +1632,10 @@ export function PricingPage() {
       <section className="pricing-bottom-status w-full">
         <div>● Trạng thái hiện tại: <strong>{currentPlanMeta?.name}</strong></div>
         <div><Clock size={14} /> {remaining !== null && remaining !== Infinity ? `Còn ${remaining} ngày${subExpiry ? ` (đến ${formatDate(subExpiry)})` : ''}` : 'Không giới hạn'}</div>
-        <button onClick={() => setShowComparison(true)}>Xem bảng gói chi tiết</button>
+        <button onClick={() => setShowComparison((prev) => !prev)}>
+          {showComparison ? 'Ẩn bảng so sánh' : 'Xem bảng gói chi tiết'}
+        </button>
       </section>
-
-      {/* Feature comparison toggle */}
-      <button
-        className={premiumButtonSecondaryClass}
-        style={neutralGhostButtonStyle}
-        onClick={() => setShowComparison(!showComparison)}
-      >
-        {showComparison ? 'Ẩn' : 'Xem'} bảng so sánh chi tiết
-      </button>
 
       {/* Feature comparison table */}
       {showComparison && (
@@ -1702,20 +1760,47 @@ export function PricingPage() {
 
       {/* Activate license */}
       <div id="activate-section" className="pricing-activation-card card w-full p-6">
-        <h3 className="text-base font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--color-primary-dark)' }}>
-          <Unlock size={18} /> Kích hoạt hoặc mở sản phẩm trên web
-        </h3>
-        <p className="text-xs mb-3" style={{ color: 'var(--color-text-light)' }}>
-          Nếu chưa có key, hãy mở đúng sản phẩm trên Web Tổng theo gói cần mua. Nếu đã có key, nhập trực tiếp bên dưới để kích hoạt.
-        </p>
-        <div className="mb-3 rounded-2xl p-3" style={{ background: '#F1F5F9', border: '1px solid #CBD5E1' }}>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <div>
-              <div className="text-xs font-bold" style={{ color: '#0F172A' }}>ID máy hiện tại (dùng để khóa 1 key / 1 máy)</div>
-              <div className="text-[11px] mt-1 break-all" style={{ color: '#334155', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>
-                {currentDeviceId}
+        <div className="pricing-activation-head">
+          <div>
+            <div className="pricing-section-kicker">Kích hoạt key</div>
+            <h3 className="pricing-activation-title">
+              <Unlock size={18} /> Nhập key hoặc mở đúng sản phẩm trên web
+            </h3>
+            <p className="pricing-activation-copy">
+              Nếu chưa có key, mở đúng gói bên dưới trên Web Tổng. Nếu đã có key, nhập trực tiếp để hệ thống tự nhận diện và hướng dẫn bước tiếp theo.
+            </p>
+          </div>
+          <div className="pricing-activation-steps">
+            <span>1. Chọn gói</span>
+            <span>2. Nhận key</span>
+            <span>3. Kích hoạt</span>
+          </div>
+        </div>
+        <div className="pricing-activation-shortcut-grid">
+          {activationShortcutPlans.map((item) => (
+            <article key={item.id} className={`pricing-activation-shortcut pricing-activation-shortcut--${item.id}`}>
+              <div className="pricing-activation-shortcut__badge">{item.badge}</div>
+              <div className="pricing-activation-shortcut__title">{item.title}</div>
+              <div className="pricing-activation-shortcut__price">
+                {item.priceLabel}
+                <span>{item.cycleLabel}</span>
               </div>
-            </div>
+              <p>{item.description}</p>
+              <button
+                className={`${premiumButtonPrimaryClass} w-full`}
+                style={item.plan ? getPlanPrimaryButtonStyle(item.plan) : topPrimaryButtonStyle}
+                onClick={() => window.open(item.productUrl, '_blank', 'noopener,noreferrer')}
+              >
+                <ExternalLink size={15} /> Mở trên Web Tổng
+              </button>
+            </article>
+          ))}
+        </div>
+        <div className="pricing-activation-meta-grid">
+          <div className="pricing-activation-meta-card">
+            <div className="pricing-activation-meta-label">ID máy hiện tại</div>
+            <div className="pricing-activation-meta-value">{currentDeviceId}</div>
+            <p>Dùng để khóa 1 key cho đúng 1 thiết bị ở lần kích hoạt đầu tiên.</p>
             <button
               className={`${premiumButtonBaseClass} px-3 py-2 text-xs whitespace-nowrap`}
               style={neutralGhostButtonStyle}
@@ -1726,43 +1811,20 @@ export function PricingPage() {
               {copiedDeviceId ? 'Đã copy' : 'Copy ID máy'}
             </button>
           </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-          <button
-            className={`${premiumButtonPrimaryClass} w-full`}
-            style={getPlanPrimaryButtonStyle(PRICING_PLANS[1])}
-            onClick={() => window.open(WEB_TOTAL_PRODUCT_URLS.standard[billing], '_blank', 'noopener,noreferrer')}
-          >
-            <ExternalLink size={15} /> Mở gói Standard trên Web Tổng
-          </button>
-          <button
-            className={`${premiumButtonPrimaryClass} w-full`}
-            style={getPlanPrimaryButtonStyle(PRICING_PLANS[3])}
-            onClick={() => window.open(WEB_TOTAL_PRODUCT_URLS.premium[billing], '_blank', 'noopener,noreferrer')}
-          >
-            <ExternalLink size={15} /> Mở gói Premium trên Web Tổng
-          </button>
-        </div>
-        <div className="grid grid-cols-1 gap-3 mb-4">
-          <button
-            className={`${premiumButtonPrimaryClass} w-full`}
-            style={getPlanPrimaryButtonStyle(PRICING_PLANS[2])}
-            onClick={() => window.open(WEB_TOTAL_PRODUCT_URLS.standard_1year_1grade.yearly, '_blank', 'noopener,noreferrer')}
-          >
-            <ExternalLink size={15} /> Mở gói 1 khóa (01 năm - 01 lớp) Full môn (299k)
-          </button>
-        </div>
-        <div className="mb-3 rounded-2xl p-3" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
-          <div className="text-xs font-bold" style={{ color: '#0F172A' }}>Định dạng key</div>
-          <div className="text-xs mt-1" style={{ color: 'var(--color-text-light)' }}>
-            Standard: HHK-STANDARD-XXXXXXXX • Gói 1 khóa (01 năm - 01 lớp): HHK-STANDARD-1Y1G-XXXXXXXX • Standard 01 năm - 03 lớp: WSTL-XXXXXXXX-XXXXXX • Premium: HHK-PREMIUM-XXXXXXXX
-          </div>
-          {shouldShowRecognizedKeyHint && (
-            <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold"
-              style={detectedKeyBadgeStyle}>
-              {detectedKeyBadgeText}
+          <div className="pricing-activation-meta-card">
+            <div className="pricing-activation-meta-label">Định dạng key</div>
+            <div className="pricing-activation-meta-list">
+              <span>Standard: HHK-STANDARD-XXXXXXXX</span>
+              <span>1 khóa: HHK-STANDARD-1Y1G-XXXXXXXX</span>
+              <span>Standard 01 năm - 03 lớp: WSTL-XXXXXXXX-XXXXXX</span>
+              <span>Premium: HHK-PREMIUM-XXXXXXXX</span>
             </div>
-          )}
+            {shouldShowRecognizedKeyHint && (
+              <div className="pricing-activation-recognized-badge" style={detectedKeyBadgeStyle}>
+                {detectedKeyBadgeText}
+              </div>
+            )}
+          </div>
         </div>
         <div className="mb-4 rounded-2xl p-4 activation-key-spotlight" style={{ background: 'linear-gradient(135deg, #FFF7E6 0%, #FFFFFF 60%, #EFF6FF 100%)', border: '2px solid #FDBA74', boxShadow: '0 14px 30px rgba(217,119,6,0.16)' }}>
           <div className="text-[13px] font-extrabold tracking-[0.02em]" style={{ color: '#9A3412' }}>NHẬP KEY KÍCH HOẠT NGAY</div>
@@ -1787,7 +1849,7 @@ export function PricingPage() {
             maxLength={25}
             disabled={isActivating}
           />
-            <button className={premiumButtonPrimaryClass} onClick={activateLicense} disabled={!licenseKey.trim() || isActivating} style={{ ...darkPrimaryButtonStyle, minWidth: 170 }}>
+            <button className={`${premiumButtonPrimaryClass} activation-key-primary-btn`} onClick={activateLicense} disabled={!licenseKey.trim() || isActivating} style={{ ...darkPrimaryButtonStyle, minWidth: 170 }}>
               {isActivating ? <RefreshCw size={16} className="animate-spin" /> : <Unlock size={16} />}
               {isActivating ? 'Đang xác minh...' : 'Kích hoạt ngay'}
             </button>
@@ -1817,7 +1879,15 @@ export function PricingPage() {
           </div>
         </div>
         <div ref={gradePickerRef} className="mb-4 rounded-2xl p-4 activation-grade-card" style={{ background: '#F8FBFF', border: '2px solid #93C5FD', opacity: isPremiumKeyFlow ? 0.72 : 1 }}>
-          <div className="text-base font-extrabold" style={{ color: '#0F172A' }}>Bước 2: Chọn lớp muốn mở</div>
+          <div className="activation-grade-header">
+            <div>
+              <div className="activation-grade-step">Bước 2</div>
+              <div className="text-base font-extrabold" style={{ color: '#0F172A' }}>Chọn lớp muốn mở</div>
+            </div>
+            <div className={`activation-grade-counter ${isPremiumKeyFlow || activationGrades.length === requiredGradeCountForInput ? 'is-ready' : ''}`}>
+              {isPremiumKeyFlow ? 'Mở toàn bộ lớp' : `${activationGrades.length}/${requiredGradeCountForInput} lớp`}
+            </div>
+          </div>
           <div className="text-sm mt-1" style={{ color: '#334155' }}>
             {requiredGradeCountForInput === 1
               ? 'Key gói 1 khóa (01 năm - 01 lớp): chọn đúng 1 lớp. Key Premium: tự mở tất cả lớp.'
