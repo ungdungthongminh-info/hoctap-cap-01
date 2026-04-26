@@ -1,10 +1,15 @@
 node_modules/
 dist/
+release/
 *.db
 .DS_Store
 backups/
 .env.local
 .env.*.local
-release-noibo/win-unpacked/
-release-noibo/*.exe
+release-noibo/
+.electron-dev.log
+.social-dev.log
+.vite-dev.log
+.tmp-question-scan.js
+.tmp-question-scan-v2.js
 *.asar

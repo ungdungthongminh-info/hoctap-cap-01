@@ -11,20 +11,20 @@ function isCommonDevPort(port: string): boolean {
   return ['3000', '3900', '4173', '5173', '5174'].includes(port);
 }
 
+const PRODUCTION_BRIDGE_BASE = 'https://www.ungdungthongminh.shop/api/v1';
+
 function resolveBackendApiBase() {
   const configuredBase = import.meta.env.VITE_BACKEND_API_BASE?.trim();
   if (configuredBase) {
     return configuredBase.replace(/\/+$/, '');
   }
 
-  const productionBridgeBase = 'https://www.ungdungthongminh.shop/api/v1';
-
   if (typeof window !== 'undefined') {
     const { protocol, hostname, port, origin } = window.location;
 
     // file:// = Electron app
     if (protocol === 'file:') {
-      return 'http://localhost:5000/api/v1';
+      return PRODUCTION_BRIDGE_BASE;
     }
 
     // Dev local/LAN: frontend có thể mở từ Vite, Web Tong local hoặc IP nội bộ.
@@ -36,16 +36,16 @@ function resolveBackendApiBase() {
 
     if (protocol === 'http:' || protocol === 'https:') {
       if (/vercel\.app$/i.test(hostname) || /hoctap-cap-01/i.test(hostname)) {
-        return productionBridgeBase;
+        return PRODUCTION_BRIDGE_BASE;
       }
       if (/ungdungthongminh\.shop$/i.test(hostname)) {
         return `${origin.replace(/\/+$/, '')}/api/v1`;
       }
-      return productionBridgeBase;
+      return PRODUCTION_BRIDGE_BASE;
     }
   }
 
-  return 'http://localhost:5000/api/v1';
+  return PRODUCTION_BRIDGE_BASE;
 }
 
 export const BACKEND_API_BASE = resolveBackendApiBase();
@@ -525,16 +525,31 @@ export async function lockStandardGrades(params: {
   clientProfile?: 'web' | 'desktop' | 'shared';
 }): Promise<LockStandardGradesResult> {
   const bridgeToken = getBridgeToken();
-  const res = await fetch(`${BACKEND_API_BASE}/ai-app/licenses/lock-standard-grades`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(bridgeToken ? { Authorization: `Bearer ${bridgeToken}` } : {}),
-    },
-    body: JSON.stringify(params),
-  });
+  let res: Response;
 
-  const payload: any = await res.json().catch(() => ({}));
+  try {
+    res = await fetch(`${BACKEND_API_BASE}/ai-app/licenses/lock-standard-grades`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(bridgeToken ? { Authorization: `Bearer ${bridgeToken}` } : {}),
+      },
+      body: JSON.stringify(params),
+    });
+  } catch {
+    throw new Error(
+      `Không kết nối được endpoint khóa lớp của Web Tổng (base hiện tại: ${BACKEND_API_BASE}). `
+      + 'Nếu đây là bản desktop đóng gói, app đang không chạm được backend bridge production.',
+    );
+  }
+
+  const rawText = await res.text().catch(() => '');
+  let payload: any = {};
+  try {
+    payload = rawText ? JSON.parse(rawText) : {};
+  } catch {
+    payload = {};
+  }
   const isSuccess = Boolean(payload?.success ?? payload?.ok);
   const dataNode = (payload?.data && typeof payload.data === 'object') ? payload.data : payload;
   if (!res.ok || !isSuccess) {
@@ -546,7 +561,22 @@ export async function lockStandardGrades(params: {
       || payload?.data?.message
       || 'Khóa lớp theo key thất bại.'
     ).trim();
-    throw new Error(backendError);
+    const rawLower = rawText.toLowerCase();
+    const backendLower = backendError.toLowerCase();
+
+    if (
+      rawLower.includes('page could not be found')
+      || rawLower.includes('not_found sin1::')
+      || rawLower.includes('"message":"not found"')
+      || backendLower === 'not found'
+    ) {
+      throw new Error(
+        `Đang gọi sai endpoint khóa lớp trên backend/bridge (base hiện tại: ${BACKEND_API_BASE}). `
+        + 'App cần trỏ tới backend có route /api/v1/ai-app/licenses/lock-standard-grades.',
+      );
+    }
+
+    throw new Error(backendError || `Khóa lớp theo key thất bại (HTTP ${res.status}).`);
   }
 
   return {
