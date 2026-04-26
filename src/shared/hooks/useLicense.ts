@@ -11,9 +11,11 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   fetchAndCacheLicenses,
   readLicenseCache,
+  clearLicenseCache,
   isCacheWithinGrace,
   hasFeature as checkFeature,
   hasActiveLicense as checkActiveLicense,
+  renewCurrentLicenseLease,
   LicenseCache,
 } from '../services/webTotalBridge';
 
@@ -51,10 +53,16 @@ export function useLicense(): UseLicenseReturn {
     setLoading(true);
     setError(null);
     try {
+      await renewCurrentLicenseLease();
       const cache = await fetchAndCacheLicenses(customerId);
       setLicenseCache(cache);
     } catch (err: any) {
-      setError(err?.message || 'Không thể refresh license.');
+      const message = err?.message || 'Không thể refresh license.';
+      if (/đang được sử dụng trên một thiết bị khác/i.test(message)) {
+        clearLicenseCache();
+        setLicenseCache(null);
+      }
+      setError(message);
       // Không xóa cache cũ — vẫn dùng offline grace
     } finally {
       setLoading(false);
@@ -70,6 +78,17 @@ export function useLicense(): UseLicenseReturn {
 
     void refreshLicenses();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    const cache = readLicenseCache();
+    if (!cache?.customerId) return;
+
+    const timer = window.setInterval(() => {
+      void refreshLicenses();
+    }, 60_000);
+
+    return () => window.clearInterval(timer);
+  }, [refreshLicenses]);
 
   const hasFeature = useCallback((featureKey: string) => checkFeature(featureKey), [licenseCache]); // eslint-disable-line react-hooks/exhaustive-deps
   const isActive = checkActiveLicense();

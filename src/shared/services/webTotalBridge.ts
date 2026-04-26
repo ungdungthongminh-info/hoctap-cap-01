@@ -1,3 +1,5 @@
+import { getDeviceId } from '../utils/deviceFingerprint';
+
 function isPrivateNetworkHostname(hostname: string): boolean {
   if (!hostname) return false;
   if (['localhost', '127.0.0.1', '::1'].includes(hostname)) return true;
@@ -93,6 +95,14 @@ const SUB_BILLING_KEY = 'hhk_sub_billing_cycle';
 const SUB_STATUS_KEY = 'hhk_sub_status';
 const ACTIVATION_SOURCE_KEY = 'hhk_activation_source';
 const PAID_LICENSE_PATTERN = /^HHK-(STANDARD|PREMIUM)-[A-Z0-9]{8}$/;
+
+function getRuntimeClientProfile(): 'web' | 'desktop' {
+  return (window as any)?.electronAPI?.db ? 'desktop' : 'web';
+}
+
+export function getStoredLicenseKey(): string {
+  return String(localStorage.getItem(LICENSE_KEY) || '').trim().toUpperCase();
+}
 
 export interface WebTotalCustomer {
   id?: string;
@@ -584,6 +594,14 @@ export async function verifyLicenseKey(params: {
     }
 
     if (
+      backendLower.includes('đang được sử dụng trên một thiết bị khác')
+      || backendLower.includes('dong app/web o thiet bi kia')
+      || backendLower.includes('phien dang dung key nam tren mot thiet bi khac')
+    ) {
+      throw new Error('Key này đang được sử dụng trên một thiết bị khác. Vui lòng đóng app/web ở thiết bị kia rồi thử lại.');
+    }
+
+    if (
       rawLower.includes('page could not be found')
       || rawLower.includes('not_found sin1::')
       || rawLower.includes('"message":"not found"')
@@ -607,6 +625,27 @@ export async function verifyLicenseKey(params: {
     grace: dataNode?.grace,
     license: dataNode?.license,
   };
+}
+
+export async function renewCurrentLicenseLease(appId = 'app-study-12'): Promise<VerifyLicenseResult | null> {
+  const licenseKey = getStoredLicenseKey();
+  if (!licenseKey) {
+    return null;
+  }
+
+  const customerId = getBridgeCustomer()?.id ? String(getBridgeCustomer()!.id) : undefined;
+  const deviceName = typeof navigator === 'undefined'
+    ? null
+    : `${navigator.platform} / ${navigator.userAgent.slice(0, 80)}`;
+
+  return verifyLicenseKey({
+    licenseKey,
+    appId,
+    ...(customerId ? { customerId } : {}),
+    deviceId: getDeviceId(),
+    ...(deviceName ? { deviceName } : {}),
+    clientProfile: getRuntimeClientProfile(),
+  });
 }
 
 export async function lockStandardGrades(params: {
