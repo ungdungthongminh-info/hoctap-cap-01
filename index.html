@@ -4,31 +4,74 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Học Hứng Khởi Tiểu Học</title>
-    <meta name="description" content="Ứng dụng học tập vui nhộn cho học sinh tiểu học" />
+    <meta
+      name="description"
+      content="Ứng dụng học tập vui nhộn cho học sinh tiểu học với bài học, luyện tập, mini-game và theo dõi tiến bộ rõ ràng."
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="theme-color" content="#F97316" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="canonical" href="https://hoctap-cap-01.vercel.app/" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Học Hứng Khởi Tiểu Học" />
+    <meta property="og:title" content="Học Hứng Khởi Tiểu Học" />
+    <meta
+      property="og:description"
+      content="Học vui mỗi ngày cùng Dopi với bài học, luyện tập, mini-game và theo dõi tiến bộ rõ ràng."
+    />
+    <meta property="og:url" content="https://hoctap-cap-01.vercel.app/" />
+    <meta property="og:image" content="https://hoctap-cap-01.vercel.app/social/social-preview.png" />
+    <meta property="og:image:secure_url" content="https://hoctap-cap-01.vercel.app/social/social-preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Ảnh xem trước của ứng dụng Học Hứng Khởi Tiểu Học với mascot cá heo Dopi" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Học Hứng Khởi Tiểu Học" />
+    <meta
+      name="twitter:description"
+      content="Học vui mỗi ngày cùng Dopi với bài học, luyện tập, mini-game và theo dõi tiến bộ rõ ràng."
+    />
+    <meta name="twitter:image" content="https://hoctap-cap-01.vercel.app/social/social-preview.png" />
+    <meta name="twitter:image:alt" content="Ảnh xem trước của ứng dụng Học Hứng Khởi Tiểu Học với mascot cá heo Dopi" />
     <link rel="manifest" href="./manifest.json" />
     <link rel="apple-touch-icon" href="./icon-192.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Học Hứng Khởi Tiểu Học",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web",
+        "url": "https://hoctap-cap-01.vercel.app/",
+        "image": "https://hoctap-cap-01.vercel.app/social/social-preview.png",
+        "description": "Ứng dụng học tập vui nhộn cho học sinh tiểu học với bài học, luyện tập, mini-game và theo dõi tiến bộ rõ ràng.",
+        "inLanguage": "vi-VN",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "VND"
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="./src/main.tsx"></script>
     <script>
-      // Only register SW in production builds (not during Vite dev server)
       if ('serviceWorker' in navigator && !window.electronAPI) {
-        // Vite dev server injects import.meta — production builds use compiled JS without it
         var isDev = document.querySelector('script[src*="main.tsx"]') !== null;
         if (!isDev) {
-          window.addEventListener('load', function() {
+          window.addEventListener('load', function () {
             navigator.serviceWorker
               .register('./sw.js', { updateViaCache: 'none' })
-              .then(function(reg) { return reg.update(); })
-              .catch(function() {});
+              .then(function (reg) { return reg.update(); })
+              .catch(function () {});
           });
         }
       }

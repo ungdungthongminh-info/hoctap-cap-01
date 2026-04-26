@@ -1,39 +1,39 @@
 /* ============================================
-   🎨 HỌC HỨNG KHỞI — THEME SYSTEM
-   6 theme thiếu nhi, mỗi theme có mascot riêng
+   HOC HUNG KHOI - THEME SYSTEM
    ============================================ */
 
 export interface ThemeConfig {
   id: string;
   name: string;
-  emoji: string;           // mascot icon
-  mascotName: string;      // tên thú cưng
+  emoji: string;
+  mascotName: string;
+  mascotAvatarSrc?: string;
   colors: {
-    primary: string;       // màu chủ đạo
-    primaryLight: string;  // màu nhạt hơn
-    primaryDark: string;   // màu đậm hơn
-    secondary: string;     // màu phụ
-    accent: string;        // điểm nhấn
-    background: string;    // nền chính
-    backgroundCard: string;// nền card
-    surface: string;       // surface
-    text: string;          // text chính
-    textLight: string;     // text phụ
-    success: string;       // đúng
-    error: string;         // sai
-    warning: string;       // cảnh báo
-    star: string;          // sao/reward
+    primary: string;
+    primaryLight: string;
+    primaryDark: string;
+    secondary: string;
+    accent: string;
+    background: string;
+    backgroundCard: string;
+    surface: string;
+    text: string;
+    textLight: string;
+    success: string;
+    error: string;
+    warning: string;
+    star: string;
   };
-  gradientBg: string;      // gradient nền
-  patternClass: string;    // CSS class cho pattern nền
+  gradientBg: string;
+  patternClass: string;
 }
 
-// 🌊 Theme 1: Đại Dương Xanh — Cá heo vui vẻ
 const oceanTheme: ThemeConfig = {
   id: 'ocean',
   name: 'Đại Dương Xanh',
   emoji: '🐬',
   mascotName: 'Dopi',
+  mascotAvatarSrc: '/mascots/dopi-avatar.png',
   colors: {
     primary: '#0EA5E9',
     primaryLight: '#7DD3FC',
@@ -54,7 +54,6 @@ const oceanTheme: ThemeConfig = {
   patternClass: 'pattern-ocean',
 };
 
-// 🌸 Theme 2: Vườn Hoa Hồng — Thỏ bông dễ thương
 const gardenTheme: ThemeConfig = {
   id: 'garden',
   name: 'Vườn Hoa Hồng',
@@ -80,7 +79,6 @@ const gardenTheme: ThemeConfig = {
   patternClass: 'pattern-garden',
 };
 
-// 🌿 Theme 3: Rừng Xanh — Gấu con khám phá
 const forestTheme: ThemeConfig = {
   id: 'forest',
   name: 'Rừng Xanh',
@@ -106,7 +104,6 @@ const forestTheme: ThemeConfig = {
   patternClass: 'pattern-forest',
 };
 
-// 🌅 Theme 4: Hoàng Hôn Cam — Mèo con tinh nghịch
 const sunsetTheme: ThemeConfig = {
   id: 'sunset',
   name: 'Hoàng Hôn Cam',
@@ -132,7 +129,6 @@ const sunsetTheme: ThemeConfig = {
   patternClass: 'pattern-sunset',
 };
 
-// 💜 Theme 5: Thiên Hà Tím — Cú mèo thông thái
 const galaxyTheme: ThemeConfig = {
   id: 'galaxy',
   name: 'Thiên Hà Tím',
@@ -158,7 +154,6 @@ const galaxyTheme: ThemeConfig = {
   patternClass: 'pattern-galaxy',
 };
 
-// ☀️ Theme 6: Nắng Vàng — Chó con trung thành
 const sunnyTheme: ThemeConfig = {
   id: 'sunny',
   name: 'Nắng Vàng',
@@ -184,7 +179,6 @@ const sunnyTheme: ThemeConfig = {
   patternClass: 'pattern-sunny',
 };
 
-// Export tất cả themes
 export const themes: ThemeConfig[] = [
   oceanTheme,
   gardenTheme,
@@ -197,5 +191,5 @@ export const themes: ThemeConfig[] = [
 export const defaultTheme = oceanTheme;
 
 export function getThemeById(id: string): ThemeConfig {
-  return themes.find((t) => t.id === id) || defaultTheme;
+  return themes.find((theme) => theme.id === id) || defaultTheme;
 }

@@ -2,7 +2,7 @@
    🐬 MASCOT CHARACTER — SVG mascot sống động
    Mỗi loài có chuyển động riêng để thu hút trẻ em
    ============================================ */
-import { useTheme } from '../themes';
+import { getThemeById, useTheme } from '../themes';
 
 type MascotSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
@@ -14,12 +14,43 @@ interface MascotCharacterProps {
   size?: MascotSize;
   className?: string;
   onClick?: () => void;
+  themeId?: string;
 }
 
-export function MascotCharacter({ size = 'md', className = '', onClick }: MascotCharacterProps) {
-  const { theme } = useTheme();
+export function MascotCharacter({ size = 'md', className = '', onClick, themeId }: MascotCharacterProps) {
+  const { theme: currentTheme } = useTheme();
+  const theme = themeId ? getThemeById(themeId) : currentTheme;
   const px = sizeMap[size];
   const Mascot = mascotMap[theme.id] || DolphinMascot;
+  const useAvatarImage = Boolean(theme.mascotAvatarSrc) && (size === 'xs' || size === 'sm' || size === 'md');
+
+  if (useAvatarImage && theme.mascotAvatarSrc) {
+    return (
+      <span
+        className={`mascot-character mascot-char-${theme.id} ${className}`}
+        style={{ display: 'inline-flex', width: px, height: px, cursor: onClick ? 'pointer' : undefined }}
+        onClick={onClick}
+        role={onClick ? 'button' : undefined}
+        tabIndex={onClick ? 0 : undefined}
+        onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') onClick(); } : undefined}
+      >
+        <img
+          src={theme.mascotAvatarSrc}
+          alt={theme.mascotName}
+          draggable={false}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            transform: size === 'xs' ? 'scale(1.22)' : 'scale(1.16)',
+            transformOrigin: 'center',
+            userSelect: 'none',
+            filter: 'drop-shadow(0 8px 18px rgba(14, 165, 233, 0.22))',
+          }}
+        />
+      </span>
+    );
+  }
 
   return (
     <span

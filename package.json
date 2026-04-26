@@ -33,6 +33,7 @@
   "build": {
     "appId": "com.hochungkhoi.noibo",
     "productName": "Hoc Hung Khoi Tieu Hoc_NoiBo",
+    "icon": "public/icon.png",
     "asar": true,
     "directories": {
       "output": "release-noibo"
@@ -40,6 +41,7 @@
     "files": [
       "dist/**/*",
       "electron/**/*",
+      "public/icon.png",
       "package.json"
     ],
     "extraMetadata": {
@@ -48,6 +50,7 @@
       "main": "electron/main.js"
     },
     "win": {
+      "icon": "public/icon.ico",
       "target": [
         {
           "target": "portable",
