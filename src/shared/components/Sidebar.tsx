@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTheme } from '../themes';
-import { getAccessPlan } from '../services/accessControl';
+import { getAccessPlan, getUnlockedGrades } from '../services/accessControl';
 import {
   Home,
   BookOpen,
@@ -35,7 +35,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { useAppData } from '../providers/AppDataProvider';
-import { getGradeLabel, getSubjectByCode } from '../../data/subjects';
+import { getGradeLabel, getSubjectByCode, getSubjectsForGrade } from '../../data/subjects';
 import { MascotCharacter } from './MascotCharacter';
 import { isAdminUnlocked } from '../utils/adminAccess';
 
@@ -52,13 +52,18 @@ interface NavGroup {
   items: NavItem[];
 }
 
-// Top-level items (always visible)
-const topItems: NavItem[] = [
+const primaryItems: NavItem[] = [
   { to: '/home', icon: Home, label: 'Trang chủ' },
-  { to: '/pricing', icon: Crown, label: 'Cài đặt & Gói' },
+  { to: '/subjects', icon: GraduationCap, label: 'Môn học' },
+  { to: '/lessons', icon: BookOpen, label: 'Bài học' },
+  { to: '/quiz', icon: PenTool, label: 'Luyện tập' },
+  { to: '/mini-games', icon: Gamepad2, label: 'Mini-Game' },
+  { to: '/progress', icon: BarChart3, label: 'Tiến bộ' },
+  { to: '/achievements', icon: Star, label: 'Thành tựu' },
 ];
 
-// Grouped items (collapsible)
+const primaryRoutes = new Set(primaryItems.map((item) => item.to));
+
 const navGroups: NavGroup[] = [
   {
     id: 'learn',
@@ -116,14 +121,13 @@ const navGroups: NavGroup[] = [
   },
 ];
 
-// Helper: check if current path is in a group
 function groupContainsPath(group: NavGroup, path: string): boolean {
   return group.items.some((item) => item.to === path || (item.to !== '/' && path.startsWith(item.to)));
 }
 
 export function Sidebar() {
   const { theme } = useTheme();
-  const { state } = useAppData();
+  const { state, updateStudent } = useAppData();
   const location = useLocation();
   const [online, setOnline] = useState(navigator.onLine);
   const [isMobileNav, setIsMobileNav] = useState(() =>
@@ -132,8 +136,14 @@ export function Sidebar() {
   const [currentPlan, setCurrentPlan] = useState(() => getAccessPlan());
   const canSeeAdmin = isAdminUnlocked();
   const subject = getSubjectByCode(state.student.subjectCode);
+  const unlockedGrades = getUnlockedGrades(state.student.grade, currentPlan);
+  const gradeSubjects = getSubjectsForGrade(state.student.grade);
+  const readySubjects = gradeSubjects.filter((s) =>
+    state.lessons.some((l) => l.grade === state.student.grade && l.subjectCode === s.code),
+  );
 
-  // Auto-open group that contains active route
+  const lessonCountByGrade = (g: number) => state.lessons.filter((l) => l.grade === g).length;
+
   const [openGroups, setOpenGroups] = useState<Set<string>>(() => {
     const initial = new Set<string>();
     for (const g of navGroups) {
@@ -142,7 +152,13 @@ export function Sidebar() {
     return initial;
   });
 
-  // Update open groups when route changes
+  const visibleGroups = useMemo(() => navGroups.map((group) => ({
+    ...group,
+    items: group.items.filter((item) =>
+      !primaryRoutes.has(item.to) && (item.to !== '/admin' || canSeeAdmin),
+    ),
+  })).filter((group) => group.items.length > 0), [canSeeAdmin]);
+
   useEffect(() => {
     for (const g of navGroups) {
       if (groupContainsPath(g, location.pathname)) {
@@ -163,12 +179,30 @@ export function Sidebar() {
     });
   };
 
+  const handleGradeChange = (value: string) => {
+    const nextGrade = Number(value);
+    if (!Number.isFinite(nextGrade)) return;
+
+    const subjectsOfGrade = getSubjectsForGrade(nextGrade);
+    const firstReadySubject = subjectsOfGrade.find((s) =>
+      state.lessons.some((l) => l.grade === nextGrade && l.subjectCode === s.code),
+    );
+
+    updateStudent({
+      grade: nextGrade,
+      subjectCode: firstReadySubject?.code || subjectsOfGrade[0]?.code || 'math',
+    });
+  };
+
   useEffect(() => {
     const on = () => setOnline(true);
     const off = () => setOnline(false);
     window.addEventListener('online', on);
     window.addEventListener('offline', off);
-    return () => { window.removeEventListener('online', on); window.removeEventListener('offline', off); };
+    return () => {
+      window.removeEventListener('online', on);
+      window.removeEventListener('offline', off);
+    };
   }, []);
 
   useEffect(() => {
@@ -192,107 +226,116 @@ export function Sidebar() {
 
   return (
     <aside className="app-sidebar">
-      {/* Logo + Mascot */}
-      <div className="flex flex-col items-center gap-2 pb-4 mb-4 border-b border-gray-100">
-        <MascotCharacter size="sm" />
-        <div className="text-center">
-          <div className="text-sm font-bold" style={{ color: 'var(--color-primary)' }}>
-            Học Hứng Khởi
-          </div>
-          <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-            Cùng {theme.mascotName} học nào!
+      <div className="sidebar-brand-card">
+        <div className="sidebar-brand-main">
+          <MascotCharacter size="sm" />
+          <div>
+            <div className="sidebar-brand-title">Học Hứng Khởi</div>
+            <div className="sidebar-brand-subtitle">Cùng {theme.mascotName} học nào!</div>
           </div>
         </div>
-        {/* Offline indicator */}
-        <div className="flex items-center gap-1 text-xs" style={{ color: online ? 'var(--color-success)' : '#D97706' }}>
-          {online ? <Wifi size={12} /> : <WifiOff size={12} />}
-          <span>{online ? 'Trực tuyến' : 'Ngoại tuyến'}</span>
+
+        <div className="sidebar-status-row">
+          <span className="sidebar-status-chip" data-online={online}>
+            {online ? <Wifi size={12} /> : <WifiOff size={12} />}
+            {online ? 'Trực tuyến' : 'Ngoại tuyến'}
+          </span>
+          <NavLink to="/pricing" className="sidebar-plan-chip">
+            <Crown size={12} />
+            {currentPlan === 'free' ? 'Free' : currentPlan === 'standard' ? 'Standard' : 'Premium'}
+          </NavLink>
         </div>
-        {/* Grade + Subject context */}
-        <div className="flex items-center gap-1 text-xs font-bold" style={{ color: 'var(--color-primary)' }}>
-          <GraduationCap size={12} />
-          <span>{getGradeLabel(state.student.grade)} · {subject?.emoji} {subject?.name || 'Toán'}</span>
+
+        <div className="sidebar-study-context">
+          <label>
+            <span>Lớp hiện tại</span>
+            <select value={state.student.grade} onChange={(event) => handleGradeChange(event.target.value)}>
+              {[0, 1, 2, 3, 4, 5].map((g) => {
+                const gradeReady = lessonCountByGrade(g) > 0;
+                const unlocked = unlockedGrades.includes(g);
+                return (
+                  <option key={g} value={g} disabled={!gradeReady || !unlocked}>
+                    {getGradeLabel(g)}
+                  </option>
+                );
+              })}
+            </select>
+          </label>
+          <label>
+            <span>Môn đang học</span>
+            <select
+              value={state.student.subjectCode}
+              onChange={(event) => updateStudent({ subjectCode: event.target.value })}
+            >
+              {(readySubjects.length > 0 ? readySubjects : gradeSubjects).map((s) => (
+                <option key={s.code} value={s.code}>
+                  {s.emoji} {s.name}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
-        <NavLink
-          to="/pricing"
-          className="w-full mt-2 rounded-xl px-3 py-2 text-xs border"
-          style={{
-            background: currentPlan === 'free' ? '#EFF6FF' : '#ECFDF5',
-            borderColor: currentPlan === 'free' ? '#BFDBFE' : '#A7F3D0',
-            color: currentPlan === 'free' ? '#1D4ED8' : '#065F46',
-          }}
-        >
-          <div className="font-bold">{currentPlan === 'free' ? 'Gói Free mặc định' : `Đang dùng gói ${currentPlan === 'standard' ? 'Standard' : 'Premium'}`}</div>
-          <div className="mt-1" style={{ opacity: 0.9 }}>
-            {currentPlan === 'free'
-              ? 'Mở mục Gói dịch vụ để xem gói và nhập key kích hoạt.'
-              : 'Key đã kích hoạt. Có thể gia hạn hoặc đổi gói trong trang gói dịch vụ.'}
-          </div>
-        </NavLink>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex flex-col gap-0.5 flex-1">
-        {/* Top items (Trang chủ) */}
-        {topItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end
-            data-group="top"
-            className={({ isActive }) => `nav-item nav-item-top ${isActive ? 'active' : ''}`}
-          >
-            <item.icon size={20} />
-            <span>{item.label}</span>
-          </NavLink>
-        ))}
+      <nav className="sidebar-nav">
+        <div className="sidebar-primary-nav">
+          {primaryItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/home'}
+              data-group="primary"
+              className={({ isActive }) => `nav-item nav-item-primary ${isActive ? 'active' : ''}`}
+            >
+              <item.icon size={20} />
+              <span>{item.label}</span>
+            </NavLink>
+          ))}
+        </div>
 
-        {/* Grouped sections */}
-        {navGroups.map((group) => {
-          const isOpen = openGroups.has(group.id);
-          const hasActive = groupContainsPath(group, location.pathname);
-          return (
-            <div key={group.id} className={`nav-group nav-group-${group.id}`}>
-              <button
-                className={`nav-group-header ${hasActive && !isOpen ? 'has-active' : ''}`}
-                onClick={() => toggleGroup(group.id)}
-              >
-                <span className="nav-group-emoji">{group.emoji}</span>
-                <span className="nav-group-label">{group.label}</span>
-                <ChevronDown
-                  size={14}
-                  className={`nav-group-chevron ${isOpen ? 'open' : ''}`}
-                />
-              </button>
-              {(isOpen || isMobileNav) && (
-                <div className="nav-group-items">
-                  {group.items
-                    .filter((item) => item.to !== '/admin' || canSeeAdmin)
-                    .map((item) => (
-                    <NavLink
-                      key={item.to}
-                      to={item.to}
-                      data-group={group.id}
-                      className={({ isActive }) => `nav-item nav-item-child ${isActive ? 'active' : ''}`}
-                    >
-                      <item.icon size={16} />
-                      <span>{item.label}</span>
-                    </NavLink>
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
+        <div className="sidebar-secondary-nav">
+          {visibleGroups.map((group) => {
+            const isOpen = openGroups.has(group.id);
+            const hasActive = groupContainsPath(group, location.pathname);
+            return (
+              <div key={group.id} className={`nav-group nav-group-${group.id}`}>
+                <button
+                  className={`nav-group-header ${hasActive && !isOpen ? 'has-active' : ''}`}
+                  onClick={() => toggleGroup(group.id)}
+                >
+                  <span className="nav-group-emoji">{group.emoji}</span>
+                  <span className="nav-group-label">{group.label}</span>
+                  <ChevronDown size={14} className={`nav-group-chevron ${isOpen ? 'open' : ''}`} />
+                </button>
+                {(isOpen || isMobileNav) && (
+                  <div className="nav-group-items">
+                    {group.items.map((item) => (
+                      <NavLink
+                        key={item.to}
+                        to={item.to}
+                        data-group={group.id}
+                        className={({ isActive }) => `nav-item nav-item-child ${isActive ? 'active' : ''}`}
+                      >
+                        <item.icon size={16} />
+                        <span>{item.label}</span>
+                      </NavLink>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </nav>
 
-      {/* Mascot ở dưới sidebar */}
-      <div className="flex flex-col items-center pt-4 mt-auto border-t border-gray-100">
-        <MascotCharacter size="lg" />
-        <span className="text-xs font-bold mt-1" style={{ color: 'var(--color-primary)' }}>
-          {theme.mascotName}
+      <NavLink to="/profiles" className="sidebar-profile-card">
+        <UserCircle size={34} />
+        <span>
+          <strong>{state.student.fullName}</strong>
+          <small>{getGradeLabel(state.student.grade)} · {subject?.name || 'Toán'}</small>
         </span>
-      </div>
+        <ChevronDown size={14} />
+      </NavLink>
     </aside>
   );
 }

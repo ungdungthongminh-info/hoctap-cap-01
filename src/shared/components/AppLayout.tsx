@@ -2,7 +2,6 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { PageTransition } from './PageTransition';
 import { MascotChatPanel } from './MascotChatPanel';
-import { GlobalGradeSelector } from './GlobalGradeSelector';
 import { InternalBuildBanner } from './AccessGuard';
 
 export function AppLayout({ children }: { children?: React.ReactNode }) {
@@ -12,7 +11,6 @@ export function AppLayout({ children }: { children?: React.ReactNode }) {
       <Sidebar />
       <main className="app-main">
         <InternalBuildBanner />
-        <GlobalGradeSelector />
         <PageTransition key={location.pathname}>
           {children ?? <Outlet />}
         </PageTransition>

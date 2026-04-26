@@ -3,7 +3,26 @@ import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../../shared/themes';
 import { useAppData } from '../../../shared/providers/AppDataProvider';
 import { getGradeLabel, getSubjectsForGrade, getSubjectByCode } from '../../../data/subjects';
-import { BookOpen, BarChart3, Sparkles, RefreshCw, PenTool, GraduationCap, Gamepad2, CalendarDays, Brush, Star, Brain, Swords, ShoppingBag, Crown, Shield } from 'lucide-react';
+import {
+  BookOpen,
+  BarChart3,
+  Sparkles,
+  RefreshCw,
+  PenTool,
+  GraduationCap,
+  Gamepad2,
+  CalendarDays,
+  Brush,
+  Star,
+  Brain,
+  Swords,
+  ShoppingBag,
+  Crown,
+  Shield,
+  PlayCircle,
+  Trophy,
+  type LucideIcon,
+} from 'lucide-react';
 import { StudyReminder } from '../../../shared/components/StudyReminder';
 import { MascotCharacter } from '../../../shared/components';
 import { getXpData } from '../../../shared/utils/achievements';
@@ -20,13 +39,23 @@ type KeyExpiryBadge = {
   border: string;
 };
 
+type ActionCardProps = {
+  icon: LucideIcon;
+  label: string;
+  meta: string;
+  color: string;
+  bg: string;
+  onClick: () => void;
+  compact?: boolean;
+};
+
 function getKeyExpiryBadge(plan: ReturnType<typeof getAccessPlan>): KeyExpiryBadge | null {
   if (plan === 'free') return null;
 
   const expiryRaw = localStorage.getItem(SUB_EXPIRY_KEY);
   if (!expiryRaw) {
     return {
-      text: 'Key vinh vien',
+      text: 'Key vĩnh viễn',
       bg: '#D1FAE5',
       color: '#065F46',
       border: '#6EE7B7',
@@ -36,7 +65,7 @@ function getKeyExpiryBadge(plan: ReturnType<typeof getAccessPlan>): KeyExpiryBad
   const expiresAt = new Date(expiryRaw);
   if (Number.isNaN(expiresAt.getTime())) {
     return {
-      text: 'Key dang hoat dong',
+      text: 'Key đang hoạt động',
       bg: '#DBEAFE',
       color: '#1D4ED8',
       border: '#93C5FD',
@@ -49,7 +78,7 @@ function getKeyExpiryBadge(plan: ReturnType<typeof getAccessPlan>): KeyExpiryBad
 
   if (leftDays < 0) {
     return {
-      text: `Het han ${expiryDate}`,
+      text: `Hết hạn ${expiryDate}`,
       bg: '#FEE2E2',
       color: '#991B1B',
       border: '#FCA5A5',
@@ -58,7 +87,7 @@ function getKeyExpiryBadge(plan: ReturnType<typeof getAccessPlan>): KeyExpiryBad
 
   if (leftDays <= 7) {
     return {
-      text: `HSD ${expiryDate} • con ${leftDays} ngay`,
+      text: `HSD ${expiryDate} · còn ${leftDays} ngày`,
       bg: '#FEF3C7',
       color: '#92400E',
       border: '#FCD34D',
@@ -66,22 +95,43 @@ function getKeyExpiryBadge(plan: ReturnType<typeof getAccessPlan>): KeyExpiryBad
   }
 
   return {
-    text: `HSD ${expiryDate} • con ${leftDays} ngay`,
+    text: `HSD ${expiryDate} · còn ${leftDays} ngày`,
     bg: '#DCFCE7',
     color: '#166534',
     border: '#86EFAC',
   };
 }
 
+function ActionCard({ icon: Icon, label, meta, color, bg, onClick, compact }: ActionCardProps) {
+  return (
+    <button className={`card-action-btn home-action-card ${compact ? 'home-action-card--compact' : ''}`} onClick={onClick}>
+      <div className="home-action-icon" style={{ background: bg }}>
+        <Icon size={26} style={{ color }} />
+      </div>
+      <span className="home-action-title" style={{ color }}>{label}</span>
+      <span className="home-action-meta">{meta}</span>
+    </button>
+  );
+}
+
 export function HomePage() {
   const { theme } = useTheme();
   const navigate = useNavigate();
-  const { state, getCompletedCount, getAverageScore, getStreak, getNeedsReviewLessons, getSubjectLessons } = useAppData();
+  const {
+    state,
+    getCompletedCount,
+    getAverageScore,
+    getStreak,
+    getNeedsReviewLessons,
+    getSubjectLessons,
+    getLessonProgress,
+  } = useAppData();
   const [currentPlan, setCurrentPlan] = useState(() => getAccessPlan());
   const [keyExpiryBadge, setKeyExpiryBadge] = useState<KeyExpiryBadge | null>(() => getKeyExpiryBadge(getAccessPlan()));
 
+  const subjectLessons = getSubjectLessons();
   const completed = getCompletedCount();
-  const total = getSubjectLessons().length;
+  const total = subjectLessons.length;
   const avg = getAverageScore();
   const streak = getStreak();
   const needsReview = getNeedsReviewLessons();
@@ -89,6 +139,22 @@ export function HomePage() {
   const gradeSubjects = getSubjectsForGrade(state.student.grade);
   const studiedToday = state.practiceSets.some((ps) => ps.finishedAt && ps.finishedAt.startsWith(new Date().toISOString().slice(0, 10)));
   const xpData = getXpData(parseInt(localStorage.getItem(STORAGE_KEYS.XP) || '0', 10) || 0);
+  const subjectProgressPercent = total > 0 ? Math.round((completed / total) * 100) : 0;
+  const reviewLesson = needsReview.find(
+    (lesson) => lesson.grade === state.student.grade && lesson.subjectCode === state.student.subjectCode,
+  );
+  const nextLesson = reviewLesson
+    || subjectLessons.find((lesson) => {
+      const progress = getLessonProgress(lesson.id);
+      return !progress || progress.attemptCount === 0;
+    })
+    || subjectLessons[0];
+  const nextLessonProgress = nextLesson ? getLessonProgress(nextLesson.id) : undefined;
+  const nextLessonPercent = nextLessonProgress?.attemptCount
+    ? Math.min(100, nextLessonProgress.bestScore || nextLessonProgress.lastScore || 0)
+    : subjectProgressPercent;
+  const remainingLessons = Math.max(total - completed, 0);
+  const planName = currentPlan === 'free' ? 'Free' : currentPlan === 'standard' ? 'Standard' : 'Premium';
 
   useEffect(() => {
     const syncPlan = () => {
@@ -106,281 +172,234 @@ export function HomePage() {
   }, []);
 
   return (
-    <div className="home-page-shell fade-in flex flex-col items-center gap-8 w-full max-w-[1480px] mx-auto pb-8">
-      {/* Notifications */}
-      <StudyReminder streak={streak} studiedToday={studiedToday} needsReviewCount={needsReview.length} />
-
-      {/* Hero mascot */}
-      <div className="home-hero text-center mt-2">
-        <MascotCharacter size="xl" />
-        <h1 className="text-3xl font-bold mt-4" style={{ color: 'var(--color-primary-dark)' }}>
-          Chào <strong style={{ color: 'var(--color-primary)' }}>{state.student.fullName}</strong>! 🎉
-        </h1>
-        <p className="text-lg mt-2" style={{ color: 'var(--color-text-light)' }}>
-          Cùng bạn <strong style={{ color: 'var(--color-primary)' }}>{theme.mascotName}</strong> học {currentSubject?.name || 'Toán'} thật vui nào!
-        </p>
+    <div className="home-page-shell fade-in w-full max-w-[1480px] mx-auto pb-8">
+      <div className="home-reminder-slot">
+        <StudyReminder streak={streak} studiedToday={studiedToday} needsReviewCount={needsReview.length} />
       </div>
 
-      <div
-        className="home-plan-card card relative w-full max-w-3xl px-5 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
-        style={{
-          borderColor: currentPlan === 'free' ? '#BFDBFE' : '#A7F3D0',
-          borderWidth: 2,
-          background: currentPlan === 'free' ? 'linear-gradient(135deg, #EFF6FF 0%, #F8FAFC 100%)' : 'linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%)',
-        }}
-      >
-        {keyExpiryBadge && (
-          <div
-            className="absolute top-2 right-2 rounded-full px-2.5 py-1 text-[11px] font-bold"
-            style={{
-              background: keyExpiryBadge.bg,
-              color: keyExpiryBadge.color,
-              border: `1px solid ${keyExpiryBadge.border}`,
-              maxWidth: '58%',
-            }}
-            title={keyExpiryBadge.text}
-          >
-            <span className="block truncate">{keyExpiryBadge.text}</span>
-          </div>
-        )}
-        <div className="flex items-start gap-3">
-          <div
-            className="w-11 h-11 rounded-full flex items-center justify-center shrink-0"
-            style={{ background: currentPlan === 'free' ? '#DBEAFE' : '#D1FAE5' }}
-          >
-            {currentPlan === 'free' ? <Shield size={22} style={{ color: '#2563EB' }} /> : <Crown size={22} style={{ color: '#059669' }} />}
-          </div>
-          <div>
-            <div className="text-sm font-bold" style={{ color: currentPlan === 'free' ? '#1D4ED8' : '#065F46' }}>
-              {currentPlan === 'free' ? 'Bạn đang dùng gói Free' : `Bạn đang dùng gói ${currentPlan === 'standard' ? 'Standard' : 'Premium'}`}
-            </div>
-            <div className="text-xs mt-1" style={{ color: 'var(--color-text-light)' }}>
-              {currentPlan === 'free'
-                ? 'Free dùng ngay sau khi cài. Khi cần thêm tính năng, hãy mua key trên Web Tổng và kích hoạt trong app.'
-                : 'Key của bạn đang hoạt động. Có thể tiếp tục học hoặc quản lý gói trong trang gói dịch vụ.'}
-            </div>
-          </div>
+      <section className="home-hero">
+        <div className="home-hero-art">
+          <MascotCharacter size="xl" />
         </div>
-        <button
-          className="premium-btn-base premium-btn-sheen px-4 py-2.5 rounded-[14px] font-bold text-sm text-white hover:brightness-105"
-          style={currentPlan === 'free'
-            ? {
-                background: 'linear-gradient(180deg, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.08) 42%, rgba(0,0,0,0.16) 100%), linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)',
-                border: '1px solid rgba(191,219,254,0.7)',
-                boxShadow: '0 12px 22px rgba(29,78,216,0.22), inset 0 1px 0 rgba(255,255,255,0.38), inset 0 -2px 0 rgba(30,64,175,0.36)',
-              }
-            : {
-                background: 'linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.08) 42%, rgba(0,0,0,0.14) 100%), linear-gradient(135deg, #10B981 0%, #059669 100%)',
-                border: '1px solid rgba(167,243,208,0.72)',
-                boxShadow: '0 12px 22px rgba(5,150,105,0.2), inset 0 1px 0 rgba(255,255,255,0.36), inset 0 -2px 0 rgba(4,120,87,0.34)',
-              }}
-          onClick={() => navigate('/pricing')}
-        >
-          {currentPlan === 'free' ? 'Xem gói và nhập key' : 'Quản lý gói hiện tại'}
-        </button>
-      </div>
-
-      {/* Streak warning — handled by StudyReminder above */}
-
-      {/* Stats mini */}
-      <div className="home-stats flex gap-4 flex-wrap justify-center w-full">
-        <div className="card-flat text-center px-5 py-3">
-          <div className="text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>{completed}/{total}</div>
-          <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Bài đã học</div>
+        <div className="home-hero-copy">
+          <div className="home-eyebrow">{getGradeLabel(state.student.grade)} · {currentSubject?.emoji} {currentSubject?.name || 'Toán'}</div>
+          <h1>
+            Chào <strong>{state.student.fullName}</strong>!
+          </h1>
+          <p>
+            Cùng bạn <strong>{theme.mascotName}</strong> học {currentSubject?.name || 'Toán'} thật vui nào!
+          </p>
         </div>
-        <div className="card-flat text-center px-5 py-3">
-          <div className="text-2xl font-bold" style={{ color: 'var(--color-success)' }}>{avg}%</div>
-          <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Điểm TB</div>
-        </div>
-        <div className="card-flat text-center px-5 py-3 streak-glow">
-          <div className="text-2xl font-bold" style={{ color: 'var(--color-star)' }}>🔥 {streak}</div>
-          <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Ngày liên tiếp</div>
-        </div>
-        <button className="premium-btn-base card-flat text-center px-5 py-3 cursor-pointer hover:scale-105 transition-transform" onClick={() => navigate('/achievements')}>
-          <div className="text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>
-            {xpData.levelEmoji} Lv.{xpData.level}
-          </div>
-          <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>{xpData.totalXp} XP</div>
-        </button>
-      </div>
-
-      {/* Quick actions */}
-      <div className="home-quick-actions flex gap-4 flex-wrap justify-center w-full">
-        <button
-          className="card-action-btn"
-          onClick={() => navigate('/subjects')}
-        >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center"
-            style={{ background: '#FEF3C7' }}>
-            <GraduationCap size={28} style={{ color: '#D97706' }} />
-          </div>
-          <span className="text-lg font-bold" style={{ color: '#D97706' }}>Môn học</span>
-          <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-            {gradeSubjects.length} môn {getGradeLabel(state.student.grade)}
-          </span>
-        </button>
-
-        <button
-          className="card-action-btn"
-          onClick={() => navigate('/lessons')}
-        >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center"
-            style={{ background: currentSubject?.bgColor || 'var(--color-primary-light)' }}>
-            <BookOpen size={28} style={{ color: currentSubject?.color || 'var(--color-primary-dark)' }} />
-          </div>
-          <span className="text-lg font-bold" style={{ color: currentSubject?.color || 'var(--color-primary)' }}>
-            {currentSubject?.emoji} {currentSubject?.name || 'Toán'}
-          </span>
-          <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-            {total - completed > 0 ? `${total - completed} bài chưa học` : 'Ôn lại bài cũ'}
-          </span>
-        </button>
-
-        <button
-          className="card-action-btn"
-          onClick={() => navigate('/quiz')}
-        >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center"
-            style={{ background: '#EDE9FE' }}>
-            <PenTool size={28} style={{ color: '#7C3AED' }} />
-          </div>
-          <span className="text-lg font-bold" style={{ color: '#7C3AED' }}>Luyện tập</span>
-          <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>Làm bài kiểm tra nhanh</span>
-        </button>
-
-        {needsReview.length > 0 && (
-          <button
-            className="card-action-btn"
-            onClick={() => navigate('/progress')}
-          >
-            <div className="w-14 h-14 rounded-full flex items-center justify-center"
-              style={{ background: '#FEE2E2' }}>
-              <RefreshCw size={28} style={{ color: '#DC2626' }} />
-            </div>
-            <span className="text-lg font-bold" style={{ color: '#DC2626' }}>Ôn lại</span>
-            <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-              {needsReview.length} bài cần ôn
+        <div className="home-hero-actions">
+          <button className="home-plan-pill" onClick={() => navigate('/pricing')}>
+            {currentPlan === 'free' ? <Shield size={18} /> : <Crown size={18} />}
+            <span>
+              <strong>Gói {planName}</strong>
+              <small>{currentPlan === 'free' ? 'Xem gói & nhập key' : 'Key đang hoạt động'}</small>
             </span>
           </button>
-        )}
+          {keyExpiryBadge && (
+            <span
+              className="home-key-expiry"
+              style={{
+                background: keyExpiryBadge.bg,
+                color: keyExpiryBadge.color,
+                borderColor: keyExpiryBadge.border,
+              }}
+            >
+              {keyExpiryBadge.text}
+            </span>
+          )}
+        </div>
+      </section>
 
-        <button
-          className="card-action-btn"
-          onClick={() => navigate('/progress')}
-        >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center"
-            style={{ background: '#D1FAE5' }}>
-            <BarChart3 size={28} style={{ color: '#059669' }} />
+      <section className="home-stats">
+        <div className="home-stat-card">
+          <div className="home-stat-icon home-stat-icon--book"><BookOpen size={24} /></div>
+          <div>
+            <span>Bài đã học</span>
+            <strong>{completed}/{total}</strong>
           </div>
-          <span className="text-lg font-bold" style={{ color: '#059669' }}>Tiến bộ</span>
-          <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>Xem con học được gì</span>
-        </button>
-
-        <button
-          className="card-action-btn"
-          onClick={() => navigate('/themes')}
-        >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center"
-            style={{ background: '#FEF3C7' }}>
-            <Sparkles size={28} style={{ color: '#D97706' }} />
+          <div className="home-stat-track"><i style={{ width: `${subjectProgressPercent}%` }} /></div>
+        </div>
+        <div className="home-stat-card">
+          <div className="home-stat-icon home-stat-icon--score"><Star size={24} /></div>
+          <div>
+            <span>Điểm TB</span>
+            <strong>{avg}%</strong>
           </div>
-          <span className="text-lg font-bold" style={{ color: '#D97706' }}>Giao diện</span>
-          <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>Chọn theme yêu thích</span>
-        </button>
-
-        <button
-          className="card-action-btn"
-          onClick={() => navigate('/daily')}
-        >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center"
-            style={{ background: '#F3E8FF' }}>
-            <CalendarDays size={28} style={{ color: '#8B5CF6' }} />
+          <div className="home-stat-track home-stat-track--amber"><i style={{ width: `${avg}%` }} /></div>
+        </div>
+        <div className="home-stat-card">
+          <div className="home-stat-icon home-stat-icon--streak"><CalendarDays size={24} /></div>
+          <div>
+            <span>Ngày liên tiếp</span>
+            <strong>{streak}</strong>
           </div>
-          <span className="text-lg font-bold" style={{ color: '#8B5CF6' }}>Thử thách</span>
-          <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>Thử thách hàng ngày</span>
+          <div className="home-stat-track home-stat-track--coral"><i style={{ width: `${Math.min(100, streak * 12)}%` }} /></div>
+        </div>
+        <button className="home-stat-card home-stat-card--button" onClick={() => navigate('/achievements')}>
+          <div className="home-stat-icon home-stat-icon--xp"><Trophy size={24} /></div>
+          <div>
+            <span>{xpData.levelTitle}</span>
+            <strong>{xpData.levelEmoji} Lv.{xpData.level}</strong>
+          </div>
+          <small>{xpData.totalXp} XP</small>
         </button>
+      </section>
 
+      <section className="home-focus-card card">
+        <div className="home-focus-visual">
+          <div className="home-board-mini">
+            <span>245</span>
+            <span>+127</span>
+          </div>
+          <MascotCharacter size="md" />
+        </div>
+        <div className="home-focus-content">
+          <span className="home-focus-badge">{reviewLesson ? 'Cần ôn lại' : 'Tiếp tục học'}</span>
+          <h2>{nextLesson?.title || `${currentSubject?.name || 'Toán'} ${getGradeLabel(state.student.grade)}`}</h2>
+          <p>{currentSubject?.name || 'Toán'} · {nextLesson ? `Bài ${nextLesson.sortOrder || nextLesson.id}` : `${remainingLessons} bài chưa học`}</p>
+          <div className="home-focus-progress">
+            <i style={{ width: `${nextLessonPercent}%` }} />
+            <span>{nextLessonPercent}%</span>
+          </div>
+        </div>
         <button
-          className="card-action-btn"
+          className="home-focus-button"
+          onClick={() => navigate(nextLesson ? `/lessons/${nextLesson.id}` : '/lessons')}
+        >
+          <PlayCircle size={20} />
+          Tiếp tục học
+        </button>
+      </section>
+
+      <section className="home-quick-actions">
+        <ActionCard
+          icon={GraduationCap}
+          label="Môn học"
+          meta={`${gradeSubjects.length} môn ${getGradeLabel(state.student.grade)}`}
+          color="#0F766E"
+          bg="#CCFBF1"
+          onClick={() => navigate('/subjects')}
+        />
+        <ActionCard
+          icon={BookOpen}
+          label="Bài học"
+          meta={remainingLessons > 0 ? `${remainingLessons} bài chưa học` : 'Ôn lại bài cũ'}
+          color="#2563EB"
+          bg="#DBEAFE"
+          onClick={() => navigate('/lessons')}
+        />
+        <ActionCard
+          icon={PenTool}
+          label="Luyện tập"
+          meta="Làm bài kiểm tra nhanh"
+          color="#D97706"
+          bg="#FEF3C7"
+          onClick={() => navigate('/quiz')}
+        />
+        <ActionCard
+          icon={Gamepad2}
+          label="Mini-Game"
+          meta="Ghép cặp ôn tập"
+          color="#7C3AED"
+          bg="#EDE9FE"
           onClick={() => navigate('/match-game')}
-        >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center"
-            style={{ background: '#FCE7F3' }}>
-            <Gamepad2 size={28} style={{ color: '#DB2777' }} />
-          </div>
-          <span className="text-lg font-bold" style={{ color: '#DB2777' }}>Mini-Game</span>
-          <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>Ghép cặp ôn tập</span>
-        </button>
-
-        <button
-          className="card-action-btn"
-          onClick={() => navigate('/drawing')}
-        >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center"
-            style={{ background: '#DBEAFE' }}>
-            <Brush size={28} style={{ color: '#2563EB' }} />
-          </div>
-          <span className="text-lg font-bold" style={{ color: '#2563EB' }}>Vẽ & Tô màu</span>
-          <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>Giải trí sáng tạo</span>
-        </button>
-
-        <button
-          className="card-action-btn"
+        />
+        <ActionCard
+          icon={BarChart3}
+          label="Tiến bộ"
+          meta="Xem con học được gì"
+          color="#059669"
+          bg="#D1FAE5"
+          onClick={() => navigate('/progress')}
+        />
+        <ActionCard
+          icon={Star}
+          label="Thành tựu"
+          meta={`${xpData.levelTitle} · Lv.${xpData.level}`}
+          color="#C2410C"
+          bg="#FFEDD5"
           onClick={() => navigate('/achievements')}
-        >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center"
-            style={{ background: '#FEF3C7' }}>
-            <Star size={28} style={{ color: '#D97706' }} />
-          </div>
-          <span className="text-lg font-bold" style={{ color: '#D97706' }}>Thành tựu</span>
-          <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>{xpData.levelTitle} · Lv.{xpData.level}</span>
-        </button>
+        />
+      </section>
 
-        <button
-          className="card-action-btn"
+      <section className="home-secondary-actions">
+        {needsReview.length > 0 && (
+          <ActionCard
+            icon={RefreshCw}
+            label="Ôn lại"
+            meta={`${needsReview.length} bài cần ôn`}
+            color="#DC2626"
+            bg="#FEE2E2"
+            compact
+            onClick={() => navigate('/progress')}
+          />
+        )}
+        <ActionCard
+          icon={Sparkles}
+          label="Giao diện"
+          meta="Chọn theme yêu thích"
+          color="#D97706"
+          bg="#FEF3C7"
+          compact
+          onClick={() => navigate('/themes')}
+        />
+        <ActionCard
+          icon={CalendarDays}
+          label="Thử thách"
+          meta="Thử thách hằng ngày"
+          color="#8B5CF6"
+          bg="#F3E8FF"
+          compact
+          onClick={() => navigate('/daily')}
+        />
+        <ActionCard
+          icon={Brush}
+          label="Vẽ & Tô màu"
+          meta="Giải trí sáng tạo"
+          color="#2563EB"
+          bg="#DBEAFE"
+          compact
+          onClick={() => navigate('/drawing')}
+        />
+        <ActionCard
+          icon={Brain}
+          label="Trí nhớ"
+          meta="Flashcard ôn tập"
+          color="#4F46E5"
+          bg="#E0E7FF"
+          compact
           onClick={() => navigate('/memory')}
-        >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center"
-            style={{ background: '#E0E7FF' }}>
-            <Brain size={28} style={{ color: '#4F46E5' }} />
-          </div>
-          <span className="text-lg font-bold" style={{ color: '#4F46E5' }}>Trí nhớ</span>
-          <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>Flashcard ôn tập</span>
-        </button>
-
-        <button
-          className="card-action-btn"
+        />
+        <ActionCard
+          icon={Swords}
+          label="Thi đấu"
+          meta="Đấu Robot / bạn bè"
+          color="#DC2626"
+          bg="#FEE2E2"
+          compact
           onClick={() => navigate('/competition')}
-        >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center"
-            style={{ background: '#FEE2E2' }}>
-            <Swords size={28} style={{ color: '#DC2626' }} />
-          </div>
-          <span className="text-lg font-bold" style={{ color: '#DC2626' }}>Thi đấu</span>
-          <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>Đấu Robot / bạn bè</span>
-        </button>
-
-        <button
-          className="card-action-btn"
+        />
+        <ActionCard
+          icon={ShoppingBag}
+          label="Cửa hàng"
+          meta="Đổi XP lấy avatar"
+          color="#059669"
+          bg="#D1FAE5"
+          compact
           onClick={() => navigate('/avatar-shop')}
-        >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center"
-            style={{ background: '#D1FAE5' }}>
-            <ShoppingBag size={28} style={{ color: '#059669' }} />
-          </div>
-          <span className="text-lg font-bold" style={{ color: '#059669' }}>Cửa hàng</span>
-          <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>Đổi XP lấy avatar</span>
-        </button>
-      </div>
+        />
+      </section>
 
-      {/* Info bar */}
-      <div className="home-info-bar card-flat flex items-center gap-4 px-6 py-3 mt-4">
-        <span className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-          📅 {new Date().toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+      <div className="home-info-bar card-flat">
+        <span>
+          {new Date().toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
         </span>
-        <span style={{ color: 'var(--color-text-light)' }}>•</span>
-        <span className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-          📚 {currentSubject?.emoji} {currentSubject?.name || 'Toán'} {getGradeLabel(state.student.grade)}
+        <span>·</span>
+        <span>
+          {currentSubject?.emoji} {currentSubject?.name || 'Toán'} {getGradeLabel(state.student.grade)}
         </span>
       </div>
     </div>
