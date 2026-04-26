@@ -1163,6 +1163,102 @@
   position: relative;
 }
 
+.pricing-learn-fab {
+  position: fixed;
+  right: 18px;
+  bottom: max(88px, calc(env(safe-area-inset-bottom) + 76px));
+  z-index: 48;
+  width: min(290px, calc(100vw - 24px));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 22px;
+  border: 1px solid rgba(191, 219, 254, 0.72);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08)),
+    linear-gradient(135deg, rgba(10, 25, 49, 0.95) 0%, rgba(14, 40, 76, 0.94) 62%, rgba(18, 53, 97, 0.92) 100%);
+  box-shadow:
+    0 22px 42px rgba(8, 21, 49, 0.28),
+    inset 0 1px 0 rgba(255,255,255,0.22);
+  backdrop-filter: blur(14px);
+  animation: pricing-learn-fab-enter 0.22s ease-out;
+}
+
+.pricing-learn-fab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle at 18% 0%, rgba(245, 158, 11, 0.24), transparent 34%);
+}
+
+.pricing-learn-fab > * {
+  position: relative;
+  z-index: 1;
+}
+
+.pricing-learn-fab__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.12);
+  color: #DBEAFE;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.pricing-learn-fab__close:hover {
+  background: rgba(255,255,255,0.22);
+  transform: scale(1.05);
+}
+
+.pricing-learn-fab__eyebrow {
+  color: #FDE68A;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pricing-learn-fab__title {
+  max-width: calc(100% - 30px);
+  color: #F8FAFC;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.pricing-learn-fab p {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.82);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.pricing-learn-fab__button {
+  min-height: 44px;
+}
+
+@keyframes pricing-learn-fab-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes activation-key-shake {
   0% { transform: translateX(0); }
   20% { transform: translateX(-5px); }
@@ -1510,6 +1606,23 @@
   .pricing-activation-shortcut {
     padding: 14px;
     border-radius: 18px;
+  }
+
+  .pricing-learn-fab {
+    right: 12px;
+    bottom: max(86px, calc(env(safe-area-inset-bottom) + 72px));
+    width: min(274px, calc(100vw - 24px));
+    padding: 12px;
+    border-radius: 18px;
+    gap: 8px;
+  }
+
+  .pricing-learn-fab__title {
+    font-size: 0.94rem;
+  }
+
+  .pricing-learn-fab p {
+    font-size: 11px;
   }
 
   .pricing-activation-shortcut__price {

@@ -6,7 +6,7 @@
  * - Quản lý gia hạn, hết hạn, hoàn tiền 3 ngày
  * - Lưu subscription vào SQLite
  */
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, type UIEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Check, X, Unlock, Gift, Shield, Copy, CheckCircle, RefreshCw, Clock, AlertTriangle, CreditCard, ExternalLink } from 'lucide-react';
 import { useAppData } from '../../../shared/providers/AppDataProvider';
@@ -691,9 +691,12 @@ export function PricingPage() {
   const [showGradeConfirmModal, setShowGradeConfirmModal] = useState(false);
   const [gradeConfirmDone, setGradeConfirmDone] = useState(false);
   const [pendingStandardActivation, setPendingStandardActivation] = useState<PendingStandardActivation | null>(null);
+  const [showFloatingLearnCta, setShowFloatingLearnCta] = useState(false);
+  const [dismissedFloatingLearnCta, setDismissedFloatingLearnCta] = useState(false);
   // Subscription state
   const [activeSub, setActiveSub] = useState<Subscription | null>(null);
   const [subExpiry, setSubExpiry] = useState(localStorage.getItem(SUB_EXPIRY_KEY));
+  const pricingShellRef = useRef<HTMLDivElement | null>(null);
   const gradePickerRef = useRef<HTMLDivElement | null>(null);
   const previousDetectedPlanRef = useRef<'standard' | 'standard_1year_1grade' | 'standard_1year_3grade' | 'premium' | null>(null);
   const currentDeviceId = getDeviceId();
@@ -730,6 +733,17 @@ export function PricingPage() {
     'Mua trên web, nhận key và quay lại app để học',
     'Chỉ cần đúng key là mở đúng gói',
   ];
+  const syncFloatingLearnCta = useCallback((scrollTop: number) => {
+    if (dismissedFloatingLearnCta) {
+      setShowFloatingLearnCta(false);
+      return;
+    }
+    const shouldShow = scrollTop > 260;
+    setShowFloatingLearnCta((prev) => (prev === shouldShow ? prev : shouldShow));
+  }, [dismissedFloatingLearnCta]);
+  const handlePricingShellScroll = useCallback((event: UIEvent<HTMLDivElement>) => {
+    syncFloatingLearnCta(event.currentTarget.scrollTop);
+  }, [syncFloatingLearnCta]);
   const activationShortcutPlans = [
     {
       id: 'standard',
@@ -983,6 +997,14 @@ export function PricingPage() {
       window.removeEventListener('hashchange', scrollToHashTarget);
     };
   }, []);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      syncFloatingLearnCta(pricingShellRef.current?.scrollTop ?? 0);
+    }, 320);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [syncFloatingLearnCta]);
 
   // Load active subscription from DB on mount
   useEffect(() => {
@@ -1432,10 +1454,21 @@ export function PricingPage() {
         border: '1px solid #CBD5E1',
         boxShadow: '0 4px 10px rgba(15,23,42,0.08)',
       };
+  const floatingLearnCtaTitle = currentPlan === 'free' ? 'Bắt đầu học ngay với Free' : `${currentPlanMeta?.name || 'Gói hiện tại'} đã sẵn sàng`;
+  const floatingLearnCtaCopy = currentPlan === 'free'
+    ? 'Quay lại trang học để tiếp tục ngay, không cần chờ mua key.'
+    : remaining !== null && remaining !== Infinity
+      ? `Bạn còn ${remaining} ngày để tiếp tục học không gián đoạn.`
+      : 'Mọi quyền lợi đã sẵn sàng. Chỉ cần quay lại màn học và bắt đầu.';
 
   return (
-    <div className="pricing-page-shell h-screen overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
-      <div className="pricing-page-container fade-in flex flex-col items-center gap-6 p-4 md:p-5 pb-10 w-full">
+    <div
+      ref={pricingShellRef}
+      className="pricing-page-shell h-screen overflow-y-auto"
+      style={{ WebkitOverflowScrolling: 'touch' }}
+      onScroll={handlePricingShellScroll}
+    >
+      <div className="pricing-page-container fade-in flex flex-col items-center gap-6 p-4 md:p-5 pb-28 md:pb-24 w-full">
       <section className="pricing-pro-hero w-full">
         <div className="pricing-pro-title-card">
           <div className="pricing-pro-mark">
@@ -2182,6 +2215,34 @@ export function PricingPage() {
           </div>
         </div>
       </div>
+
+      {showFloatingLearnCta && !showGradeConfirmModal && (
+        <aside className="pricing-learn-fab" aria-label="Lối tắt vào học ngay">
+          <button
+            type="button"
+            className="pricing-learn-fab__close"
+            onClick={() => {
+              setDismissedFloatingLearnCta(true);
+              setShowFloatingLearnCta(false);
+            }}
+            aria-label="Ẩn lối tắt vào học"
+          >
+            <X size={14} />
+          </button>
+          <div className="pricing-learn-fab__eyebrow">
+            {currentPlan === 'free' ? 'Học ngay' : 'Tiếp tục học'}
+          </div>
+          <div className="pricing-learn-fab__title">{floatingLearnCtaTitle}</div>
+          <p>{floatingLearnCtaCopy}</p>
+          <button
+            className={`${premiumButtonPrimaryClass} w-full pricing-learn-fab__button`}
+            style={topPrimaryButtonStyle}
+            onClick={() => navigate('/home')}
+          >
+            Vào học ngay →
+          </button>
+        </aside>
+      )}
       </div>
     </div>
   );
