@@ -15,11 +15,9 @@ export function SubjectPage() {
 
   const grade = state.student.grade;
   const subjects = getSubjectsForGrade(grade);
-
-  // Count lessons per subject for the current grade
   const allGradeLessons = getGradeLessons();
   const lessonCountBySubject = (code: string) =>
-    allGradeLessons.filter((l) => l.subjectCode === code).length;
+    allGradeLessons.filter((lesson) => lesson.subjectCode === code).length;
 
   const handleSelectSubject = (code: string) => {
     if (isFreePlan && code !== 'math') {
@@ -31,23 +29,30 @@ export function SubjectPage() {
     navigate('/lessons');
   };
 
+  const readySubjectCount = subjects.filter(
+    (subject) => subject.hasContent && lessonCountBySubject(subject.code) > 0,
+  ).length;
+
   return (
-    <div className="fade-in max-w-3xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <MascotCharacter size="sm" />
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-primary-dark)' }}>
+    <div className="subpage-shell subpage-shell--compact fade-in max-w-3xl mx-auto">
+      <div className="subpage-hero subpage-hero--subject">
+        <div className="subpage-hero__avatar"><MascotCharacter size="sm" /></div>
+        <div className="subpage-hero__content">
+          <div className="subpage-hero__eyebrow">{getGradeLabel(grade)}</div>
+          <h1 className="subpage-hero__title" style={{ color: 'var(--color-primary-dark)' }}>
             📚 Chọn Môn Học
           </h1>
-          <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
+          <p className="subpage-hero__subtitle" style={{ color: 'var(--color-text-light)' }}>
             Cùng {theme.mascotName} chọn môn muốn học nhé!
           </p>
         </div>
+        <div className="subpage-hero__meta">
+          <span className="subpage-hero__pill">{subjects.length} môn</span>
+          <span className="subpage-hero__pill">{readySubjectCount} sẵn sàng</span>
+        </div>
       </div>
 
-      {/* Subject grid */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="subject-grid-premium">
         {subjects.map((subject) => {
           const count = lessonCountBySubject(subject.code);
           const unlockedByPlan = !isFreePlan || subject.code === 'math';
@@ -56,9 +61,10 @@ export function SubjectPage() {
           return (
             <button
               key={subject.code}
-              className="card flex flex-col items-center gap-3 p-6 cursor-pointer transition-all relative"
+              className="subject-card-premium"
+              data-active={state.student.subjectCode === subject.code && available}
+              data-disabled={!available}
               style={{
-                opacity: available ? 1 : 0.55,
                 border: state.student.subjectCode === subject.code && available
                   ? `2px solid ${subject.color}`
                   : '2px solid transparent',
@@ -66,46 +72,32 @@ export function SubjectPage() {
               onClick={() => available && handleSelectSubject(subject.code)}
               disabled={!available}
             >
-              {/* Badge */}
               {!available && (
-                <div
-                  className="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold"
-                  style={{ background: '#FEF3C7', color: '#92400E' }}
-                >
+                <div className="subject-card-badge" style={{ background: '#FEF3C7', color: '#92400E' }}>
                   <Lock size={10} /> {unlockedByPlan ? 'Sắp có' : 'Standard'}
                 </div>
               )}
 
-              {/* Icon */}
-              <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl"
-                style={{ background: subject.bgColor }}
-              >
+              <div className="subject-card-icon" style={{ background: subject.bgColor }}>
                 {subject.emoji}
               </div>
 
-              {/* Name */}
-              <span className="font-bold text-lg" style={{ color: subject.color }}>
+              <span className="subject-card-title" style={{ color: subject.color }}>
                 {subject.name}
               </span>
 
-              {/* Lesson count */}
               {available ? (
-                <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+                <span className="subject-card-meta" style={{ color: 'var(--color-text-light)' }}>
                   {count} bài học
                 </span>
               ) : (
-                <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+                <span className="subject-card-meta" style={{ color: 'var(--color-text-light)' }}>
                   {unlockedByPlan ? 'Đang phát triển...' : 'Gói Free chỉ mở Toán'}
                 </span>
               )}
 
-              {/* Current subject indicator */}
               {state.student.subjectCode === subject.code && available && (
-                <div
-                  className="flex items-center gap-1 text-xs font-bold"
-                  style={{ color: subject.color }}
-                >
+                <div className="subject-card-current" style={{ color: subject.color }}>
                   <BookOpen size={12} /> Đang học
                 </div>
               )}
@@ -114,11 +106,9 @@ export function SubjectPage() {
         })}
       </div>
 
-      {/* Info footer */}
-      <div className="card-flat text-center mt-6">
+      <div className="subpage-info-bar card-flat">
         <span className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-          🎒 {getGradeLabel(grade)} · {subjects.length} môn học ·{' '}
-          {subjects.filter((s) => s.hasContent && lessonCountBySubject(s.code) > 0).length} môn sẵn sàng
+          🎒 {getGradeLabel(grade)} · {subjects.length} môn học · {readySubjectCount} môn sẵn sàng
         </span>
         {isFreePlan && (
           <div className="mt-2 text-xs font-bold" style={{ color: '#1D4ED8' }}>

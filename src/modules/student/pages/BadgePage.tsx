@@ -14,53 +14,62 @@ export function BadgePage() {
   const masteredCount = state.progress.filter((p) => p.masteryLevel === 'mastered').length;
 
   const ctx: BadgeContext = {
-    completedCount, totalLessons, averageScore, streak,
-    totalPracticeSets, perfectScoreCount, masteredCount,
+    completedCount,
+    totalLessons,
+    averageScore,
+    streak,
+    totalPracticeSets,
+    perfectScoreCount,
+    masteredCount,
   };
 
   const unlocked = getUnlockedBadges(ctx);
   const unlockedIds = new Set(unlocked.map((b) => b.id));
+  const completionPct = Math.round((unlocked.length / allBadges.length) * 100);
 
   return (
-    <div className="fade-in max-w-3xl mx-auto">
-      <div className="flex items-center gap-3 mb-6">
-        <MascotCharacter size="sm" />
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-primary-dark)' }}>
+    <div className="subpage-shell subpage-shell--compact fade-in max-w-4xl mx-auto">
+      <div className="subpage-hero subpage-hero--badge">
+        <div className="subpage-hero__avatar"><MascotCharacter size="sm" /></div>
+        <div className="subpage-hero__content">
+          <div className="subpage-hero__eyebrow">Bộ sưu tập</div>
+          <h1 className="subpage-hero__title" style={{ color: 'var(--color-primary-dark)' }}>
             🏅 Huy Hiệu Thành Tích
           </h1>
-          <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
+          <p className="subpage-hero__subtitle" style={{ color: 'var(--color-text-light)' }}>
             Đã mở khóa {unlocked.length}/{allBadges.length} huy hiệu
           </p>
         </div>
+        <div className="subpage-hero__meta">
+          <span className="subpage-hero__pill">🏅 {unlocked.length}</span>
+          <span className="subpage-hero__pill">{completionPct}% hoàn thành</span>
+        </div>
       </div>
 
-      {/* Progress bar */}
-      <div className="card mb-6">
+      <div className="badge-progress-card subpage-panel">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-bold" style={{ color: 'var(--color-primary)' }}>
             Tiến trình sưu tập
           </span>
           <span className="text-sm font-bold" style={{ color: 'var(--color-primary)' }}>
-            {Math.round((unlocked.length / allBadges.length) * 100)}%
+            {completionPct}%
           </span>
         </div>
         <div className="progress-bar">
           <div
             className="progress-bar-fill"
-            style={{ width: `${(unlocked.length / allBadges.length) * 100}%` }}
+            style={{ width: `${completionPct}%` }}
           />
         </div>
       </div>
 
-      {/* Badge grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div className="badge-grid-premium">
         {allBadges.map((badge) => {
           const isUnlocked = unlockedIds.has(badge.id);
           return (
             <div
               key={badge.id}
-              className="card text-center p-5 transition-transform"
+              className="badge-card-premium"
               style={{
                 opacity: isUnlocked ? 1 : 0.4,
                 filter: isUnlocked ? 'none' : 'grayscale(1)',

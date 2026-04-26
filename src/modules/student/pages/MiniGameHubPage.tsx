@@ -128,21 +128,26 @@ export function MiniGameHubPage() {
   };
 
   return (
-    <div className="fade-in max-w-5xl mx-auto">
+    <div className="subpage-shell subpage-shell--wide fade-in max-w-5xl mx-auto">
       {/* Header */}
       <div
-        className="rounded-3xl p-4 md:p-6 mb-6 relative overflow-hidden"
+        className="minigame-hero-premium"
         style={{ background: 'linear-gradient(135deg,#FDE68A,#FCA5A5 45%,#93C5FD)' }}
       >
-        <div className="flex items-center gap-3 relative z-10">
-          <MascotCharacter size="md" />
-          <div className="flex-1">
-            <h1 className="text-2xl md:text-3xl font-black flex items-center gap-2" style={{ color: '#111827' }}>
+        <div className="subpage-hero subpage-hero--minigame">
+          <div className="subpage-hero__avatar"><MascotCharacter size="md" /></div>
+          <div className="subpage-hero__content">
+            <div className="subpage-hero__eyebrow">Mini-game</div>
+            <h1 className="subpage-hero__title flex items-center gap-2" style={{ color: '#111827' }}>
               <Gamepad2 size={30} /> Vương Quốc Mini-Game
             </h1>
-            <p className="text-sm md:text-base mt-1" style={{ color: '#374151' }}>
+            <p className="subpage-hero__subtitle" style={{ color: '#374151' }}>
               Chọn trò chơi bé thích nhất và săn thật nhiều sao nhé!
             </p>
+          </div>
+          <div className="subpage-hero__meta">
+            <span className="subpage-hero__pill">🎮 {shownGames.length}</span>
+            <span className="subpage-hero__pill">⭐ {activeTag === 'all' ? 'All' : tagMeta[activeTag].label}</span>
           </div>
         </div>
         <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/40" />
@@ -150,7 +155,7 @@ export function MiniGameHubPage() {
       </div>
 
       {/* Filter chips */}
-      <div className="flex flex-wrap gap-2 mb-5">
+      <div className="subpage-chip-bar">
         {(Object.keys(tagMeta) as Array<keyof typeof tagMeta>).map((k) => {
           const Icon = tagMeta[k].icon;
           const active = activeTag === k;
@@ -158,7 +163,7 @@ export function MiniGameHubPage() {
             <button
               key={k}
               onClick={() => setActiveTag(k as 'all' | GameInfo['tag'])}
-              className="px-3 py-2 rounded-full text-sm font-bold inline-flex items-center gap-1 transition-all"
+              className="minigame-filter-chip"
               style={{
                 background: active ? '#111827' : '#F3F4F6',
                 color: active ? '#fff' : '#111827',
@@ -171,12 +176,12 @@ export function MiniGameHubPage() {
       </div>
 
       {/* Game cards grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="minigame-grid-premium">
         {shownGames.map((game, i) => (
           <button
             key={game.id}
             onClick={() => navigate(game.path)}
-            className="group relative overflow-hidden rounded-3xl text-left p-0 border-none shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1"
+            className="minigame-card-premium group"
             style={{
               background: game.gradient,
               animationDelay: `${i * 70}ms`,

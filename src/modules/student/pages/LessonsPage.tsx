@@ -23,62 +23,68 @@ export function LessonsPage() {
     }
   }, [currentPlan, navigate, state.student.subjectCode]);
 
-  const gradeLessons = getSubjectLessons();
-  const lessons = gradeLessons.map((lesson) => {
+  const lessons = getSubjectLessons().map((lesson) => {
     const progress = getLessonProgress(lesson.id);
-    const qCount = getLessonQuestions(lesson.id).length;
-    return { ...lesson, progress, questionCount: qCount };
+    const questionCount = getLessonQuestions(lesson.id).length;
+    return { ...lesson, progress, questionCount };
   });
 
-  const filtered = lessons.filter((l) => {
-    if (tab === 'review') return l.progress?.needsReview === 1;
-    if (tab === 'done') return l.progress && l.progress.attemptCount > 0 && !l.progress.needsReview;
+  const filtered = lessons.filter((lesson) => {
+    if (tab === 'review') return lesson.progress?.needsReview === 1;
+    if (tab === 'done') return Boolean(lesson.progress && lesson.progress.attemptCount > 0 && !lesson.progress.needsReview);
     return true;
   });
 
   const getMasteryBadge = (mastery: string) => {
     switch (mastery) {
-      case 'mastered': return { label: '⭐ Giỏi lắm!', cls: 'badge-mastered' };
-      case 'good': return { label: '👍 Tốt', cls: 'badge-good' };
-      case 'learning': return { label: '📖 Đang học', cls: 'badge-learning' };
-      default: return { label: '🆕 Chưa học', cls: 'badge-new' };
+      case 'mastered':
+        return { label: '⭐ Giỏi lắm!', cls: 'badge-mastered' };
+      case 'good':
+        return { label: '👍 Tốt', cls: 'badge-good' };
+      case 'learning':
+        return { label: '📖 Đang học', cls: 'badge-learning' };
+      default:
+        return { label: '🆕 Chưa học', cls: 'badge-new' };
     }
   };
 
   return (
-    <div className="fade-in">
-      <div className="flex items-center gap-3 mb-6">
-        <MascotCharacter size="sm" />
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-primary-dark)' }}>
+    <div className="subpage-shell fade-in">
+      <div className="subpage-hero subpage-hero--lesson">
+        <div className="subpage-hero__avatar"><MascotCharacter size="sm" /></div>
+        <div className="subpage-hero__content">
+          <div className="subpage-hero__eyebrow">{getGradeLabel(state.student.grade)}</div>
+          <h1 className="subpage-hero__title" style={{ color: 'var(--color-primary-dark)' }}>
             {subject?.emoji || '📚'} {subject?.name || 'Toán'} {getGradeLabel(state.student.grade)}
           </h1>
-          <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
+          <p className="subpage-hero__subtitle" style={{ color: 'var(--color-text-light)' }}>
             Cùng {theme.mascotName} chinh phục {lessons.length} bài học nào!
           </p>
         </div>
+        <div className="subpage-hero__meta">
+          <span className="subpage-hero__pill">{lessons.length} bài</span>
+          <span className="subpage-hero__pill">{filtered.length} hiển thị</span>
+        </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-2 mb-6">
+      <div className="subpage-chip-bar">
         {([
           { key: 'all' as Tab, label: `Tất cả (${lessons.length})` },
-          { key: 'review' as Tab, label: `Cần ôn lại (${lessons.filter(l => l.progress?.needsReview).length})` },
-          { key: 'done' as Tab, label: `Đã học (${lessons.filter(l => l.progress && l.progress.attemptCount > 0).length})` },
-        ]).map((t) => (
+          { key: 'review' as Tab, label: `Cần ôn lại (${lessons.filter((lesson) => lesson.progress?.needsReview).length})` },
+          { key: 'done' as Tab, label: `Đã học (${lessons.filter((lesson) => lesson.progress && lesson.progress.attemptCount > 0).length})` },
+        ]).map((item) => (
           <button
-            key={t.key}
+            key={item.key}
             className="chip-tab"
-            data-active={tab === t.key}
-            onClick={() => setTab(t.key)}
+            data-active={tab === item.key}
+            onClick={() => setTab(item.key)}
           >
-            {t.label}
+            {item.label}
           </button>
         ))}
       </div>
 
-      {/* Lessons list */}
-      <div className="grid gap-4">
+      <div className="lesson-list-premium">
         {filtered.length === 0 ? (
           <EmptyState
             emoji="🎉"
@@ -86,28 +92,27 @@ export function LessonsPage() {
             description="Hãy bắt đầu học để thấy tiến bộ nhé!"
           />
         ) : (
-          filtered.map((lesson, i) => {
+          filtered.map((lesson, index) => {
             const badge = getMasteryBadge(lesson.progress?.masteryLevel || 'new');
+
             return (
               <button
                 key={lesson.id}
-                className="card flex items-center gap-4 cursor-pointer hover:scale-[1.01] transition-transform text-left w-full"
+                className="lesson-card-premium"
                 onClick={() => navigate(`/lessons/${lesson.id}`)}
               >
-                {/* Number */}
                 <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold text-white shrink-0"
+                  className="lesson-card-index"
                   style={{ background: lesson.progress?.masteryLevel === 'mastered' ? 'var(--color-success)' : 'var(--color-primary)' }}
                 >
-                  {lesson.progress?.masteryLevel === 'mastered' ? <CheckCircle size={24} /> : i + 1}
+                  {lesson.progress?.masteryLevel === 'mastered' ? <CheckCircle size={24} /> : index + 1}
                 </div>
 
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="font-bold text-base truncate" style={{ color: 'var(--color-text)' }}>
+                <div className="lesson-card-body">
+                  <div className="lesson-card-title" style={{ color: 'var(--color-text)' }}>
                     {lesson.title}
                   </div>
-                  <div className="flex items-center gap-3 mt-1 flex-wrap">
+                  <div className="lesson-card-meta">
                     <span className={`badge ${badge.cls}`}>{badge.label}</span>
                     <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>
                       ❓ {lesson.questionCount} câu hỏi
@@ -123,13 +128,11 @@ export function LessonsPage() {
                   </div>
                 </div>
 
-                {/* Arrow / review icon + direct quiz button */}
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="lesson-card-actions">
                   <button
-                    className="btn btn-primary text-xs flex items-center gap-1"
-                    style={{ padding: '6px 12px', fontSize: '12px' }}
-                    onClick={(e) => {
-                      e.stopPropagation();
+                    className="lesson-card-quick-btn"
+                    onClick={(event) => {
+                      event.stopPropagation();
                       navigate(`/lessons/${lesson.id}/practice?mode=practice_5`);
                     }}
                     title="Làm bài 5 câu nhanh"

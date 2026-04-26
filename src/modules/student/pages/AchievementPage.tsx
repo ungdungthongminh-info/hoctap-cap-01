@@ -83,22 +83,27 @@ export function AchievementPage() {
   const totalCount = ACHIEVEMENTS.length;
 
   return (
-    <div className="fade-in max-w-3xl mx-auto">
+    <div className="subpage-shell subpage-shell--compact fade-in max-w-3xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <MascotCharacter size="sm" />
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-primary-dark)' }}>
+      <div className="subpage-hero subpage-hero--achievement">
+        <div className="subpage-hero__avatar"><MascotCharacter size="sm" /></div>
+        <div className="subpage-hero__content">
+          <div className="subpage-hero__eyebrow">XP · Level</div>
+          <h1 className="subpage-hero__title" style={{ color: 'var(--color-primary-dark)' }}>
             🏆 Thành Tựu & XP
           </h1>
-          <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
+          <p className="subpage-hero__subtitle" style={{ color: 'var(--color-text-light)' }}>
             {unlockedCount}/{totalCount} thành tựu đã mở khóa
           </p>
+        </div>
+        <div className="subpage-hero__meta">
+          <span className="subpage-hero__pill">🏆 {unlockedCount}</span>
+          <span className="subpage-hero__pill">✨ {xpData.totalXp}</span>
         </div>
       </div>
 
       {/* XP & Level Card */}
-      <div className="card mb-6" style={{ background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))' }}>
+      <div className="achievement-xp-card" style={{ background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))' }}>
         <div className="flex items-center gap-4">
           <div className="text-5xl">{xpData.levelEmoji}</div>
           <div className="flex-1">
@@ -128,7 +133,7 @@ export function AchievementPage() {
 
       {/* New unlocks toast */}
       {newUnlocks.length > 0 && (
-        <div className="card mb-6 animate-bounce-once" style={{ background: '#FEF3C7', border: '2px solid #FBBF24' }}>
+        <div className="achievement-unlock-card animate-bounce-once" style={{ background: '#FEF3C7', border: '2px solid #FBBF24' }}>
           <div className="text-center">
             <div className="text-2xl mb-1">🎉</div>
             <div className="font-bold" style={{ color: '#92400E' }}>Mới mở khóa!</div>
@@ -147,7 +152,7 @@ export function AchievementPage() {
       )}
 
       {/* Category filter */}
-      <div className="flex gap-2 mb-6 flex-wrap">
+      <div className="subpage-chip-bar">
         {categories.map((cat) => (
           <button
             key={cat}
@@ -161,14 +166,14 @@ export function AchievementPage() {
       </div>
 
       {/* Achievements grid */}
-      <div className="grid gap-3">
+      <div className="achievement-list-premium">
         {filtered.map((a: Achievement) => {
           const unlocked = unlockedIds.includes(a.id);
           const isNew = newUnlocks.includes(a.id);
           return (
             <div
               key={a.id}
-              className={`card flex items-center gap-4 transition-all ${isNew ? 'animate-bounce-once' : ''}`}
+              className={`achievement-card-premium ${isNew ? 'animate-bounce-once' : ''}`}
               style={{
                 opacity: unlocked ? 1 : 0.5,
                 background: unlocked
