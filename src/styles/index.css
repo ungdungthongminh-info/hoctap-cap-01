@@ -4343,8 +4343,9 @@ button.card-flat:active {
     width: 100%;
     gap: 12px;
     overflow: visible;
-    /* Cần flex-shrink: 0 để sidebar-nav không bị cắt, để container sidebar scroll */
     flex-shrink: 0;
+    /* Override touch-action: pan-x từ mobile base CSS — pan-x chặn scroll dọc cha */
+    touch-action: pan-y;
   }
 
   .app-sidebar.mobile-nav-open .sidebar-primary-nav,
