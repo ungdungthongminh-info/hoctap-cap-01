@@ -238,6 +238,14 @@ export function Sidebar() {
     };
   }, []);
 
+  useEffect(() => {
+    if (isMobileNav && isMobileMenuOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = prev; };
+    }
+  }, [isMobileNav, isMobileMenuOpen]);
+
   const handleNavItemClick = () => {
     if (isMobileNav) {
       setIsMobileMenuOpen(false);

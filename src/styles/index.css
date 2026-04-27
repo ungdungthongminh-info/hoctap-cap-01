@@ -4324,6 +4324,8 @@ button.card-flat:active {
     justify-content: flex-start;
     overflow-y: auto;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     z-index: 60;
     border-right: 1px solid color-mix(in srgb, var(--color-primary-light) 28%, white);
     border-bottom: none;
@@ -4341,6 +4343,8 @@ button.card-flat:active {
     width: 100%;
     gap: 12px;
     overflow: visible;
+    /* Cần flex-shrink: 0 để sidebar-nav không bị cắt, để container sidebar scroll */
+    flex-shrink: 0;
   }
 
   .app-sidebar.mobile-nav-open .sidebar-primary-nav,
