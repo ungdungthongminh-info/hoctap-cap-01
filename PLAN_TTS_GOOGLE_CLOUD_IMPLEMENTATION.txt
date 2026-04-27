@@ -1,0 +1,279 @@
+PLAN TRIỂN KHAI GOOGLE CLOUD TTS - HOC TAP CAP 01
+
+MUC TIEU
+- Chuyen he thong TTS hien tai sang Google Cloud Text-to-Speech.
+- Frontend khong goi Google Cloud truc tiep.
+- Dung cache audio MP3 rieng, khong anh huong data hoc tap.
+- Giu facade tuong thich nguoc: speakText().
+- Co fallback native khi backend hoac Google Cloud loi.
+
+NGUYEN TAC BAT BUOC
+- TUYET DOI KHONG doi STORAGE_KEYS.APP_STATE = hhk_app_state.
+- TUYET DOI KHONG doi schema student / progress / practiceSets / answers trong src/shared/utils/persistence.ts.
+- TUYET DOI KHONG luu base64 audio vao localStorage.
+- TUYET DOI KHONG luu blob audio vao progress / lesson / question / answers.
+- KHONG commit credential Google Cloud.
+- Cache audio la du lieu phu, xoa cache khong duoc anh huong data hoc tap.
+
+HIEN TRANG CODE
+- TTS hien tai nam trong src/shared/utils/sounds.ts.
+- Tieng Viet dang goi Google Translate TTS endpoint tren frontend.
+- Backend chua co route/controller/service TTS.
+- Cac man hinh dang goi speakText():
+  - src/modules/student/pages/LessonDetailPage.tsx
+  - src/modules/student/pages/PracticePage.tsx
+  - src/modules/student/pages/PreGradeMiniGamesPage.tsx
+  - src/modules/student/pages/TtsSettingsPage.tsx
+
+PHASE 1 - BACKEND TTS INFRASTRUCTURE
+
+1.1. Cap nhat dependency backend
+- File: backend/package.json
+- Them package: @google-cloud/text-to-speech
+
+1.2. Them env va bao mat
+- File: backend/.env.example hoac file env mau dang dung
+- Them cac bien:
+  - TTS_PROVIDER=google-cloud
+  - APP_CONTENT_VERSION=2026-04-27-v1
+  - GOOGLE_APPLICATION_CREDENTIALS=./secrets/google-tts-service-account.json
+  - GOOGLE_TTS_DEFAULT_LANGUAGE=vi-VN
+  - GOOGLE_TTS_DEFAULT_VOICE=vi-VN-Wavenet-A
+  - GOOGLE_TTS_AUDIO_ENCODING=MP3
+  - TTS_MONTHLY_CHAR_LIMIT=1000000
+  - TTS_MAX_TEXT_LENGTH=1800
+- File: .gitignore va backend/.gitignore
+  - Ignore backend/secrets/
+  - Ignore file credential json
+
+1.3. Them bang cache TTS vao backend DB
+- File: backend/src/db/init.ts
+- Them CREATE TABLE IF NOT EXISTS tts_cache (...)
+- Cot toi thieu:
+  - id
+  - provider
+  - voice
+  - speed
+  - lang
+  - usage
+  - content_version
+  - text_hash
+  - audio_path
+  - char_count
+  - hit_count
+  - created_at
+  - updated_at
+- Tao unique index theo cache key:
+  provider + voice + speed + lang + usage + content_version + text_hash
+
+1.4. Tao adapter Google Cloud
+- File moi: backend/src/services/tts/GoogleTtsAdapter.ts
+- Nhiem vu:
+  - Khoi tao client @google-cloud/text-to-speech
+  - Nhap text, lang, voice, speed
+  - Tra MP3 buffer
+  - Validate TTS_MAX_TEXT_LENGTH
+
+1.5. Tao cache repository
+- File moi: backend/src/services/tts/cacheRepo.ts
+- Nhiem vu:
+  - Tao hash text
+  - Tim cache theo full cache key
+  - Save metadata vao sqlite
+  - Tang hit_count khi cache hit
+  - Tao duong dan luu file MP3 vao backend/data/tts-cache/google-cloud/<APP_CONTENT_VERSION>/
+  - Co helper xoa cache neu can
+
+1.6. Tao controller
+- File moi: backend/src/controllers/ttsController.ts
+- API chinh:
+  - POST /tts/synthesize
+    Input: text, lang, voiceId, speed, usage, contentVersion
+    Output: audioUrl, cacheStatus, provider, voiceId
+  - GET /tts/cache-stats
+    Output: tong so file cache, usage theo ngay/thang
+  - DELETE /tts/cache
+    Output: xoa cache theo filter hoac toan bo cache
+- Validation:
+  - Text length
+  - VoiceId hop le
+  - Speed trong range cho phep
+  - usage nam trong danh sach cho phep
+
+1.7. Tao route
+- File moi: backend/src/routes/tts.ts
+- Mount cac endpoint tu controller
+
+1.8. Noi route vao backend
+- File: backend/src/index.ts
+- Them app.use(API_PREFIX, ttsRoutes)
+- Them static serving cho audio cache neu can:
+  - /tts-audio -> backend/data/tts-cache
+
+PHASE 2 - SAFETY, RATE LIMIT, BUDGET
+
+2.1. Rate limit
+- Gioi han request theo IP cho /api/v1/tts/synthesize
+- Chan spam request lap lai qua nhanh
+
+2.2. Text limit
+- Khong cho gui text tu do qua dai
+- Limit theo TTS_MAX_TEXT_LENGTH
+- Khuyen nghi phia frontend chi gui text da duoc app tao ra
+
+2.3. Log usage
+- Log so ky tu da dung theo ngay va theo thang
+- Co check TTS_MONTHLY_CHAR_LIMIT truoc khi goi Google Cloud
+- Neu vuot limit:
+  - Khong goi Google Cloud nua
+  - Fallback native
+  - Tra canh bao cho frontend
+
+PHASE 3 - FRONTEND TTS REFACTOR
+
+3.1. Tao ttsClient
+- File moi: src/shared/services/tts/ttsClient.ts
+- Nhiem vu:
+  - Goi backend /api/v1/tts/synthesize
+  - Nhan audioUrl
+  - Khong goi Google Cloud truc tiep
+
+3.2. Tao ttsPolicy
+- File moi: src/shared/services/tts/ttsPolicy.ts
+- Dinh nghia policy:
+  - lesson-prefetch
+  - lesson-read-all
+  - practice-on-demand
+  - pre-grade-auto
+  - feedback-short
+  - fallback-native
+
+3.3. Tao useTts
+- File moi: src/shared/hooks/useTts.ts
+- Tra ve:
+  - speak
+  - stop
+  - pause
+  - resume
+  - isSpeaking
+  - isLoading
+  - error
+  - prefetch
+  - getStatus
+
+3.4. Refactor sounds.ts thanh facade
+- File: src/shared/utils/sounds.ts
+- Giu nguyen public API:
+  - speakText()
+  - stopSpeaking()
+  - isSpeaking()
+  - getTtsMode()
+  - setTtsMode()
+  - getTtsSpeed()
+  - setTtsSpeed()
+  - getPreferredVoice()
+  - setPreferredVoice()
+- Thay implementation ben trong:
+  - bo Google Translate endpoint
+  - delegate qua ttsClient/useTts
+  - fallback native neu backend hoac Google loi
+
+PHASE 4 - LESSON AUDIO
+
+4.1. Cap nhat LessonDetailPage
+- File: src/modules/student/pages/LessonDetailPage.tsx
+- Muc tieu:
+  - Moi LessonCard la 1 don vi audio rieng
+  - Khi mo bai, co the prefetch audio toan bai
+  - Them nut "Doc ca bai"
+  - Nut play/pause tung card
+  - Hien thi trang thai tung card:
+    - chua co audio
+    - dang tao
+    - da san sang
+    - dang phat
+
+4.2. Hanh vi doc ca bai
+- Doc theo thu tu card
+- Card nao da co cache thi phat ngay
+- Card nao chua co cache thi tao audio roi phat
+- Co the dung giua chung
+
+PHASE 5 - PRACTICE AUDIO
+
+5.1. Cap nhat PracticePage
+- File: src/modules/student/pages/PracticePage.tsx
+- Muc tieu:
+  - Chi doc khi hoc sinh bam nghe
+  - Cache cau hoi sau lan nghe dau
+  - Khong auto doc loi giai dai
+  - Feedback dung/sai dung audio ngan hoac native
+
+5.2. Cap nhat pre-grade
+- File: src/modules/student/pages/PreGradeMiniGamesPage.tsx
+- Muc tieu:
+  - Giu auto-read cho pre-grade
+  - Dung policy pre-grade-auto
+  - Feedback ngan, uu tien tiet kiem quota
+
+PHASE 6 - SETTINGS
+
+6.1. Cap nhat TtsSettingsPage
+- File: src/modules/student/pages/TtsSettingsPage.tsx
+- Doi cac mode thanh:
+  - Auto
+  - Google Cloud
+  - Native
+- Them:
+  - Chon voiceId
+  - Chon toc do doc
+  - Chon che do cache
+  - Nut xoa cache audio
+  - Hien thi usage/quota neu la admin hoac dev mode
+
+PHASE 7 - TEST VA NGHIEM THU
+
+7.1. Verification backend
+- POST /api/v1/tts/synthesize voi text tieng Viet tra ve audioUrl MP3
+- Goi lan 2 cung cache key phai cache hit
+- Khi vuot monthly char limit phai fallback native
+
+7.2. Verification frontend
+- LessonDetailPage co the doc tung card
+- LessonDetailPage co nut "Doc ca bai"
+- PracticePage chi doc on-demand
+- PreGradeMiniGamesPage van auto-read
+- TtsSettingsPage hien thi provider Google Cloud va Native
+- Khong con request toi translate.googleapis.com
+
+7.3. Verification data safety
+- Truoc va sau khi migrate, localStorage key hhk_app_state con nguyen
+- Progress cu van con
+- PracticeSets cu van con
+- Answers cu van con
+- Khong co audio nao duoc luu vao app state
+
+ROLLBACK
+- Neu backend TTS loi:
+  - Tam tat provider Google Cloud
+  - Dung fallback native
+  - Khong can xoa data hoc tap
+- Cache audio co the xoa ma khong anh huong data chinh
+
+THU TU LAM KHUYEN NGHI
+1. Backend dependency + env + db table
+2. GoogleTtsAdapter + cacheRepo + controller + route
+3. ttsClient + ttsPolicy + useTts
+4. Refactor sounds.ts
+5. LessonDetailPage
+6. PracticePage
+7. PreGradeMiniGamesPage
+8. TtsSettingsPage
+9. Safety + quota UI
+10. Verification + cleanup
+
+DINH NGHIA HOAN THANH
+- Bai hoc phat giong Google Cloud tu file MP3 cache
+- Luyen tap goi Google theo nhu cau nhung co cache
+- Mat mang hoac loi Google thi fallback native
+- Data hoc tap khong bi anh huong
