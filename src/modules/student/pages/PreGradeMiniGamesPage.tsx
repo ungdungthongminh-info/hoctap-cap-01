@@ -2,164 +2,17 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, CheckCircle2, PencilLine, Shapes, Sparkles, Volume2 } from 'lucide-react';
 import { playCorrect, playWrong, speakText, stopSpeaking } from '../../../shared/utils/sounds';
+import { countRounds, letterRounds, PRE_GRADE_FEEDBACK_TEXT, traceRounds } from '../content/preGradeMiniGameRounds';
+import { buildPreGradeFeedbackAssetKey, buildPreGradePromptAssetKey, type PreGradeMode } from '../../../shared/services/tts/ttsAssetKeys';
 
-interface LetterRound {
-  image: string;
-  hint: string;
-  promptSpeech: string;
-  answer: string;
-  options: Array<{ key: string; icon: string; label: string }>;
-}
-
-interface CountRound {
-  image: string;
-  promptSpeech: string;
-  answer: number;
-  options: Array<{ key: number; icon: string }>;
-}
-
-interface TraceRound {
-  image: string;
-  promptSpeech: string;
-  pattern: string;
-  points: Array<{ key: string; icon: string }>;
-  answer: string;
-}
-
-type Mode = 'letters' | 'counting' | 'tracing';
-
-const letterRounds: LetterRound[] = [
-  {
-    image: '🧒👩',
-    hint: 'Bé và mẹ',
-    promptSpeech: 'Nhìn hình bé và mẹ. Con chạm vào tiếng ME nhé.',
-    answer: 'me',
-    options: [
-      { key: 'me', icon: '👩', label: 'ME' },
-      { key: 'ba', icon: '👨', label: 'BA' },
-      { key: 'be', icon: '🧒', label: 'BÉ' },
-    ],
-  },
-  {
-    image: '👶🐄',
-    hint: 'Bé và bò',
-    promptSpeech: 'Con tìm tiếng BÉ trong các lựa chọn nhé.',
-    answer: 'be',
-    options: [
-      { key: 'be', icon: '👶', label: 'BÉ' },
-      { key: 'bo', icon: '🐄', label: 'BÒ' },
-      { key: 'na', icon: '👧', label: 'NA' },
-    ],
-  },
-  {
-    image: '👨🏠',
-    hint: 'Ba ở nhà',
-    promptSpeech: 'Con chọn tiếng BA nhé.',
-    answer: 'ba',
-    options: [
-      { key: 'na', icon: '👧', label: 'NA' },
-      { key: 'ba', icon: '👨', label: 'BA' },
-      { key: 'me', icon: '👩', label: 'ME' },
-    ],
-  },
-  {
-    image: '👧🌸',
-    hint: 'Bạn Na',
-    promptSpeech: 'Con chạm vào tiếng NA nào.',
-    answer: 'na',
-    options: [
-      { key: 'be', icon: '👶', label: 'BÉ' },
-      { key: 'na', icon: '👧', label: 'NA' },
-      { key: 'ba', icon: '👨', label: 'BA' },
-    ],
-  },
-];
-
-const countRounds: CountRound[] = [
-  {
-    image: '🍎🍎🍎',
-    promptSpeech: 'Có bao nhiêu quả táo? Con chạm vào số đúng.',
-    answer: 3,
-    options: [
-      { key: 2, icon: '2️⃣' },
-      { key: 3, icon: '3️⃣' },
-      { key: 4, icon: '4️⃣' },
-    ],
-  },
-  {
-    image: '⭐ ⭐ ⭐ ⭐ ⭐',
-    promptSpeech: 'Đếm sao thật nhanh. Có mấy ngôi sao?',
-    answer: 5,
-    options: [
-      { key: 4, icon: '4️⃣' },
-      { key: 5, icon: '5️⃣' },
-      { key: 6, icon: '6️⃣' },
-    ],
-  },
-  {
-    image: '🎈🎈🎈🎈',
-    promptSpeech: 'Có mấy quả bóng bay nhỉ?',
-    answer: 4,
-    options: [
-      { key: 3, icon: '3️⃣' },
-      { key: 4, icon: '4️⃣' },
-      { key: 5, icon: '5️⃣' },
-    ],
-  },
-  {
-    image: '🐟🐟',
-    promptSpeech: 'Con đếm số cá trong bể nhé.',
-    answer: 2,
-    options: [
-      { key: 1, icon: '1️⃣' },
-      { key: 2, icon: '2️⃣' },
-      { key: 3, icon: '3️⃣' },
-    ],
-  },
-];
-
-const traceRounds: TraceRound[] = [
-  {
-    image: '🖍️ ───>',
-    promptSpeech: 'Tô nét thẳng. Con chạm điểm bắt đầu bên trái.',
-    pattern: 'Nét thẳng',
-    answer: 'start',
-    points: [
-      { key: 'start', icon: '🟢' },
-      { key: 'middle', icon: '🟡' },
-      { key: 'end', icon: '🔴' },
-    ],
-  },
-  {
-    image: '🖍️ ⤿',
-    promptSpeech: 'Tô nét cong. Chạm điểm bắt đầu màu xanh.',
-    pattern: 'Nét cong',
-    answer: 'start',
-    points: [
-      { key: 'middle', icon: '🟡' },
-      { key: 'start', icon: '🟢' },
-      { key: 'end', icon: '🔴' },
-    ],
-  },
-  {
-    image: '🖍️ ⭕',
-    promptSpeech: 'Tô nét tròn. Chạm điểm bắt đầu để đi vòng tròn.',
-    pattern: 'Nét tròn',
-    answer: 'start',
-    points: [
-      { key: 'end', icon: '🔴' },
-      { key: 'start', icon: '🟢' },
-      { key: 'middle', icon: '🟡' },
-    ],
-  },
-];
+type Mode = PreGradeMode;
 
 export function PreGradeMiniGamesPage() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<Mode>('letters');
   const [idx, setIdx] = useState(0);
   const [score, setScore] = useState(0);
-  const [selected, setSelected] = useState<string>('');
+  const [selected, setSelected] = useState('');
   const [done, setDone] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
@@ -178,42 +31,50 @@ export function PreGradeMiniGamesPage() {
     setIsCorrect(null);
   };
 
+  const speakFeedback = useCallback((tone: keyof typeof PRE_GRADE_FEEDBACK_TEXT) => {
+    speakText(PRE_GRADE_FEEDBACK_TEXT[tone], 'vi', {
+      policy: 'feedback-short',
+      assetKey: buildPreGradeFeedbackAssetKey(tone),
+    });
+  }, []);
+
   const nextRound = () => {
     if (idx + 1 >= rounds) {
       setDone(true);
-      speakText('Tuyệt vời! Con đã hoàn thành mini game.', 'vi');
+      speakFeedback('completed');
       return;
     }
-    setIdx((v) => v + 1);
+    setIdx((value) => value + 1);
     setSelected('');
     setIsCorrect(null);
   };
 
   const getPromptSpeech = useCallback(() => {
     if (done) return '';
-    if (mode === 'letters') return letterRounds[idx].promptSpeech;
-    if (mode === 'counting') return countRounds[idx].promptSpeech;
-    return traceRounds[idx].promptSpeech;
-  }, [done, mode, idx]);
+    if (mode === 'letters') return letterRounds[idx]?.promptSpeech || '';
+    if (mode === 'counting') return countRounds[idx]?.promptSpeech || '';
+    return traceRounds[idx]?.promptSpeech || '';
+  }, [done, idx, mode]);
 
   const speakCurrentPrompt = useCallback(() => {
     const text = getPromptSpeech();
     if (!text) return;
-    speakText(text, 'vi');
-  }, [getPromptSpeech]);
+    speakText(text, 'vi', {
+      policy: 'pre-grade-auto',
+      assetKey: buildPreGradePromptAssetKey(mode, idx),
+    });
+  }, [getPromptSpeech, idx, mode]);
 
   useEffect(() => {
-    if (done) return;
+    if (done) return undefined;
     const timer = setTimeout(() => {
       speakCurrentPrompt();
     }, 220);
     return () => clearTimeout(timer);
-  }, [mode, idx, done, speakCurrentPrompt]);
+  }, [done, mode, idx, speakCurrentPrompt]);
 
-  useEffect(() => {
-    return () => {
-      stopSpeaking();
-    };
+  useEffect(() => () => {
+    stopSpeaking();
   }, []);
 
   const answerLetter = (value: string) => {
@@ -222,12 +83,12 @@ export function PreGradeMiniGamesPage() {
     const correct = value === letterRounds[idx].answer;
     setIsCorrect(correct);
     if (correct) {
-      setScore((s) => s + 1);
+      setScore((current) => current + 1);
       playCorrect();
-      speakText('Đúng rồi, con giỏi lắm!', 'vi');
+      speakFeedback('correct');
     } else {
       playWrong();
-      speakText('Chưa đúng đâu, mình thử lại câu tiếp theo nhé.', 'vi');
+      speakFeedback('wrong');
     }
   };
 
@@ -237,12 +98,12 @@ export function PreGradeMiniGamesPage() {
     const correct = value === countRounds[idx].answer;
     setIsCorrect(correct);
     if (correct) {
-      setScore((s) => s + 1);
+      setScore((current) => current + 1);
       playCorrect();
-      speakText('Chuẩn luôn, con đếm rất giỏi!', 'vi');
+      speakFeedback('correct');
     } else {
       playWrong();
-      speakText('Gần đúng rồi, con xem lại hình nhé.', 'vi');
+      speakFeedback('wrong');
     }
   };
 
@@ -252,12 +113,12 @@ export function PreGradeMiniGamesPage() {
     const correct = value === traceRounds[idx].answer;
     setIsCorrect(correct);
     if (correct) {
-      setScore((s) => s + 1);
+      setScore((current) => current + 1);
       playCorrect();
-      speakText('Đúng điểm bắt đầu rồi! Con khéo tay quá.', 'vi');
+      speakFeedback('correct');
     } else {
       playWrong();
-      speakText('Con chạm vào chấm màu xanh để bắt đầu nhé.', 'vi');
+      speakFeedback('wrong');
     }
   };
 
@@ -269,34 +130,34 @@ export function PreGradeMiniGamesPage() {
         </button>
         <div>
           <h1 className="text-2xl font-black" style={{ color: 'var(--color-primary-dark)' }}>
-            🌱 Vui Học Tiền Tiểu Học
+            Vui Hoc Tien Tieu Hoc
           </h1>
           <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-            Bộ game riêng cho bé lớp Lá: ghép chữ, đếm nhanh, tô nét.
+            Bo game rieng cho be lop la: ghep chu, dem nhanh, to net.
           </p>
         </div>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-4">
         <button className="btn btn-secondary" onClick={() => resetMode('letters')}>
-          <Shapes size={14} /> Ghép chữ
+          <Shapes size={14} /> Ghep chu
         </button>
         <button className="btn btn-secondary" onClick={() => resetMode('counting')}>
-          <Sparkles size={14} /> Đếm nhanh
+          <Sparkles size={14} /> Dem nhanh
         </button>
         <button className="btn btn-secondary" onClick={() => resetMode('tracing')}>
-          <PencilLine size={14} /> Tô nét
+          <PencilLine size={14} /> To net
         </button>
       </div>
 
       <div className="card">
         <div className="flex items-center justify-between gap-2 mb-3">
           <span className="text-sm font-bold" style={{ color: 'var(--color-primary-dark)' }}>
-            Câu {Math.min(idx + 1, rounds)}/{rounds}
+            Cau {Math.min(idx + 1, rounds)}/{rounds}
           </span>
           <div className="flex items-center gap-2">
             <button className="btn btn-primary" style={{ padding: '8px 12px', fontSize: 13 }} onClick={speakCurrentPrompt}>
-              <Volume2 size={14} /> Nghe lại
+              <Volume2 size={14} /> Nghe lai
             </button>
             <span className="text-sm">⭐ {score}</span>
           </div>
@@ -307,10 +168,10 @@ export function PreGradeMiniGamesPage() {
             <div className="pregrade-hero-image">{letterRounds[idx].image}</div>
             <p className="pregrade-hint-text">{letterRounds[idx].hint}</p>
             <div className="pregrade-options-grid">
-              {letterRounds[idx].options.map((opt) => (
-                <button key={opt.key} className="pregrade-option-card" onClick={() => answerLetter(opt.key)}>
-                  <span className="pregrade-option-card__icon">{opt.icon}</span>
-                  <span className="pregrade-option-card__label">{opt.label}</span>
+              {letterRounds[idx].options.map((option) => (
+                <button key={option.key} className="pregrade-option-card" onClick={() => answerLetter(option.key)}>
+                  <span className="pregrade-option-card__icon">{option.icon}</span>
+                  <span className="pregrade-option-card__label">{option.label}</span>
                 </button>
               ))}
             </div>
@@ -320,11 +181,11 @@ export function PreGradeMiniGamesPage() {
         {!done && mode === 'counting' && (
           <div className="pregrade-touch-area">
             <div className="pregrade-hero-image">{countRounds[idx].image}</div>
-            <p className="pregrade-hint-text">Chạm số đúng</p>
+            <p className="pregrade-hint-text">Cham so dung</p>
             <div className="pregrade-options-grid">
-              {countRounds[idx].options.map((opt) => (
-                <button key={opt.key} className="pregrade-option-card" onClick={() => answerCount(opt.key)}>
-                  <span className="pregrade-option-card__icon">{opt.icon}</span>
+              {countRounds[idx].options.map((option) => (
+                <button key={option.key} className="pregrade-option-card" onClick={() => answerCount(option.key)}>
+                  <span className="pregrade-option-card__icon">{option.icon}</span>
                 </button>
               ))}
             </div>
@@ -336,9 +197,9 @@ export function PreGradeMiniGamesPage() {
             <div className="pregrade-hero-image">{traceRounds[idx].image}</div>
             <p className="pregrade-hint-text">{traceRounds[idx].pattern}</p>
             <div className="pregrade-options-grid">
-              {traceRounds[idx].points.map((p) => (
-                <button key={p.key} className="pregrade-option-card" onClick={() => answerTrace(p.key)}>
-                  <span className="pregrade-option-card__icon">{p.icon}</span>
+              {traceRounds[idx].points.map((point) => (
+                <button key={point.key} className="pregrade-option-card" onClick={() => answerTrace(point.key)}>
+                  <span className="pregrade-option-card__icon">{point.icon}</span>
                 </button>
               ))}
             </div>
@@ -348,22 +209,22 @@ export function PreGradeMiniGamesPage() {
         {!done && selected && (
           <div className="mt-4 flex items-center justify-between gap-2">
             <span className="text-sm font-bold" style={{ color: isCorrect ? 'var(--color-success)' : 'var(--color-error)' }}>
-              {isCorrect ? '✅ Giỏi lắm!' : '💡 Chưa đúng, mình thử tiếp nhé!'}
+              {isCorrect ? 'Chinh xac, gioi lam!' : 'Chua dung, minh thu tiep nhe!'}
             </span>
-            <button className="btn btn-primary" onClick={nextRound}>Tiếp theo</button>
+            <button className="btn btn-primary" onClick={nextRound}>Tiep theo</button>
           </div>
         )}
 
         {done && (
           <div className="text-center py-4">
             <CheckCircle2 size={32} style={{ color: 'var(--color-success)' }} className="mx-auto mb-2" />
-            <p className="font-bold text-lg">Hoàn thành mini-game!</p>
+            <p className="font-bold text-lg">Hoan thanh mini-game!</p>
             <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-              Bé đạt {score}/{rounds} sao.
+              Be dat {score}/{rounds} sao.
             </p>
             <div className="flex gap-2 justify-center mt-3">
-              <button className="btn btn-secondary" onClick={() => resetMode(mode)}>Chơi lại</button>
-              <button className="btn btn-primary" onClick={() => navigate('/mini-games')}>Về kho game</button>
+              <button className="btn btn-secondary" onClick={() => resetMode(mode)}>Choi lai</button>
+              <button className="btn btn-primary" onClick={() => navigate('/mini-games')}>Ve kho game</button>
             </div>
           </div>
         )}

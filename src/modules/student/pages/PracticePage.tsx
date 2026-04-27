@@ -5,6 +5,8 @@ import { ArrowLeft, ArrowRight, CheckCircle, XCircle, Clock, AlertTriangle, Ligh
 import { playCorrect, playWrong, playWarning, playFinish, playClick, speakText, stopSpeaking } from '../../../shared/utils/sounds';
 import { MascotCharacter } from '../../../shared/components';
 import { canAccessLesson, getAccessPlan } from '../../../shared/services/accessControl';
+import { buildQuestionAssetKey } from '../../../shared/services/tts/ttsAssetKeys';
+import { buildQuestionNarrationText } from '../../../shared/services/tts/ttsNarration';
 import '../styles/premiumButtons.css';
 
 type AnswerState = 'unanswered' | 'correct' | 'wrong';
@@ -21,8 +23,9 @@ export function PracticePage() {
   const lesson = state.lessons.find((l) => l.id === id);
   const currentPlan = getAccessPlan();
   const lessonAccessible = lesson ? canAccessLesson(lesson, state.student, currentPlan) : false;
+  const questionLang = lesson?.subjectCode === 'english' ? 'en' : 'vi';
 
-  // Time limit from parent settings (minutes → seconds, 0 = unlimited)
+  // Time limit from parent settings (minutes â†’ seconds, 0 = unlimited)
   const timeLimitSec = useMemo(() => {
     const raw = localStorage.getItem('hhk_time_limit');
     return raw ? parseInt(raw, 10) * 60 : 0;
@@ -116,15 +119,15 @@ export function PracticePage() {
           clearInterval(timer);
           handleAutoFinish();
         } else if (remaining === 60) {
-          setTimeWarning('⏰ Còn 1 phút!');
+          setTimeWarning('â° CÃ²n 1 phÃºt!');
           playWarning();
           setTimeout(() => setTimeWarning(null), 3000);
         } else if (remaining === 30) {
-          setTimeWarning('⚠️ Còn 30 giây!');
+          setTimeWarning('âš ï¸ CÃ²n 30 giÃ¢y!');
           playWarning();
           setTimeout(() => setTimeWarning(null), 3000);
         } else if (remaining === 10) {
-          setTimeWarning('🔴 Còn 10 giây!');
+          setTimeWarning('ðŸ”´ CÃ²n 10 giÃ¢y!');
           playWarning();
           setTimeout(() => setTimeWarning(null), 3000);
         }
@@ -151,8 +154,8 @@ export function PracticePage() {
     if (!currentQuestion) return [];
     if (currentQuestion.questionType === 'true_false') {
       return [
-        { key: 'Đúng', label: '✅ Đúng' },
-        { key: 'Sai', label: '❌ Sai' },
+        { key: 'ÄÃºng', label: 'âœ… ÄÃºng' },
+        { key: 'Sai', label: 'âŒ Sai' },
       ];
     }
     if ((currentQuestion.questionType === 'single_choice' || currentQuestion.questionType === 'multi_choice') && currentQuestion.optionsJson) {
@@ -169,12 +172,12 @@ export function PracticePage() {
     return [];
   }, [currentQuestion]);
 
-  // State for ordering (sắp xếp)
+  // State for ordering (sáº¯p xáº¿p)
   const [orderItems, setOrderItems] = useState<string[]>([]);
-  // State for matching (nối cặp)
+  // State for matching (ná»‘i cáº·p)
   const [matchSelected, setMatchSelected] = useState<number | null>(null);
   const [matchPairs, setMatchPairs] = useState<Record<number, number>>({});
-  // State for multi_choice (chọn nhiều)
+  // State for multi_choice (chá»n nhiá»u)
   const [multiSelected, setMultiSelected] = useState<string[]>([]);
 
   // Pre-grade helpers (TTS + visual)
@@ -182,14 +185,11 @@ export function PracticePage() {
 
   const speakQuestion = useCallback(() => {
     if (!currentQuestion) return;
-    // Ghép đề bài + tất cả đáp án thành 1 chuỗi, đọc 1 lần liền mạch
-    let fullText = currentQuestion.questionText;
-    if (options.length > 0) {
-      const optionText = options.map(o => o.label).join('. ');
-      fullText += '. ' + optionText;
-    }
-    speakText(fullText, 'vi');
-  }, [currentQuestion, options]);
+    speakText(buildQuestionNarrationText(currentQuestion), questionLang, {
+      policy: isPreGrade ? 'pre-grade-auto' : 'practice-on-demand',
+      assetKey: buildQuestionAssetKey(currentQuestion.id),
+    });
+  }, [currentQuestion, isPreGrade, questionLang]);
 
   // Auto-read question for pre-grade students
   useEffect(() => {
@@ -205,15 +205,15 @@ export function PracticePage() {
 
   const subjectEmoji = (code: string): string => {
     const m: Record<string, string> = {
-      math: '🔢', vietnamese: '📝', ethics: '🌈',
-      arts: '🎨', music: '🎵', nature: '🌿',
-      pe: '⚽', science: '🔬', english: '🔤', informatics: '💻',
+      math: 'ðŸ”¢', vietnamese: 'ðŸ“', ethics: 'ðŸŒˆ',
+      arts: 'ðŸŽ¨', music: 'ðŸŽµ', nature: 'ðŸŒ¿',
+      pe: 'âš½', science: 'ðŸ”¬', english: 'ðŸ”¤', informatics: 'ðŸ’»',
     };
-    return m[code] || '📚';
+    return m[code] || 'ðŸ“š';
   };
 
   const extractEmoji = (text: string): string => {
-    const matches = text.match(/[\p{Emoji_Presentation}\p{Extended_Pictographic}★⭐]/gu);
+    const matches = text.match(/[\p{Emoji_Presentation}\p{Extended_Pictographic}â˜…â­]/gu);
     return matches ? matches.slice(0, 6).join(' ') : '';
   };
 
@@ -296,8 +296,8 @@ export function PracticePage() {
   if (isHydrating) {
     return (
       <div className="fade-in text-center py-20">
-        <span className="text-4xl block mb-4">⏳</span>
-        <p>Đang nạp dữ liệu bài học...</p>
+        <span className="text-4xl block mb-4">â³</span>
+        <p>Äang náº¡p dá»¯ liá»‡u bÃ i há»c...</p>
       </div>
     );
   }
@@ -305,9 +305,9 @@ export function PracticePage() {
   if (!lesson) {
     return (
       <div className="fade-in text-center py-20">
-        <span className="text-6xl block mb-4">😵</span>
-        <p>Không tìm thấy bài học.</p>
-        <button className="btn btn-primary mt-4" onClick={() => navigate('/lessons')}>Quay lại</button>
+        <span className="text-6xl block mb-4">ðŸ˜µ</span>
+        <p>KhÃ´ng tÃ¬m tháº¥y bÃ i há»c.</p>
+        <button className="btn btn-primary mt-4" onClick={() => navigate('/lessons')}>Quay láº¡i</button>
       </div>
     );
   }
@@ -315,8 +315,8 @@ export function PracticePage() {
   if (!lessonAccessible) {
     return (
       <div className="fade-in text-center py-20">
-        <span className="text-4xl block mb-4">⏳</span>
-        <p>Đang chuyển về danh sách môn học...</p>
+        <span className="text-4xl block mb-4">â³</span>
+        <p>Äang chuyá»ƒn vá» danh sÃ¡ch mÃ´n há»c...</p>
       </div>
     );
   }
@@ -324,8 +324,8 @@ export function PracticePage() {
   if (isInitializing || (questions.length > 0 && (!practiceSet || practiceSet.lessonId !== id))) {
     return (
       <div className="fade-in text-center py-20">
-        <span className="text-4xl block mb-4">⏳</span>
-        <p>Đang tải câu hỏi...</p>
+        <span className="text-4xl block mb-4">â³</span>
+        <p>Äang táº£i cÃ¢u há»i...</p>
       </div>
     );
   }
@@ -333,9 +333,9 @@ export function PracticePage() {
   if (questions.length === 0) {
     return (
       <div className="fade-in text-center py-20">
-        <span className="text-6xl block mb-4">📭</span>
-        <p>Bài này chưa có câu hỏi luyện tập.</p>
-        <button className="btn btn-primary mt-4" onClick={() => navigate('/lessons')}>Quay lại</button>
+        <span className="text-6xl block mb-4">ðŸ“­</span>
+        <p>BÃ i nÃ y chÆ°a cÃ³ cÃ¢u há»i luyá»‡n táº­p.</p>
+        <button className="btn btn-primary mt-4" onClick={() => navigate('/lessons')}>Quay láº¡i</button>
       </div>
     );
   }
@@ -343,8 +343,8 @@ export function PracticePage() {
   if (!currentQuestion || !practiceSet) {
     return (
       <div className="fade-in text-center py-20">
-        <span className="text-4xl block mb-4">⏳</span>
-        <p>Đang tải câu hỏi...</p>
+        <span className="text-4xl block mb-4">â³</span>
+        <p>Äang táº£i cÃ¢u há»i...</p>
       </div>
     );
   }
@@ -392,7 +392,7 @@ export function PracticePage() {
   };
 
   const handleQuit = () => {
-    if (confirm('Bạn có chắc muốn thoát? Tiến trình sẽ bị mất.')) {
+    if (confirm('Báº¡n cÃ³ cháº¯c muá»‘n thoÃ¡t? Tiáº¿n trÃ¬nh sáº½ bá»‹ máº¥t.')) {
       navigate(`/lessons/${id}`);
     }
   };
@@ -403,7 +403,7 @@ export function PracticePage() {
       <div className="flex items-center justify-between mb-4">
         <button className="flex items-center gap-1 text-sm hover:underline"
           style={{ color: 'var(--color-primary)' }} onClick={handleQuit}>
-          <ArrowLeft size={16} /> Thoát
+          <ArrowLeft size={16} /> ThoÃ¡t
         </button>
         <div className="flex items-center gap-4">
           {timeLimitSec > 0 ? (
@@ -443,37 +443,35 @@ export function PracticePage() {
           <MascotCharacter size="xs" />
           <span className="text-xs font-bold uppercase tracking-wide"
             style={{ color: 'var(--color-primary)' }}>
-            Câu {currentIndex + 1}
+            CÃ¢u {currentIndex + 1}
           </span>
           <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-            • {({'single_choice':'Chọn 1 đáp án','true_false':'Đúng/Sai','fill_number':'Điền số','fill_text':'Điền chữ','ordering':'Sắp xếp','matching':'Nối cặp','multi_choice':'Chọn nhiều'} as Record<string,string>)[currentQuestion.questionType] || 'Trắc nghiệm'}
+            â€¢ {({'single_choice':'Chá»n 1 Ä‘Ã¡p Ã¡n','true_false':'ÄÃºng/Sai','fill_number':'Äiá»n sá»‘','fill_text':'Äiá»n chá»¯','ordering':'Sáº¯p xáº¿p','matching':'Ná»‘i cáº·p','multi_choice':'Chá»n nhiá»u'} as Record<string,string>)[currentQuestion.questionType] || 'Tráº¯c nghiá»‡m'}
           </span>
           <span className="flex-1" />
-          {isPreGrade && (
-            <button
-              className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg"
-              style={{ background: 'color-mix(in srgb, var(--color-primary-light) 22%, white)', color: 'var(--color-primary-dark)' }}
-              onClick={speakQuestion}
-              title="Nghe lại câu hỏi"
-            >
-              <Volume2 size={13} /> Nghe lại
-            </button>
-          )}
+          <button
+            className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg"
+            style={{ background: 'color-mix(in srgb, var(--color-primary-light) 22%, white)', color: 'var(--color-primary-dark)' }}
+            onClick={speakQuestion}
+            title={isPreGrade ? 'Nghe lai cau hoi' : 'Nghe cau hoi'}
+          >
+            <Volume2 size={13} /> {isPreGrade ? 'Nghe lai' : 'Nghe cau hoi'}
+          </button>
           {answerState === 'unanswered' && currentQuestion.explanationSimple && (
             <button
               className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg hover:opacity-80"
               style={{ background: showHint ? '#FEF3C7' : 'transparent', color: '#D97706' }}
               onClick={() => { playClick(); setShowHint((h) => !h); }}
-              title="Xem gợi ý"
+              title="Xem gá»£i Ã½"
             >
-              <Lightbulb size={14} /> Gợi ý
+              <Lightbulb size={14} /> Gá»£i Ã½
             </button>
           )}
         </div>
 
         {showHint && answerState === 'unanswered' && currentQuestion.explanationSimple && (
           <div className="mb-3 p-2 rounded-lg text-sm" style={{ background: '#FEF3C7', color: '#92400E' }}>
-            💡 {currentQuestion.explanationSimple}
+            ðŸ’¡ {currentQuestion.explanationSimple}
           </div>
         )}
 
@@ -486,33 +484,32 @@ export function PracticePage() {
           </div>
         )}
 
-        <h2 className={`font-bold mb-6 ${isPreGrade ? 'text-2xl text-center' : 'text-xl'}`} style={{ color: 'var(--color-text)' }}>
-          {currentQuestion.questionText}
-        </h2>
-
-        {/* Answer area */}
         {(currentQuestion.questionType === 'fill_number' || currentQuestion.questionType === 'fill_text') ? (
           <div className="flex flex-col items-center gap-4">
             <input
               type={currentQuestion.questionType === 'fill_number' ? 'text' : 'text'}
               className="premium-input text-center text-3xl font-bold px-6 py-3 w-64"
               style={{
-                borderColor: answerState === 'unanswered' ? 'var(--color-primary)' :
-                  answerState === 'correct' ? 'var(--color-success)' : '#DC2626',
+                borderColor: answerState === 'unanswered'
+                  ? 'var(--color-primary)'
+                  : answerState === 'correct'
+                    ? 'var(--color-success)'
+                    : '#DC2626',
                 color: 'var(--color-text)',
-                background: answerState !== 'unanswered' ? (answerState === 'correct' ? '#D1FAE5' : '#FEE2E2') : 'white',
+                background: answerState !== 'unanswered'
+                  ? (answerState === 'correct' ? '#D1FAE5' : '#FEE2E2')
+                  : 'white',
               }}
-              placeholder={currentQuestion.questionType === 'fill_number' ? '?' : 'Nhập câu trả lời...'}
+              placeholder={currentQuestion.questionType === 'fill_number' ? '?' : 'Nhap cau tra loi...'}
               value={selectedAnswer || ''}
-              onChange={(e) => handleFillAnswer(e.target.value)}
+              onChange={(event) => handleFillAnswer(event.target.value)}
               disabled={answerState !== 'unanswered'}
               autoFocus
-              onKeyDown={(e) => e.key === 'Enter' && handleSubmitFill()}
+              onKeyDown={(event) => event.key === 'Enter' && handleSubmitFill()}
             />
             {answerState === 'unanswered' && (
-              <button className="btn btn-primary" onClick={handleSubmitFill}
-                disabled={!selectedAnswer}>
-                Trả lời
+              <button className="btn btn-primary" onClick={handleSubmitFill} disabled={!selectedAnswer}>
+                Tra loi
               </button>
             )}
           </div>
@@ -538,7 +535,7 @@ export function PracticePage() {
               </div>
             ))}
             {answerState === 'unanswered' && (
-              <button className="btn btn-primary mt-2" onClick={handleSubmitOrder}>Xác nhận thứ tự</button>
+              <button className="btn btn-primary mt-2" onClick={handleSubmitOrder}>XÃ¡c nháº­n thá»© tá»±</button>
             )}
           </div>
         ) : currentQuestion.questionType === 'matching' && matchData ? (
@@ -583,11 +580,11 @@ export function PracticePage() {
             {answerState === 'unanswered' && (
               <div className="flex gap-2 justify-center">
                 {Object.keys(matchPairs).length > 0 && (
-                  <button className="btn btn-secondary text-sm" onClick={() => { setMatchPairs({}); setMatchSelected(null); }}>Làm lại</button>
+                  <button className="btn btn-secondary text-sm" onClick={() => { setMatchPairs({}); setMatchSelected(null); }}>LÃ m láº¡i</button>
                 )}
                 <button className="btn btn-primary" onClick={handleSubmitMatch}
                   disabled={Object.keys(matchPairs).length < matchData.left.length}>
-                  Xác nhận
+                  XÃ¡c nháº­n
                 </button>
               </div>
             )}
@@ -626,7 +623,7 @@ export function PracticePage() {
             {answerState === 'unanswered' && (
               <button className="btn btn-primary self-center mt-2" onClick={handleSubmitMulti}
                 disabled={multiSelected.length === 0}>
-                Xác nhận ({multiSelected.length} đã chọn)
+                XÃ¡c nháº­n ({multiSelected.length} Ä‘Ã£ chá»n)
               </button>
             )}
           </div>
@@ -678,23 +675,23 @@ export function PracticePage() {
             {answerState === 'correct' ? (
               <>
                 <CheckCircle size={20} style={{ color: 'var(--color-success)' }} />
-                <span className="font-bold" style={{ color: 'var(--color-success)' }}>Chính xác! 🎉</span>
+                <span className="font-bold" style={{ color: 'var(--color-success)' }}>ChÃ­nh xÃ¡c! ðŸŽ‰</span>
               </>
             ) : (
               <>
                 <XCircle size={20} style={{ color: '#DC2626' }} />
-                <span className="font-bold" style={{ color: '#DC2626' }}>Chưa đúng rồi 😅</span>
+                <span className="font-bold" style={{ color: '#DC2626' }}>ChÆ°a Ä‘Ãºng rá»“i ðŸ˜…</span>
               </>
             )}
           </div>
           {answerState === 'wrong' && (
             <p className="text-sm" style={{ color: 'var(--color-text)' }}>
-              Đáp án đúng: <strong>{currentQuestion.correctAnswer}</strong>
+              ÄÃ¡p Ã¡n Ä‘Ãºng: <strong>{currentQuestion.correctAnswer}</strong>
             </p>
           )}
           {currentQuestion.explanationSimple && (
             <p className="text-sm mt-1" style={{ color: 'var(--color-text-light)' }}>
-              💡 {currentQuestion.explanationSimple}
+              ðŸ’¡ {currentQuestion.explanationSimple}
             </p>
           )}
         </div>
@@ -705,8 +702,8 @@ export function PracticePage() {
         <div className="text-center">
           <button className="btn btn-primary text-lg" style={{ padding: '14px 40px' }}
             onClick={handleNext}>
-            {currentIndex + 1 >= total ? '🎊 Xem kết quả' : (
-              <>Câu tiếp <ArrowRight size={18} className="inline ml-1" /></>
+            {currentIndex + 1 >= total ? 'ðŸŽŠ Xem káº¿t quáº£' : (
+              <>CÃ¢u tiáº¿p <ArrowRight size={18} className="inline ml-1" /></>
             )}
           </button>
         </div>
@@ -736,3 +733,4 @@ export function PracticePage() {
     </div>
   );
 }
+

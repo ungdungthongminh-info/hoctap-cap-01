@@ -1,0 +1,43 @@
+PLAN_GOOGLE_CLOUD_TTS_HOCTAP_CAP_01
+Bám sát plan cũ: schema -> provider abstraction -> cache -> lesson audio -> practice audio.
+Provider chính mới: Google Cloud Text-to-Speech.
+
+MỤC TIÊU
+- Đổi VbeeAdapter sang GoogleTtsAdapter.
+- Không gọi Google từ frontend.
+- Sinh MP3 và lưu cache riêng, không ảnh hưởng data học tập.
+- Bài học dùng pre-generate/cache.
+- Luyện tập dùng on-demand có cache.
+- Native/Web Speech API là fallback.
+
+VIỆC CẦN LÀM
+1. Refactor src/shared/utils/sounds.ts thành façade, giữ speakText().
+2. Tạo src/shared/services/tts/ttsClient.ts.
+3. Tạo src/shared/services/tts/ttsPolicy.ts.
+4. Tạo src/shared/hooks/useTts.ts.
+5. Tạo backend/src/routes/tts.ts.
+6. Tạo backend/src/controllers/ttsController.ts.
+7. Tạo backend/src/services/tts/GoogleTtsAdapter.ts dùng @google-cloud/text-to-speech.
+8. Tạo backend/src/services/tts/cacheRepo.ts.
+9. Thêm bảng tts_cache trong SQLite.
+10. Lưu MP3 vào backend/data/tts-cache/google-cloud/<APP_CONTENT_VERSION>/ hoặc Electron userData/tts-cache.
+11. Cập nhật LessonDetailPage: prefetch, đọc từng card, đọc cả bài, progress.
+12. Cập nhật PracticePage: nghe đề/gợi ý/feedback theo policy, không auto đọc lời giải dài.
+13. Cập nhật TtsSettingsPage: Google Cloud / Native, voice, tốc độ, cache settings.
+14. Thêm rate limit, char limit, monthly limit, log char usage và cache hit.
+
+ENV
+TTS_PROVIDER=google-cloud
+APP_CONTENT_VERSION=2026-04-27-v1
+GOOGLE_APPLICATION_CREDENTIALS=./secrets/google-tts-service-account.json
+GOOGLE_TTS_DEFAULT_LANGUAGE=vi-VN
+GOOGLE_TTS_DEFAULT_VOICE=vi-VN-Wavenet-A
+GOOGLE_TTS_AUDIO_ENCODING=MP3
+TTS_MONTHLY_CHAR_LIMIT=1000000
+TTS_MAX_TEXT_LENGTH=1800
+
+KHÔNG ĐƯỢC LÀM
+- Không lưu base64/blob audio trong localStorage/progress/lesson/question.
+- Không commit Google service account.
+- Không để frontend gọi Google API trực tiếp.
+- Không gọi Google mỗi lần học sinh bấm nghe nếu nội dung đã có cache.

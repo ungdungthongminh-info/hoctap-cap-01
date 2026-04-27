@@ -19,7 +19,8 @@
     "data:assign": "tsx scripts/generate-content-assignment.ts",
     "data:templates": "tsx scripts/generate-question-templates.ts",
     "data:patch:drafts": "tsx scripts/generate-subject-patch-files.ts",
-    "data:patch:apply": "tsx scripts/apply-question-patches.ts"
+    "data:patch:apply": "tsx scripts/apply-question-patches.ts",
+    "tts:catalog": "tsx scripts/generate-static-tts-catalog.ts"
   },
   "keywords": ["education", "kids", "math"],
   "author": "",

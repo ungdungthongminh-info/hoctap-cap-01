@@ -1,7 +1,9 @@
 import 'dotenv/config';
 import express, { Request, Response } from 'express';
+import path from 'path';
 import { initializeDatabase } from './db/init';
 import paymentRoutes from './routes/payments';
+import ttsRoutes from './routes/tts';
 import { corsMiddleware, errorHandler } from './middleware/auth';
 
 const app = express();
@@ -12,6 +14,7 @@ const API_PREFIX = process.env.API_PREFIX || '/api/v1';
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(corsMiddleware);
+app.use('/tts-audio', express.static(path.resolve(process.cwd(), 'data', 'tts-cache')));
 
 // ===== ROUTES =====
 
@@ -27,6 +30,7 @@ app.get('/', (req: Request, res: Response) => {
 
 // API routes
 app.use(API_PREFIX, paymentRoutes);
+app.use(API_PREFIX, ttsRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {

@@ -13,3 +13,5 @@ release-noibo/
 .tmp-question-scan.js
 .tmp-question-scan-v2.js
 *.asar
+backend/secrets/
+backend/secrets/*.json

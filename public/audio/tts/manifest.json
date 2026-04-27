@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "contentVersion": "2026-04-27-v1",
+    "generatedAt": "2026-04-27T16:48:16.993Z",
+    "defaultProfileId": "vi-v1",
+    "audioBasePath": "audio/tts/assets"
+  },
+  "summary": {
+    "totalEntries": 24054,
+    "availableEntries": 0,
+    "missingEntries": 24054,
+    "defaultProfileId": "vi-v1",
+    "contentVersion": "2026-04-27-v1",
+    "generatedAt": "2026-04-27T16:48:16.994Z",
+    "audioBasePath": "audio/tts/assets",
+    "voiceProfiles": [
+      {
+        "id": "vi-v1",
+        "label": "Ung vien 1 - Wavenet A",
+        "lang": "vi-VN",
+        "voiceId": "vi-VN-Wavenet-A",
+        "notes": "Uu tien cho giong nu doc ro, dung lam giong mac dinh de tao san audio.",
+        "candidateRank": 1,
+        "targetPersona": "female-clear",
+        "isDefault": true
+      },
+      {
+        "id": "vi-v2",
+        "label": "Ung vien 2 - Wavenet C",
+        "lang": "vi-VN",
+        "voiceId": "vi-VN-Wavenet-C",
+        "notes": "Ung vien du phong de so sanh do mem va nhac nhip khi doc tap doc.",
+        "candidateRank": 2,
+        "targetPersona": "female-clear"
+      },
+      {
+        "id": "vi-v3",
+        "label": "Ung vien 3 - Standard A",
+        "lang": "vi-VN",
+        "voiceId": "vi-VN-Standard-A",
+        "notes": "Ung vien tiet kiem hon, dung de doi chieu do ro va nhiet giong.",
+        "candidateRank": 3,
+        "targetPersona": "female-clear"
+      },
+      {
+        "id": "en-v1",
+        "label": "English support - Neural2 F",
+        "lang": "en-US",
+        "voiceId": "en-US-Neural2-F",
+        "notes": "Giup giu dong bo cho cac bai tieng Anh can audio tinh.",
+        "candidateRank": 1,
+        "targetPersona": "neutral-clear"
+      }
+    ],
+    "auditSamples": [
+      {
+        "key": "audit:vi-v1:reading-rhythm",
+        "label": "Tap doc - ngat nhip",
+        "profileId": "vi-v1",
+        "sampleId": "reading-rhythm",
+        "available": false
+      },
+      {
+        "key": "audit:vi-v1:story-flow",
+        "label": "Ke chuyen - tu nhien",
+        "profileId": "vi-v1",
+        "sampleId": "story-flow",
+        "available": false
+      },
+      {
+        "key": "audit:vi-v1:math-prompt",
+        "label": "Toan - doc phep tinh",
+        "profileId": "vi-v1",
+        "sampleId": "math-prompt",
+        "available": false
+      },
+      {
+        "key": "audit:vi-v2:reading-rhythm",
+        "label": "Tap doc - ngat nhip",
+        "profileId": "vi-v2",
+        "sampleId": "reading-rhythm",
+        "available": false
+      },
+      {
+        "key": "audit:vi-v2:story-flow",
+        "label": "Ke chuyen - tu nhien",
+        "profileId": "vi-v2",
+        "sampleId": "story-flow",
+        "available": false
+      },
+      {
+        "key": "audit:vi-v2:math-prompt",
+        "label": "Toan - doc phep tinh",
+        "profileId": "vi-v2",
+        "sampleId": "math-prompt",
+        "available": false
+      },
+      {
+        "key": "audit:vi-v3:reading-rhythm",
+        "label": "Tap doc - ngat nhip",
+        "profileId": "vi-v3",
+        "sampleId": "reading-rhythm",
+        "available": false
+      },
+      {
+        "key": "audit:vi-v3:story-flow",
+        "label": "Ke chuyen - tu nhien",
+        "profileId": "vi-v3",
+        "sampleId": "story-flow",
+        "available": false
+      },
+      {
+        "key": "audit:vi-v3:math-prompt",
+        "label": "Toan - doc phep tinh",
+        "profileId": "vi-v3",
+        "sampleId": "math-prompt",
+        "available": false
+      }
+    ],
+    "byUsage": [
+      {
+        "usage": "lesson-read-all",
+        "total": 4988,
+        "available": 0
+      },
+      {
+        "usage": "practice-on-demand",
+        "total": 19043,
+        "available": 0
+      },
+      {
+        "usage": "pre-grade-auto",
+        "total": 11,
+        "available": 0
+      },
+      {
+        "usage": "feedback-short",
+        "total": 3,
+        "available": 0
+      },
+      {
+        "usage": "voice-audit",
+        "total": 9,
+        "available": 0
+      }
+    ]
+  },
+  "entries": {}
+}

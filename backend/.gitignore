@@ -9,3 +9,5 @@ data/
 .vscode/settings.json
 yarn.lock
 package-lock.json
+secrets/
+secrets/*.json

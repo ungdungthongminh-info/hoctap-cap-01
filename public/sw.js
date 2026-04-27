@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hhk-v3';
+const CACHE_NAME = 'hhk-v4';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const STATIC_ASSETS = [
   './offline.html',
   './icon-192.svg',
   './icon-512.svg',
+  './audio/tts/manifest.json',
 ];
 
 // Install — cache the app shell

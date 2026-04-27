@@ -121,6 +121,29 @@ async function createTables(): Promise<void> {
         )
       `);
 
+      db.run(`
+        CREATE TABLE IF NOT EXISTS tts_cache (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          provider TEXT NOT NULL,
+          voice TEXT NOT NULL,
+          speed REAL NOT NULL,
+          lang TEXT NOT NULL,
+          usage TEXT NOT NULL,
+          content_version TEXT NOT NULL,
+          text_hash TEXT NOT NULL,
+          audio_path TEXT NOT NULL,
+          char_count INTEGER NOT NULL DEFAULT 0,
+          hit_count INTEGER NOT NULL DEFAULT 0,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      db.run(`
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_tts_cache_lookup
+        ON tts_cache (provider, voice, speed, lang, usage, content_version, text_hash)
+      `);
+
       // Migration: add customer_phone to payment_orders (ignore if column already exists)
       db.run(`ALTER TABLE payment_orders ADD COLUMN customer_phone TEXT`, (_migrErr: any) => {
         // Swallow error – column may already exist in existing DB

@@ -1,35 +1,107 @@
-import { useState, useEffect } from 'react';
-import { getTtsInfo, getTtsMode, setTtsMode, speakText, onVoicesReady, getTtsSpeed, setTtsSpeed, getPreferredVoice, setPreferredVoice, getVoicePreferenceOptions, type TtsInfo } from '../../../shared/utils/sounds';
-import { Volume2, Wifi, WifiOff, Settings, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Cloud, DatabaseZap, Headphones, MonitorSpeaker, RefreshCw, Trash2, Volume2, Wifi, WifiOff } from 'lucide-react';
+import {
+  clearTtsAudioCache,
+  fetchTtsCacheStats,
+  getGoogleVoiceCatalog,
+  getPreferredVoice,
+  getTtsCacheMode,
+  getTtsMode,
+  getTtsSpeed,
+  getVoicePreferenceOptions,
+  onVoicesReady,
+  setPreferredVoice,
+  setTtsCacheMode,
+  setTtsMode,
+  setTtsSpeed,
+  speakTextAsync,
+  type TtsCacheMode,
+  type TtsInfo,
+} from '../../../shared/utils/sounds';
+import { buildVoiceAuditAssetKey } from '../../../shared/services/tts/ttsAssetKeys';
 import { MascotCharacter } from '../../../shared/components';
+import { isAdminUnlocked } from '../../../shared/utils/adminAccess';
+
+type TestAction = 'static' | 'advanced' | 'native' | null;
+
+const cacheModeOptions: Array<{ value: TtsCacheMode; label: string; desc: string }> = [
+  { value: 'manual', label: 'Thu cong', desc: 'Chi tai cache khi bam nghe.' },
+  { value: 'balanced', label: 'Can bang', desc: 'Uu tien audio tinh, lam nong cache vua du cho bai dang hoc.' },
+  { value: 'aggressive', label: 'Chu dong', desc: 'Prefetch cac asset audio tinh cua bai hoc som hon.' },
+];
+
+function filterVoices(info: TtsInfo | null, lang: 'vi' | 'en') {
+  return (info?.voices || []).filter((voice) => {
+    const code = voice.lang.toLowerCase();
+    const name = voice.name.toLowerCase();
+    return lang === 'vi'
+      ? code.startsWith('vi') || name.includes('viet')
+      : code.startsWith('en') || name.includes('english');
+  });
+}
 
 export function TtsSettingsPage() {
   const [ttsInfo, setTtsInfo] = useState<TtsInfo | null>(null);
-  const [mode, setMode] = useState(getTtsMode());
-  const [speed, setSpeed] = useState(getTtsSpeed());
+  const [mode, setModeState] = useState(getTtsMode());
+  const [speed, setSpeedState] = useState(getTtsSpeed());
   const [voiceVi, setVoiceVi] = useState(getPreferredVoice('vi'));
   const [voiceEn, setVoiceEn] = useState(getPreferredVoice('en'));
-  const [testing, setTesting] = useState(false);
+  const [cacheMode, setCacheModeState] = useState<TtsCacheMode>(getTtsCacheMode());
+  const [stats, setStats] = useState<Awaited<ReturnType<typeof fetchTtsCacheStats>> | null>(null);
+  const [statsLoading, setStatsLoading] = useState(false);
+  const [statsError, setStatsError] = useState('');
+  const [clearing, setClearing] = useState(false);
+  const [testing, setTesting] = useState<TestAction>(null);
+  const [online, setOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
+
   const pref = getVoicePreferenceOptions();
+  const showAdmin = import.meta.env.DEV || isAdminUnlocked();
+  const googleViVoices = getGoogleVoiceCatalog('vi');
+  const googleEnVoices = getGoogleVoiceCatalog('en');
+  const nativeViVoices = useMemo(() => filterVoices(ttsInfo, 'vi'), [ttsInfo]);
+  const nativeEnVoices = useMemo(() => filterVoices(ttsInfo, 'en'), [ttsInfo]);
+
+  const staticManifest = stats?.staticManifest;
+  const staticViProfiles = (staticManifest?.voiceProfiles || []).filter((profile) => profile.lang === 'vi-VN');
+  const defaultStaticProfile = staticViProfiles.find((profile) => profile.id === staticManifest?.defaultProfileId) || staticViProfiles[0];
+  const defaultAuditSample = staticManifest?.auditSamples.find((sample) => sample.profileId === defaultStaticProfile?.id) || staticManifest?.auditSamples[0];
+
+  const loadStats = async () => {
+    setStatsLoading(true);
+    setStatsError('');
+    try {
+      const nextStats = await fetchTtsCacheStats();
+      setStats(nextStats);
+    } catch (error) {
+      setStats(null);
+      setStatsError(error instanceof Error ? error.message : 'Khong tai duoc thong tin TTS.');
+    } finally {
+      setStatsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // Lắng nghe khi voices load xong (async, có thể chậm)
     const cleanup = onVoicesReady((info) => setTtsInfo(info));
-    return cleanup;
+    void loadStats();
+
+    const handleNetwork = () => setOnline(navigator.onLine);
+    window.addEventListener('online', handleNetwork);
+    window.addEventListener('offline', handleNetwork);
+    return () => {
+      cleanup();
+      window.removeEventListener('online', handleNetwork);
+      window.removeEventListener('offline', handleNetwork);
+    };
   }, []);
 
-  const refreshVoices = () => {
-    setTtsInfo(getTtsInfo());
+  const handleModeChange = (value: 'static' | 'advanced' | 'native') => {
+    setModeState(value);
+    setTtsMode(value);
   };
 
-  const handleModeChange = (m: 'auto' | 'google' | 'native') => {
-    setMode(m);
-    setTtsMode(m);
-  };
-
-  const handleSpeedChange = (nextSpeed: number) => {
-    setSpeed(nextSpeed);
-    setTtsSpeed(nextSpeed);
+  const handleSpeedChange = (value: number) => {
+    setSpeedState(value);
+    setTtsSpeed(value);
   };
 
   const handleVoiceChange = (lang: 'vi' | 'en', voiceName: string) => {
@@ -38,304 +110,465 @@ export function TtsSettingsPage() {
     setPreferredVoice(lang, voiceName);
   };
 
-  const voicesVi = (ttsInfo?.voices || []).filter((v) => {
-    const lang = v.lang.toLowerCase();
-    const name = v.name.toLowerCase();
-    return lang.startsWith('vi') || name.includes('vietnam') || name.includes('viet');
-  });
-  const voicesEn = (ttsInfo?.voices || []).filter((v) => {
-    const lang = v.lang.toLowerCase();
-    const name = v.name.toLowerCase();
-    return lang.startsWith('en') || name.includes('english');
-  });
-
-  const testSpeak = (lang: 'vi' | 'en') => {
-    setTesting(true);
-    if (lang === 'vi') {
-      speakText('Xin chào! Đây là giọng đọc tiếng Việt. Chúc bạn học tốt nhé!', 'vi');
-    } else {
-      speakText('Hello! This is the English voice. Good luck with your studies!', 'en');
-    }
-    setTimeout(() => setTesting(false), 3000);
+  const handleCacheModeChange = (value: TtsCacheMode) => {
+    setCacheModeState(value);
+    setTtsCacheMode(value);
   };
 
-  const online = navigator.onLine;
+  const handleClearCache = async () => {
+    setClearing(true);
+    try {
+      await clearTtsAudioCache();
+      await loadStats();
+    } finally {
+      setClearing(false);
+    }
+  };
+
+  const testStaticVoice = async () => {
+    if (!defaultStaticProfile || !defaultAuditSample) return;
+    setTesting('static');
+    try {
+      await speakTextAsync('Kiem tra voice pack co dinh.', 'vi', {
+        mode: 'static',
+        policy: 'lesson-read-all',
+        assetKey: buildVoiceAuditAssetKey(defaultStaticProfile.id, defaultAuditSample.sampleId),
+      });
+    } finally {
+      setTesting(null);
+    }
+  };
+
+  const testAdvancedVoice = async () => {
+    setTesting('advanced');
+    try {
+      await speakTextAsync(
+        'Xin chao. Day la cau thu de nghe giong generator tieng Viet.',
+        'vi',
+        {
+          mode: 'advanced',
+          policy: 'practice-on-demand',
+        },
+      );
+    } finally {
+      setTesting(null);
+    }
+  };
+
+  const testNativeVoice = async () => {
+    setTesting('native');
+    try {
+      await speakTextAsync(
+        'Xin chao. Day la cau thu cua giong native tren may nay.',
+        'vi',
+        {
+          mode: 'native',
+          policy: 'fallback-native',
+        },
+      );
+    } finally {
+      setTesting(null);
+    }
+  };
 
   return (
-    <div className="fade-in max-w-2xl mx-auto">
+    <div className="fade-in max-w-4xl mx-auto">
       <div className="flex items-center gap-3 mb-6">
         <MascotCharacter size="sm" />
         <div>
           <h1 className="text-2xl font-bold" style={{ color: 'var(--color-primary-dark)' }}>
-            🔊 Cài Đặt Giọng Đọc
+            Audio tap doc
           </h1>
           <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-            Cấu hình Text-to-Speech cho việc đọc bài
+            App mac dinh uu tien audio tinh + manifest. Advanced mode chi dung cho generator/BYO API khi can.
           </p>
         </div>
       </div>
 
-      {/* Connection status */}
-      <div className="card mb-4 flex items-center gap-3">
-        {online ? (
-          <>
+      <div className="grid gap-4 mb-4 md:grid-cols-2">
+        <div className="card flex items-start gap-3">
+          {online ? (
             <Wifi size={20} style={{ color: 'var(--color-success)' }} />
-            <div>
-              <div className="text-sm font-bold" style={{ color: 'var(--color-success)' }}>Đang trực tuyến</div>
-              <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Google TTS sẵn sàng cho tiếng Việt</div>
-            </div>
-          </>
-        ) : (
-          <>
+          ) : (
             <WifiOff size={20} style={{ color: '#D97706' }} />
-            <div>
-              <div className="text-sm font-bold" style={{ color: '#D97706' }}>Ngoại tuyến</div>
-              <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-                Google TTS không khả dụng. Cần voice tiếng Việt cài trên máy.
-              </div>
+          )}
+          <div>
+            <div className="text-sm font-bold" style={{ color: online ? 'var(--color-success)' : '#D97706' }}>
+              {online ? 'Dang online' : 'Dang offline'}
             </div>
-          </>
-        )}
+            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+              Static audio van phat duoc neu file da tao san va da nam trong goi app/cache.
+            </div>
+          </div>
+        </div>
+
+        <div className="card flex items-start gap-3">
+          <MonitorSpeaker size={20} style={{ color: ttsInfo?.hasVietnameseVoice ? 'var(--color-success)' : '#D97706' }} />
+          <div>
+            <div className="text-sm font-bold" style={{ color: ttsInfo?.hasVietnameseVoice ? 'var(--color-success)' : '#D97706' }}>
+              {ttsInfo?.hasVietnameseVoice ? 'Co giong native TV du phong' : 'Chua thay giong native TV'}
+            </div>
+            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+              Native la lop an toan cuoi cung khi asset tinh chua co hoac advanced backend khong san sang.
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Vietnamese voice detection */}
       <div className="card mb-4">
         <div className="flex items-center gap-2 mb-3">
-          <Settings size={18} style={{ color: 'var(--color-primary)' }} />
-          <h3 className="font-bold flex-1">Giọng tiếng Việt nội bộ</h3>
-          <button
-            className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg"
-            style={{ background: 'var(--color-surface)', color: 'var(--color-primary)' }}
-            onClick={refreshVoices}
-            title="Kiểm tra lại"
-          >
-            <RefreshCw size={12} /> Refresh
-          </button>
+          <Cloud size={18} style={{ color: 'var(--color-primary)' }} />
+          <h3 className="font-bold">Che do phat</h3>
         </div>
-        {!ttsInfo?.voicesLoaded ? (
-          <div className="flex items-center gap-2 p-3 rounded-xl" style={{ background: '#F3F4F6' }}>
-            <RefreshCw size={16} className="animate-spin" style={{ color: '#6B7280' }} />
-            <span className="text-sm" style={{ color: '#6B7280' }}>Đang tải danh sách voices...</span>
-          </div>
-        ) : ttsInfo?.hasVietnameseVoice ? (
-          <div className="flex items-center gap-2 p-3 rounded-xl" style={{ background: '#D1FAE5' }}>
-            <CheckCircle size={20} style={{ color: '#059669' }} />
-            <div>
-              <div className="text-sm font-bold" style={{ color: '#059669' }}>Đã cài đặt!</div>
-              <div className="text-xs" style={{ color: '#065F46' }}>
-                {ttsInfo.voices.filter((v) => v.lang.startsWith('vi')).map((v) => v.name).join(', ')}
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="p-3 rounded-xl" style={{ background: '#FEF3C7' }}>
-            <div className="flex items-center gap-2 mb-2">
-              <AlertCircle size={20} style={{ color: '#D97706' }} />
-              <div className="text-sm font-bold" style={{ color: '#92400E' }}>Chưa phát hiện giọng tiếng Việt</div>
-            </div>
-            <div className="text-xs mb-3" style={{ color: '#78350F' }}>
-              Windows đã cài voice OneCore (An - vi-VN) nhưng Chrome/Electron không đọc được. Cần fix registry:
-            </div>
-
-            {/* Registry fix instructions */}
-            <div className="p-3 rounded-lg mb-3" style={{ background: '#FFFBEB', border: '1px solid #FDE68A' }}>
-              <div className="text-xs font-bold mb-2" style={{ color: '#92400E' }}>
-                ⚡ Cách sửa nhanh (chạy 1 lần):
-              </div>
-              <ol className="text-xs space-y-1 ml-4" style={{ color: '#78350F', listStyleType: 'decimal' }}>
-                <li>Mở thư mục <strong>scripts</strong> trong thư mục app</li>
-                <li>Nhấn chuột phải vào file <strong>fix-tts-voices.bat</strong></li>
-                <li>Chọn <strong>"Run as administrator"</strong></li>
-                <li><strong>Khởi động lại</strong> trình duyệt/app</li>
-                <li>Quay lại đây và nhấn <strong>Refresh</strong></li>
-              </ol>
-            </div>
-
-            {/* Manual PowerShell */}
-            <details className="text-xs">
-              <summary className="cursor-pointer font-bold mb-1" style={{ color: '#92400E' }}>
-                📋 Hoặc chạy lệnh PowerShell (Admin)
-              </summary>
-              <div className="p-2 rounded font-mono text-[10px] overflow-x-auto" style={{ background: '#1F2937', color: '#D1D5DB' }}>
-                Get-ChildItem "HKLM:\SOFTWARE\Microsoft\Speech_OneCore\Voices\Tokens" | ForEach-Object {'{'} $n = $_.PSChildName; if (-not (Test-Path "HKLM:\SOFTWARE\Microsoft\Speech\Voices\Tokens\$n")) {'{'} Copy-Item $_.PSPath "HKLM:\SOFTWARE\Microsoft\Speech\Voices\Tokens\$n" -Recurse {'}'} {'}'}
-              </div>
-            </details>
-
-            {/* Original install instructions as fallback */}
-            <details className="text-xs mt-2">
-              <summary className="cursor-pointer font-bold mb-1" style={{ color: '#92400E' }}>
-                📥 Chưa cài gói ngôn ngữ? Cài đặt trước
-              </summary>
-              <ol className="space-y-1 ml-4 mt-1" style={{ color: '#78350F', listStyleType: 'decimal' }}>
-                <li>Mở <strong>Settings</strong> (Windows + I)</li>
-                <li>Vào <strong>Time &amp; Language → Language &amp; Region</strong></li>
-                <li>Nhấn <strong>Add a language</strong> → Tìm <strong>"Tiếng Việt"</strong></li>
-                <li>Tick chọn <strong>"Text-to-speech"</strong> rồi nhấn <strong>Install</strong></li>
-                <li>Khởi động lại máy tính</li>
-                <li>Sau đó chạy file <strong>fix-tts-voices.bat</strong> ở trên</li>
-              </ol>
-            </details>
-          </div>
-        )}
-      </div>
-
-      {/* TTS Mode selector */}
-      <div className="card mb-4">
-        <h3 className="font-bold mb-3">🎛️ Chế độ đọc tiếng Việt</h3>
         <div className="grid gap-2">
-          {([
-            { value: 'auto' as const, label: '🤖 Tự động', desc: 'Dùng voice nội bộ nếu có, nếu không thì dùng Google TTS' },
-            { value: 'google' as const, label: '🌐 Google TTS', desc: 'Luôn dùng Google Translate (cần internet, giọng tự nhiên)' },
-            { value: 'native' as const, label: '💻 Nội bộ', desc: 'Luôn dùng voice cài trên máy (offline, cần cài gói tiếng Việt)' },
-          ]).map((opt) => (
+          {[
+            {
+              value: 'static' as const,
+              label: 'Static mac dinh',
+              desc: 'Phat audio tu manifest/asset da tao san. Neu chua co file thi fallback native.',
+            },
+            {
+              value: 'advanced' as const,
+              label: 'Advanced / Generator',
+              desc: 'Van uu tien asset tinh, nhung duoc phep roi sang backend TTS khi can.',
+            },
+            {
+              value: 'native' as const,
+              label: 'Native',
+              desc: 'Chi dung speech synthesis san co tren may.',
+            },
+          ].map((option) => (
             <button
-              key={opt.value}
+              key={option.value}
               className="flex items-center gap-3 p-3 rounded-xl text-left w-full transition-all"
               style={{
-                background: mode === opt.value ? 'var(--color-surface)' : '#F9FAFB',
-                border: mode === opt.value ? '2px solid var(--color-primary)' : '2px solid transparent',
+                background: mode === option.value ? 'var(--color-surface)' : '#F9FAFB',
+                border: mode === option.value ? '2px solid var(--color-primary)' : '2px solid transparent',
               }}
-              onClick={() => handleModeChange(opt.value)}
+              onClick={() => handleModeChange(option.value)}
             >
               <div
                 className="w-5 h-5 rounded-full border-2 flex items-center justify-center"
-                style={{ borderColor: mode === opt.value ? 'var(--color-primary)' : '#D1D5DB' }}
+                style={{ borderColor: mode === option.value ? 'var(--color-primary)' : '#D1D5DB' }}
               >
-                {mode === opt.value && (
+                {mode === option.value && (
                   <div className="w-3 h-3 rounded-full" style={{ background: 'var(--color-primary)' }} />
                 )}
               </div>
               <div>
-                <div className="text-sm font-bold">{opt.label}</div>
-                <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>{opt.desc}</div>
+                <div className="text-sm font-bold">{option.label}</div>
+                <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>{option.desc}</div>
               </div>
             </button>
           ))}
         </div>
+      </div>
 
-        <div className="mt-4 grid md:grid-cols-2 gap-3">
-          <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
-            <div className="text-sm font-bold mb-2">🗣️ Giọng tiếng Việt</div>
-            {mode === 'google' && (
-              <div className="text-xs mb-2 p-2 rounded-lg" style={{ background: '#FEF3C7', color: '#92400E' }}>
-                ⚠️ Google TTS chỉ có 1 giọng mặc định. Chuyển sang <strong>Nội bộ</strong> hoặc <strong>Tự động</strong> để chọn giọng.
+      <div className="card mb-4">
+        <div className="flex items-center gap-2 mb-3">
+          <Headphones size={18} style={{ color: 'var(--color-primary)' }} />
+          <h3 className="font-bold">Voice pack co dinh cua app</h3>
+        </div>
+        <div className="text-sm mb-3" style={{ color: 'var(--color-text-light)' }}>
+          Audio cua bai hoc se duoc pre-generate theo 1 profile mac dinh. Cac ung vien duoi day la bo giong uu tien cho tieng Viet doc ro.
+        </div>
+        <div className="grid gap-3 md:grid-cols-3">
+          {staticViProfiles.map((profile) => (
+            <div
+              key={profile.id}
+              className="p-3 rounded-xl border"
+              style={{
+                borderColor: profile.id === staticManifest?.defaultProfileId ? 'var(--color-primary)' : '#E5E7EB',
+                background: profile.id === staticManifest?.defaultProfileId ? '#EFF6FF' : '#FFFFFF',
+              }}
+            >
+              <div className="text-sm font-bold mb-1">{profile.label}</div>
+              <div className="text-xs font-mono mb-2" style={{ color: 'var(--color-primary-dark)' }}>
+                {profile.voiceId}
               </div>
-            )}
-            {mode !== 'google' && !ttsInfo?.hasVietnameseVoice && voiceVi && (
-              <div className="text-xs mb-2 p-2 rounded-lg" style={{ background: '#FEF3C7', color: '#92400E' }}>
-                ⚠️ Chưa có voice tiếng Việt trên máy. Cài gói ngôn ngữ + chạy fix-tts-voices.bat để chọn giọng.
+              <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+                {profile.notes}
               </div>
-            )}
+              {profile.id === staticManifest?.defaultProfileId && (
+                <div className="text-[11px] mt-2 font-bold" style={{ color: 'var(--color-primary-dark)' }}>
+                  Dang la profile mac dinh trong manifest
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-3 flex-wrap mt-4">
+          <button
+            className="btn btn-primary flex items-center gap-2"
+            onClick={() => void testStaticVoice()}
+            disabled={!defaultAuditSample?.available || testing !== null}
+          >
+            <Volume2 size={16} />
+            {testing === 'static' ? 'Dang phat mau...' : 'Nghe voice chuan'}
+          </button>
+          <button
+            className="btn flex items-center gap-2"
+            style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}
+            onClick={() => void testNativeVoice()}
+            disabled={testing !== null}
+          >
+            <Volume2 size={16} />
+            {testing === 'native' ? 'Dang phat native...' : 'Thu native du phong'}
+          </button>
+        </div>
+        {!defaultAuditSample?.available && (
+          <p className="text-xs mt-3" style={{ color: '#B45309' }}>
+            Audit sample chua co file MP3. Sau khi generate audit pack, nut nghe voice chuan se phat dung file tinh.
+          </p>
+        )}
+      </div>
+
+      <div className="card mb-4">
+        <div className="flex items-center gap-2 mb-3">
+          <Cloud size={18} style={{ color: 'var(--color-primary)' }} />
+          <h3 className="font-bold">Advanced / generator mode</h3>
+        </div>
+        <div className="text-sm mb-4" style={{ color: 'var(--color-text-light)' }}>
+          Muc nay chi dung khi can goi backend TTS de tao audio moi, hoac khi khach muon dung API rieng. Flow mac dinh cua app khong phu thuoc phan nay.
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
+            <label className="text-sm font-bold block mb-2">Voice tieng Viet cho advanced</label>
             <select
               className="w-full p-2 rounded-lg text-sm"
               value={voiceVi}
-              onChange={(e) => handleVoiceChange('vi', e.target.value)}
-              disabled={mode === 'google'}
+              onChange={(event) => handleVoiceChange('vi', event.target.value)}
             >
-              <option value="">Tự chọn theo hệ thống</option>
-              <option value={pref.female}>Ưu tiên giọng Nữ (tự động)</option>
-              <option value={pref.male}>Ưu tiên giọng Nam (tự động)</option>
-              {voicesVi.map((v) => (
-                <option key={`${v.lang}-${v.name}`} value={v.name}>{v.name} ({v.lang})</option>
-              ))}
+              <option value="">Tu dong theo generator</option>
+              <optgroup label="Google Cloud">
+                {googleViVoices.map((voice) => (
+                  <option key={voice.id} value={voice.id}>{voice.label}</option>
+                ))}
+              </optgroup>
+              <optgroup label="Native">
+                <option value={pref.female}>Uu tien giong nu</option>
+                <option value={pref.male}>Uu tien giong nam</option>
+                {nativeViVoices.map((voice) => (
+                  <option key={`${voice.lang}-${voice.name}`} value={voice.name}>{voice.name} ({voice.lang})</option>
+                ))}
+              </optgroup>
             </select>
           </div>
-          <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
-            <div className="text-sm font-bold mb-2">🗣️ Giọng tiếng Anh</div>
+
+          <div>
+            <label className="text-sm font-bold block mb-2">Voice tieng Anh cho advanced</label>
             <select
               className="w-full p-2 rounded-lg text-sm"
               value={voiceEn}
-              onChange={(e) => handleVoiceChange('en', e.target.value)}
+              onChange={(event) => handleVoiceChange('en', event.target.value)}
             >
-              <option value="">Tự chọn theo hệ thống</option>
-              <option value={pref.female}>Prefer Female voice (auto)</option>
-              <option value={pref.male}>Prefer Male voice (auto)</option>
-              {voicesEn.map((v) => (
-                <option key={`${v.lang}-${v.name}`} value={v.name}>{v.name} ({v.lang})</option>
-              ))}
+              <option value="">Tu dong theo generator</option>
+              <optgroup label="Google Cloud">
+                {googleEnVoices.map((voice) => (
+                  <option key={voice.id} value={voice.id}>{voice.label}</option>
+                ))}
+              </optgroup>
+              <optgroup label="Native">
+                <option value={pref.female}>Prefer female voice</option>
+                <option value={pref.male}>Prefer male voice</option>
+                {nativeEnVoices.map((voice) => (
+                  <option key={`${voice.lang}-${voice.name}`} value={voice.name}>{voice.name} ({voice.lang})</option>
+                ))}
+              </optgroup>
             </select>
           </div>
         </div>
-
-        <div className="mt-4 p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
-          <div className="flex items-center justify-between mb-2">
-            <div className="text-sm font-bold">⏱️ Tốc độ đọc</div>
-            <div className="text-xs font-mono px-2 py-0.5 rounded" style={{ background: 'white', color: 'var(--color-primary)' }}>
-              {speed.toFixed(2)}x
+        <div className="flex gap-3 flex-wrap mt-4">
+          <button
+            className="btn btn-primary flex items-center gap-2"
+            onClick={() => void testAdvancedVoice()}
+            disabled={testing !== null}
+          >
+            <Volume2 size={16} />
+            {testing === 'advanced' ? 'Dang goi advanced...' : 'Thu advanced'}
+          </button>
+          {!stats?.backendReachable && stats?.backendError && (
+            <div className="text-xs px-3 py-2 rounded-lg" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
+              Backend advanced chua san sang: {stats.backendError}
             </div>
-          </div>
-          <input
-            type="range"
-            min={0.6}
-            max={1.6}
-            step={0.05}
-            value={speed}
-            onChange={(e) => handleSpeedChange(Number(e.target.value))}
-            className="w-full"
-          />
-          <div className="flex items-center justify-between text-[11px] mt-1" style={{ color: 'var(--color-text-light)' }}>
-            <span>Chậm</span>
-            <span>Bình thường</span>
-            <span>Nhanh</span>
-          </div>
-          <div className="flex gap-2 mt-2">
-            <button
-              className="text-xs px-2 py-1 rounded-lg"
-              style={{ background: 'white', border: '1px solid #E5E7EB' }}
-              onClick={() => handleSpeedChange(1)}
-            >
-              Đặt lại 1.00x
-            </button>
-            <button
-              className="text-xs px-2 py-1 rounded-lg"
-              style={{ background: 'white', border: '1px solid #E5E7EB' }}
-              onClick={() => testSpeak('vi')}
-              disabled={testing}
-            >
-              Nghe thử tốc độ này
-            </button>
-          </div>
+          )}
         </div>
       </div>
 
-      {/* Test buttons */}
       <div className="card mb-4">
-        <h3 className="font-bold mb-3">🎧 Thử giọng đọc</h3>
-        <div className="flex gap-3">
-          <button
-            className="btn btn-primary flex items-center gap-2 flex-1"
-            onClick={() => testSpeak('vi')}
-            disabled={testing}
-          >
-            <Volume2 size={16} />
-            {testing ? 'Đang đọc...' : '🇻🇳 Thử tiếng Việt'}
-          </button>
-          <button
-            className="btn flex items-center gap-2 flex-1"
-            style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}
-            onClick={() => testSpeak('en')}
-            disabled={testing}
-          >
-            <Volume2 size={16} />
-            🇺🇸 Thử tiếng Anh
-          </button>
-        </div>
-      </div>
-
-      {/* Installed voices list */}
-      {ttsInfo && ttsInfo.voices.length > 0 && (
-        <div className="card">
-          <h3 className="font-bold mb-3">📋 Danh sách voices đã cài ({ttsInfo.voices.length})</h3>
-          <div className="grid gap-1 max-h-48 overflow-y-auto">
-            {ttsInfo.voices.map((v, i) => (
-              <div key={i} className="flex items-center gap-2 text-xs py-1 px-2 rounded" style={{ background: i % 2 === 0 ? '#F9FAFB' : 'transparent' }}>
-                <span className="font-mono" style={{ color: 'var(--color-primary)' }}>{v.lang}</span>
-                <span style={{ color: 'var(--color-text-light)' }}>{v.name}</span>
-              </div>
-            ))}
+        <div className="flex items-center justify-between mb-2">
+          <div className="text-sm font-bold">Toc do doc</div>
+          <div className="text-xs font-mono px-2 py-0.5 rounded" style={{ background: 'white', color: 'var(--color-primary)' }}>
+            {speed.toFixed(2)}x
           </div>
         </div>
-      )}
+        <input
+          type="range"
+          min={0.6}
+          max={1.6}
+          step={0.05}
+          value={speed}
+          onChange={(event) => handleSpeedChange(Number(event.target.value))}
+          className="w-full"
+        />
+        <p className="text-xs mt-2" style={{ color: 'var(--color-text-light)' }}>
+          Toc do nay ap dung cho phat static MP3, advanced MP3 va native fallback.
+        </p>
+      </div>
+
+      <div className="card mb-4">
+        <div className="flex items-center gap-2 mb-3">
+          <DatabaseZap size={18} style={{ color: 'var(--color-primary)' }} />
+          <h3 className="font-bold">Cache audio</h3>
+        </div>
+        <div className="grid gap-2 mb-4">
+          {cacheModeOptions.map((option) => (
+            <button
+              key={option.value}
+              className="flex items-center gap-3 p-3 rounded-xl text-left w-full transition-all"
+              style={{
+                background: cacheMode === option.value ? 'var(--color-surface)' : '#F9FAFB',
+                border: cacheMode === option.value ? '2px solid var(--color-primary)' : '2px solid transparent',
+              }}
+              onClick={() => handleCacheModeChange(option.value)}
+            >
+              <div
+                className="w-5 h-5 rounded-full border-2 flex items-center justify-center"
+                style={{ borderColor: cacheMode === option.value ? 'var(--color-primary)' : '#D1D5DB' }}
+              >
+                {cacheMode === option.value && (
+                  <div className="w-3 h-3 rounded-full" style={{ background: 'var(--color-primary)' }} />
+                )}
+              </div>
+              <div>
+                <div className="text-sm font-bold">{option.label}</div>
+                <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>{option.desc}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+        <button
+          className="btn flex items-center gap-2"
+          style={{ background: '#FEF2F2', color: '#B91C1C' }}
+          onClick={() => void handleClearCache()}
+          disabled={clearing}
+        >
+          <Trash2 size={16} />
+          {clearing ? 'Dang xoa cache...' : 'Xoa local cache + advanced cache'}
+        </button>
+        <p className="text-xs mt-2" style={{ color: 'var(--color-text-light)' }}>
+          Nut nay khong xoa audio tinh dong goi san trong app. No chi xoa cache tren may va cache backend phat sinh them.
+        </p>
+      </div>
+
+      <div className="card">
+        <div className="flex items-center justify-between gap-3 mb-3">
+          <h3 className="font-bold">Thong ke va audit</h3>
+          <button
+            className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg"
+            style={{ background: 'var(--color-surface)', color: 'var(--color-primary)' }}
+            onClick={() => void loadStats()}
+          >
+            <RefreshCw size={12} className={statsLoading ? 'animate-spin' : ''} /> Refresh
+          </button>
+        </div>
+
+        {statsLoading && (
+          <div className="text-sm" style={{ color: 'var(--color-text-light)' }}>
+            Dang tai thong tin TTS...
+          </div>
+        )}
+
+        {!statsLoading && statsError && (
+          <div className="text-sm" style={{ color: '#B91C1C' }}>
+            {statsError}
+          </div>
+        )}
+
+        {!statsLoading && !statsError && stats && (
+          <>
+            {staticManifest && (
+              <div className="grid gap-3 md:grid-cols-4 mb-4">
+                <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+                  <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Tong entry manifest</div>
+                  <div className="text-xl font-bold">{staticManifest.totalEntries}</div>
+                </div>
+                <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+                  <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Asset da co</div>
+                  <div className="text-xl font-bold">{staticManifest.availableEntries}</div>
+                </div>
+                <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+                  <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Asset con thieu</div>
+                  <div className="text-xl font-bold">{staticManifest.missingEntries}</div>
+                </div>
+                <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+                  <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Profile mac dinh</div>
+                  <div className="text-sm font-bold">{defaultStaticProfile?.label || staticManifest.defaultProfileId}</div>
+                </div>
+              </div>
+            )}
+
+            {stats.localDeviceCache && (
+              <div className="p-3 rounded-xl mb-4" style={{ background: '#EFF6FF' }}>
+                <div className="text-sm font-bold mb-1">Cache luu tren may user</div>
+                <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+                  {stats.localDeviceCache.entries} file • {(stats.localDeviceCache.totalBytes / 1024 / 1024).toFixed(2)} MB
+                </div>
+              </div>
+            )}
+
+            {showAdmin && (
+              <>
+                <div className="grid gap-3 md:grid-cols-4 mb-4">
+                  <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+                    <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Advanced file cache</div>
+                    <div className="text-xl font-bold">{stats.totalFiles}</div>
+                  </div>
+                  <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+                    <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Ky tu thang nay</div>
+                    <div className="text-xl font-bold">{stats.month.chars.toLocaleString('vi-VN')}</div>
+                  </div>
+                  <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+                    <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Quota thang</div>
+                    <div className="text-xl font-bold">{stats.monthlyCharLimit.toLocaleString('vi-VN')}</div>
+                  </div>
+                  <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+                    <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Tong cache hit</div>
+                    <div className="text-xl font-bold">{stats.totalHits}</div>
+                  </div>
+                </div>
+
+                <div className="grid gap-2 mb-4">
+                  {stats.byUsage.map((item) => (
+                    <div key={item.usage} className="flex items-center justify-between text-sm p-2 rounded-lg" style={{ background: '#F9FAFB' }}>
+                      <span>{item.usage}</span>
+                      <span style={{ color: 'var(--color-text-light)' }}>
+                        {item.files} file / {item.chars.toLocaleString('vi-VN')} ky tu / {item.hits} hit
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {staticManifest?.auditSamples?.length ? (
+              <div>
+                <div className="text-sm font-bold mb-2">Audit sample da khai bao</div>
+                <div className="grid gap-2">
+                  {staticManifest.auditSamples.map((sample) => (
+                    <div key={sample.key} className="flex items-center justify-between text-sm p-2 rounded-lg" style={{ background: '#F9FAFB' }}>
+                      <span>{sample.label} - {sample.profileId}</span>
+                      <span style={{ color: sample.available ? 'var(--color-success)' : '#B45309' }}>
+                        {sample.available ? 'Da co MP3' : 'Chua generate'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </>
+        )}
+      </div>
     </div>
   );
 }
