@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { Readable } from 'node:stream';
 import { Request, Response } from 'express';
 import {
   deleteCache,
@@ -19,6 +20,43 @@ const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 45;
 const RATE_LIMIT_REPEAT_COOLDOWN_MS = 1_200;
 const buckets = new Map<string, RateLimitBucket>();
+
+interface StaticPackSource {
+  fileId: string;
+  fileName: string;
+}
+
+const STATIC_PACK_BY_GRADE: Record<number, StaticPackSource> = {
+  0: {
+    fileId: '1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
+    fileName: 'vi-v1-pre-k-2026-04-27-v1.zip',
+  },
+  1: {
+    fileId: '1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq',
+    fileName: 'vi-v1-grade-1-2026-04-27-v1.zip',
+  },
+  2: {
+    fileId: '1VY-VkQ9Wtunydd10rCCp_Xs9cTZRucyh',
+    fileName: 'vi-v1-grade-2-2026-04-27-v1.zip',
+  },
+  3: {
+    fileId: '1LKgjUtADcVkbDpvCkfzSNCdNoJG94YQv',
+    fileName: 'vi-v1-grade-3-2026-04-27-v1.zip',
+  },
+  4: {
+    fileId: '164Xxc7vlATmrBqSHd9EWSXnvk9Q37rFk',
+    fileName: 'vi-v1-grade-4-2026-04-27-v1.zip',
+  },
+  5: {
+    fileId: '1PinMxVGHSl-GkekhSvTYp5rLgmcUFOQV',
+    fileName: 'vi-v1-grade-5-2026-04-27-v1.zip',
+  },
+  // Compatibility alias: some data flows treat this as pre-primary.
+  6: {
+    fileId: '1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
+    fileName: 'vi-v1-pre-k-2026-04-27-v1.zip',
+  },
+};
 
 function getRequestIp(req: Request): string {
   const forwarded = req.headers['x-forwarded-for'];
@@ -145,6 +183,83 @@ export async function deleteCacheHandler(req: Request, res: Response) {
     return res.status(500).json({
       success: false,
       error: String(error?.message || 'Failed to delete TTS cache.'),
+    });
+  }
+}
+
+function resolveStaticPackByGrade(rawGrade: string): { grade: number; source: StaticPackSource } | null {
+  const grade = Number.parseInt(String(rawGrade || '').trim(), 10);
+  if (!Number.isFinite(grade)) {
+    return null;
+  }
+  const source = STATIC_PACK_BY_GRADE[grade];
+  if (!source) {
+    return null;
+  }
+  return { grade, source };
+}
+
+function buildDriveDownloadUrl(fileId: string): string {
+  return `https://drive.google.com/uc?export=download&id=${encodeURIComponent(fileId)}`;
+}
+
+export async function getStaticPackByGradeHandler(req: Request, res: Response) {
+  const resolved = resolveStaticPackByGrade(String(req.params.grade || ''));
+  if (!resolved) {
+    return res.status(400).json({
+      success: false,
+      error: 'Unsupported grade for static audio pack.',
+    });
+  }
+
+  const { grade, source } = resolved;
+  const upstreamUrl = buildDriveDownloadUrl(source.fileId);
+
+  try {
+    const upstream = await fetch(upstreamUrl, {
+      method: 'GET',
+      redirect: 'follow',
+    });
+
+    if (!upstream.ok || !upstream.body) {
+      return res.status(502).json({
+        success: false,
+        error: `Static pack upstream failed (HTTP ${upstream.status}).`,
+      });
+    }
+
+    const contentType = String(upstream.headers.get('content-type') || '').toLowerCase();
+    if (!contentType.includes('zip') && contentType.includes('text/html')) {
+      return res.status(502).json({
+        success: false,
+        error: 'Static pack upstream returned HTML instead of ZIP.',
+      });
+    }
+
+    res.status(200);
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename="${source.fileName}"`);
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.setHeader('X-Static-Pack-Grade', String(grade));
+    res.setHeader('X-Static-Pack-Source', 'google-drive-proxy');
+    const upstreamLength = upstream.headers.get('content-length');
+    if (upstreamLength) {
+      res.setHeader('Content-Length', upstreamLength);
+    }
+
+    Readable.fromWeb(upstream.body as any)
+      .on('error', () => {
+        if (!res.headersSent) {
+          res.status(502).end();
+        } else {
+          res.end();
+        }
+      })
+      .pipe(res);
+  } catch (error: any) {
+    return res.status(502).json({
+      success: false,
+      error: String(error?.message || 'Failed to proxy static pack from upstream.'),
     });
   }
 }

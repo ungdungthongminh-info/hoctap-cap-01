@@ -1,6 +1,7 @@
 import type { StaticTtsManifestFile, StaticTtsManifestEntry } from './staticTtsManifest';
 import { unzipSync } from 'fflate';
 import { STORAGE_KEYS as APP_STORAGE_KEYS } from '../../constants/storageKeys';
+import { BACKEND_API_BASE } from '../webTotalBridge';
 
 const DB_NAME = 'hhk_tts_static_pack';
 const DB_VERSION = 1;
@@ -95,15 +96,19 @@ interface StaticPackSource {
 
 let autoSyncPromise: Promise<StaticPackSyncResult | null> | null = null;
 
-const GRADE_PACK_DRIVE_LINKS: Partial<Record<number, string>> = {
-  0: 'https://drive.google.com/uc?export=download&id=1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
-  1: 'https://drive.google.com/uc?export=download&id=1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq',
-  2: 'https://drive.google.com/uc?export=download&id=1VY-VkQ9Wtunydd10rCCp_Xs9cTZRucyh',
-  3: 'https://drive.google.com/uc?export=download&id=1LKgjUtADcVkbDpvCkfzSNCdNoJG94YQv',
-  4: 'https://drive.google.com/uc?export=download&id=164Xxc7vlATmrBqSHd9EWSXnvk9Q37rFk',
-  5: 'https://drive.google.com/uc?export=download&id=1PinMxVGHSl-GkekhSvTYp5rLgmcUFOQV',
+function buildGradePackProxyUrl(grade: number): string {
+  return `${String(BACKEND_API_BASE || '').replace(/\/+$/, '')}/tts/static-pack/by-grade/${grade}`;
+}
+
+const GRADE_PACK_LINKS: Partial<Record<number, string>> = {
+  0: buildGradePackProxyUrl(0),
+  1: buildGradePackProxyUrl(1),
+  2: buildGradePackProxyUrl(2),
+  3: buildGradePackProxyUrl(3),
+  4: buildGradePackProxyUrl(4),
+  5: buildGradePackProxyUrl(5),
   // Compatibility alias in case external data uses grade 6 for pre-primary pack.
-  6: 'https://drive.google.com/uc?export=download&id=1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
+  6: buildGradePackProxyUrl(0),
 };
 
 const GRADE_PACK_LABELS: Partial<Record<number, string>> = {
@@ -132,15 +137,15 @@ function parseStudentGradeFromStoredState(): number | null {
 
 function resolveDefaultPackUrlByGrade(): string {
   const grade = parseStudentGradeFromStoredState();
-  if (grade !== null && GRADE_PACK_DRIVE_LINKS[grade]) {
-    return String(GRADE_PACK_DRIVE_LINKS[grade] || '');
+  if (grade !== null && GRADE_PACK_LINKS[grade]) {
+    return String(GRADE_PACK_LINKS[grade] || '');
   }
-  return String(GRADE_PACK_DRIVE_LINKS[1] || '');
+  return String(GRADE_PACK_LINKS[1] || '');
 }
 
 function getRecommendedPackGrade(): number {
   const grade = parseStudentGradeFromStoredState();
-  if (grade !== null && GRADE_PACK_DRIVE_LINKS[grade]) {
+  if (grade !== null && GRADE_PACK_LINKS[grade]) {
     return grade;
   }
   return 1;
@@ -218,12 +223,12 @@ function normalizeManifestUrl(value: string): string {
   }
 }
 
-function isPresetDrivePackUrl(value: string): boolean {
+function isPresetPackUrl(value: string): boolean {
   const normalized = normalizeGoogleDriveUrl(String(value || '').trim());
   if (!normalized) {
     return false;
   }
-  return Object.values(GRADE_PACK_DRIVE_LINKS).some((item) => normalizeGoogleDriveUrl(String(item || '')) === normalized);
+  return Object.values(GRADE_PACK_LINKS).some((item) => normalizeGoogleDriveUrl(String(item || '')) === normalized);
 }
 
 function isLegacyLocalManifestUrl(value: string): boolean {
@@ -251,7 +256,7 @@ export function getStaticPackManifestUrl(): string {
     return getStaticPackRecommendedUrl();
   }
   const normalizedStored = normalizeManifestUrl(storedRaw);
-  if (isLegacyLocalManifestUrl(normalizedStored) || isPresetDrivePackUrl(normalizedStored)) {
+  if (isLegacyLocalManifestUrl(normalizedStored) || isPresetPackUrl(normalizedStored)) {
     // Auto-follow grade pack presets instead of pinning an old grade URL.
     return getStaticPackRecommendedUrl();
   }
@@ -655,7 +660,10 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
 
   const source = await fetchStaticPackSource(manifestUrl);
   if (!source) {
-    throw new Error('Khong tai duoc audio pack tu duong dan da cau hinh (can manifest.json hoac file .zip).');
+    throw new Error(
+      `Khong tai duoc audio pack tu duong dan da cau hinh: ${manifestUrl}. `
+      + 'Kiem tra backend /api/v1/tts/static-pack/by-grade/:grade va ket noi internet.',
+    );
   }
   const manifest = source.manifest;
 
