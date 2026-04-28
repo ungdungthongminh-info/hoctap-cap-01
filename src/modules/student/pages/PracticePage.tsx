@@ -349,6 +349,8 @@ export function PracticePage() {
     );
   }
 
+  const questionPrompt = (currentQuestion.questionText || '').trim();
+
   const handleSelect = (answer: string) => {
     if (answerState !== 'unanswered') return;
     setSelectedAnswer(answer);
@@ -474,6 +476,15 @@ export function PracticePage() {
             💡 {currentQuestion.explanationSimple}
           </div>
         )}
+
+        <div className="mb-4">
+          <p
+            className="text-lg font-semibold leading-relaxed"
+            style={{ color: 'var(--color-text)' }}
+          >
+            {questionPrompt || 'Câu hỏi đang được cập nhật...'}
+          </p>
+        </div>
 
         {/* Grade-0: emoji visual */}
         {isPreGrade && (
