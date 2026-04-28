@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { App } from './App';
+import { ensureStaticPackAutoSync } from './shared/services/tts/staticAudioPack';
 import './styles/index.css';
 
 document.title = import.meta.env.VITE_APP_TITLE || 'Học Hứng Khởi Tiểu Học';
@@ -83,6 +84,9 @@ async function boot() {
         <App />
       </React.StrictMode>,
     );
+
+    // Best-effort background sync for static audio pack (if enabled).
+    void ensureStaticPackAutoSync().catch(() => undefined);
   } catch (err) {
     const msg = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
     renderFatal(msg);

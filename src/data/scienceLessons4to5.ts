@@ -63,7 +63,7 @@ export const scienceLessons5: Lesson[] = [
   L(5, 'C3', 'KH5-12', 'Đa dạng sinh học', 'Nhận biết sự đa dạng sinh học', 'Trái Đất có hàng triệu loài SV khác nhau, cần bảo vệ sự đa dạng', 'Đếm các loài cây/con vật bé biết', 'easy', 10),
   // C4: Trái Đất và Bầu trời
   L(5, 'C4', 'KH5-13', 'Hệ Mặt Trời', 'Tìm hiểu về Hệ Mặt Trời', '8 hành tinh: Thủy, Kim, Trái Đất, Hỏa, Mộc, Thổ, Thiên Vương, Hải Vương', 'Làm mô hình Hệ Mặt Trời bằng bóng xốp', 'medium', 12),
-  L(5, 'C4', 'KH5-14', 'Trái Đất quay', 'Hiểu sự tự quay và quay quanh Mặt Trời', 'Tự quay → ngày đêm. Quay quanh Môi trường → 4 mùa', 'Dùng đèn pin + quả bóng minh họa ngày/đêm', 'medium', 12),
+  L(5, 'C4', 'KH5-14', 'Trái Đất quay', 'Hiểu sự tự quay và quay quanh Mặt Trời', 'Tự quay → ngày đêm. Quay quanh Mặt Trời → 4 mùa', 'Dùng đèn pin + quả bóng minh họa ngày/đêm', 'medium', 12),
   L(5, 'C4', 'KH5-15', 'Mùa và Khí hậu', 'Hiểu nguyên nhân 4 mùa', 'Trục Trái Đất nghiêng → các vùng nhận ánh sáng khác nhau', 'VN có 2 mùa chính: mùa mưa và mùa khô', 'medium', 12),
   L(5, 'C4', 'KH5-16', 'Địa hình Việt Nam', 'Nhận biết các dạng địa hình cơ bản', 'Đồng bằng, Cao nguyên, Núi, Ven biển', 'Xem bản đồ địa hình VN cùng bé', 'easy', 10),
   // C5: Con người và Môi trường

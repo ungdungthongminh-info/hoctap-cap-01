@@ -60,9 +60,9 @@ export const natureLessons3: Lesson[] = [
   L3('sinh-thai','cthan','Chuỗi thức ăn','Biết mối quan hệ ăn → bị ăn','Cỏ→Thỏ→Cáo = chuỗi thức ăn','Vẽ chuỗi thức ăn trong vườn nhà','medium',14,13),
   L3('trai-dat','tdqdc','Trái Đất & Quả địa cầu','Biết hình dạng TĐ, lục địa, đại dương','TĐ hình cầu, 70% nước, 30% đất liền','Xoay quả địa cầu, tìm Việt Nam','easy',12,14),
   L3('trai-dat','bmat','Bề mặt Trái Đất','Biết núi, đồng bằng, sông, biển','Núi cao, ĐB phẳng, sông chảy, biển mênh mông','Mô hình: nhào đất nặn → núi, ĐB, sông','easy',12,15),
-  L3('trai-dat','matt','Mặt Trời & Hệ Mặt Trời','Biết Môi trường là ngôi sao, 8 hành tinh','Môi trường nóng, TĐ quay quanh Môi trường → ngày/đêm, 4 mùa','Nhớ: Mẹ Vừa Trồng Đào Hỏi Thiên-Hải-Diêm','medium',14,16),
-  L3('trai-dat','mtrg','Mặt Trăng & Ngày đêm','Biết MTr quay quanh TĐ, ngày/đêm','TĐ tự quay → ngày (mặt hướng Môi trường) / đêm','Dùng đèn pin + quả bóng → thí nghiệm ngày đêm','medium',14,17),
+  L3('trai-dat','matt','Mặt Trời & Hệ Mặt Trời','Biết Mặt Trời là ngôi sao, 8 hành tinh','Mặt Trời nóng, TĐ quay quanh Mặt Trời → ngày/đêm, 4 mùa','Nhớ: Mẹ Vừa Trồng Đào Hỏi Thiên-Hải-Diêm','medium',14,16),
+  L3('trai-dat','mtrg','Mặt Trăng & Ngày đêm','Biết MTr quay quanh TĐ, ngày/đêm','TĐ tự quay → ngày (mặt hướng Mặt Trời) / đêm','Dùng đèn pin + quả bóng → thí nghiệm ngày đêm','medium',14,17),
   L3('moi-truong','bvmt','Bảo vệ môi trường','Biết cách bảo vệ Môi trường sống','Phân loại rác, trồng cây, tiết kiệm điện nước','Nhặt rác sân trường = hành động nhỏ, ý nghĩa lớn','easy',12,18),
   L3('moi-truong','pctt','Phòng chống thiên tai','Biết bão, lũ, động đất, cách phòng','Bão: đóng cửa, tránh xa cây to. ĐĐ: chui gầm bàn','Tập diễn tập: nghe còi → nấp gầm bàn','medium',12,19),
-  L3('on-tap','otl3','Ôn tập: Thế giới Tự nhiên','Ôn tổng hợp Kiểm tra lớp 3','Giác quan, vật chất, Thực vật, ĐV, TĐ, Môi trường, Bảo vệ môi trường','Chơi "Ai thông minh hơn" ôn Kiểm tra Tự nhiên','easy',15,20),
+  L3('on-tap','otl3','Ôn tập: Thế giới Tự nhiên','Ôn tổng hợp Kiểm tra lớp 3','Giác quan, vật chất, Thực vật, ĐV, TĐ, Mặt Trời, Bảo vệ môi trường','Chơi "Ai thông minh hơn" ôn Kiểm tra Tự nhiên','easy',15,20),
 ];

@@ -23,7 +23,11 @@
     "tts:catalog": "tsx scripts/generate-static-tts-catalog.ts",
     "tts:generate:static": "npm --prefix backend run tts:generate-static --"
   },
-  "keywords": ["education", "kids", "math"],
+  "keywords": [
+    "education",
+    "kids",
+    "math"
+  ],
   "author": "",
   "license": "ISC",
   "description": "Ứng dụng học tập vui nhộn cho học sinh tiểu học",
@@ -73,13 +77,13 @@
   },
   "dependencies": {
     "better-sqlite3": "^12.9.0",
+    "fflate": "^0.8.2",
     "lucide-react": "^1.8.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router-dom": "^7.14.1"
   },
   "devDependencies": {
-      "cross-env": "^10.1.0",
     "@tailwindcss/vite": "^4.2.2",
     "@types/better-sqlite3": "^7.6.13",
     "@types/react": "^19.2.14",
@@ -87,6 +91,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.5.0",
     "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
     "electron": "^41.2.1",
     "electron-builder": "^26.8.1",
     "tailwindcss": "^4.2.2",

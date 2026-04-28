@@ -1,4 +1,5 @@
 import { getDefaultStaticVoiceProfile, listStaticVoiceProfiles, type StaticTtsVoiceProfile } from './ttsVoiceProfiles';
+import { fetchStaticPackManifest, getCachedStaticPackManifest, getStaticPackManifestUrl } from './staticAudioPack';
 
 export interface StaticTtsManifestEntry {
   key: string;
@@ -50,6 +51,10 @@ const STATIC_MANIFEST_PATH = `${import.meta.env.BASE_URL || '/'}audio/tts/manife
 
 let manifestPromise: Promise<StaticTtsManifestFile | null> | null = null;
 
+export function invalidateStaticTtsManifestCache(): void {
+  manifestPromise = null;
+}
+
 function withResolvedAudioUrl(entry: Omit<StaticTtsManifestEntry, 'audioUrl'> & { audioUrl?: string }): StaticTtsManifestEntry {
   const assetPath = String(entry.assetPath || '').replace(/^\/+/, '');
   const audioUrl = entry.audioUrl || `${import.meta.env.BASE_URL || '/'}${assetPath}`.replace(/([^:]\/)\/+/g, '$1');
@@ -60,6 +65,17 @@ function withResolvedAudioUrl(entry: Omit<StaticTtsManifestEntry, 'audioUrl'> & 
 }
 
 async function fetchManifest(): Promise<StaticTtsManifestFile | null> {
+  const cachedPackManifest = await getCachedStaticPackManifest();
+  if (cachedPackManifest) {
+    return cachedPackManifest;
+  }
+
+  const configuredManifestUrl = getStaticPackManifestUrl();
+  const configuredManifest = await fetchStaticPackManifest(configuredManifestUrl);
+  if (configuredManifest) {
+    return configuredManifest;
+  }
+
   try {
     const response = await fetch(STATIC_MANIFEST_PATH, { cache: 'no-cache' });
     if (!response.ok) {
@@ -75,7 +91,12 @@ export async function loadStaticTtsManifest(force = false): Promise<StaticTtsMan
   if (force || !manifestPromise) {
     manifestPromise = fetchManifest();
   }
-  return manifestPromise;
+  const manifest = await manifestPromise;
+  if (!force && manifest && Number(manifest.summary?.availableEntries || 0) === 0) {
+    manifestPromise = fetchManifest();
+    return manifestPromise;
+  }
+  return manifest;
 }
 
 export async function getStaticTtsManifestEntry(assetKey?: string): Promise<StaticTtsManifestEntry | null> {

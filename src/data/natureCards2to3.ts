@@ -51,12 +51,12 @@ export const natureCards2to3: LessonCard[] = [
   // === G2 L227: Thời tiết ===
   C(227,'intro','Thời tiết là gì?','Trạng thái KQ ở 1 nơi, 1 lúc: nắng/mưa/gió...',null,1),
   C(227,'explain','Các hiện tượng','Nắng, mưa, gió, sấm sét, mây, sương mù.',null,2),
-  C(227,'example','Dự báo thời tiết','Xem Thực vật/điện thoại: hôm nay nắng 35°C, chiều mưa.','["Mây đen = sắp mưa", "Trout nắng = trời quang"]',3),
+  C(227,'example','Dự báo thời tiết','Xem TV/điện thoại: hôm nay nắng 35°C, chiều mưa.','["Mây đen = sắp mưa", "Trời nắng = trời quang"]',3),
   C(227,'tip','Ăn mặc theo thời tiết','Nóng: mỏng. Lạnh: áo ấm. Mưa: mang ô.',null,4),
 
   // === G2 L228: Các mùa ===
   C(228,'intro','4 mùa Việt Nam','Xuân: ấm. Hạ: nóng. Thu: mát. Đông: lạnh.',null,1),
-  C(228,'explain','Vì sao có mùa?','Trái Đất nghiêng trục + quay quanh Môi trường → mùa thay đổi.',null,2),
+  C(228,'explain','Vì sao có mùa?','Trái Đất nghiêng trục + quay quanh Mặt Trời → mùa thay đổi.',null,2),
   C(228,'example','Đặc điểm từng mùa','Xuân: hoa nở. Hạ: ve kêu. Thu: lá vàng. Đông: rét.','["Miền Nam VN: 2 mùa mưa/khô"]',3),
   C(228,'tip','Yêu thiên nhiên','Mỗi mùa đều đẹp, hãy quan sát và trân trọng!',null,4),
 
@@ -172,7 +172,7 @@ export const natureCards2to3: LessonCard[] = [
   C(247,'intro','Nguồn sáng','Tự nhiên: Mặt Trời, sao. Nhân tạo: đèn, nến.',null,1),
   C(247,'explain','Truyền thẳng','AS đi thẳng, bị chặn → bóng. Vật: trong suốt/mờ/đục.',null,2),
   C(247,'example','Bóng đổ','Đứng ngoài nắng → bóng em. Đèn pin → bóng tay.','["Kính trong suốt: AS qua. Gỗ đục: AS không qua"]',3),
-  C(247,'tip','Bảo vệ mắt','Không nhìn thẳng Môi trường, đeo kính râm, đọc đủ sáng.',null,4),
+  C(247,'tip','Bảo vệ mắt','Không nhìn thẳng Mặt Trời, đeo kính râm, đọc đủ sáng.',null,4),
 
   // === G3 L248: Âm thanh ===
   C(248,'intro','Âm thanh từ rung','Vật rung → KK rung → tai nghe = âm thanh.',null,1),
@@ -223,16 +223,16 @@ export const natureCards2to3: LessonCard[] = [
   C(255,'tip','Mô hình','Nhào đất nặn → tạo núi, sông, ĐB mini.',null,4),
 
   // === G3 L256: Mặt Trời ===
-  C(256,'intro','Môi trường = ngôi sao','Môi trường rất nóng, tỏa sáng + nhiệt. Cách TĐ 150 triệu km.',null,1),
-  C(256,'explain','Hệ Môi trường','8 hành tinh: Sao Thủy-Kim-TĐ-Hỏa-Mộc-Thổ-Thiên Vương-Hải Vương.',null,2),
-  C(256,'example','TĐ quay quanh Môi trường','1 vòng = 365 ngày = 1 năm. Nghiêng trục → 4 mùa.','["Môi trường = 99.8% khối lượng hệ Môi trường"]',3),
+  C(256,'intro','Mặt Trời = ngôi sao','Mặt Trời rất nóng, tỏa sáng + nhiệt. Cách TĐ 150 triệu km.',null,1),
+  C(256,'explain','Hệ Mặt Trời','8 hành tinh: Sao Thủy-Kim-TĐ-Hỏa-Mộc-Thổ-Thiên Vương-Hải Vương.',null,2),
+  C(256,'example','TĐ quay quanh Mặt Trời','1 vòng = 365 ngày = 1 năm. Nghiêng trục → 4 mùa.','["Mặt Trời = 99.8% khối lượng hệ Mặt Trời"]',3),
   C(256,'tip','Nhớ thứ tự','Mẹ Vừa Trồng Đào Hỏi Thiên-Hải-Diêm.',null,4),
 
   // === G3 L257: Mặt Trăng ===
   C(257,'intro','MTr = vệ tinh TĐ','Mặt Trăng quay quanh TĐ, phản chiếu AS Mặt Trời.',null,1),
   C(257,'explain','Các pha MTr','Trăng non→Lưỡi liềm→Bán nguyệt→Trăng tròn→...','MTr lặp 1 vòng ≈ 29.5 ngày.',2),
-  C(257,'example','Ngày và đêm','TĐ tự quay: mặt hướng Môi trường = ngày, mặt kia = đêm.','["1 ngày = TĐ quay 1 vòng = 24 giờ"]',3),
-  C(257,'tip','Thí nghiệm','Đèn pin(Môi trường) + bóng(TĐ) → xoay → ngày/đêm.',null,4),
+  C(257,'example','Ngày và đêm','TĐ tự quay: mặt hướng Mặt Trời = ngày, mặt kia = đêm.','["1 ngày = TĐ quay 1 vòng = 24 giờ"]',3),
+  C(257,'tip','Thí nghiệm','Đèn pin(Mặt Trời) + bóng(TĐ) → xoay → ngày/đêm.',null,4),
 
   // === G3 L258: Bảo vệ môi trường ===
   C(258,'intro','Vì sao BV Môi trường?','Ô nhiễm → bệnh tật, ĐV mất nhà, thiên tai.',null,1),
@@ -247,8 +247,8 @@ export const natureCards2to3: LessonCard[] = [
   C(259,'tip','Diễn tập','Tập ở trường: nghe còi → nấp bàn → ra sân.',null,4),
 
   // === G3 L260: Ôn tập ===
-  C(260,'intro','Ôn cuối năm lớp 3','Tổng hợp: giác quan, vật chất, sinh vật, TĐ, Môi trường.',null,1),
-  C(260,'explain','Trọng tâm lớp 3','Giác quan, 3 TT vật chất, Thực vật-ĐV-chuỗi TĂ, hệ Môi trường, Bảo vệ môi trường.',null,2),
+  C(260,'intro','Ôn cuối năm lớp 3','Tổng hợp: giác quan, vật chất, sinh vật, TĐ, Mặt Trời.',null,1),
+  C(260,'explain','Trọng tâm lớp 3','Giác quan, 3 TT vật chất, Thực vật-ĐV-chuỗi TĂ, hệ Mặt Trời, Bảo vệ môi trường.',null,2),
   C(260,'example','Bài ôn','Vẽ sơ đồ tư duy, làm poster, thuyết trình.','["Sơ đồ: giữa = Tự nhiên, nhánh = chủ đề"]',3),
   C(260,'tip','Tự tin','Ôn kỹ, ngủ sớm, thi vui vẻ!',null,4),
 ];

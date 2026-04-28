@@ -234,7 +234,7 @@ export function PwaSettingsPage() {
         </div>
         <div className="mt-3 pt-3 border-t" style={{ borderColor: 'var(--color-border)' }}>
           <div className="text-[10px]" style={{ color: 'var(--color-text-light)' }}>
-            ⚠️ Giọng đọc tiếng Việt (Google TTS) cần kết nối mạng. Giọng đọc tiếng Anh hoạt động offline.
+            ⚠️ Giọng đọc dùng audio pack tĩnh: tải pack trong cài đặt audio để nghe ổn định khi offline.
           </div>
         </div>
       </div>

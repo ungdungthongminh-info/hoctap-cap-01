@@ -9,6 +9,7 @@ import {
 import { getStaticTtsManifestEntry, getStaticTtsManifestSummary, prefetchStaticTtsAsset } from './staticTtsManifest';
 import { getTtsPolicy, type TtsPolicyId } from './ttsPolicy';
 import { buildNarrationSsml, type TtsSsmlStyleId } from './ttsNarration';
+import { getStaticPackAudioBlob } from './staticAudioPack';
 
 export type { TtsCacheStats } from './ttsClient';
 
@@ -633,6 +634,24 @@ async function tryPlayFromStaticManifest(
   options: SpeakTextOptions,
   token: number,
 ): Promise<TtsPlaybackResult | null> {
+  if (assetKey) {
+    try {
+      const blob = await getStaticPackAudioBlob(assetKey);
+      if (blob) {
+        const objectUrl = URL.createObjectURL(blob);
+        currentObjectUrl = objectUrl;
+        setRuntimeStatus({
+          lastCacheStatus: 'hit',
+          error: null,
+        });
+        options.onStatusChange?.('ready');
+        return await playAudioUrl(objectUrl, 'static-manifest', 'hit', speed, options, token);
+      }
+    } catch {
+      // Continue fallback chain below.
+    }
+  }
+
   const entry = await getStaticTtsManifestEntry(assetKey);
   if (!entry?.available) {
     return null;

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Cloud, DatabaseZap, Headphones, MonitorSpeaker, RefreshCw, Trash2, Volume2, Wifi, WifiOff } from 'lucide-react';
+import { Cloud, DatabaseZap, Download, Headphones, MonitorSpeaker, RefreshCw, Trash2, Volume2, Wifi, WifiOff } from 'lucide-react';
 import {
   clearTtsAudioCache,
   fetchTtsCacheStats,
@@ -22,7 +22,21 @@ import {
 import { MascotCharacter } from '../../../shared/components';
 import { buildVoiceAuditAssetKey } from '../../../shared/services/tts/ttsAssetKeys';
 import { VOICE_AUDIT_LINES } from '../../../shared/services/tts/ttsNarration';
+import { invalidateStaticTtsManifestCache } from '../../../shared/services/tts/staticTtsManifest';
 import { listStaticVoiceProfiles } from '../../../shared/services/tts/ttsVoiceProfiles';
+import {
+  clearStaticAudioPack,
+  getStaticAudioPackStats,
+  getStaticPackManifestUrl,
+  getStaticPackRecommendedLabel,
+  getStaticPackRecommendedUrl,
+  isStaticPackAutoSyncEnabled,
+  setStaticPackAutoSyncEnabled,
+  setStaticPackManifestUrl,
+  syncStaticAudioPack,
+  type StaticAudioPackStats,
+  type StaticPackSyncProgress,
+} from '../../../shared/services/tts/staticAudioPack';
 import { isAdminUnlocked } from '../../../shared/utils/adminAccess';
 
 type TtsModeOption = 'static' | 'advanced';
@@ -87,9 +101,18 @@ export function TtsSettingsPage() {
   const [online, setOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
   const [activeProfileId, setActiveProfileId] = useState('');
   const [lastPlaybackMessage, setLastPlaybackMessage] = useState('');
+  const [packManifestUrl, setPackManifestUrl] = useState(getStaticPackManifestUrl());
+  const [packAutoSync, setPackAutoSync] = useState(isStaticPackAutoSyncEnabled());
+  const [packStats, setPackStats] = useState<StaticAudioPackStats | null>(null);
+  const [packSyncing, setPackSyncing] = useState(false);
+  const [packClearing, setPackClearing] = useState(false);
+  const [packProgress, setPackProgress] = useState<StaticPackSyncProgress | null>(null);
+  const [packError, setPackError] = useState('');
 
   const pref = getVoicePreferenceOptions();
   const showAdmin = import.meta.env.DEV || isAdminUnlocked();
+  const recommendedPackUrl = getStaticPackRecommendedUrl();
+  const recommendedPackLabel = getStaticPackRecommendedLabel();
   const visibleModeOptions = showAdmin
     ? modeOptions
     : modeOptions.filter((option) => option.value === 'static');
@@ -175,9 +198,19 @@ export function TtsSettingsPage() {
     }
   };
 
+  const loadPackStats = async () => {
+    try {
+      const next = await getStaticAudioPackStats();
+      setPackStats(next);
+    } catch {
+      setPackStats(null);
+    }
+  };
+
   useEffect(() => {
     const cleanup = onVoicesReady((info) => setTtsInfo(info));
     void loadStats();
+    void loadPackStats();
 
     const handleNetwork = () => setOnline(navigator.onLine);
     window.addEventListener('online', handleNetwork);
@@ -225,6 +258,70 @@ export function TtsSettingsPage() {
       await loadStats();
     } finally {
       setClearing(false);
+    }
+  };
+
+  const handlePackAutoSyncChange = (enabled: boolean) => {
+    setPackAutoSync(enabled);
+    setStaticPackAutoSyncEnabled(enabled);
+  };
+
+  const handleSavePackManifestUrl = () => {
+    if (!showAdmin) {
+      return;
+    }
+    const normalized = setStaticPackManifestUrl(packManifestUrl);
+    setPackManifestUrl(normalized);
+    setPackError('');
+    invalidateStaticTtsManifestCache();
+  };
+
+  const handleSyncPack = async () => {
+    setPackError('');
+    setPackProgress(null);
+    setPackSyncing(true);
+    try {
+      const syncUrl = showAdmin ? packManifestUrl : recommendedPackUrl;
+      if (!showAdmin) {
+        setPackManifestUrl(syncUrl);
+        setStaticPackManifestUrl(syncUrl);
+      }
+      await syncStaticAudioPack({
+        manifestUrl: syncUrl,
+        profileId: defaultProfileId || undefined,
+        onProgress: (progress) => setPackProgress(progress),
+      });
+      invalidateStaticTtsManifestCache();
+      await loadPackStats();
+      await loadStats();
+    } catch (error) {
+      setPackError(error instanceof Error ? error.message : 'Không đồng bộ được audio pack.');
+    } finally {
+      setPackSyncing(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showAdmin) {
+      return;
+    }
+    const nextUrl = recommendedPackUrl;
+    setPackManifestUrl(nextUrl);
+    setStaticPackManifestUrl(nextUrl);
+  }, [recommendedPackUrl, showAdmin]);
+
+  const handleClearStaticPack = async () => {
+    setPackClearing(true);
+    setPackError('');
+    try {
+      await clearStaticAudioPack();
+      invalidateStaticTtsManifestCache();
+      await loadPackStats();
+      await loadStats();
+    } catch (error) {
+      setPackError(error instanceof Error ? error.message : 'Không xóa được audio pack.');
+    } finally {
+      setPackClearing(false);
     }
   };
 
@@ -423,6 +520,118 @@ export function TtsSettingsPage() {
             App học sinh luôn ưu tiên audio tĩnh để ổn định và dùng offline. Chế độ Advanced chỉ mở trong khu kỹ thuật.
           </p>
         )}
+      </div>
+
+      <div className="card mb-4">
+        <div className="flex items-center gap-2 mb-3">
+          <Download size={18} style={{ color: 'var(--color-primary)' }} />
+          <h3 className="font-bold">Audio pack tải về máy (offline)</h3>
+        </div>
+
+        {showAdmin ? (
+          <>
+            <label className="text-sm font-bold block mb-2">Đường dẫn audio pack (manifest.json hoặc .zip)</label>
+            <div className="flex gap-2 mb-3">
+              <input
+                className="flex-1 p-2 rounded-lg text-sm"
+                style={{ border: '1px solid #D1D5DB' }}
+                value={packManifestUrl}
+                onChange={(event) => setPackManifestUrl(event.target.value)}
+                placeholder="https://.../manifest.json hoặc https://.../vi-v1-grade-1.zip"
+              />
+              <button
+                type="button"
+                className="btn"
+                style={{ background: 'var(--color-surface)', color: 'var(--color-primary)' }}
+                onClick={handleSavePackManifestUrl}
+              >
+                Lưu URL
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="mb-3 rounded-xl p-3" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+            <div className="text-sm font-bold">Gói audio tự động: {recommendedPackLabel}</div>
+            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+              Chỉ cần bấm tải, app tự chọn đúng gói theo lớp và lưu offline trên máy.
+            </div>
+          </div>
+        )}
+
+        <label className="flex items-center gap-2 text-sm mb-3">
+          <input
+            type="checkbox"
+            checked={packAutoSync}
+            onChange={(event) => handlePackAutoSyncChange(event.target.checked)}
+          />
+          Tự đồng bộ audio pack khi mở app/web
+        </label>
+
+        <div className="grid gap-2 md:grid-cols-4 mb-3">
+          <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Manifest</div>
+            <div className="text-sm font-bold">{packStats?.hasManifest ? 'Đã có' : 'Chưa có'}</div>
+          </div>
+          <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Đã tải về máy</div>
+            <div className="text-sm font-bold">{packStats?.downloadedEntries || 0}</div>
+          </div>
+          <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Còn thiếu</div>
+            <div className="text-sm font-bold">{packStats?.missingEntries || 0}</div>
+          </div>
+          <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Dung lượng local</div>
+            <div className="text-sm font-bold">{((packStats?.totalBytes || 0) / 1024 / 1024).toFixed(2)} MB</div>
+          </div>
+        </div>
+
+        {packProgress && (
+          <div className="mb-3 p-3 rounded-xl" style={{ background: '#EFF6FF' }}>
+            <div className="text-xs font-bold mb-1">
+              {packProgress.phase === 'manifest'
+                ? 'Đang đọc thông tin pack...'
+                : packProgress.phase === 'finalizing'
+                  ? 'Đang chốt dữ liệu local...'
+                  : `Đang tải ${packProgress.processedEntries}/${packProgress.totalEntries}`}
+            </div>
+            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+              Mới: {packProgress.downloadedEntries} | Bỏ qua: {packProgress.skippedEntries} | Lỗi: {packProgress.failedEntries}
+            </div>
+          </div>
+        )}
+
+        {packError && (
+          <div className="text-xs mb-3 px-3 py-2 rounded-lg" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
+            {packError}
+          </div>
+        )}
+
+        <div className="flex gap-3 flex-wrap">
+          <button
+            type="button"
+            className="btn btn-primary flex items-center gap-2"
+            onClick={() => void handleSyncPack()}
+            disabled={packSyncing || !online}
+          >
+            <Download size={16} />
+            {packSyncing ? 'Đang tải audio pack...' : 'Tải/đồng bộ audio pack'}
+          </button>
+          <button
+            type="button"
+            className="btn flex items-center gap-2"
+            style={{ background: '#FEF2F2', color: '#B91C1C' }}
+            onClick={() => void handleClearStaticPack()}
+            disabled={packClearing}
+          >
+            <Trash2 size={16} />
+            {packClearing ? 'Đang xóa audio pack...' : 'Xóa audio pack local'}
+          </button>
+        </div>
+
+        <p className="text-xs mt-3" style={{ color: 'var(--color-text-light)' }}>
+          Sau khi tải xong, người học có thể nghe offline từ file đã lưu trên máy, không cần gọi API TTS cho flow mặc định.
+        </p>
       </div>
 
       <div className="card mb-4">
@@ -691,7 +900,10 @@ export function TtsSettingsPage() {
               type="button"
               className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg"
               style={{ background: 'var(--color-surface)', color: 'var(--color-primary)' }}
-              onClick={() => void loadStats()}
+              onClick={() => {
+                void loadStats();
+                void loadPackStats();
+              }}
             >
               <RefreshCw size={12} className={statsLoading ? 'animate-spin' : ''} /> Refresh
             </button>

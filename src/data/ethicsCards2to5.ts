@@ -325,7 +325,7 @@ export const ethicsCards2to5: LessonCard[] = [
   C(391,'intro','TK năng lượng','Người lạ hóa thạch (than, dầu) có hạn → phải TK.',null),
   C(391,'explain','Hành động','Tắt điện khi ra ngoài, dùng quạt thay điều hòa khi được.',null),
   C(391,'example','Đi xe đạp','Đi học bằng xe đạp thay xe máy = TK xăng + giảm khí thải.','Đi xe đạp đi học'),
-  C(391,'tip','Người lạ sạch','Pin Môi trường, gió, thủy điện = Người lạ tái tạo = tương lai.',null),
+  C(391,'tip','Người lạ sạch','Pin mặt trời, gió, thủy điện = Năng lượng tái tạo = tương lai.',null),
   C(392,'intro','Sống xanh','= lối sống thân thiện Môi trường, ít rác, nhiều tái chế.',null),
   C(392,'explain','Zero waste','Giảm rác → 0. Bình nước, túi vải, hộp cơm.',null),
   C(392,'example','Không ống hút nhựa','Dùng ống hút inox/tre thay ống hút nhựa = sống xanh.','Dùng ống hút tre'),

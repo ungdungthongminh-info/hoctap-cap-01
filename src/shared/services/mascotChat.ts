@@ -1,4 +1,4 @@
-/**
+﻿/**
  * MASCOT CHAT — Hệ thống nhân vật trò chuyện theo rule
  * Mỗi mascot có tính cách riêng, nói chuyện khác nhau
  * Không cần AI runtime — template + rule engine
@@ -81,7 +81,7 @@ const mascots: MascotPersonality[] = [
         'Ê đúng nè đúng nè! {name} xịn quá! 🐬🔥',
       ],
       wrong_answer: [
-        'Ây sai r! Hok sao, Dopi cũng hay bơi lạc lắm 😄🐬',
+        'Ấy sai rồi! Hông sao, Dopi cũng hay bơi lạc lắm 😄🐬',
         'Ối sai mất! Nhưng mà thử lại đi, từ từ mà! 💪🐬',
         'Hehe sai rồi nè! Để Dopi chỉ cho nghen! 🐬',
       ],
@@ -813,3 +813,4 @@ export function getMascotComebackMessage(
 ): MascotMessage {
   return getMascotMessage(themeId, 'comeback', { name: studentName, days: daysAway });
 }
+

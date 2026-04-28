@@ -439,8 +439,8 @@ export const artExpLessons = [
   LA(1,'MT1C3','L31_in_hinh','In hình bằng lá cây','Tạo hình từ lá cây','Nhúng sơn + in lên giấy','Chọn lá đẹp rồi in!','easy',10,31),
   LA(1,'MT1C4','L32_xem_tranh','Xem tranh và cảm nhận','Biết nhận xét tranh','Tranh có gì? Màu gì? Đẹp không?','Mỗi người thấy khác nhau!','easy',8,32),
   LA(1,'MT1C5','L33_ve_truong','Vẽ trường em','Vẽ tranh trường học','Cổng trường, sân, lớp học','Vẽ nơi mình yêu thích!','easy',12,33),
-  LA(1,'MT1C2','L34_on_hk1_mt1','Ôn HK1 Môi trường lớp 1','Ôn bài giữa năm','Ôn vẽ, tô, cắt dán','Vẽ mỗi ngày!','easy',10,34),
-  LA(1,'MT1C5','L35_on_cuoi_mt1','Ôn cuối năm Môi trường lớp 1','Ôn toàn bộ','Tổng ôn Môi trường 1','Bé họa sĩ giỏi!','easy',10,35),
+  LA(1,'MT1C2','L34_on_hk1_mt1','Ôn HK1 Mĩ thuật lớp 1','Ôn bài giữa năm','Ôn vẽ, tô, cắt dán','Vẽ mỗi ngày!','easy',10,34),
+  LA(1,'MT1C5','L35_on_cuoi_mt1','Ôn cuối năm Mĩ thuật lớp 1','Ôn toàn bộ','Tổng ôn Mĩ thuật 1','Bé họa sĩ giỏi!','easy',10,35),
 
   // Lớp 2
   LA(2,'MT2C1','L21_ve_nguoi','Vẽ người đang hoạt động','Vẽ người chạy, nhảy','Cơ thể = que + tròn','Chú ý tay chân đang động!','easy',10,21),
@@ -456,8 +456,8 @@ export const artExpLessons = [
   LA(2,'MT2C3','L31_ve_dong_vat_2','Vẽ con vật yêu thích','Vẽ ĐV chi tiết hơn','Vẽ lông, mắt, tai','Quan sát kỹ rồi vẽ!','easy',12,31),
   LA(2,'MT2C4','L32_tranh_nhom','Vẽ tranh nhóm','Hợp tác vẽ tranh tường','Cùng bạn vẽ 1 tranh lớn','Chia phần, rồi ghép!','easy',12,32),
   LA(2,'MT2C5','L33_sang_tao_vat_lieu','Sáng tạo từ vật liệu','Tái chế thành nghệ thuật','Chai nhựa → lọ hoa','Tái chế = sáng tạo!','easy',12,33),
-  LA(2,'MT2C2','L34_on_hk1_mt2','Ôn HK1 Môi trường lớp 2','Ôn bài giữa năm','Ôn vẽ, pha màu, cắt dán','Luyện tập!','easy',10,34),
-  LA(2,'MT2C5','L35_on_cuoi_mt2','Ôn cuối năm Môi trường lớp 2','Ôn toàn bộ','Tổng ôn Môi trường 2','Họa sĩ nhí giỏi!','easy',10,35),
+  LA(2,'MT2C2','L34_on_hk1_mt2','Ôn HK1 Mĩ thuật lớp 2','Ôn bài giữa năm','Ôn vẽ, pha màu, cắt dán','Luyện tập!','easy',10,34),
+  LA(2,'MT2C5','L35_on_cuoi_mt2','Ôn cuối năm Mĩ thuật lớp 2','Ôn toàn bộ','Tổng ôn Mĩ thuật 2','Họa sĩ nhí giỏi!','easy',10,35),
 
   // Lớp 3
   LA(3,'MT3C1','L21_phoi_canh','Phối cảnh đơn giản','Xa nhỏ, gần to','Vẽ cảnh có xa gần','Gần = to, Xa = nhỏ!','medium',12,21),
@@ -473,8 +473,8 @@ export const artExpLessons = [
   LA(3,'MT3C3','L31_origami','Gấp giấy Origami','Gấp hình từ giấy','Gấp hạc, thuyền, hoa','Gấp chính xác, nhẹ tay!','easy',12,31),
   LA(3,'MT3C4','L32_nhac_va_hinh','Âm nhạc và hình ảnh','Vẽ theo nhạc','Nghe nhạc vui → vẽ tươi sáng','Để nhạc gợi cảm hứng!','easy',12,32),
   LA(3,'MT3C5','L33_trien_lam','Triển lãm nhỏ','Trưng bày tác phẩm','Bé bày tranh cho bạn xem','Tự hào tác phẩm mình!','easy',10,33),
-  LA(3,'MT3C2','L34_on_hk1_mt3','Ôn HK1 Môi trường lớp 3','Ôn bài giữa năm','Ôn vẽ, nặn, cắt dán','Luyện tập!','easy',10,34),
-  LA(3,'MT3C5','L35_on_cuoi_mt3','Ôn cuối năm Môi trường lớp 3','Ôn toàn bộ','Tổng ôn Môi trường 3','Họa sĩ nhí tài ba!','easy',10,35),
+  LA(3,'MT3C2','L34_on_hk1_mt3','Ôn HK1 Mĩ thuật lớp 3','Ôn bài giữa năm','Ôn vẽ, nặn, cắt dán','Luyện tập!','easy',10,34),
+  LA(3,'MT3C5','L35_on_cuoi_mt3','Ôn cuối năm Mĩ thuật lớp 3','Ôn toàn bộ','Tổng ôn Mĩ thuật 3','Họa sĩ nhí tài ba!','easy',10,35),
 
   // Lớp 4
   LA(4,'MT4C1','L21_mau_tuong_phan','Màu tương phản','Sử dụng màu đối lập','Đỏ-Xanh lá, Vàng-Tím','Tương phản = nổi bật!','medium',12,21),
@@ -490,8 +490,8 @@ export const artExpLessons = [
   LA(4,'MT4C3','L31_dieu_khac','Điêu khắc nổi','Nặn phù điêu','Đất sét + công cụ → phù điêu','Phù điêu = tranh nổi!','medium',12,31),
   LA(4,'MT4C4','L32_animation','Hoạt hình cơ bản','Tạo hoạt hình đơn giản','Vẽ nhiều frame → chuyển động','Nhiều hình liền = chuyển động!','medium',15,32),
   LA(4,'MT4C5','L33_nghe_thuat_tg','Nghệ thuật thế giới','Biết Van Gogh, Picasso','Đêm đầy sao, Guernica','Họa sĩ nổi tiếng thế giới!','easy',10,33),
-  LA(4,'MT4C2','L34_on_hk1_mt4','Ôn HK1 Môi trường lớp 4','Ôn bài giữa năm','Ôn vẽ, thiết kế','Luyện tập!','easy',10,34),
-  LA(4,'MT4C5','L35_on_cuoi_mt4','Ôn cuối năm Môi trường lớp 4','Ôn toàn bộ','Tổng ôn Môi trường 4','Tài năng Môi trường lớn!','easy',10,35),
+  LA(4,'MT4C2','L34_on_hk1_mt4','Ôn HK1 Mĩ thuật lớp 4','Ôn bài giữa năm','Ôn vẽ, thiết kế','Luyện tập!','easy',10,34),
+  LA(4,'MT4C5','L35_on_cuoi_mt4','Ôn cuối năm Mĩ thuật lớp 4','Ôn toàn bộ','Tổng ôn Mĩ thuật 4','Tài năng Mĩ thuật lớn!','easy',10,35),
 
   // Lớp 5
   LA(5,'MT5C1','L21_phoi_canh_nc','Phối cảnh nâng cao','Remote gần xa, 2 điểm mất','Vẽ đường phố có phối cảnh','2 điểm tụ = thực tế!','hard',15,21),
@@ -501,14 +501,14 @@ export const artExpLessons = [
   LA(5,'MT5C3','L25_photography','Nhiếp ảnh cơ bản','Chụp ảnh composition','Quy tắc 1/3, ánh sáng','Mắt nhìn = cảm xúc!','medium',12,25),
   LA(5,'MT5C3','L26_video','Quay video đơn giản','Dùng điện thoại quay video','Giữ vững, ánh sáng đủ','Ngang máy khi quay!','medium',12,26),
   LA(5,'MT5C4','L27_digital_art','Nghệ thuật số','Vẽ trên tablet/máy tính','Photoshop, Procreate, GIMP','Bút cảm ứng = cọ số!','medium',15,27),
-  LA(5,'MT5C4','L28_bieu_dien','Nghệ thuật biểu diễn','Kết hợp Môi trường + sân khấu','Trang trí sân khấu, hóa trang','Nghệ thuật = tổng hợp!','easy',12,28),
+  LA(5,'MT5C4','L28_bieu_dien','Nghệ thuật biểu diễn','Kết hợp Mĩ thuật + sân khấu','Trang trí sân khấu, hóa trang','Nghệ thuật = tổng hợp!','easy',12,28),
   LA(5,'MT5C5','L29_thuong_hieu','Thiết kế thương hiệu','Logo + màu + font','Tạo brand cho nhóm','Thương hiệu = nhận diện!','medium',15,29),
   LA(5,'MT5C5','L30_portfolio','Làm portfolio','Tập hợp tác phẩm cá nhân','Album các bài vẽ đẹp nhất','Portfolio = hồ sơ nghệ thuật!','easy',12,30),
   LA(5,'MT5C3','L31_installation','Nghệ thuật sắp đặt','Sắp đặt vật thể thành TP','Dùng vật tái chế sắp đặt','Vật bình thường → nghệ thuật!','medium',12,31),
   LA(5,'MT5C4','L32_lich_su_mt','Lịch sử mỹ thuật VN','Tranh sơn mài, lụa','Sơn mài VN nổi tiếng TG','Nghệ thuật VN tuyệt vời!','easy',10,32),
   LA(5,'MT5C5','L33_trien_lam_cuoi','Triển lãm cuối cấp','Trưng bày tổng kết','Chọn tác phẩm đẹp nhất','Bé là họa sĩ thực thụ!','easy',12,33),
-  LA(5,'MT5C2','L34_on_hk1_mt5','Ôn HK1 Môi trường lớp 5','Ôn bài giữa năm','Ôn vẽ, thiết kế, ảnh','Luyện tập!','easy',10,34),
-  LA(5,'MT5C5','L35_on_cuoi_mt5','Tổng ôn Môi trường cuối cấp','Ôn toàn bộ Môi trường từ lớp 1-5','Tổng ôn','Họa sĩ tài năng!','medium',12,35),
+  LA(5,'MT5C2','L34_on_hk1_mt5','Ôn HK1 Mĩ thuật lớp 5','Ôn bài giữa năm','Ôn vẽ, thiết kế, ảnh','Luyện tập!','easy',10,34),
+  LA(5,'MT5C5','L35_on_cuoi_mt5','Tổng ôn Mĩ thuật cuối cấp','Ôn toàn bộ Mĩ thuật từ lớp 1-5','Tổng ôn','Họa sĩ tài năng!','medium',12,35),
 ];
 
 // =============== GENERATE CARDS ===============

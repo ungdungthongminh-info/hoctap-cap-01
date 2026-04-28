@@ -1,4 +1,4 @@
-/**
+﻿/**
  * KHOA HỌC LỚP 4–5 — 160 thẻ học (4 thẻ/bài × 40 bài)
  */
 import type { LessonCard } from './seedData';
@@ -65,7 +65,7 @@ export const scienceCards4to5: LessonCard[] = [
   C(509, 'intro', 'Cây xanh! 🌳', 'Cây xanh có nhiều bộ phận!', 1),
   C(509, 'explain', 'Các bộ phận cây', 'Rễ 🌱: hút nước + chất khoáng\nThân 🪵: vận chuyển nước + chất dinh dưỡng\nLá 🍃: quang hợp, tạo thức ăn\nHoa 🌸: sinh sản\nQuả 🍎: chứa hạt', 2),
   C(509, 'example', 'Cây cam', 'Rễ cây cam hút nước trong đất\nThân cây dẫn nước lên lá\nLá quang hợp tạo đường\nHoa cam nở → thụ phấn → quả cam\nQuả cam chứa hạt → gieo hạt → cây mới!', 3),
-  C(509, 'tip', 'Mẹo nhớ 💡', 'Từ dưới lên: RỄ → THÂm nhạc → LÁ → HOA → QUẢ → HẠT 🌱→🪵→🍃→🌸→🍎→🌰', 4),
+  C(509, 'tip', 'Mẹo nhớ 💡', 'Từ dưới lên: RỄ → THÂN → LÁ → HOA → QUẢ → HẠT 🌱→🪵→🍃→🌸→🍎→🌰', 4),
 
   // 510: Quang hợp
   C(510, 'intro', 'Lá cây làm gì? 🍃', 'Lá cây là "bếp ăn" của cây!', 1),
@@ -89,7 +89,7 @@ export const scienceCards4to5: LessonCard[] = [
   C(513, 'intro', 'Thế giới động vật! 🐾', 'Động vật chia thành nhiều nhóm!', 1),
   C(513, 'explain', 'Có xương sống & Không xương sống', 'CÓ XƯƠNG SỐNG:\n🐟 Cá, 🐸 Lưỡng cư, 🐍 Bò sát, 🐦 Chim, 🐘 Thú\nKHÔNG XƯƠNG SỐNG:\n🦋 Côn trùng, 🐛 Giun, 🐙 Thân mềm, 🦐 Giáp xác', 2),
   C(513, 'example', 'Phân loại', 'Chó 🐶 → Thú (có xương sống, nuôi con bằng sữa)\nCá vàng 🐟 → Cá (sống dưới nước, thở bằng mang)\nBướm 🦋 → Côn trùng (không xương sống, 6 chân)', 3),
-  C(513, 'tip', 'Mẹo nhớ 💡', 'CÓ XƯƠNG: Cá-Ếch-Rắn-Chim-Thú (5 nhóm). Khoa họcÔNG XƯƠNG: bé hơn, nhiều hơn!', 4),
+  C(513, 'tip', 'Mẹo nhớ 💡', 'CÓ XƯƠNG: Cá-Ếch-Rắn-Chim-Thú (5 nhóm). KHÔNG XƯƠNG: bé hơn, nhiều hơn!', 4),
 
   // 514: Chuỗi thức ăn
   C(514, 'intro', 'Ai ăn gì? 🔗', 'Trong tự nhiên, sinh vật ăn lẫn nhau!', 1),
@@ -131,7 +131,7 @@ export const scienceCards4to5: LessonCard[] = [
   C(520, 'intro', 'Phòng bệnh! 🛡️', 'Phòng bệnh hơn chữa bệnh!', 1),
   C(520, 'explain', 'Cách phòng bệnh', 'Rửa tay: trước ăn, sau WC → diệt vi khuẩn\nĂn chín uống sôi → tránh ngộ độc\nTiêm phòng → tạo miễn dịch\nTập thể dục → cơ thể khỏe\nNgủ đủ giấc → phục hồi sức khỏe', 2),
   C(520, 'example', 'Rửa tay đúng cách', '6 bước rửa tay: Ướt tay → Xà phòng → Chà lòng bàn tay → Chà mu bàn tay → Chà kẽ ngón → Xả sạch → Lau khô', 3),
-  C(520, 'tip', 'Mẹo nhớ 💡', 'Rửa tay + Ăn sạch + Tiêm phòng + Thể dục + Ngủ đủ = Khoa họcỎE MẠNH! 💪', 4),
+  C(520, 'tip', 'Mẹo nhớ 💡', 'Rửa tay + Ăn sạch + Tiêm phòng + Thể dục + Ngủ đủ = KHỎE MẠNH! 💪', 4),
 
   // ===== LỚP 5 =====
   // 521: Biến đổi hóa học
@@ -167,7 +167,7 @@ export const scienceCards4to5: LessonCard[] = [
   // 526: Nam châm
   C(526, 'intro', 'Nam châm! 🧲', 'Nam châm có sức hút bí ẩn!', 1),
   C(526, 'explain', 'Tính chất nam châm', 'Hút sắt, thép, niken, coban\nCó 2 cực: Bắc (N) và Nam (S)\nCùng cực → ĐẨY. Khác cực → HÚT\nLa bàn dùng nam châm: kim luôn chỉ Bắc-Nam', 2),
-  C(526, 'example', 'Thí nghiệm', 'Đưa nam châm lại gần:\n📎 Kẹp sắt → HÚT ✅\n🪙 Xu đồng → Khoa họcÔNG hút ❌\n🗝️ Chìa khóa sắt → HÚT ✅', 3),
+  C(526, 'example', 'Thí nghiệm', 'Đưa nam châm lại gần:\n📎 Kẹp sắt → HÚT ✅\n🪙 Xu đồng → KHÔNG hút ❌\n🗝️ Chìa khóa sắt → HÚT ✅', 3),
   C(526, 'tip', 'Mẹo nhớ 💡', 'Cùng cực ĐẨY 🚫, Khác cực HÚT ❤️. N=North (Bắc), S=South (Nam)!', 4),
 
   // 527: Năng lượng mặt trời
@@ -180,7 +180,7 @@ export const scienceCards4to5: LessonCard[] = [
   C(528, 'intro', 'Tiết kiệm! 💚', 'Năng lượng quý, hãy tiết kiệm!', 1),
   C(528, 'explain', 'Cách tiết kiệm', 'Tắt đèn khi ra khỏi phòng 💡\nTắt quạt/điều hòa khi không cần 🌀\nĐi bộ/xe đạp thay vì xe máy 🚲\nDùng năng lượng mặt trời ☀️\nChọn thiết bị tiết kiệm điện ⭐', 2),
   C(528, 'example', 'Bảng so sánh', 'Đèn LED 💡: ít điện, sáng lâu\nĐèn sợi đốt: tốn điện, nóng, nhanh hỏng\nĐi xe đạp 🚲: 0 xăng, khỏe người\nĐi xe máy 🏍️: tốn xăng, khói bụi', 3),
-  C(528, 'tip', 'Hành động nhỏ 💚', 'Tắt—Tắt—Tắt! Tắt đèn, tắt quạt, tắt Thực vật khi không dùng!', 4),
+  C(528, 'tip', 'Hành động nhỏ 💚', 'Tắt—Tắt—Tắt! Tắt đèn, tắt quạt, tắt TV khi không dùng!', 4),
 
   // 529: Chuỗi thức ăn NC
   C(529, 'intro', 'Lưới thức ăn! 🕸️', 'Trong tự nhiên, chuỗi thức ăn phức tạp hơn!', 1),
@@ -206,7 +206,7 @@ export const scienceCards4to5: LessonCard[] = [
   C(532, 'example', 'VN đa dạng!', '🌿 12.000+ loài thực vật\n🐾 310+ loài thú\n🐦 840+ loài chim\n🐸 162+ loài lưỡng cư\n🐍 296+ loài bò sát', 3),
   C(532, 'tip', 'Mẹo nhớ 💡', 'Bảo vệ đa dạng SH = bảo vệ TƯƠNG LAI! Mỗi loài đều quý!', 4),
 
-  // 533: Hệ Môi trường
+  // 533: Hệ Mặt Trời
   C(533, 'intro', 'Hệ Mặt Trời! 🪐', 'Trái Đất nằm trong Hệ Mặt Trời!', 1),
   C(533, 'explain', '8 hành tinh', 'Thứ tự từ Mặt Trời ra:\n1. Thủy tinh ☿ 2. Kim tinh ♀ 3. TRÁI ĐẤT 🌍\n4. Hỏa tinh ♂ 5. Mộc tinh ♃ 6. Thổ tinh 🪐\n7. Thiên Vương tinh ♅ 8. Hải Vương tinh ♆', 2),
   C(533, 'example', 'Trái Đất đặc biệt', 'Vị trí thứ 3 → không quá nóng, không quá lạnh\nCó nước lỏng → có sự sống!\nBầu khí quyển → bảo vệ khỏi tia UV', 3),
@@ -215,12 +215,12 @@ export const scienceCards4to5: LessonCard[] = [
   // 534: TĐ quay
   C(534, 'intro', 'Trái Đất quay! 🌍', 'Trái Đất không đứng yên!', 1),
   C(534, 'explain', '2 chuyển động', 'TỰ QUAY quanh trục: 24 giờ/vòng → Ngày & Đêm\nQUAY quanh Mặt Trời: 365 ngày/vòng → 4 Mùa\nTrục nghiêng 23.5° → ánh sáng không đều → mùa', 2),
-  C(534, 'example', 'Ngày & Đêm', 'Mặt hướng Môi trường → NGÀY (sáng) ☀️\nMặt quay lưng Môi trường → ĐÊM (tối) 🌙\n12 giờ ngày + 12 giờ đêm ≈ 24 giờ', 3),
-  C(534, 'tip', 'Mẹo nhớ 💡', 'Tự quay = NGÀY ĐÊM (24h). Quay quanh Môi trường = 4 MÙA (365 ngày)!', 4),
+  C(534, 'example', 'Ngày & Đêm', 'Mặt hướng Mặt Trời → NGÀY (sáng) ☀️\nMặt quay lưng Mặt Trời → ĐÊM (tối) 🌙\n12 giờ ngày + 12 giờ đêm ≈ 24 giờ', 3),
+  C(534, 'tip', 'Mẹo nhớ 💡', 'Tự quay = NGÀY ĐÊM (24h). Quay quanh Mặt Trời = 4 MÙA (365 ngày)!', 4),
 
   // 535: Mùa & Khí hậu
   C(535, 'intro', '4 Mùa! 🌸☀️🍂❄️', 'Tại sao có 4 mùa?', 1),
-  C(535, 'explain', 'Nguyên nhân', 'Trục TĐ nghiêng → khi quay quanh Môi trường:\nBán cầu Bắc hướng Môi trường → Hè (nóng)\nBán cầu Bắc xa Môi trường → Đông (lạnh)\nViệt Nam: 2 mùa chính: MƯA và Khoa họcÔ', 2),
+  C(535, 'explain', 'Nguyên nhân', 'Trục TĐ nghiêng → khi quay quanh Mặt Trời:\nBán cầu Bắc hướng Mặt Trời → Hè (nóng)\nBán cầu Bắc xa Mặt Trời → Đông (lạnh)\nViệt Nam: 2 mùa chính: MƯA và Khoa họcÔ', 2),
   C(535, 'example', '4 mùa', '🌸 Xuân: ấm áp, hoa nở\n☀️ Hè: nóng, nghỉ hè\n🍂 Thu: mát, lá vàng\n❄️ Đông: lạnh, ngắn ngày', 3),
   C(535, 'tip', 'Mẹo nhớ 💡', 'VN = nước nhiệt đới: NÓNG quanh năm, MƯA nhiều. Xuân-Hạ-Thu-Đông!', 4),
 
@@ -232,17 +232,17 @@ export const scienceCards4to5: LessonCard[] = [
 
   // 537: Ô nhiễm
   C(537, 'intro', 'Ô nhiễm! 😷', 'Môi trường đang bị ô nhiễm!', 1),
-  C(537, 'explain', '3 loại ô nhiễm', 'Ô nhiễm Khoa họcÔNG Khoa họcÍ: khói xe, nhà máy → ho, bệnh phổi\nÔ nhiễm NƯỚC: rác thải, hóa chất → cá chết, bệnh\nÔ nhiễm ĐẤT: rác nhựa, thuốc trừ sâu → đất hỏng', 2),
+  C(537, 'explain', '3 loại ô nhiễm', 'Ô nhiễm KHÔNG KHÍ: khói xe, nhà máy → ho, bệnh phổi\nÔ nhiễm NƯỚC: rác thải, hóa chất → cá chết, bệnh\nÔ nhiễm ĐẤT: rác nhựa, thuốc trừ sâu → đất hỏng', 2),
   C(537, 'example', 'Ở VN', 'Hà Nội: ô nhiễm không khí (bụi mịn PM2.5)\nSông Tô Lịch: ô nhiễm nước nặng\nRác nhựa: VN xả 1.8 triệu tấn/năm ra biển', 3),
   C(537, 'tip', 'Hành động! 💚', 'Không xả rác! Phân loại rác! Dùng túi vải thay túi nilon!', 4),
 
-  // 538: BĐKhoa học
+  // 538: BĐKH
   C(538, 'intro', 'Biến đổi khí hậu! 🌡️', 'Trái Đất đang nóng lên!', 1),
   C(538, 'explain', 'Hiệu ứng nhà kính', 'Khí nhà kính (CO₂, CH₄) → giữ nhiệt → TĐ nóng lên\nNguyên nhân: đốt nhiên liệu, phá rừng, chăn nuôi\nHậu quả: nước biển dâng, bão lũ, hạn hán', 2),
-  C(538, 'example', 'VN bị ảnh hưởng', 'VN: 1 trong 5 nước bị ảnh hưởng BĐKhoa học nhất!\nĐBSCL: nguy cơ ngập do nước biển dâng\nBão: ngày càng mạnh và nhiều hơn', 3),
+  C(538, 'example', 'VN bị ảnh hưởng', 'VN: 1 trong 5 nước bị ảnh hưởng BĐKH nhất!\nĐBSCL: nguy cơ ngập do nước biển dâng\nBão: ngày càng mạnh và nhiều hơn', 3),
   C(538, 'tip', 'Hành động! 🌿', 'Trồng cây = hấp thụ CO₂! Tiết kiệm điện! Đi xe đạp!', 4),
 
-  // 539: Tài nguyên Thí nghiệm
+  // 539: Tài nguyên thiên nhiên
   C(539, 'intro', 'Tài nguyên! ⛏️', 'Tài nguyên thiên nhiên quý giá!', 1),
   C(539, 'explain', 'Các loại tài nguyên', 'Tái tạo: nước, rừng, không khí (có thể phục hồi)\nKhông tái tạo: dầu mỏ, than đá, khoáng sản (dùng hết = hết)\nPhải SỬ DỤNG TIẾT KIỆM + BẢO VỆ!', 2),
   C(539, 'example', 'Tài nguyên VN', '🌲 Rừng: 42% diện tích VN\n💧 Nước: sông Hồng, sông Mê Kông\n⛏️ Khoáng sản: than, dầu khí, đá vôi\n🌊 Biển: hải sản, du lịch', 3),
@@ -250,7 +250,8 @@ export const scienceCards4to5: LessonCard[] = [
 
   // 540: Bảo vệ Môi trường
   C(540, 'intro', 'Bảo vệ Trái Đất! 🌍', 'Mỗi hành động nhỏ đều quan trọng!', 1),
-  C(540, 'explain', '5 hành động', '♻️ Phân loại rác: hữu cơ, tái chế, nguy hại\n🌳 Trồng cây xanh\n💡 Tiết kiệm điện, nước\n🚲 Đi bộ/xe đạp\n🚫 Nói Khoa họcÔNG với nhựa dùng 1 lần', 2),
+  C(540, 'explain', '5 hành động', '♻️ Phân loại rác: hữu cơ, tái chế, nguy hại\n🌳 Trồng cây xanh\n💡 Tiết kiệm điện, nước\n🚲 Đi bộ/xe đạp\n🚫 Nói KHÔNG với nhựa dùng 1 lần', 2),
   C(540, 'example', 'Em làm được!', '✅ Mang bình nước thay chai nhựa\n✅ Phân loại rác ở nhà\n✅ Tắt đèn khi ra khỏi phòng\n✅ Trồng 1 cây xanh\n✅ Kể bạn bè cùng bảo vệ Môi trường!', 3),
   C(540, 'tip', 'Khẩu hiệu! 💚', 'GIẢM — TÁI SỬ DỤNG — TÁI CHẾ (Reduce — Reuse — Recycle)!', 4),
 ];
+

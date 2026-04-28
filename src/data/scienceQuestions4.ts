@@ -1,4 +1,4 @@
-/**
+﻿/**
  * KHOA HỌC LỚP 4 — 300 câu hỏi (15 câu/bài × 20 bài)
  * ID: 7301 – 7600 | subjectCode: science | grade: 4
  * Dùng đủ 7 loại: single_choice, true_false, fill_number, ordering, matching, fill_text, multi_choice
@@ -42,7 +42,7 @@ export const scienceQuestions4: Question[] = [
   Q(502,'true_false',1,'Thủy tinh là vật liệu trong suốt.',null,'true','Nhìn qua kính cửa sổ!','Thủy tinh trong suốt, ánh sáng xuyên qua.'),
   Q(502,'single_choice',1,'Vật liệu nào mềm và đàn hồi?','["Cao su","Sắt","Đá","Thủy tinh"]','Cao su','Bóng cao su nảy được!','Cao su mềm, kéo giãn được, có tính đàn hồi.'),
   Q(502,'matching',2,'Nối vật liệu với tính chất:','["Sắt → cứng, dẫn điện","Cao su → mềm, đàn hồi","Thủy tinh → trong suốt"]','0-0,1-1,2-2','Mỗi vật liệu có tính chất riêng!','Sắt cứng & dẫn điện, cao su mềm & đàn hồi, thủy tinh trong suốt.'),
-  Q(502,'multi_choice',2,'Chọn các vật liệu CÁCH ĐIỆN:','["Nhựa","Cao su","Sắt","Gỗ"]','Cao su,Gỗ,Nhựa','Vật liệu nào Khoa họcÔNG dẫn điện?','Nhựa, cao su, gỗ đều cách điện (không dẫn điện).'),
+  Q(502,'multi_choice',2,'Chọn các vật liệu CÁCH ĐIỆN:','["Nhựa","Cao su","Sắt","Gỗ"]','Cao su,Gỗ,Nhựa','Vật liệu nào KHÔNG dẫn điện?','Nhựa, cao su, gỗ đều cách điện (không dẫn điện).'),
   Q(502,'single_choice',1,'Vật liệu nào nặng nhất?','["Sắt","Gỗ","Bông","Nhựa"]','Sắt','So sánh cùng kích thước!','Sắt nặng hơn gỗ, bông và nhựa.'),
   Q(502,'fill_text',1,'Gỗ là vật liệu ___ điện.',null,'cách','Gỗ có dẫn điện không?','Gỗ cách điện, không cho dòng điện đi qua.'),
   Q(502,'true_false',1,'Đá là vật liệu mềm.',null,'false','Sờ viên đá xem!','Đá rất cứng, không phải mềm.'),
@@ -100,7 +100,7 @@ export const scienceQuestions4: Question[] = [
   Q(505,'multi_choice',2,'Chọn các vật TỰ PHÁT SÁNG:','["Mặt Trời","Đom đóm","Gương","Mặt Trăng"]','Đom đóm,Mặt Trời','Tự phát sáng = không cần nguồn khác!','Mặt Trời, đom đóm tự phát sáng. Gương, Mặt Trăng chỉ phản xạ.'),
   Q(505,'fill_number',1,'Ánh sáng truyền qua bao nhiêu loại môi trường: trong suốt, mờ, không truyền qua vật cản?',null,'2','Trong suốt và mờ!','Ánh sáng truyền qua vật trong suốt và vật mờ (1 phần).'),
   Q(505,'ordering',2,'Sắp xếp bước tạo bóng:','["Bật đèn","Đặt vật trước đèn","Vật cản ánh sáng","Bóng tối xuất hiện phía sau"]','Bật đèn,Đặt vật trước đèn,Vật cản ánh sáng,Bóng tối xuất hiện phía sau','Tạo bóng cần gì?','Đèn → vật cản → chắn ánh sáng → bóng tối.'),
-  Q(505,'single_choice',2,'Tại sao ban đêm ta cần đèn?','["Vì không có ánh sáng Mặt Trời","Vì mắt yếu","Vì trời lạnh","Vì sợ"]','Vì không có ánh sáng Mặt Trời','Ban đêm Mặt Trời ở đâu?','Ban đêm: bán cầu quay lưng Môi trường → thiếu ánh sáng → cần đèn.'),
+  Q(505,'single_choice',2,'Tại sao ban đêm ta cần đèn?','["Vì không có ánh sáng Mặt Trời","Vì mắt yếu","Vì trời lạnh","Vì sợ"]','Vì không có ánh sáng Mặt Trời','Ban đêm Mặt Trời ở đâu?','Ban đêm: bán cầu quay lưng Mặt Trời → thiếu ánh sáng → cần đèn.'),
   Q(505,'true_false',1,'Ánh sáng có thể truyền qua tường gạch.',null,'false','Tường có trong suốt không?','Tường gạch cản ánh sáng → ánh sáng không xuyên qua.'),
   Q(505,'single_choice',1,'Bóng to hay nhỏ phụ thuộc vào gì?','["Khoảng cách vật đến nguồn sáng","Màu vật","Trọng lượng vật","Mùi vật"]','Khoảng cách vật đến nguồn sáng','Đưa tay lại gần đèn, bóng to hay nhỏ?','Vật gần nguồn sáng → bóng to. Vật xa → bóng nhỏ.'),
   Q(505,'fill_text',2,'Gương có khả năng ___ ánh sáng.',null,'phản xạ','Ánh sáng gặp gương thì sao?','Gương phản xạ ánh sáng → ta thấy hình ảnh trong gương.'),
@@ -108,7 +108,7 @@ export const scienceQuestions4: Question[] = [
   // ===== Bài 506: Âm thanh =====
   Q(506,'single_choice',1,'Âm thanh do đâu tạo ra?','["Vật rung động","Vật đứng yên","Ánh sáng","Nhiệt"]','Vật rung động','Gảy đàn → dây rung!','Âm thanh phát ra khi vật rung động.'),
   Q(506,'true_false',1,'Âm thanh truyền được qua không khí.',null,'true','Ta nghe tiếng nói qua không khí!','Âm thanh truyền qua chất khí (không khí).'),
-  Q(506,'single_choice',1,'Âm thanh Khoa họcÔNG truyền qua môi trường nào?','["Chân không","Không khí","Nước","Gỗ"]','Chân không','Ngoài vũ trụ có nghe gì không?','Chân không (không có phân tử) → âm thanh không truyền.'),
+  Q(506,'single_choice',1,'Âm thanh KHÔNG truyền qua môi trường nào?','["Chân không","Không khí","Nước","Gỗ"]','Chân không','Ngoài vũ trụ có nghe gì không?','Chân không (không có phân tử) → âm thanh không truyền.'),
   Q(506,'fill_text',1,'Âm thanh do ___ động tạo ra.',null,'rung','Dây đàn rung → có tiếng!','Âm thanh sinh ra khi vật rung động.'),
   Q(506,'ordering',2,'Sắp xếp quá trình nghe âm thanh:','["Vật rung động","Sóng âm truyền qua không khí","Sóng âm đến tai","Não xử lý → nghe"]','Vật rung động,Sóng âm truyền qua không khí,Sóng âm đến tai,Não xử lý → nghe','Từ nguồn đến tai!','Vật rung → sóng âm → tai → não.'),
   Q(506,'single_choice',2,'Âm thanh truyền nhanh nhất qua môi trường nào?','["Chất rắn","Chất lỏng","Chất khí","Chân không"]','Chất rắn','Áp tai lên bàn, gõ → nghe rõ!','Chất rắn truyền âm nhanh nhất, rồi lỏng, rồi khí.'),
@@ -232,7 +232,7 @@ export const scienceQuestions4: Question[] = [
   Q(513,'ordering',2,'Sắp xếp nhóm ĐV có xương sống:','["Cá","Lưỡng cư","Bò sát","Chim","Thú"]','Cá,Lưỡng cư,Bò sát,Chim,Thú','5 nhóm từ đơn giản đến phức tạp!','Cá → Lưỡng cư → Bò sát → Chim → Thú.'),
   Q(513,'single_choice',1,'Chim có đặc điểm gì?','["Có lông vũ và cánh","Có vảy","Sống dưới nước","Có 8 chân"]','Có lông vũ và cánh','Chim bay!','Chim: lông vũ + cánh + đẻ trứng.'),
   Q(513,'fill_text',1,'Thú là ĐV nuôi con bằng ___.',null,'sữa','Mèo mẹ cho con bú!','Thú nuôi con bằng sữa mẹ.'),
-  Q(513,'multi_choice',2,'Chọn các ĐV Khoa họcÔNG xương sống:','["Bướm","Giun đất","Ốc sên","Mèo"]','Bướm,Giun đất,Ốc sên','Mèo là thú!','Bướm, giun, ốc sên không có xương sống. Mèo là thú (có xương sống).'),
+  Q(513,'multi_choice',2,'Chọn các ĐV KHÔNG xương sống:','["Bướm","Giun đất","Ốc sên","Mèo"]','Bướm,Giun đất,Ốc sên','Mèo là thú!','Bướm, giun, ốc sên không có xương sống. Mèo là thú (có xương sống).'),
   Q(513,'true_false',2,'Ếch là lưỡng cư vì sống cả dưới nước và trên cạn.',null,'true','Lưỡng = 2, cư = sống!','Lưỡng cư: sống 2 nơi (nước + cạn). Ếch đúng!'),
   Q(513,'single_choice',2,'Côn trùng có bao nhiêu chân?','["6","4","8","2"]','6','Đếm chân bướm!','Côn trùng có 6 chân (3 đôi).'),
   Q(513,'fill_number',1,'Có bao nhiêu nhóm ĐV có xương sống?',null,'5','Cá, lưỡng cư, bò sát, chim, thú!','5 nhóm: Cá, Lưỡng cư, Bò sát, Chim, Thú.'),
@@ -360,3 +360,4 @@ export const scienceQuestions4: Question[] = [
   Q(520,'true_false',1,'Tập thể dục đều đặn giúp cơ thể khỏe mạnh.',null,'true','Vận động!','Tập thể dục → tuần hoàn tốt → miễn dịch mạnh → khỏe.'),
   Q(520,'fill_text',2,'___ phòng (vắc-xin) giúp cơ thể tạo kháng thể chống bệnh.',null,'Tiêm','Vắc-xin!','Tiêm phòng đưa vắc-xin vào cơ thể → tạo kháng thể.'),
 ];
+
