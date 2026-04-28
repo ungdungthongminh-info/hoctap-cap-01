@@ -2,9 +2,9 @@ import { Router } from 'express';
 import {
   deleteCacheHandler,
   getCacheStatsHandler,
-  getStaticPackByGradeHandler,
   postSynthesize,
 } from '../controllers/ttsController';
+import { getStaticPackByGradeHandler } from '../controllers/staticPackProxyController';
 
 const router = Router();
 
