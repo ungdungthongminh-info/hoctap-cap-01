@@ -8,6 +8,7 @@ import {
 } from './localAudioCache';
 import { getStaticTtsManifestEntry, getStaticTtsManifestSummary, prefetchStaticTtsAsset } from './staticTtsManifest';
 import { getTtsPolicy, type TtsPolicyId } from './ttsPolicy';
+import { buildNarrationSsml, type TtsSsmlStyleId } from './ttsNarration';
 
 export type { TtsCacheStats } from './ttsClient';
 
@@ -78,8 +79,9 @@ const DEFAULT_CACHE_MODE: TtsCacheMode = 'balanced';
 
 const GOOGLE_VI_VOICE_OPTIONS: TtsVoiceCatalogOption[] = [
   { id: 'vi-VN-Chirp3-HD-Despina', label: 'Chirp3 HD Despina (Female)' },
-  { id: 'vi-VN-Chirp3-HD-Achernar', label: 'Chirp3 HD Achernar (Female)' },
-  { id: 'vi-VN-Chirp3-HD-Achird', label: 'Chirp3 HD Achird' },
+  { id: 'vi-VN-Chirp3-HD-Algenib', label: 'Chirp3 HD Algenib (Female)' },
+  { id: 'vi-VN-Chirp3-HD-Achernar', label: 'Chirp3 HD Achernar (Fallback)' },
+  { id: 'vi-VN-Chirp3-HD-Achird', label: 'Chirp3 HD Achird (Fallback)' },
   { id: 'vi-VN-Wavenet-A', label: 'Google Wavenet A (Fallback)' },
   { id: 'vi-VN-Wavenet-C', label: 'Google Wavenet C (Fallback)' },
   { id: 'vi-VN-Standard-A', label: 'Google Standard A (Fallback)' },
@@ -276,14 +278,14 @@ export function onVoicesReady(cb: (info: TtsInfo) => void): () => void {
 
 export function getTtsMode(): TtsMode {
   const saved = safeStorageGet(STORAGE_KEYS.mode);
-  if (saved === 'native') return 'native';
   if (saved === 'advanced' || saved === 'google') return 'advanced';
   return 'static';
 }
 
 export function setTtsMode(mode: TtsMode): void {
-  safeStorageSet(STORAGE_KEYS.mode, mode);
-  setRuntimeStatus({ activeMode: mode });
+  const normalizedMode: TtsMode = mode === 'native' ? 'static' : mode;
+  safeStorageSet(STORAGE_KEYS.mode, normalizedMode);
+  setRuntimeStatus({ activeMode: normalizedMode });
 }
 
 export function getTtsSpeed(): number {
@@ -552,6 +554,36 @@ function toBackendLang(lang: TtsLang): string {
   return lang === 'en' ? 'en-US' : 'vi-VN';
 }
 
+function resolveSsmlStyle(policyId: TtsPolicyId, lang: 'vi-VN' | 'en-US'): TtsSsmlStyleId {
+  if (lang === 'en-US') {
+    return 'en-general';
+  }
+
+  if (policyId === 'lesson-read-all' || policyId === 'lesson-prefetch') {
+    return 'vi-lesson-reading';
+  }
+
+  if (policyId === 'pre-grade-auto') {
+    return 'vi-pregrade';
+  }
+
+  if (policyId === 'feedback-short') {
+    return 'vi-feedback';
+  }
+
+  if (policyId === 'fallback-native') {
+    return 'vi-lesson-general';
+  }
+
+  return 'vi-practice';
+}
+
+function buildAdvancedSsml(text: string, lang: TtsLang, policyId: TtsPolicyId): string {
+  const backendLang = toBackendLang(lang) as 'vi-VN' | 'en-US';
+  const styleId = resolveSsmlStyle(policyId, backendLang);
+  return buildNarrationSsml(text, backendLang, styleId);
+}
+
 function buildLocalDescriptor(
   text: string,
   lang: TtsLang,
@@ -653,6 +685,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
   const allowAdvancedFallback = desiredMode === 'advanced' && policy.preferBackend;
   const speed = clampTtsSpeed(options.speed ?? getTtsSpeed());
   const backendVoiceId = resolveBackendVoiceId(lang, options.voiceId);
+  const ssml = buildAdvancedSsml(cleanedText, lang, policy.id);
   const localDescriptor = buildLocalDescriptor(
     cleanedText,
     lang,
@@ -712,6 +745,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
   try {
     const response = await synthesizeTtsAudio({
       text: cleanedText,
+      ssml,
       lang: toBackendLang(lang),
       voiceId: backendVoiceId,
       speed,
@@ -777,6 +811,7 @@ export async function prefetchText(text: string, lang: TtsLang = 'vi', options: 
   const policy = getTtsPolicy(options.policy || 'lesson-prefetch');
   const desiredMode = options.mode || getTtsMode();
   const allowAdvancedFallback = desiredMode === 'advanced' && policy.preferBackend;
+  const ssml = buildAdvancedSsml(cleanedText, lang, policy.id);
 
   if (options.assetKey) {
     const staticEntry = await prefetchStaticTtsAsset(options.assetKey);
@@ -812,6 +847,7 @@ export async function prefetchText(text: string, lang: TtsLang = 'vi', options: 
 
     const response = await synthesizeTtsAudio({
       text: cleanedText,
+      ssml,
       lang: toBackendLang(lang),
       voiceId: resolveBackendVoiceId(lang, options.voiceId),
       speed: clampTtsSpeed(options.speed ?? getTtsSpeed()),

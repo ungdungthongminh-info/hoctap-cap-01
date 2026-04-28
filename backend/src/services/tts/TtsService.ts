@@ -18,7 +18,8 @@ export type TtsUsage =
   | 'fallback-native';
 
 export interface TtsSynthesizeInput {
-  text: string;
+  text?: string;
+  ssml?: string;
   lang?: string;
   voiceId?: string;
   speed?: number;
@@ -83,22 +84,44 @@ function normalizeVoiceId(value: string | undefined): string {
   return GoogleTtsAdapter.defaultVoice;
 }
 
+function stripSsmlTags(value: string): string {
+  return String(value || '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&apos;/gi, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function getMonthlyCharLimit(): number {
   return parsePositiveInt(process.env.TTS_MONTHLY_CHAR_LIMIT, 1_000_000);
 }
 
 export function validateSynthesizeInput(input: TtsSynthesizeInput) {
-  const text = String(input.text || '').trim();
+  const rawText = String(input.text || '').trim();
+  const ssml = String(input.ssml || '').trim();
+  const text = rawText || stripSsmlTags(ssml);
   const lang = normalizeLang(input.lang);
   const voiceId = normalizeVoiceId(input.voiceId);
   const speed = clampSpeed(Number(input.speed ?? 1));
   const usage = normalizeUsage(input.usage || 'practice-on-demand');
   const contentVersion = normalizeContentVersion(input.contentVersion);
 
+  if (!rawText && !ssml) {
+    throw new Error('Text or ssml is required.');
+  }
+
   GoogleTtsAdapter.validateText(text);
 
   return {
     text,
+    ssml: ssml || undefined,
+    cacheText: ssml || text,
+    charCount: text.length,
     lang,
     voiceId,
     speed,
@@ -130,7 +153,7 @@ export async function synthesizeSpeech(input: TtsSynthesizeInput): Promise<TtsSy
     lang: normalized.lang,
     usage: normalized.usage,
     contentVersion: normalized.contentVersion,
-    textHash: hashText(normalized.text),
+    textHash: hashText(normalized.cacheText),
   };
 
   const cacheHit = await findByCacheKey(lookupKey);
@@ -149,7 +172,7 @@ export async function synthesizeSpeech(input: TtsSynthesizeInput): Promise<TtsSy
 
   const monthlyUsage = await getMonthlyUsage();
   const monthlyLimit = getMonthlyCharLimit();
-  if (monthlyUsage + normalized.text.length > monthlyLimit) {
+  if (monthlyUsage + normalized.charCount > monthlyLimit) {
     return {
       cacheStatus: 'fallback',
       provider: 'native-fallback',
@@ -164,6 +187,7 @@ export async function synthesizeSpeech(input: TtsSynthesizeInput): Promise<TtsSy
   try {
     const audioBuffer = await GoogleTtsAdapter.synthesize({
       text: normalized.text,
+      ssml: normalized.ssml,
       lang: normalized.lang,
       voiceId: normalized.voiceId,
       speed: normalized.speed,
@@ -172,7 +196,7 @@ export async function synthesizeSpeech(input: TtsSynthesizeInput): Promise<TtsSy
     const saved = await saveCacheEntry({
       key: lookupKey,
       audioBuffer,
-      charCount: normalized.text.length,
+      charCount: normalized.charCount,
     });
 
     return {

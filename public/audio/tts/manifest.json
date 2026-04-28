@@ -1,17 +1,17 @@
 {
   "meta": {
     "contentVersion": "2026-04-27-v1",
-    "generatedAt": "2026-04-28T02:50:16.812Z",
+    "generatedAt": "2026-04-28T05:50:23.662Z",
     "defaultProfileId": "vi-v1",
     "audioBasePath": "audio/tts/assets"
   },
   "summary": {
-    "totalEntries": 24054,
+    "totalEntries": 0,
     "availableEntries": 0,
-    "missingEntries": 24054,
+    "missingEntries": 0,
     "defaultProfileId": "vi-v1",
     "contentVersion": "2026-04-27-v1",
-    "generatedAt": "2026-04-28T02:50:16.814Z",
+    "generatedAt": "2026-04-28T05:50:23.664Z",
     "audioBasePath": "audio/tts/assets",
     "voiceProfiles": [
       {
@@ -26,21 +26,12 @@
       },
       {
         "id": "vi-v2",
-        "label": "Ứng viên 2 - Chirp3 HD Achernar",
+        "label": "Ứng viên 2 - Chirp3 HD Algenib",
         "lang": "vi-VN",
-        "voiceId": "vi-VN-Chirp3-HD-Achernar",
-        "notes": "Ứng viên đối chiếu độ rõ với giọng chuẩn.",
+        "voiceId": "vi-VN-Chirp3-HD-Algenib",
+        "notes": "Giọng đã duyệt, dùng đối chiếu với giọng chuẩn Despina.",
         "candidateRank": 2,
         "targetPersona": "female-clear"
-      },
-      {
-        "id": "vi-v3",
-        "label": "Ứng viên 3 - Chirp3 HD Achird",
-        "lang": "vi-VN",
-        "voiceId": "vi-VN-Chirp3-HD-Achird",
-        "notes": "Ứng viên dự phòng khi cần so sánh phụ âm và nhịp.",
-        "candidateRank": 3,
-        "targetPersona": "neutral-clear"
       },
       {
         "id": "en-v1",
@@ -94,56 +85,9 @@
         "profileId": "vi-v2",
         "sampleId": "math-prompt",
         "available": false
-      },
-      {
-        "key": "audit:vi-v3:reading-rhythm",
-        "label": "Tập đọc - ngắt nhịp",
-        "profileId": "vi-v3",
-        "sampleId": "reading-rhythm",
-        "available": false
-      },
-      {
-        "key": "audit:vi-v3:story-flow",
-        "label": "Kể chuyện - tự nhiên",
-        "profileId": "vi-v3",
-        "sampleId": "story-flow",
-        "available": false
-      },
-      {
-        "key": "audit:vi-v3:math-prompt",
-        "label": "Toán - đọc phép tính",
-        "profileId": "vi-v3",
-        "sampleId": "math-prompt",
-        "available": false
       }
     ],
-    "byUsage": [
-      {
-        "usage": "lesson-read-all",
-        "total": 4988,
-        "available": 0
-      },
-      {
-        "usage": "practice-on-demand",
-        "total": 19043,
-        "available": 0
-      },
-      {
-        "usage": "pre-grade-auto",
-        "total": 11,
-        "available": 0
-      },
-      {
-        "usage": "feedback-short",
-        "total": 3,
-        "available": 0
-      },
-      {
-        "usage": "voice-audit",
-        "total": 9,
-        "available": 0
-      }
-    ]
+    "byUsage": []
   },
   "entries": {}
 }

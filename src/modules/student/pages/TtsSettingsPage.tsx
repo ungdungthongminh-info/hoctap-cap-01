@@ -25,7 +25,7 @@ import { VOICE_AUDIT_LINES } from '../../../shared/services/tts/ttsNarration';
 import { listStaticVoiceProfiles } from '../../../shared/services/tts/ttsVoiceProfiles';
 import { isAdminUnlocked } from '../../../shared/utils/adminAccess';
 
-type TtsModeOption = 'static' | 'advanced' | 'native';
+type TtsModeOption = 'static' | 'advanced';
 type PlaybackSource = 'static' | 'advanced' | 'native';
 
 interface VoiceCandidate {
@@ -46,18 +46,13 @@ const cacheModeOptions: Array<{ value: TtsCacheMode; label: string; desc: string
 const modeOptions: Array<{ value: TtsModeOption; label: string; desc: string }> = [
   {
     value: 'static',
-    label: 'Mac dinh - Audio tinh',
-    desc: 'Dung audio pre-generate trong manifest. Neu thieu file se roi ve native.',
+    label: 'Mặc định - Audio tĩnh',
+    desc: 'Dùng audio pre-generate trong manifest. Nếu thiếu file sẽ rơi về native.',
   },
   {
     value: 'advanced',
     label: 'Advanced / Generator',
-    desc: 'Chi dung khi can tao audio moi hoac can API rieng.',
-  },
-  {
-    value: 'native',
-    label: 'Native tren may',
-    desc: 'Doc bang speech synthesis cua thiet bi, khong can backend.',
+    desc: 'Chỉ dùng khi cần tạo audio mới hoặc cần API riêng.',
   },
 ];
 
@@ -95,6 +90,9 @@ export function TtsSettingsPage() {
 
   const pref = getVoicePreferenceOptions();
   const showAdmin = import.meta.env.DEV || isAdminUnlocked();
+  const visibleModeOptions = showAdmin
+    ? modeOptions
+    : modeOptions.filter((option) => option.value === 'static');
   const googleViVoices = getGoogleVoiceCatalog('vi');
   const googleEnVoices = getGoogleVoiceCatalog('en');
   const nativeViVoices = useMemo(() => filterVoices(ttsInfo, 'vi'), [ttsInfo]);
@@ -191,9 +189,17 @@ export function TtsSettingsPage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (mode === 'native' || (!showAdmin && mode !== 'static')) {
+      setModeState('static');
+      setTtsMode('static');
+    }
+  }, [mode, showAdmin]);
+
   const handleModeChange = (value: TtsModeOption) => {
-    setModeState(value);
-    setTtsMode(value);
+    const nextMode: TtsModeOption = !showAdmin ? 'static' : value;
+    setModeState(nextMode);
+    setTtsMode(nextMode);
   };
 
   const handleSpeedChange = (value: number) => {
@@ -386,7 +392,7 @@ export function TtsSettingsPage() {
           <h3 className="font-bold">Che do phat mac dinh</h3>
         </div>
         <div className="grid gap-2">
-          {modeOptions.map((option) => (
+          {visibleModeOptions.map((option) => (
             <button
               key={option.value}
               type="button"
@@ -412,6 +418,11 @@ export function TtsSettingsPage() {
             </button>
           ))}
         </div>
+        {!showAdmin && (
+          <p className="text-xs mt-3" style={{ color: 'var(--color-text-light)' }}>
+            App học sinh luôn ưu tiên audio tĩnh để ổn định và dùng offline. Chế độ Advanced chỉ mở trong khu kỹ thuật.
+          </p>
+        )}
       </div>
 
       <div className="card mb-4">
@@ -523,74 +534,83 @@ export function TtsSettingsPage() {
         )}
       </div>
 
-      <details className="card mb-4">
-        <summary className="font-bold cursor-pointer">Advanced / Generator (cho ky thuat)</summary>
-        <div className="text-sm mt-3 mb-4" style={{ color: 'var(--color-text-light)' }}>
-          Muc nay de tao audio moi bang API, hoac de user nang cao gan API rieng sau nay. App van chay binh thuong du khong dung muc nay.
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <label className="text-sm font-bold block mb-2">Voice tieng Viet (advanced)</label>
-            <select
-              className="w-full p-2 rounded-lg text-sm"
-              value={voiceVi}
-              onChange={(event) => handleVoiceChange('vi', event.target.value)}
-            >
-              <option value="">Tu dong theo generator</option>
-              <optgroup label="Google Cloud">
-                {googleViVoices.map((voice) => (
-                  <option key={voice.id} value={voice.id}>{voice.label}</option>
-                ))}
-              </optgroup>
-              <optgroup label="Native">
-                <option value={pref.female}>Uu tien giong nu</option>
-                <option value={pref.male}>Uu tien giong nam</option>
-                {nativeViVoices.map((voice) => (
-                  <option key={`${voice.lang}-${voice.name}`} value={voice.name}>{voice.name} ({voice.lang})</option>
-                ))}
-              </optgroup>
-            </select>
+      {showAdmin ? (
+        <details className="card mb-4">
+          <summary className="font-bold cursor-pointer">Advanced / Generator (kỹ thuật)</summary>
+          <div className="text-sm mt-3 mb-4" style={{ color: 'var(--color-text-light)' }}>
+            Dùng để tạo audio mới bằng API hoặc cấu hình API riêng. Người học bình thường không cần dùng mục này.
           </div>
-
-          <div>
-            <label className="text-sm font-bold block mb-2">Voice tieng Anh (advanced)</label>
-            <select
-              className="w-full p-2 rounded-lg text-sm"
-              value={voiceEn}
-              onChange={(event) => handleVoiceChange('en', event.target.value)}
-            >
-              <option value="">Tu dong theo generator</option>
-              <optgroup label="Google Cloud">
-                {googleEnVoices.map((voice) => (
-                  <option key={voice.id} value={voice.id}>{voice.label}</option>
-                ))}
-              </optgroup>
-              <optgroup label="Native">
-                <option value={pref.female}>Prefer female voice</option>
-                <option value={pref.male}>Prefer male voice</option>
-                {nativeEnVoices.map((voice) => (
-                  <option key={`${voice.lang}-${voice.name}`} value={voice.name}>{voice.name} ({voice.lang})</option>
-                ))}
-              </optgroup>
-            </select>
-          </div>
-        </div>
-        <div className="flex gap-3 flex-wrap mt-4">
-          <button
-            type="button"
-            className="btn btn-primary flex items-center gap-2"
-            onClick={() => void handleAdvancedTest()}
-          >
-            <Volume2 size={16} />
-            {testingId === 'advanced:vi' ? 'Dang goi advanced...' : 'Thu advanced'}
-          </button>
-          {!stats?.backendReachable && stats?.backendError && (
-            <div className="text-xs px-3 py-2 rounded-lg" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
-              Backend advanced chua san sang: {stats.backendError}
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <label className="text-sm font-bold block mb-2">Voice tiếng Việt (advanced)</label>
+              <select
+                className="w-full p-2 rounded-lg text-sm"
+                value={voiceVi}
+                onChange={(event) => handleVoiceChange('vi', event.target.value)}
+              >
+                <option value="">Tự động theo generator</option>
+                <optgroup label="Google Cloud">
+                  {googleViVoices.map((voice) => (
+                    <option key={voice.id} value={voice.id}>{voice.label}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Native">
+                  <option value={pref.female}>Ưu tiên giọng nữ</option>
+                  <option value={pref.male}>Ưu tiên giọng nam</option>
+                  {nativeViVoices.map((voice) => (
+                    <option key={`${voice.lang}-${voice.name}`} value={voice.name}>{voice.name} ({voice.lang})</option>
+                  ))}
+                </optgroup>
+              </select>
             </div>
-          )}
+
+            <div>
+              <label className="text-sm font-bold block mb-2">Voice tiếng Anh (advanced)</label>
+              <select
+                className="w-full p-2 rounded-lg text-sm"
+                value={voiceEn}
+                onChange={(event) => handleVoiceChange('en', event.target.value)}
+              >
+                <option value="">Tự động theo generator</option>
+                <optgroup label="Google Cloud">
+                  {googleEnVoices.map((voice) => (
+                    <option key={voice.id} value={voice.id}>{voice.label}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Native">
+                  <option value={pref.female}>Prefer female voice</option>
+                  <option value={pref.male}>Prefer male voice</option>
+                  {nativeEnVoices.map((voice) => (
+                    <option key={`${voice.lang}-${voice.name}`} value={voice.name}>{voice.name} ({voice.lang})</option>
+                  ))}
+                </optgroup>
+              </select>
+            </div>
+          </div>
+          <div className="flex gap-3 flex-wrap mt-4">
+            <button
+              type="button"
+              className="btn btn-primary flex items-center gap-2"
+              onClick={() => void handleAdvancedTest()}
+            >
+              <Volume2 size={16} />
+              {testingId === 'advanced:vi' ? 'Đang gọi advanced...' : 'Thử advanced'}
+            </button>
+            {!stats?.backendReachable && stats?.backendError && (
+              <div className="text-xs px-3 py-2 rounded-lg" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
+                Backend advanced chưa sẵn sàng: {stats.backendError}
+              </div>
+            )}
+          </div>
+        </details>
+      ) : (
+        <div className="card mb-4">
+          <h3 className="font-bold mb-2">Advanced / Generator</h3>
+          <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
+            Mục này dành cho kỹ thuật để tạo thêm audio mới bằng API. Flow học mặc định của app dùng audio tĩnh đã đóng gói.
+          </p>
         </div>
-      </details>
+      )}
 
       <div className="card mb-4">
         <div className="flex items-center justify-between mb-2">

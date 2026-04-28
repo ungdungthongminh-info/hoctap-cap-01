@@ -5,6 +5,7 @@ const DEFAULT_CONTENT_VERSION = import.meta.env.VITE_APP_CONTENT_VERSION || '202
 
 export interface TtsSynthesizeRequest {
   text: string;
+  ssml?: string;
   lang?: string;
   voiceId?: string;
   speed?: number;
@@ -107,6 +108,7 @@ export async function synthesizeTtsAudio(request: TtsSynthesizeRequest): Promise
     },
     body: JSON.stringify({
       text: request.text,
+      ssml: request.ssml,
       lang: request.lang || 'vi-VN',
       voiceId: request.voiceId,
       speed: request.speed ?? 1,

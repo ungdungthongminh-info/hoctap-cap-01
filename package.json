@@ -20,7 +20,8 @@
     "data:templates": "tsx scripts/generate-question-templates.ts",
     "data:patch:drafts": "tsx scripts/generate-subject-patch-files.ts",
     "data:patch:apply": "tsx scripts/apply-question-patches.ts",
-    "tts:catalog": "tsx scripts/generate-static-tts-catalog.ts"
+    "tts:catalog": "tsx scripts/generate-static-tts-catalog.ts",
+    "tts:generate:static": "npm --prefix backend run tts:generate-static --"
   },
   "keywords": ["education", "kids", "math"],
   "author": "",

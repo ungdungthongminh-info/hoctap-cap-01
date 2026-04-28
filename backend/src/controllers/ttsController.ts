@@ -103,7 +103,7 @@ export async function postSynthesize(req: Request, res: Response) {
     });
   } catch (error: any) {
     const message = String(error?.message || 'Failed to synthesize speech.');
-    const status = /Unsupported usage|Text exceeds|Text is required|voiceId/i.test(message) ? 400 : 500;
+    const status = /Unsupported usage|Text exceeds|Text is required|Text or ssml is required|voiceId/i.test(message) ? 400 : 500;
     return res.status(status).json({
       success: false,
       error: message,
