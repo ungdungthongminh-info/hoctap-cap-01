@@ -130,34 +130,34 @@ export function PreGradeMiniGamesPage() {
         </button>
         <div>
           <h1 className="text-2xl font-black" style={{ color: 'var(--color-primary-dark)' }}>
-            Vui Hoc Tien Tieu Hoc
+            Vui Học Tiền Tiểu Học
           </h1>
           <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-            Bo game rieng cho be lop la: ghep chu, dem nhanh, to net.
+            Bộ game riêng cho bé lớp lá: ghép chữ, đếm nhanh, tô nét.
           </p>
         </div>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-4">
         <button className="btn btn-secondary" onClick={() => resetMode('letters')}>
-          <Shapes size={14} /> Ghep chu
+          <Shapes size={14} /> Ghép chữ
         </button>
         <button className="btn btn-secondary" onClick={() => resetMode('counting')}>
-          <Sparkles size={14} /> Dem nhanh
+          <Sparkles size={14} /> Đếm nhanh
         </button>
         <button className="btn btn-secondary" onClick={() => resetMode('tracing')}>
-          <PencilLine size={14} /> To net
+          <PencilLine size={14} /> Tô nét
         </button>
       </div>
 
       <div className="card">
         <div className="flex items-center justify-between gap-2 mb-3">
           <span className="text-sm font-bold" style={{ color: 'var(--color-primary-dark)' }}>
-            Cau {Math.min(idx + 1, rounds)}/{rounds}
+            Câu {Math.min(idx + 1, rounds)}/{rounds}
           </span>
           <div className="flex items-center gap-2">
             <button className="btn btn-primary" style={{ padding: '8px 12px', fontSize: 13 }} onClick={speakCurrentPrompt}>
-              <Volume2 size={14} /> Nghe lai
+              <Volume2 size={14} /> Nghe lại
             </button>
             <span className="text-sm">⭐ {score}</span>
           </div>
@@ -181,7 +181,7 @@ export function PreGradeMiniGamesPage() {
         {!done && mode === 'counting' && (
           <div className="pregrade-touch-area">
             <div className="pregrade-hero-image">{countRounds[idx].image}</div>
-            <p className="pregrade-hint-text">Cham so dung</p>
+            <p className="pregrade-hint-text">Chạm số đúng</p>
             <div className="pregrade-options-grid">
               {countRounds[idx].options.map((option) => (
                 <button key={option.key} className="pregrade-option-card" onClick={() => answerCount(option.key)}>
@@ -209,22 +209,22 @@ export function PreGradeMiniGamesPage() {
         {!done && selected && (
           <div className="mt-4 flex items-center justify-between gap-2">
             <span className="text-sm font-bold" style={{ color: isCorrect ? 'var(--color-success)' : 'var(--color-error)' }}>
-              {isCorrect ? 'Chinh xac, gioi lam!' : 'Chua dung, minh thu tiep nhe!'}
+              {isCorrect ? 'Chính xác, giỏi lắm!' : 'Chưa đúng, mình thử tiếp nhé!'}
             </span>
-            <button className="btn btn-primary" onClick={nextRound}>Tiep theo</button>
+            <button className="btn btn-primary" onClick={nextRound}>Tiếp theo</button>
           </div>
         )}
 
         {done && (
           <div className="text-center py-4">
             <CheckCircle2 size={32} style={{ color: 'var(--color-success)' }} className="mx-auto mb-2" />
-            <p className="font-bold text-lg">Hoan thanh mini-game!</p>
+            <p className="font-bold text-lg">Hoàn thành mini-game!</p>
             <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-              Be dat {score}/{rounds} sao.
+              Bé đạt {score}/{rounds} sao.
             </p>
             <div className="flex gap-2 justify-center mt-3">
-              <button className="btn btn-secondary" onClick={() => resetMode(mode)}>Choi lai</button>
-              <button className="btn btn-primary" onClick={() => navigate('/mini-games')}>Ve kho game</button>
+              <button className="btn btn-secondary" onClick={() => resetMode(mode)}>Chơi lại</button>
+              <button className="btn btn-primary" onClick={() => navigate('/mini-games')}>Về kho game</button>
             </div>
           </div>
         )}

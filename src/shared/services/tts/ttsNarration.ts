@@ -38,29 +38,63 @@ const SSML_STYLES: Record<TtsSsmlStyleId, SsmlStyleConfig> = {
 export const VOICE_AUDIT_LINES: VoiceAuditLine[] = [
   {
     id: 'reading-rhythm',
-    label: 'Tap doc - ngat nhip',
+    label: 'Tập đọc - ngắt nhịp',
     lang: 'vi-VN',
     styleId: 'vi-audit',
-    text: 'Be doc cham. Ngat nhip o dau phay, roi doc tiep o cuoi cau.',
-    notes: 'Nghe do ro phu am va do mem khi xu ly dau phay.',
+    text: 'Bé đọc chậm. Ngắt nhịp ở dấu phẩy, rồi đọc tiếp ở cuối câu.',
+    notes: 'Nghe độ rõ phụ âm và độ mềm khi xử lý dấu phẩy.',
   },
   {
     id: 'story-flow',
-    label: 'Ke chuyen - tu nhien',
+    label: 'Kể chuyện - tự nhiên',
     lang: 'vi-VN',
     styleId: 'vi-audit',
-    text: 'Sang nay, be Mai den lop som. Be chao co giao, roi ngoi ngay ngan vao ban.',
-    notes: 'Nghe do tu nhien o cau ke chuyen va do roi giua hai ve.',
+    text: 'Sáng nay, bé Mai đến lớp sớm. Bé chào cô giáo, rồi ngồi ngay ngắn vào bàn.',
+    notes: 'Nghe độ tự nhiên ở câu kể chuyện và độ rơi giữa hai vế.',
   },
   {
     id: 'math-prompt',
-    label: 'Toan - doc phep tinh',
+    label: 'Toán - đọc phép tính',
     lang: 'vi-VN',
     styleId: 'vi-audit',
-    text: 'Muoi bon cong ba bang bao nhieu? Con hay suy nghi, roi chon dap an dung.',
-    notes: 'Nghe kha nang doc so va nhan nhip o cau hoi toan.',
+    text: 'Mười bốn cộng ba bằng bao nhiêu? Con hãy suy nghĩ, rồi chọn đáp án đúng.',
+    notes: 'Nghe khả năng đọc số và nhấn nhịp ở câu hỏi toán.',
   },
 ];
+
+const MOJIBAKE_TOKEN_RE = /(?:\u00C3.|\u00C2.|\u00C4.|\u00E1\u00BB|\u00E2\u20AC|\u00E2\u20A2|\u00EF\u00B8\u008F)/g;
+const CONTROL_CHAR_RE = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F]/g;
+const REPLACEMENT_CHAR_RE = /\uFFFD/g;
+
+function scoreMojibake(value: string): number {
+  return (String(value || '').match(MOJIBAKE_TOKEN_RE) || []).length;
+}
+
+function scoreCorruption(value: string): number {
+  return (String(value || '').match(CONTROL_CHAR_RE) || []).length
+    + (String(value || '').match(REPLACEMENT_CHAR_RE) || []).length;
+}
+
+function repairLikelyMojibake(value: string): string {
+  const raw = String(value || '');
+  if (scoreMojibake(raw) === 0) {
+    return raw;
+  }
+
+  try {
+    const bytes = Uint8Array.from(raw, (char) => char.charCodeAt(0) & 0xff);
+    const decoded = new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+    return scoreMojibake(decoded) < scoreMojibake(raw) ? decoded : raw;
+  } catch {
+    return raw;
+  }
+}
+
+function stripUnsafeControlChars(value: string): string {
+  return String(value || '')
+    .replace(CONTROL_CHAR_RE, ' ')
+    .replace(REPLACEMENT_CHAR_RE, ' ');
+}
 
 function escapeXml(value: string): string {
   return value
@@ -77,6 +111,7 @@ function stripDecorativeEmoji(value: string): string {
 
 function normalizeWhitespace(value: string): string {
   return value
+    .normalize('NFC')
     .replace(/\r/g, '\n')
     .replace(/\t/g, ' ')
     .replace(/[ ]{2,}/g, ' ')
@@ -86,26 +121,51 @@ function normalizeWhitespace(value: string): string {
 
 function replaceSpeechSymbols(value: string): string {
   return value
-    .replace(/>=/g, ' lon hon hoac bang ')
-    .replace(/<=/g, ' be hon hoac bang ')
-    .replace(/=/g, ' bang ')
-    .replace(/\+/g, ' cong ')
-    .replace(/×/g, ' nhan ')
-    .replace(/x/g, ' x ')
-    .replace(/\//g, ' chia ')
-    .replace(/-/g, ' tru ')
-    .replace(/>/g, ' lon hon ')
-    .replace(/</g, ' be hon ')
-    .replace(/:/g, '. ')
-    .replace(/;/g, ', ')
+    .replace(/>=/g, ' lớn hơn hoặc bằng ')
+    .replace(/<=/g, ' bé hơn hoặc bằng ')
+    .replace(/=>/g, ' dẫn đến ')
+    .replace(/_{2,}/g, ' ô trống ')
+    .replace(/(\S)\s*=\s*\?/g, '$1 bằng bao nhiêu')
+    .replace(/(\S)\s*=\s*(\S)/g, '$1 bằng $2')
+    .replace(/(\S)\s*\+\s*(\S)/g, '$1 cộng $2')
+    .replace(/(\S)\s*[×*]\s*(\S)/g, '$1 nhân $2')
+    .replace(/(\d)\s*[xX]\s*(\d)/g, '$1 nhân $2')
+    .replace(/(\S)\s*\/\s*(\S)/g, '$1 chia $2')
+    .replace(/\b(lớp|cấp|khối)\s*(\d)\s*-\s*(\d)/gi, '$1 $2 đến $3')
+    .replace(/(\d)\s*-\s*(\d)/g, '$1 trừ $2')
+    .replace(/\?\s*(cm|mm|dm|m|km|g|kg|ml|l|%)/gi, ' bao nhiêu $1')
     .replace(/…/g, '. ')
     .replace(/[“”]/g, '"')
     .replace(/[‘’]/g, "'");
 }
 
 function cleanNarrationText(value: string): string {
-  return normalizeWhitespace(replaceSpeechSymbols(stripDecorativeEmoji(String(value || ''))))
+  const fallback = 'Nội dung này đang được cập nhật. Con xem phần chữ trên màn hình nhé.';
+  const raw = String(value || '');
+  if ((scoreCorruption(raw) >= 2 && raw.length >= 12) || scoreMojibake(raw) >= 6) {
+    return fallback;
+  }
+
+  const repaired = repairLikelyMojibake(stripUnsafeControlChars(raw));
+  if ((scoreCorruption(repaired) >= 1 && repaired.length >= 8) || scoreMojibake(repaired) >= 4) {
+    return fallback;
+  }
+
+  const normalized = normalizeWhitespace(replaceSpeechSymbols(stripDecorativeEmoji(stripUnsafeControlChars(repaired))))
     .replace(/\s+([,.!?])/g, '$1');
+  if (scoreCorruption(normalized) > 0 || normalized.includes('\uFFFD')) {
+    return fallback;
+  }
+  return normalized;
+}
+
+function joinPromptAndSuffix(prompt: string, suffix: string): string {
+  const cleanPrompt = cleanNarrationText(prompt);
+  const cleanSuffix = cleanNarrationText(suffix);
+  if (!cleanPrompt) {
+    return cleanSuffix;
+  }
+  return /[.!?]$/.test(cleanPrompt) ? `${cleanPrompt} ${cleanSuffix}` : `${cleanPrompt}. ${cleanSuffix}`;
 }
 
 function toSsmlRate(rate: number): string {
@@ -142,25 +202,25 @@ export function buildLessonCardNarrationText(card: Pick<LessonCard, 'title' | 'c
 }
 
 export function buildQuestionNarrationText(question: Pick<Question, 'questionText' | 'questionType' | 'optionsJson'>): string {
-  const prompt = cleanNarrationText(question.questionText);
+  const prompt = String(question.questionText || '');
 
   if (question.questionType === 'true_false') {
-    return `${prompt}. Dung. Sai.`;
+    return joinPromptAndSuffix(prompt, 'Đúng. Sai.');
   }
 
   if (question.questionType === 'single_choice' || question.questionType === 'multi_choice') {
     const options = safeParseOptions(question as Question);
     if (options.length === 0) {
-      return prompt;
+      return cleanNarrationText(prompt);
     }
 
     const optionText = options
-      .map((option, index) => `Phuong an ${String.fromCharCode(65 + index)}. ${cleanNarrationText(option)}`)
+      .map((option, index) => `Phương án ${String.fromCharCode(65 + index)}. ${cleanNarrationText(option)}`)
       .join('. ');
-    return `${prompt}. ${optionText}.`;
+    return joinPromptAndSuffix(prompt, optionText.endsWith('.') ? optionText : `${optionText}.`);
   }
 
-  return prompt;
+  return cleanNarrationText(prompt);
 }
 
 export function buildVietnameseSsml(text: string, styleId: TtsSsmlStyleId): string {

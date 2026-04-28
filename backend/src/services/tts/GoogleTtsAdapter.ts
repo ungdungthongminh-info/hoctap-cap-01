@@ -21,6 +21,11 @@ function normalizeAudioEncoding(value: string | undefined) {
     : protos.google.cloud.texttospeech.v1.AudioEncoding.MP3;
 }
 
+function normalizeAudioEncodingName(value: string | undefined): 'MP3' | 'LINEAR16' {
+  const raw = String(value || 'MP3').trim().toUpperCase();
+  return raw === 'LINEAR16' ? 'LINEAR16' : 'MP3';
+}
+
 function toAudioBuffer(audioContent: Uint8Array | string | null | undefined): Buffer {
   if (!audioContent) {
     throw new Error('Google Cloud TTS did not return audio content.');
@@ -45,7 +50,11 @@ export class GoogleTtsAdapter {
   }
 
   get defaultVoice(): string {
-    return String(process.env.GOOGLE_TTS_DEFAULT_VOICE || 'vi-VN-Wavenet-A').trim() || 'vi-VN-Wavenet-A';
+    return String(process.env.GOOGLE_TTS_DEFAULT_VOICE || 'vi-VN-Chirp3-HD-Despina').trim() || 'vi-VN-Chirp3-HD-Despina';
+  }
+
+  get apiKey(): string {
+    return String(process.env.GOOGLE_TTS_API_KEY || '').trim();
   }
 
   get maxTextLength(): number {
@@ -58,6 +67,43 @@ export class GoogleTtsAdapter {
     }
 
     return this.client;
+  }
+
+  private async synthesizeViaApiKey(input: {
+    text?: string;
+    ssml?: string;
+    lang: string;
+    voiceId: string;
+    speed: number;
+    pitch: number;
+  }): Promise<Buffer> {
+    const endpoint = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${encodeURIComponent(this.apiKey)}`;
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        input: input.ssml ? { ssml: input.ssml } : { text: input.text || '' },
+        voice: {
+          languageCode: input.lang,
+          name: input.voiceId,
+        },
+        audioConfig: {
+          audioEncoding: normalizeAudioEncodingName(process.env.GOOGLE_TTS_AUDIO_ENCODING),
+          speakingRate: input.speed,
+          pitch: input.pitch,
+        },
+      }),
+    });
+
+    const payload: any = await response.json().catch(() => ({} as Record<string, unknown>));
+    if (!response.ok) {
+      const message = String(payload?.error?.message || `Google TTS REST failed with HTTP ${response.status}.`);
+      throw new Error(message);
+    }
+
+    return toAudioBuffer(payload?.audioContent);
   }
 
   validateText(text: string): void {
@@ -96,6 +142,17 @@ export class GoogleTtsAdapter {
 
     this.validateText(ssml ? ssml.replace(/<[^>]+>/g, ' ') : text);
     this.validateVoiceId(voiceId);
+
+    if (this.apiKey) {
+      return this.synthesizeViaApiKey({
+        text,
+        ssml,
+        lang,
+        voiceId,
+        speed,
+        pitch,
+      });
+    }
 
     const [response] = await this.getClient().synthesizeSpeech({
       input: ssml ? { ssml } : { text },

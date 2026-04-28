@@ -77,14 +77,12 @@ const DEFAULT_MODE: TtsMode = 'static';
 const DEFAULT_CACHE_MODE: TtsCacheMode = 'balanced';
 
 const GOOGLE_VI_VOICE_OPTIONS: TtsVoiceCatalogOption[] = [
-  { id: 'vi-VN-Wavenet-A', label: 'Google Wavenet A' },
-  { id: 'vi-VN-Wavenet-B', label: 'Google Wavenet B' },
-  { id: 'vi-VN-Wavenet-C', label: 'Google Wavenet C' },
-  { id: 'vi-VN-Wavenet-D', label: 'Google Wavenet D' },
-  { id: 'vi-VN-Standard-A', label: 'Google Standard A' },
-  { id: 'vi-VN-Standard-B', label: 'Google Standard B' },
-  { id: 'vi-VN-Standard-C', label: 'Google Standard C' },
-  { id: 'vi-VN-Standard-D', label: 'Google Standard D' },
+  { id: 'vi-VN-Chirp3-HD-Despina', label: 'Chirp3 HD Despina (Female)' },
+  { id: 'vi-VN-Chirp3-HD-Achernar', label: 'Chirp3 HD Achernar (Female)' },
+  { id: 'vi-VN-Chirp3-HD-Achird', label: 'Chirp3 HD Achird' },
+  { id: 'vi-VN-Wavenet-A', label: 'Google Wavenet A (Fallback)' },
+  { id: 'vi-VN-Wavenet-C', label: 'Google Wavenet C (Fallback)' },
+  { id: 'vi-VN-Standard-A', label: 'Google Standard A (Fallback)' },
 ];
 
 const GOOGLE_EN_VOICE_OPTIONS: TtsVoiceCatalogOption[] = [
@@ -326,7 +324,7 @@ function resolveBackendVoiceId(lang: TtsLang, explicitVoiceId?: string): string 
     return candidate;
   }
 
-  return getGoogleVoiceCatalog(lang)[0]?.id || (lang === 'vi' ? 'vi-VN-Wavenet-A' : 'en-US-Neural2-F');
+  return getGoogleVoiceCatalog(lang)[0]?.id || (lang === 'vi' ? 'vi-VN-Chirp3-HD-Despina' : 'en-US-Neural2-F');
 }
 
 function resolveNativeVoice(lang: TtsLang): SpeechSynthesisVoice | undefined {

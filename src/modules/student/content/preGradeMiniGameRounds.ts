@@ -26,44 +26,44 @@ export interface TraceRound {
 export const letterRounds: LetterRound[] = [
   {
     image: '🧒👩',
-    hint: 'Be va me',
-    promptSpeech: 'Nhin hinh be va me. Con cham vao tieng ME nhe.',
+    hint: 'Bé và mẹ',
+    promptSpeech: 'Nhìn hình bé và mẹ. Con chạm vào tiếng MẸ nhé.',
     answer: 'me',
     options: [
-      { key: 'me', icon: '👩', label: 'ME' },
+      { key: 'me', icon: '👩', label: 'MẸ' },
       { key: 'ba', icon: '👨', label: 'BA' },
-      { key: 'be', icon: '🧒', label: 'BE' },
+      { key: 'be', icon: '🧒', label: 'BÉ' },
     ],
   },
   {
     image: '👶🐄',
-    hint: 'Be va bo',
-    promptSpeech: 'Con tim tieng BE trong cac lua chon nhe.',
+    hint: 'Bé và bò',
+    promptSpeech: 'Con tìm tiếng BÉ trong các lựa chọn nhé.',
     answer: 'be',
     options: [
-      { key: 'be', icon: '👶', label: 'BE' },
-      { key: 'bo', icon: '🐄', label: 'BO' },
+      { key: 'be', icon: '👶', label: 'BÉ' },
+      { key: 'bo', icon: '🐄', label: 'BÒ' },
       { key: 'na', icon: '👧', label: 'NA' },
     ],
   },
   {
     image: '👨🏠',
-    hint: 'Ba o nha',
-    promptSpeech: 'Con chon tieng BA nhe.',
+    hint: 'Ba ở nhà',
+    promptSpeech: 'Con chọn tiếng BA nhé.',
     answer: 'ba',
     options: [
       { key: 'na', icon: '👧', label: 'NA' },
       { key: 'ba', icon: '👨', label: 'BA' },
-      { key: 'me', icon: '👩', label: 'ME' },
+      { key: 'me', icon: '👩', label: 'MẸ' },
     ],
   },
   {
     image: '👧🌸',
-    hint: 'Ban Na',
-    promptSpeech: 'Con cham vao tieng NA nao.',
+    hint: 'Bạn Na',
+    promptSpeech: 'Con chạm vào tiếng NA nào.',
     answer: 'na',
     options: [
-      { key: 'be', icon: '👶', label: 'BE' },
+      { key: 'be', icon: '👶', label: 'BÉ' },
       { key: 'na', icon: '👧', label: 'NA' },
       { key: 'ba', icon: '👨', label: 'BA' },
     ],
@@ -73,7 +73,7 @@ export const letterRounds: LetterRound[] = [
 export const countRounds: CountRound[] = [
   {
     image: '🍎🍎🍎',
-    promptSpeech: 'Co bao nhieu qua tao? Con cham vao so dung.',
+    promptSpeech: 'Có bao nhiêu quả táo? Con chạm vào số đúng.',
     answer: 3,
     options: [
       { key: 2, icon: '2️⃣' },
@@ -83,7 +83,7 @@ export const countRounds: CountRound[] = [
   },
   {
     image: '⭐ ⭐ ⭐ ⭐ ⭐',
-    promptSpeech: 'Dem sao that nhanh. Co may ngoi sao?',
+    promptSpeech: 'Đếm sao thật nhanh. Có mấy ngôi sao?',
     answer: 5,
     options: [
       { key: 4, icon: '4️⃣' },
@@ -93,7 +93,7 @@ export const countRounds: CountRound[] = [
   },
   {
     image: '🎈🎈🎈🎈',
-    promptSpeech: 'Co may qua bong bay nhe?',
+    promptSpeech: 'Có mấy quả bóng bay nhỉ?',
     answer: 4,
     options: [
       { key: 3, icon: '3️⃣' },
@@ -103,7 +103,7 @@ export const countRounds: CountRound[] = [
   },
   {
     image: '🐟🐟',
-    promptSpeech: 'Con dem so ca trong be nhe.',
+    promptSpeech: 'Con đếm số cá trong bể nhé.',
     answer: 2,
     options: [
       { key: 1, icon: '1️⃣' },
@@ -116,8 +116,8 @@ export const countRounds: CountRound[] = [
 export const traceRounds: TraceRound[] = [
   {
     image: '🖍️ ───>',
-    promptSpeech: 'To net thang. Con cham diem bat dau ben trai.',
-    pattern: 'Net thang',
+    promptSpeech: 'Tô nét thẳng. Con chạm điểm bắt đầu bên trái.',
+    pattern: 'Nét thẳng',
     answer: 'start',
     points: [
       { key: 'start', icon: '🟢' },
@@ -127,8 +127,8 @@ export const traceRounds: TraceRound[] = [
   },
   {
     image: '🖍️ ⤿',
-    promptSpeech: 'To net cong. Cham diem bat dau mau xanh.',
-    pattern: 'Net cong',
+    promptSpeech: 'Tô nét cong. Chạm điểm bắt đầu màu xanh.',
+    pattern: 'Nét cong',
     answer: 'start',
     points: [
       { key: 'middle', icon: '🟡' },
@@ -138,8 +138,8 @@ export const traceRounds: TraceRound[] = [
   },
   {
     image: '🖍️ ⭕',
-    promptSpeech: 'To net tron. Cham diem bat dau de di vong tron.',
-    pattern: 'Net tron',
+    promptSpeech: 'Tô nét tròn. Chạm điểm bắt đầu để đi vòng tròn.',
+    pattern: 'Nét tròn',
     answer: 'start',
     points: [
       { key: 'end', icon: '🔴' },
@@ -150,7 +150,7 @@ export const traceRounds: TraceRound[] = [
 ];
 
 export const PRE_GRADE_FEEDBACK_TEXT: Record<FeedbackTone, string> = {
-  correct: 'Dung roi, con gioi lam!',
-  wrong: 'Chua dung dau, minh thu lai cau tiep theo nhe.',
-  completed: 'Tuyet voi! Con da hoan thanh mini game.',
+  correct: 'Đúng rồi, con giỏi lắm!',
+  wrong: 'Chưa đúng đâu, mình thử lại câu tiếp theo nhé.',
+  completed: 'Tuyệt vời! Con đã hoàn thành mini game.',
 };
