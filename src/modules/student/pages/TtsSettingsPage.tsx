@@ -15,19 +15,50 @@ import {
   setTtsMode,
   setTtsSpeed,
   speakTextAsync,
+  stopSpeaking,
   type TtsCacheMode,
   type TtsInfo,
 } from '../../../shared/utils/sounds';
-import { buildVoiceAuditAssetKey } from '../../../shared/services/tts/ttsAssetKeys';
 import { MascotCharacter } from '../../../shared/components';
+import { buildVoiceAuditAssetKey } from '../../../shared/services/tts/ttsAssetKeys';
+import { VOICE_AUDIT_LINES } from '../../../shared/services/tts/ttsNarration';
+import { listStaticVoiceProfiles } from '../../../shared/services/tts/ttsVoiceProfiles';
 import { isAdminUnlocked } from '../../../shared/utils/adminAccess';
 
-type TestAction = 'static' | 'advanced' | 'native' | null;
+type TtsModeOption = 'static' | 'advanced' | 'native';
+type PlaybackSource = 'static' | 'advanced' | 'native';
+
+interface VoiceCandidate {
+  id: string;
+  label: string;
+  voiceId: string;
+  notes: string;
+  candidateRank: number;
+  isDefault?: boolean;
+}
 
 const cacheModeOptions: Array<{ value: TtsCacheMode; label: string; desc: string }> = [
-  { value: 'manual', label: 'Thu cong', desc: 'Chi tai cache khi bam nghe.' },
-  { value: 'balanced', label: 'Can bang', desc: 'Uu tien audio tinh, lam nong cache vua du cho bai dang hoc.' },
-  { value: 'aggressive', label: 'Chu dong', desc: 'Prefetch cac asset audio tinh cua bai hoc som hon.' },
+  { value: 'manual', label: 'Thu cong', desc: 'Chi luu cache khi bam nghe.' },
+  { value: 'balanced', label: 'Can bang', desc: 'Uu tien audio tinh, prefetch vua du de khong ton tai nguyen.' },
+  { value: 'aggressive', label: 'Chu dong', desc: 'Lam nong cache som cho bai hoc sap mo.' },
+];
+
+const modeOptions: Array<{ value: TtsModeOption; label: string; desc: string }> = [
+  {
+    value: 'static',
+    label: 'Mac dinh - Audio tinh',
+    desc: 'Dung audio pre-generate trong manifest. Neu thieu file se roi ve native.',
+  },
+  {
+    value: 'advanced',
+    label: 'Advanced / Generator',
+    desc: 'Chi dung khi can tao audio moi hoac can API rieng.',
+  },
+  {
+    value: 'native',
+    label: 'Native tren may',
+    desc: 'Doc bang speech synthesis cua thiet bi, khong can backend.',
+  },
 ];
 
 function filterVoices(info: TtsInfo | null, lang: 'vi' | 'en') {
@@ -38,6 +69,12 @@ function filterVoices(info: TtsInfo | null, lang: 'vi' | 'en') {
       ? code.startsWith('vi') || name.includes('viet')
       : code.startsWith('en') || name.includes('english');
   });
+}
+
+function toPlaybackLabel(source: PlaybackSource): string {
+  if (source === 'static') return 'asset MP3 tinh';
+  if (source === 'advanced') return 'advanced generator';
+  return 'native fallback';
 }
 
 export function TtsSettingsPage() {
@@ -51,8 +88,10 @@ export function TtsSettingsPage() {
   const [statsLoading, setStatsLoading] = useState(false);
   const [statsError, setStatsError] = useState('');
   const [clearing, setClearing] = useState(false);
-  const [testing, setTesting] = useState<TestAction>(null);
+  const [testingId, setTestingId] = useState<string | null>(null);
   const [online, setOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
+  const [activeProfileId, setActiveProfileId] = useState('');
+  const [lastPlaybackMessage, setLastPlaybackMessage] = useState('');
 
   const pref = getVoicePreferenceOptions();
   const showAdmin = import.meta.env.DEV || isAdminUnlocked();
@@ -62,9 +101,67 @@ export function TtsSettingsPage() {
   const nativeEnVoices = useMemo(() => filterVoices(ttsInfo, 'en'), [ttsInfo]);
 
   const staticManifest = stats?.staticManifest;
-  const staticViProfiles = (staticManifest?.voiceProfiles || []).filter((profile) => profile.lang === 'vi-VN');
-  const defaultStaticProfile = staticViProfiles.find((profile) => profile.id === staticManifest?.defaultProfileId) || staticViProfiles[0];
-  const defaultAuditSample = staticManifest?.auditSamples.find((sample) => sample.profileId === defaultStaticProfile?.id) || staticManifest?.auditSamples[0];
+  const hasAnyStaticAudio = Boolean(staticManifest && staticManifest.availableEntries > 0);
+
+  const manifestViProfiles = useMemo<VoiceCandidate[]>(
+    () => (staticManifest?.voiceProfiles || [])
+      .filter((profile) => profile.lang === 'vi-VN')
+      .map((profile) => ({
+        id: profile.id,
+        label: profile.label,
+        voiceId: profile.voiceId,
+        notes: profile.notes,
+        candidateRank: profile.candidateRank,
+        isDefault: profile.isDefault,
+      })),
+    [staticManifest],
+  );
+
+  const fallbackViProfiles = useMemo<VoiceCandidate[]>(
+    () => listStaticVoiceProfiles('vi-VN').map((profile) => ({
+      id: profile.id,
+      label: profile.label,
+      voiceId: profile.voiceId,
+      notes: profile.notes,
+      candidateRank: profile.candidateRank,
+      isDefault: profile.isDefault,
+    })),
+    [],
+  );
+
+  const staticViProfiles = useMemo<VoiceCandidate[]>(
+    () => (manifestViProfiles.length ? manifestViProfiles : fallbackViProfiles)
+      .slice()
+      .sort((a, b) => a.candidateRank - b.candidateRank)
+      .slice(0, 3),
+    [manifestViProfiles, fallbackViProfiles],
+  );
+
+  const defaultProfileId = staticManifest?.defaultProfileId
+    || staticViProfiles.find((profile) => profile.isDefault)?.id
+    || staticViProfiles[0]?.id
+    || '';
+
+  useEffect(() => {
+    if (!staticViProfiles.length) {
+      setActiveProfileId('');
+      return;
+    }
+
+    if (!activeProfileId || !staticViProfiles.some((profile) => profile.id === activeProfileId)) {
+      setActiveProfileId(defaultProfileId);
+    }
+  }, [activeProfileId, defaultProfileId, staticViProfiles]);
+
+  const activeProfile = staticViProfiles.find((profile) => profile.id === activeProfileId) || staticViProfiles[0] || null;
+
+  const auditAvailableMap = useMemo(() => {
+    const map = new Map<string, boolean>();
+    (staticManifest?.auditSamples || []).forEach((sample) => {
+      map.set(`${sample.profileId}:${sample.sampleId}`, Boolean(sample.available));
+    });
+    return map;
+  }, [staticManifest]);
 
   const loadStats = async () => {
     setStatsLoading(true);
@@ -94,7 +191,7 @@ export function TtsSettingsPage() {
     };
   }, []);
 
-  const handleModeChange = (value: 'static' | 'advanced' | 'native') => {
+  const handleModeChange = (value: TtsModeOption) => {
     setModeState(value);
     setTtsMode(value);
   };
@@ -125,50 +222,104 @@ export function TtsSettingsPage() {
     }
   };
 
-  const testStaticVoice = async () => {
-    if (!defaultStaticProfile || !defaultAuditSample) return;
-    setTesting('static');
+  const runWithTesting = async (id: string, fn: () => Promise<void>) => {
+    setTestingId(id);
     try {
-      await speakTextAsync('Kiem tra voice pack co dinh.', 'vi', {
-        mode: 'static',
-        policy: 'lesson-read-all',
-        assetKey: buildVoiceAuditAssetKey(defaultStaticProfile.id, defaultAuditSample.sampleId),
-      });
+      await fn();
     } finally {
-      setTesting(null);
+      setTestingId((current) => (current === id ? null : current));
     }
   };
 
-  const testAdvancedVoice = async () => {
-    setTesting('advanced');
-    try {
+  const playAuditLine = async (
+    profile: VoiceCandidate,
+    sampleId: string,
+    text: string,
+  ): Promise<PlaybackSource> => {
+    const sampleAvailable = Boolean(auditAvailableMap.get(`${profile.id}:${sampleId}`));
+    if (sampleAvailable) {
+      await speakTextAsync(text, 'vi', {
+        mode: 'static',
+        policy: 'lesson-read-all',
+        assetKey: buildVoiceAuditAssetKey(profile.id, sampleId),
+      });
+      return 'static';
+    }
+
+    if (online && stats?.backendReachable !== false) {
+      await speakTextAsync(text, 'vi', {
+        mode: 'advanced',
+        policy: 'practice-on-demand',
+        voiceId: profile.voiceId,
+      });
+      return 'advanced';
+    }
+
+    await speakTextAsync(text, 'vi', {
+      mode: 'native',
+      policy: 'fallback-native',
+    });
+    return 'native';
+  };
+
+  const handlePreviewProfile = async (profileId: string) => {
+    const profile = staticViProfiles.find((item) => item.id === profileId);
+    const readingLine = VOICE_AUDIT_LINES.find((line) => line.id === 'reading-rhythm') || VOICE_AUDIT_LINES[0];
+    if (!profile || !readingLine) {
+      return;
+    }
+
+    setActiveProfileId(profile.id);
+    await runWithTesting(`profile:${profile.id}:reading-rhythm`, async () => {
+      const source = await playAuditLine(profile, readingLine.id, readingLine.text);
+      setLastPlaybackMessage(`Da thu ${profile.label} bang ${toPlaybackLabel(source)}.`);
+    });
+  };
+
+  const handlePlayAuditCheck = async (sampleId: string, label: string, text: string) => {
+    if (!activeProfile) {
+      return;
+    }
+
+    await runWithTesting(`audit:${activeProfile.id}:${sampleId}`, async () => {
+      const source = await playAuditLine(activeProfile, sampleId, text);
+      setLastPlaybackMessage(`Da kiem tra "${label}" cho ${activeProfile.label} bang ${toPlaybackLabel(source)}.`);
+    });
+  };
+
+  const handleAdvancedTest = async () => {
+    await runWithTesting('advanced:vi', async () => {
       await speakTextAsync(
-        'Xin chao. Day la cau thu de nghe giong generator tieng Viet.',
+        'Xin chao. Day la cau thu de nghe che do advanced generator.',
         'vi',
         {
           mode: 'advanced',
           policy: 'practice-on-demand',
+          voiceId: activeProfile?.voiceId || undefined,
         },
       );
-    } finally {
-      setTesting(null);
-    }
+      setLastPlaybackMessage('Da thu advanced generator.');
+    });
   };
 
-  const testNativeVoice = async () => {
-    setTesting('native');
-    try {
+  const handleNativeTest = async () => {
+    await runWithTesting('native:vi', async () => {
       await speakTextAsync(
-        'Xin chao. Day la cau thu cua giong native tren may nay.',
+        'Xin chao. Day la cau thu cua giong native tren thiet bi.',
         'vi',
         {
           mode: 'native',
           policy: 'fallback-native',
         },
       );
-    } finally {
-      setTesting(null);
-    }
+      setLastPlaybackMessage('Da thu native fallback.');
+    });
+  };
+
+  const handleStopPlayback = () => {
+    stopSpeaking();
+    setTestingId(null);
+    setLastPlaybackMessage('Da dung phat audio hien tai.');
   };
 
   return (
@@ -180,12 +331,12 @@ export function TtsSettingsPage() {
             Audio tap doc
           </h1>
           <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-            App mac dinh uu tien audio tinh + manifest. Advanced mode chi dung cho generator/BYO API khi can.
+            Flow mac dinh da doi sang audio tinh + manifest. Advanced chi dung khi can tao audio moi.
           </p>
         </div>
       </div>
 
-      <div className="grid gap-4 mb-4 md:grid-cols-2">
+      <div className="grid gap-4 mb-4 md:grid-cols-3">
         <div className="card flex items-start gap-3">
           {online ? (
             <Wifi size={20} style={{ color: 'var(--color-success)' }} />
@@ -197,7 +348,21 @@ export function TtsSettingsPage() {
               {online ? 'Dang online' : 'Dang offline'}
             </div>
             <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-              Static audio van phat duoc neu file da tao san va da nam trong goi app/cache.
+              Offline van nghe duoc neu app da co san MP3 tinh.
+            </div>
+          </div>
+        </div>
+
+        <div className="card flex items-start gap-3">
+          <Headphones size={20} style={{ color: hasAnyStaticAudio ? 'var(--color-success)' : '#D97706' }} />
+          <div>
+            <div className="text-sm font-bold" style={{ color: hasAnyStaticAudio ? 'var(--color-success)' : '#D97706' }}>
+              {hasAnyStaticAudio ? 'Da co static voice pack' : 'Chua co static MP3'}
+            </div>
+            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+              {hasAnyStaticAudio
+                ? `${staticManifest?.availableEntries || 0}/${staticManifest?.totalEntries || 0} entry da co file.`
+                : 'Van co the thu giong bang advanced/native, sau do generate MP3 tinh.'}
             </div>
           </div>
         </div>
@@ -206,10 +371,10 @@ export function TtsSettingsPage() {
           <MonitorSpeaker size={20} style={{ color: ttsInfo?.hasVietnameseVoice ? 'var(--color-success)' : '#D97706' }} />
           <div>
             <div className="text-sm font-bold" style={{ color: ttsInfo?.hasVietnameseVoice ? 'var(--color-success)' : '#D97706' }}>
-              {ttsInfo?.hasVietnameseVoice ? 'Co giong native TV du phong' : 'Chua thay giong native TV'}
+              {ttsInfo?.hasVietnameseVoice ? 'Co native TV du phong' : 'Chua thay native TV'}
             </div>
             <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-              Native la lop an toan cuoi cung khi asset tinh chua co hoac advanced backend khong san sang.
+              Native la lop an toan khi static/advanced khong kha dung.
             </div>
           </div>
         </div>
@@ -218,28 +383,13 @@ export function TtsSettingsPage() {
       <div className="card mb-4">
         <div className="flex items-center gap-2 mb-3">
           <Cloud size={18} style={{ color: 'var(--color-primary)' }} />
-          <h3 className="font-bold">Che do phat</h3>
+          <h3 className="font-bold">Che do phat mac dinh</h3>
         </div>
         <div className="grid gap-2">
-          {[
-            {
-              value: 'static' as const,
-              label: 'Static mac dinh',
-              desc: 'Phat audio tu manifest/asset da tao san. Neu chua co file thi fallback native.',
-            },
-            {
-              value: 'advanced' as const,
-              label: 'Advanced / Generator',
-              desc: 'Van uu tien asset tinh, nhung duoc phep roi sang backend TTS khi can.',
-            },
-            {
-              value: 'native' as const,
-              label: 'Native',
-              desc: 'Chi dung speech synthesis san co tren may.',
-            },
-          ].map((option) => (
+          {modeOptions.map((option) => (
             <button
               key={option.value}
+              type="button"
               className="flex items-center gap-3 p-3 rounded-xl text-left w-full transition-all"
               style={{
                 background: mode === option.value ? 'var(--color-surface)' : '#F9FAFB',
@@ -267,73 +417,120 @@ export function TtsSettingsPage() {
       <div className="card mb-4">
         <div className="flex items-center gap-2 mb-3">
           <Headphones size={18} style={{ color: 'var(--color-primary)' }} />
-          <h3 className="font-bold">Voice pack co dinh cua app</h3>
+          <h3 className="font-bold">Giong co dinh cua app (uu tien nu, doc ro)</h3>
         </div>
-        <div className="text-sm mb-3" style={{ color: 'var(--color-text-light)' }}>
-          Audio cua bai hoc se duoc pre-generate theo 1 profile mac dinh. Cac ung vien duoi day la bo giong uu tien cho tieng Viet doc ro.
-        </div>
+        <p className="text-sm mb-3" style={{ color: 'var(--color-text-light)' }}>
+          Day la 2-3 ung vien giong tieng Viet de chot bo pre-generate. Bam the de chon profile, bam nghe thu de test ngay.
+        </p>
+
         <div className="grid gap-3 md:grid-cols-3">
-          {staticViProfiles.map((profile) => (
-            <div
-              key={profile.id}
-              className="p-3 rounded-xl border"
-              style={{
-                borderColor: profile.id === staticManifest?.defaultProfileId ? 'var(--color-primary)' : '#E5E7EB',
-                background: profile.id === staticManifest?.defaultProfileId ? '#EFF6FF' : '#FFFFFF',
-              }}
-            >
-              <div className="text-sm font-bold mb-1">{profile.label}</div>
-              <div className="text-xs font-mono mb-2" style={{ color: 'var(--color-primary-dark)' }}>
-                {profile.voiceId}
-              </div>
-              <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-                {profile.notes}
-              </div>
-              {profile.id === staticManifest?.defaultProfileId && (
-                <div className="text-[11px] mt-2 font-bold" style={{ color: 'var(--color-primary-dark)' }}>
-                  Dang la profile mac dinh trong manifest
+          {staticViProfiles.map((profile) => {
+            const selected = profile.id === activeProfile?.id;
+            const readingSampleAvailable = Boolean(auditAvailableMap.get(`${profile.id}:reading-rhythm`));
+            return (
+              <div
+                key={profile.id}
+                role="button"
+                tabIndex={0}
+                className="p-3 rounded-xl border text-left cursor-pointer"
+                style={{
+                  borderColor: selected ? 'var(--color-primary)' : '#E5E7EB',
+                  background: selected ? '#EFF6FF' : '#FFFFFF',
+                }}
+                onClick={() => setActiveProfileId(profile.id)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setActiveProfileId(profile.id);
+                  }
+                }}
+              >
+                <div className="text-sm font-bold mb-1">{profile.label}</div>
+                <div className="text-xs font-mono mb-2" style={{ color: 'var(--color-primary-dark)' }}>
+                  {profile.voiceId}
                 </div>
-              )}
-            </div>
-          ))}
+                <div className="text-xs mb-3" style={{ color: 'var(--color-text-light)' }}>
+                  {profile.notes}
+                </div>
+                <div className="text-[11px] mb-3" style={{ color: readingSampleAvailable ? 'var(--color-success)' : '#B45309' }}>
+                  {readingSampleAvailable ? 'Co MP3 mau nhac nhip' : 'Chua co MP3 mau, se thu online/native'}
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-primary w-full flex items-center justify-center gap-2"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    void handlePreviewProfile(profile.id);
+                  }}
+                >
+                  <Volume2 size={14} />
+                  {testingId === `profile:${profile.id}:reading-rhythm` ? 'Dang nghe thu...' : 'Nghe thu profile'}
+                </button>
+              </div>
+            );
+          })}
         </div>
+
+        <div className="mt-4 p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+          <div className="text-sm font-bold mb-2">
+            Kiem tra nhip phat am tap doc ({activeProfile?.label || 'chua chon profile'})
+          </div>
+          <div className="grid gap-2">
+            {VOICE_AUDIT_LINES.map((line) => (
+              <button
+                key={line.id}
+                type="button"
+                className="flex items-center justify-between p-2 rounded-lg text-left"
+                style={{ background: 'white', border: '1px solid #E5E7EB' }}
+                onClick={() => void handlePlayAuditCheck(line.id, line.label, line.text)}
+              >
+                <span className="text-sm">
+                  {line.label}
+                </span>
+                <span className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+                  {testingId === `audit:${activeProfile?.id || ''}:${line.id}` ? 'Dang phat...' : 'Nghe'}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="flex gap-3 flex-wrap mt-4">
           <button
-            className="btn btn-primary flex items-center gap-2"
-            onClick={() => void testStaticVoice()}
-            disabled={!defaultAuditSample?.available || testing !== null}
-          >
-            <Volume2 size={16} />
-            {testing === 'static' ? 'Dang phat mau...' : 'Nghe voice chuan'}
-          </button>
-          <button
+            type="button"
             className="btn flex items-center gap-2"
             style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}
-            onClick={() => void testNativeVoice()}
-            disabled={testing !== null}
+            onClick={() => void handleNativeTest()}
           >
             <Volume2 size={16} />
-            {testing === 'native' ? 'Dang phat native...' : 'Thu native du phong'}
+            {testingId === 'native:vi' ? 'Dang phat native...' : 'Thu native du phong'}
+          </button>
+          <button
+            type="button"
+            className="btn flex items-center gap-2"
+            style={{ background: '#FEF2F2', color: '#B91C1C' }}
+            onClick={handleStopPlayback}
+          >
+            <Trash2 size={16} />
+            Dung audio
           </button>
         </div>
-        {!defaultAuditSample?.available && (
-          <p className="text-xs mt-3" style={{ color: '#B45309' }}>
-            Audit sample chua co file MP3. Sau khi generate audit pack, nut nghe voice chuan se phat dung file tinh.
+
+        {lastPlaybackMessage && (
+          <p className="text-xs mt-3" style={{ color: 'var(--color-text-light)' }}>
+            {lastPlaybackMessage}
           </p>
         )}
       </div>
 
-      <div className="card mb-4">
-        <div className="flex items-center gap-2 mb-3">
-          <Cloud size={18} style={{ color: 'var(--color-primary)' }} />
-          <h3 className="font-bold">Advanced / generator mode</h3>
-        </div>
-        <div className="text-sm mb-4" style={{ color: 'var(--color-text-light)' }}>
-          Muc nay chi dung khi can goi backend TTS de tao audio moi, hoac khi khach muon dung API rieng. Flow mac dinh cua app khong phu thuoc phan nay.
+      <details className="card mb-4">
+        <summary className="font-bold cursor-pointer">Advanced / Generator (cho ky thuat)</summary>
+        <div className="text-sm mt-3 mb-4" style={{ color: 'var(--color-text-light)' }}>
+          Muc nay de tao audio moi bang API, hoac de user nang cao gan API rieng sau nay. App van chay binh thuong du khong dung muc nay.
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="text-sm font-bold block mb-2">Voice tieng Viet cho advanced</label>
+            <label className="text-sm font-bold block mb-2">Voice tieng Viet (advanced)</label>
             <select
               className="w-full p-2 rounded-lg text-sm"
               value={voiceVi}
@@ -356,7 +553,7 @@ export function TtsSettingsPage() {
           </div>
 
           <div>
-            <label className="text-sm font-bold block mb-2">Voice tieng Anh cho advanced</label>
+            <label className="text-sm font-bold block mb-2">Voice tieng Anh (advanced)</label>
             <select
               className="w-full p-2 rounded-lg text-sm"
               value={voiceEn}
@@ -380,12 +577,12 @@ export function TtsSettingsPage() {
         </div>
         <div className="flex gap-3 flex-wrap mt-4">
           <button
+            type="button"
             className="btn btn-primary flex items-center gap-2"
-            onClick={() => void testAdvancedVoice()}
-            disabled={testing !== null}
+            onClick={() => void handleAdvancedTest()}
           >
             <Volume2 size={16} />
-            {testing === 'advanced' ? 'Dang goi advanced...' : 'Thu advanced'}
+            {testingId === 'advanced:vi' ? 'Dang goi advanced...' : 'Thu advanced'}
           </button>
           {!stats?.backendReachable && stats?.backendError && (
             <div className="text-xs px-3 py-2 rounded-lg" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
@@ -393,7 +590,7 @@ export function TtsSettingsPage() {
             </div>
           )}
         </div>
-      </div>
+      </details>
 
       <div className="card mb-4">
         <div className="flex items-center justify-between mb-2">
@@ -412,7 +609,7 @@ export function TtsSettingsPage() {
           className="w-full"
         />
         <p className="text-xs mt-2" style={{ color: 'var(--color-text-light)' }}>
-          Toc do nay ap dung cho phat static MP3, advanced MP3 va native fallback.
+          Toc do nay ap dung cho static, advanced va native fallback.
         </p>
       </div>
 
@@ -425,6 +622,7 @@ export function TtsSettingsPage() {
           {cacheModeOptions.map((option) => (
             <button
               key={option.value}
+              type="button"
               className="flex items-center gap-3 p-3 rounded-xl text-left w-full transition-all"
               style={{
                 background: cacheMode === option.value ? 'var(--color-surface)' : '#F9FAFB',
@@ -448,6 +646,7 @@ export function TtsSettingsPage() {
           ))}
         </div>
         <button
+          type="button"
           className="btn flex items-center gap-2"
           style={{ background: '#FEF2F2', color: '#B91C1C' }}
           onClick={() => void handleClearCache()}
@@ -457,68 +656,72 @@ export function TtsSettingsPage() {
           {clearing ? 'Dang xoa cache...' : 'Xoa local cache + advanced cache'}
         </button>
         <p className="text-xs mt-2" style={{ color: 'var(--color-text-light)' }}>
-          Nut nay khong xoa audio tinh dong goi san trong app. No chi xoa cache tren may va cache backend phat sinh them.
+          Khong xoa audio tinh dong goi san trong app. Chi xoa cache local va advanced cache phat sinh.
         </p>
       </div>
 
-      <div className="card">
-        <div className="flex items-center justify-between gap-3 mb-3">
-          <h3 className="font-bold">Thong ke va audit</h3>
-          <button
-            className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg"
-            style={{ background: 'var(--color-surface)', color: 'var(--color-primary)' }}
-            onClick={() => void loadStats()}
-          >
-            <RefreshCw size={12} className={statsLoading ? 'animate-spin' : ''} /> Refresh
-          </button>
-        </div>
-
-        {statsLoading && (
-          <div className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-            Dang tai thong tin TTS...
+      <details className="card">
+        <summary className="font-bold cursor-pointer">Thong ke va audit</summary>
+        <div className="mt-3">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <p className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+              Dung cho kiem tra tinh trang pack MP3 va backend TTS.
+            </p>
+            <button
+              type="button"
+              className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg"
+              style={{ background: 'var(--color-surface)', color: 'var(--color-primary)' }}
+              onClick={() => void loadStats()}
+            >
+              <RefreshCw size={12} className={statsLoading ? 'animate-spin' : ''} /> Refresh
+            </button>
           </div>
-        )}
 
-        {!statsLoading && statsError && (
-          <div className="text-sm" style={{ color: '#B91C1C' }}>
-            {statsError}
-          </div>
-        )}
+          {statsLoading && (
+            <div className="text-sm" style={{ color: 'var(--color-text-light)' }}>
+              Dang tai thong tin TTS...
+            </div>
+          )}
 
-        {!statsLoading && !statsError && stats && (
-          <>
-            {staticManifest && (
-              <div className="grid gap-3 md:grid-cols-4 mb-4">
-                <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
-                  <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Tong entry manifest</div>
-                  <div className="text-xl font-bold">{staticManifest.totalEntries}</div>
-                </div>
-                <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
-                  <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Asset da co</div>
-                  <div className="text-xl font-bold">{staticManifest.availableEntries}</div>
-                </div>
-                <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
-                  <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Asset con thieu</div>
-                  <div className="text-xl font-bold">{staticManifest.missingEntries}</div>
-                </div>
-                <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
-                  <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Profile mac dinh</div>
-                  <div className="text-sm font-bold">{defaultStaticProfile?.label || staticManifest.defaultProfileId}</div>
-                </div>
-              </div>
-            )}
+          {!statsLoading && statsError && (
+            <div className="text-sm" style={{ color: '#B91C1C' }}>
+              {statsError}
+            </div>
+          )}
 
-            {stats.localDeviceCache && (
-              <div className="p-3 rounded-xl mb-4" style={{ background: '#EFF6FF' }}>
-                <div className="text-sm font-bold mb-1">Cache luu tren may user</div>
-                <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-                  {stats.localDeviceCache.entries} file • {(stats.localDeviceCache.totalBytes / 1024 / 1024).toFixed(2)} MB
+          {!statsLoading && !statsError && stats && (
+            <>
+              {staticManifest && (
+                <div className="grid gap-3 md:grid-cols-4 mb-4">
+                  <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+                    <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Tong entry manifest</div>
+                    <div className="text-xl font-bold">{staticManifest.totalEntries}</div>
+                  </div>
+                  <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+                    <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Asset da co</div>
+                    <div className="text-xl font-bold">{staticManifest.availableEntries}</div>
+                  </div>
+                  <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+                    <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Asset con thieu</div>
+                    <div className="text-xl font-bold">{staticManifest.missingEntries}</div>
+                  </div>
+                  <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+                    <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Profile mac dinh</div>
+                    <div className="text-sm font-bold">{defaultProfileId || '-'}</div>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {showAdmin && (
-              <>
+              {stats.localDeviceCache && (
+                <div className="p-3 rounded-xl mb-4" style={{ background: '#EFF6FF' }}>
+                  <div className="text-sm font-bold mb-1">Cache luu tren may user</div>
+                  <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+                    {stats.localDeviceCache.entries} file / {(stats.localDeviceCache.totalBytes / 1024 / 1024).toFixed(2)} MB
+                  </div>
+                </div>
+              )}
+
+              {showAdmin && (
                 <div className="grid gap-3 md:grid-cols-4 mb-4">
                   <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
                     <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Advanced file cache</div>
@@ -537,38 +740,11 @@ export function TtsSettingsPage() {
                     <div className="text-xl font-bold">{stats.totalHits}</div>
                   </div>
                 </div>
-
-                <div className="grid gap-2 mb-4">
-                  {stats.byUsage.map((item) => (
-                    <div key={item.usage} className="flex items-center justify-between text-sm p-2 rounded-lg" style={{ background: '#F9FAFB' }}>
-                      <span>{item.usage}</span>
-                      <span style={{ color: 'var(--color-text-light)' }}>
-                        {item.files} file / {item.chars.toLocaleString('vi-VN')} ky tu / {item.hits} hit
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-
-            {staticManifest?.auditSamples?.length ? (
-              <div>
-                <div className="text-sm font-bold mb-2">Audit sample da khai bao</div>
-                <div className="grid gap-2">
-                  {staticManifest.auditSamples.map((sample) => (
-                    <div key={sample.key} className="flex items-center justify-between text-sm p-2 rounded-lg" style={{ background: '#F9FAFB' }}>
-                      <span>{sample.label} - {sample.profileId}</span>
-                      <span style={{ color: sample.available ? 'var(--color-success)' : '#B45309' }}>
-                        {sample.available ? 'Da co MP3' : 'Chua generate'}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-          </>
-        )}
-      </div>
+              )}
+            </>
+          )}
+        </div>
+      </details>
     </div>
   );
 }
