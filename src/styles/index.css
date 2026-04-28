@@ -48,13 +48,15 @@ html, body, #root {
 }
 
 body {
-  font-family: 'Quicksand', 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Quicksand', 'Noto Sans', 'Segoe UI', 'Helvetica Neue', Arial, system-ui, sans-serif;
   font-weight: 500;
   line-height: 1.5;
   color: var(--color-text);
   background: var(--color-background);
   transition: background 0.4s ease, color 0.3s ease;
   position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ============================================
@@ -491,7 +493,7 @@ body.pattern-sunny::before {
   padding: 12px 24px;
   border: 1px solid transparent;
   border-radius: var(--radius-full);
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Quicksand', 'Noto Sans', 'Segoe UI', 'Helvetica Neue', Arial, system-ui, sans-serif;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
@@ -822,7 +824,7 @@ button.card-flat:active {
   gap: 6px;
   padding: 8px 16px;
   border-radius: 12px;
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Quicksand', 'Noto Sans', 'Segoe UI', 'Helvetica Neue', Arial, system-ui, sans-serif;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
