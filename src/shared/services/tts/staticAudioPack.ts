@@ -1,7 +1,6 @@
 import type { StaticTtsManifestFile, StaticTtsManifestEntry } from './staticTtsManifest';
 import { unzipSync } from 'fflate';
 import { STORAGE_KEYS as APP_STORAGE_KEYS } from '../../constants/storageKeys';
-import { BACKEND_API_BASE } from '../webTotalBridge';
 
 const DB_NAME = 'hhk_tts_static_pack';
 const DB_VERSION = 1;
@@ -96,19 +95,19 @@ interface StaticPackSource {
 
 let autoSyncPromise: Promise<StaticPackSyncResult | null> | null = null;
 
-function buildGradePackProxyUrl(grade: number): string {
-  return `${String(BACKEND_API_BASE || '').replace(/\/+$/, '')}/tts/static-pack/by-grade/${grade}`;
+function buildDrivePackUrl(fileId: string): string {
+  return `https://drive.usercontent.google.com/download?id=${encodeURIComponent(fileId)}&export=download&confirm=t`;
 }
 
 const GRADE_PACK_LINKS: Partial<Record<number, string>> = {
-  0: buildGradePackProxyUrl(0),
-  1: buildGradePackProxyUrl(1),
-  2: buildGradePackProxyUrl(2),
-  3: buildGradePackProxyUrl(3),
-  4: buildGradePackProxyUrl(4),
-  5: buildGradePackProxyUrl(5),
+  0: buildDrivePackUrl('1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN'),
+  1: buildDrivePackUrl('1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq'),
+  2: buildDrivePackUrl('1VY-VkQ9Wtunydd10rCCp_Xs9cTZRucyh'),
+  3: buildDrivePackUrl('1LKgjUtADcVkbDpvCkfzSNCdNoJG94YQv'),
+  4: buildDrivePackUrl('164Xxc7vlATmrBqSHd9EWSXnvk9Q37rFk'),
+  5: buildDrivePackUrl('1PinMxVGHSl-GkekhSvTYp5rLgmcUFOQV'),
   // Compatibility alias in case external data uses grade 6 for pre-primary pack.
-  6: buildGradePackProxyUrl(0),
+  6: buildDrivePackUrl('1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN'),
 };
 
 const GRADE_PACK_LABELS: Partial<Record<number, string>> = {
@@ -242,6 +241,14 @@ function isLegacyLocalManifestUrl(value: string): boolean {
     || normalized === './audio/tts/manifest.json';
 }
 
+function isLegacyBackendGradePackUrl(value: string): boolean {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (!normalized) {
+    return false;
+  }
+  return /\/api\/v1\/tts\/static-pack\/by-grade\/\d+/.test(normalized);
+}
+
 export function getStaticPackRecommendedUrl(): string {
   return normalizeManifestUrl(resolveDefaultPackUrlByGrade());
 }
@@ -256,7 +263,11 @@ export function getStaticPackManifestUrl(): string {
     return getStaticPackRecommendedUrl();
   }
   const normalizedStored = normalizeManifestUrl(storedRaw);
-  if (isLegacyLocalManifestUrl(normalizedStored) || isPresetPackUrl(normalizedStored)) {
+  if (
+    isLegacyLocalManifestUrl(normalizedStored)
+    || isLegacyBackendGradePackUrl(normalizedStored)
+    || isPresetPackUrl(normalizedStored)
+  ) {
     // Auto-follow grade pack presets instead of pinning an old grade URL.
     return getStaticPackRecommendedUrl();
   }
@@ -662,7 +673,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
   if (!source) {
     throw new Error(
       `Khong tai duoc audio pack tu duong dan da cau hinh: ${manifestUrl}. `
-      + 'Kiem tra backend /api/v1/tts/static-pack/by-grade/:grade va ket noi internet.',
+      + 'Kiem tra ket noi internet hoac cap nhat lai duong dan audio pack.',
     );
   }
   const manifest = source.manifest;

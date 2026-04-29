@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+﻿import { useEffect, useMemo, useState } from 'react';
 import { Cloud, DatabaseZap, Download, Headphones, MonitorSpeaker, RefreshCw, Trash2, Volume2, Wifi, WifiOff } from 'lucide-react';
 import {
   clearTtsAudioCache,
@@ -567,25 +567,35 @@ export function TtsSettingsPage() {
           Tự đồng bộ audio pack khi mở app/web
         </label>
 
-        <div className="grid gap-2 md:grid-cols-4 mb-3">
-          <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
-            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Manifest</div>
-            <div className="text-sm font-bold">{packStats?.hasManifest ? 'Đã có' : 'Chưa có'}</div>
+        {showAdmin ? (
+          <div className="grid gap-2 md:grid-cols-4 mb-3">
+            <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+              <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Manifest</div>
+              <div className="text-sm font-bold">{packStats?.hasManifest ? 'Đã có' : 'Chưa có'}</div>
+            </div>
+            <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+              <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Đã tải về máy</div>
+              <div className="text-sm font-bold">{packStats?.downloadedEntries || 0}</div>
+            </div>
+            <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+              <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Còn thiếu</div>
+              <div className="text-sm font-bold">{packStats?.missingEntries || 0}</div>
+            </div>
+            <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
+              <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Dung lượng local</div>
+              <div className="text-sm font-bold">{((packStats?.totalBytes || 0) / 1024 / 1024).toFixed(2)} MB</div>
+            </div>
           </div>
-          <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
-            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Đã tải về máy</div>
-            <div className="text-sm font-bold">{packStats?.downloadedEntries || 0}</div>
+        ) : (
+          <div className="mb-3 p-3 rounded-xl" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+            <div className="text-sm font-bold" style={{ color: packStats?.downloadedEntries ? 'var(--color-success)' : 'var(--color-primary-dark)' }}>
+              {packStats?.downloadedEntries ? 'Audio offline đã sẵn sàng' : 'Audio offline chưa tải'}
+            </div>
+            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+              Đã lưu: {packStats?.downloadedEntries || 0} file | Dung lượng: {((packStats?.totalBytes || 0) / 1024 / 1024).toFixed(2)} MB
+            </div>
           </div>
-          <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
-            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Còn thiếu</div>
-            <div className="text-sm font-bold">{packStats?.missingEntries || 0}</div>
-          </div>
-          <div className="p-3 rounded-xl" style={{ background: '#F9FAFB' }}>
-            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Dung lượng local</div>
-            <div className="text-sm font-bold">{((packStats?.totalBytes || 0) / 1024 / 1024).toFixed(2)} MB</div>
-          </div>
-        </div>
-
+        )}
         {packProgress && (
           <div className="mb-3 p-3 rounded-xl" style={{ background: '#EFF6FF' }}>
             <div className="text-xs font-bold mb-1">
@@ -603,7 +613,7 @@ export function TtsSettingsPage() {
 
         {packError && (
           <div className="text-xs mb-3 px-3 py-2 rounded-lg" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
-            {packError}
+            {showAdmin ? packError : 'Khong tai duoc audio pack. Vui long kiem tra mang, sau do bam tai lai.'}
           </div>
         )}
 
@@ -634,6 +644,7 @@ export function TtsSettingsPage() {
         </p>
       </div>
 
+      {showAdmin ? (
       <div className="card mb-4">
         <div className="flex items-center gap-2 mb-3">
           <Headphones size={18} style={{ color: 'var(--color-primary)' }} />
@@ -742,7 +753,48 @@ export function TtsSettingsPage() {
           </p>
         )}
       </div>
-
+      ) : (
+        <div className="card mb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Headphones size={18} style={{ color: 'var(--color-primary)' }} />
+            <h3 className="font-bold">Giong doc mac dinh</h3>
+          </div>
+          <p className="text-sm mb-3" style={{ color: 'var(--color-text-light)' }}>
+            App dang dung giong nu da chot san cho bai hoc. Ban chi can bam nghe thu neu muon kiem tra nhanh.
+          </p>
+          <div className="text-xs mb-3" style={{ color: 'var(--color-primary-dark)' }}>
+            {activeProfile ? `${activeProfile.label} (${activeProfile.voiceId})` : 'Chua co profile audio tinh'}
+          </div>
+          <div className="flex gap-3 flex-wrap">
+            <button
+              type="button"
+              className="btn btn-primary flex items-center gap-2"
+              onClick={() => {
+                if (activeProfile) {
+                  void handlePreviewProfile(activeProfile.id);
+                }
+              }}
+            >
+              <Volume2 size={16} />
+              {testingId && testingId.startsWith('profile:') ? 'Dang nghe thu...' : 'Nghe thu giong mac dinh'}
+            </button>
+            <button
+              type="button"
+              className="btn flex items-center gap-2"
+              style={{ background: '#FEF2F2', color: '#B91C1C' }}
+              onClick={handleStopPlayback}
+            >
+              <Trash2 size={16} />
+              Dung audio
+            </button>
+          </div>
+          {lastPlaybackMessage && (
+            <p className="text-xs mt-3" style={{ color: 'var(--color-text-light)' }}>
+              {lastPlaybackMessage}
+            </p>
+          )}
+        </div>
+      )}
       {showAdmin ? (
         <details className="card mb-4">
           <summary className="font-bold cursor-pointer">Advanced / Generator (kỹ thuật)</summary>
@@ -980,3 +1032,4 @@ export function TtsSettingsPage() {
     </div>
   );
 }
+
