@@ -322,6 +322,7 @@ export class WebAiAppLicenseService {
     licenseKey: string;
     appId?: string;
     customerId?: string;
+    customerEmail?: string;
     deviceId?: string;
     deviceName?: string;
     clientProfile?: 'web' | 'desktop' | 'shared';
@@ -340,6 +341,7 @@ export class WebAiAppLicenseService {
         licenseKey: params.licenseKey,
         appId: params.appId || WebSalesTotalService.getAppId(),
         ...(params.customerId ? { customerId: params.customerId } : {}),
+        ...(params.customerEmail ? { customerEmail: params.customerEmail } : {}),
         ...(params.deviceId ? { deviceId: params.deviceId } : {}),
         ...(params.deviceName ? { deviceName: params.deviceName } : {}),
       }),

@@ -562,6 +562,7 @@ export async function verifyLicenseKey(params: {
   licenseKey: string;
   appId?: string;
   customerId?: string;
+  customerEmail?: string;
   deviceId?: string;
   deviceName?: string;
   clientProfile?: 'web' | 'desktop' | 'shared';

@@ -230,6 +230,7 @@ const SUB_EXPIRY_KEY = 'hhk_sub_expiry';
 const SUB_STATUS_KEY = 'hhk_sub_status';
 const SUB_BILLING_KEY = 'hhk_sub_billing_cycle';
 const ACTIVATION_SOURCE_KEY = 'hhk_activation_source';
+const ACTIVATION_EMAIL_KEY = 'hhk_activation_email';
 const STANDARD_GRADE_LOCKS_KEY = 'hhk_standard_grade_locks_v1';
 const REFUND_DAYS = 3;
 const PAID_LICENSE_PATTERN = /^HHK-[A-Z0-9_]+-[A-Z0-9]{8}$/;
@@ -679,6 +680,7 @@ export function PricingPage() {
   const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>(PRICING_PLANS);
   const [pricingSynced, setPricingSynced] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(getCurrentPlan());
+  const [activationEmail, setActivationEmail] = useState(() => String(getBridgeCustomer()?.email || localStorage.getItem(ACTIVATION_EMAIL_KEY) || '').trim().toLowerCase());
   const [licenseKey, setLicenseKey] = useState('');
   const [activationGrades, setActivationGrades] = useState<number[]>(() => getUnlockedGrades(state.student.grade, getAccessPlan()));
   const [activateMsg, setActivateMsg] = useState<{ type: 'success' | 'error'; text: string; actionLabel?: string; actionUrl?: string } | null>(null);
@@ -732,8 +734,24 @@ export function PricingPage() {
   const heroHighlights = [
     'Dùng Free ngay, không cần tài khoản',
     'Mua trên web, nhận key và quay lại app để học',
-    'Chỉ cần đúng key là mở đúng gói',
+    clientProfile === 'web' ? 'Web app dùng email + key để mở đúng gói' : 'Desktop app chỉ cần đúng key để mở đúng gói',
   ];
+  useEffect(() => {
+    const bridgeEmail = String(getBridgeCustomer()?.email || '').trim().toLowerCase();
+    if (clientProfile === 'web' && bridgeEmail && !activationEmail) {
+      setActivationEmail(bridgeEmail);
+    }
+  }, [activationEmail, clientProfile]);
+
+  useEffect(() => {
+    const normalizedEmail = activationEmail.trim().toLowerCase();
+    if (normalizedEmail) {
+      localStorage.setItem(ACTIVATION_EMAIL_KEY, normalizedEmail);
+    } else {
+      localStorage.removeItem(ACTIVATION_EMAIL_KEY);
+    }
+  }, [activationEmail]);
+
   const syncFloatingLearnCta = useCallback((scrollTop: number) => {
     if (dismissedFloatingLearnCta) {
       setShowFloatingLearnCta(false);
@@ -1181,7 +1199,21 @@ export function PricingPage() {
   // ========== LICENSE ACTIVATION ==========
   const activateLicense = async () => {
     const key = licenseKey.trim().toUpperCase();
+    const normalizedActivationEmail = activationEmail.trim().toLowerCase();
     if (!key) return;
+    if (clientProfile === 'web') {
+      if (!normalizedActivationEmail) {
+        setActivateMsg({ type: 'error', text: '❌ Web app yêu cầu nhập email mua hàng trước khi xác minh key.' });
+        setTimeout(() => setActivateMsg(null), 5000);
+        return;
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedActivationEmail)) {
+        setActivateMsg({ type: 'error', text: '❌ Email mua hàng không hợp lệ.' });
+        setTimeout(() => setActivateMsg(null), 5000);
+        return;
+      }
+    }
     setIsActivating(true);
     setActivateMsg({ type: 'success', text: '⏳ Đang xác minh key, vui lòng chờ...' });
 
@@ -1191,6 +1223,7 @@ export function PricingPage() {
         licenseKey: key,
         ...(WEB_TOTAL_APP_ID ? { appId: WEB_TOTAL_APP_ID } : {}),
         ...(bridgeCustomerId ? { customerId: bridgeCustomerId } : {}),
+        ...(clientProfile === 'web' && normalizedActivationEmail ? { customerEmail: normalizedActivationEmail } : {}),
         deviceId: getDeviceId(),
         deviceName: `${navigator.platform} / ${navigator.userAgent.slice(0, 80)}`,
         clientProfile,
@@ -1200,7 +1233,11 @@ export function PricingPage() {
       if (resolvedCustomerId) {
         const bridgeCustomer = getBridgeCustomer();
         if (!bridgeCustomer?.id || String(bridgeCustomer.id).trim() !== resolvedCustomerId) {
-          setBridgeCustomer({ ...(bridgeCustomer || {}), id: resolvedCustomerId });
+          setBridgeCustomer({
+            ...(bridgeCustomer || {}),
+            ...(clientProfile === 'web' && normalizedActivationEmail ? { email: normalizedActivationEmail } : {}),
+            id: resolvedCustomerId,
+          });
         }
       }
 
@@ -1806,10 +1843,12 @@ export function PricingPage() {
           <div>
             <div className="pricing-section-kicker">Kích hoạt key</div>
             <h3 className="pricing-activation-title">
-              <Unlock size={18} /> Nhập key hoặc mở đúng sản phẩm trên web
+              <Unlock size={18} /> {clientProfile === 'web' ? 'Nhập email + key hoặc mở đúng sản phẩm trên web' : 'Nhập key hoặc mở đúng sản phẩm trên web'}
             </h3>
             <p className="pricing-activation-copy">
-              Nếu chưa có key, mở đúng gói bên dưới trên Web Tổng. Nếu đã có key, nhập trực tiếp để hệ thống tự nhận diện và hướng dẫn bước tiếp theo.
+              {clientProfile === 'web'
+                ? 'Nếu chưa có key, mở đúng gói bên dưới trên Web Tổng. Nếu đã có key, nhập email mua hàng và key để web app xác minh đúng gói.'
+                : 'Nếu chưa có key, mở đúng gói bên dưới trên Web Tổng. Nếu đã có key, nhập trực tiếp để hệ thống tự nhận diện và hướng dẫn bước tiếp theo.'}
             </p>
           </div>
           <div className="pricing-activation-steps">
@@ -1839,20 +1878,28 @@ export function PricingPage() {
           ))}
         </div>
         <div className="pricing-activation-meta-grid">
-          <div className="pricing-activation-meta-card">
-            <div className="pricing-activation-meta-label">ID máy hiện tại</div>
-            <div className="pricing-activation-meta-value">{currentDeviceId}</div>
-            <p>Dùng để khóa 1 key cho đúng 1 thiết bị ở lần kích hoạt đầu tiên.</p>
-            <button
-              className={`${premiumButtonBaseClass} px-3 py-2 text-xs whitespace-nowrap`}
-              style={neutralGhostButtonStyle}
-              onClick={copyDeviceId}
-              title="Copy ID máy"
-            >
-              {copiedDeviceId ? <CheckCircle size={14} /> : <Copy size={14} />}
-              {copiedDeviceId ? 'Đã copy' : 'Copy ID máy'}
-            </button>
-          </div>
+          {clientProfile === 'desktop' ? (
+            <div className="pricing-activation-meta-card">
+              <div className="pricing-activation-meta-label">ID máy hiện tại</div>
+              <div className="pricing-activation-meta-value">{currentDeviceId}</div>
+              <p>Dùng để khóa 1 key cho đúng 1 thiết bị ở lần kích hoạt đầu tiên.</p>
+              <button
+                className={`${premiumButtonBaseClass} px-3 py-2 text-xs whitespace-nowrap`}
+                style={neutralGhostButtonStyle}
+                onClick={copyDeviceId}
+                title="Copy ID máy"
+              >
+                {copiedDeviceId ? <CheckCircle size={14} /> : <Copy size={14} />}
+                {copiedDeviceId ? 'Đã copy' : 'Copy ID máy'}
+              </button>
+            </div>
+          ) : (
+            <div className="pricing-activation-meta-card">
+              <div className="pricing-activation-meta-label">Đăng nhập web app</div>
+              <div className="pricing-activation-meta-value">Email mua hàng + license key</div>
+              <p>Phiên Web Tổng để mua hàng không tính vào quota. Chỉ web app mới giới hạn 1 phiên hoạt động đồng thời.</p>
+            </div>
+          )}
           <div className="pricing-activation-meta-card">
             <div className="pricing-activation-meta-label">Định dạng key</div>
             <div className="pricing-activation-meta-list">
@@ -1869,10 +1916,25 @@ export function PricingPage() {
           </div>
         </div>
         <div className="mb-4 rounded-2xl p-4 activation-key-spotlight" style={{ background: 'linear-gradient(135deg, #FFF7E6 0%, #FFFFFF 60%, #EFF6FF 100%)', border: '2px solid #FDBA74', boxShadow: '0 14px 30px rgba(217,119,6,0.16)' }}>
-          <div className="text-[13px] font-extrabold tracking-[0.02em]" style={{ color: '#9A3412' }}>NHẬP KEY KÍCH HOẠT NGAY</div>
+          <div className="text-[13px] font-extrabold tracking-[0.02em]" style={{ color: '#9A3412' }}>{clientProfile === 'web' ? 'NHẬP EMAIL + KEY ĐỂ VÀO WEB APP' : 'NHẬP KEY KÍCH HOẠT NGAY'}</div>
           <div className="text-xs mt-1 mb-3" style={{ color: '#7C2D12' }}>
-            Sau khi nhập key, hệ thống tự nhận diện gói và hướng dẫn bước tiếp theo.
+            {clientProfile === 'web'
+              ? 'Web app cần đúng email mua hàng và key để xác minh gói. Sau khi đúng, hệ thống tự nhận diện quyền sử dụng.'
+              : 'Sau khi nhập key, hệ thống tự nhận diện gói và hướng dẫn bước tiếp theo.'}
           </div>
+          {clientProfile === 'web' && (
+            <div className="mb-3 rounded-2xl p-2" style={{ background: 'rgba(255,255,255,0.92)', border: '1px solid #FED7AA' }}>
+              <input
+                type="email"
+                className="premium-input w-full px-4 py-3 rounded-xl text-sm"
+                placeholder="Email mua hàng trên Web Tổng"
+                value={activationEmail}
+                onChange={(e) => setActivationEmail(e.target.value.toLowerCase())}
+                autoComplete="email"
+                disabled={isActivating}
+              />
+            </div>
+          )}
           <div className={`flex gap-2 items-stretch rounded-2xl p-2 activation-key-input-shell ${activateMsg?.type === 'error' ? 'is-error' : activateMsg?.type === 'success' ? 'is-success' : ''}`} style={{
             background: '#FFFFFF',
             border: activateMsg?.type === 'error' ? '1px solid #FCA5A5' : activateMsg?.type === 'success' ? '1px solid #86EFAC' : '1px solid #FED7AA',
@@ -1885,15 +1947,15 @@ export function PricingPage() {
           <input
             type="text"
             className={`premium-input flex-1 px-4 py-3 rounded-xl text-sm uppercase ${activateMsg?.type === 'error' ? 'activation-key-input-error' : activateMsg?.type === 'success' ? 'activation-key-input-success' : ''}`}
-            placeholder="Ví dụ: HHK-STANDARD-AB12CD34"
+            placeholder={clientProfile === 'web' ? 'Nhập license key để vào web app' : 'Ví dụ: HHK-STANDARD-AB12CD34'}
             value={licenseKey}
             onChange={e => setLicenseKey(e.target.value.toUpperCase())}
             maxLength={25}
             disabled={isActivating}
           />
-            <button className={`${premiumButtonPrimaryClass} activation-key-primary-btn`} onClick={activateLicense} disabled={!licenseKey.trim() || isActivating} style={{ ...darkPrimaryButtonStyle, minWidth: 170 }}>
+            <button className={`${premiumButtonPrimaryClass} activation-key-primary-btn`} onClick={activateLicense} disabled={!licenseKey.trim() || (clientProfile === 'web' && !activationEmail.trim()) || isActivating} style={{ ...darkPrimaryButtonStyle, minWidth: 170 }}>
               {isActivating ? <RefreshCw size={16} className="animate-spin" /> : <Unlock size={16} />}
-              {isActivating ? 'Đang xác minh...' : 'Kích hoạt ngay'}
+              {isActivating ? 'Đang xác minh...' : clientProfile === 'web' ? 'Vào web app' : 'Kích hoạt ngay'}
             </button>
           </div>
           {isActivating && (

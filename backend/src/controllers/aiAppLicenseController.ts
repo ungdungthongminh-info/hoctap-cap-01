@@ -55,10 +55,10 @@ export async function proxyGetCustomerLicenses(req: Request, res: Response): Pro
 /**
  * POST /api/v1/ai-app/licenses/verify
  * Proxy → Web tổng /api/ai-app/licenses/verify
- * Body: { licenseKey, appId?, customerId?, deviceId?, deviceName? }
+ * Body: { licenseKey, appId?, customerId?, customerEmail?, deviceId?, deviceName? }
  */
 export async function proxyVerifyLicense(req: Request, res: Response): Promise<void> {
-  const { licenseKey, appId, customerId, deviceId, deviceName, clientProfile } = req.body || {};
+  const { licenseKey, appId, customerId, customerEmail, deviceId, deviceName, clientProfile } = req.body || {};
   const resolvedAppId = String(appId || process.env.WEB_TOTAL_APP_ID || 'app-study-12').trim();
   const resolvedClientProfile = String(clientProfile || '').trim().toLowerCase();
   const finalClientProfile: 'web' | 'desktop' | 'shared' =
@@ -81,6 +81,7 @@ export async function proxyVerifyLicense(req: Request, res: Response): Promise<v
       licenseKey,
       appId: resolvedAppId,
       customerId,
+      customerEmail,
       deviceId,
       deviceName,
       clientProfile: finalClientProfile,
