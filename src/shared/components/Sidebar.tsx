@@ -28,6 +28,7 @@ import {
   Smartphone,
   ChevronDown,
   RefreshCw,
+  Network,
   UserCircle,
   Crown,
   TrendingUp,
@@ -45,6 +46,7 @@ interface NavItem {
   to: string;
   icon: LucideIcon;
   label: string;
+  badge?: string;
 }
 
 interface NavGroup {
@@ -77,6 +79,7 @@ const navGroups: NavGroup[] = [
       { to: '/quiz', icon: PenTool, label: 'Luyện tập' },
       { to: '/memory', icon: Brain, label: 'Phòng trí nhớ' },
       { to: '/smart-review', icon: RefreshCw, label: 'Ôn tập thông minh' },
+      { to: '/mind-map', icon: Network, label: 'Mind-map', badge: 'Sắp ra mắt' },
       { to: '/learning-assistant', icon: Lightbulb, label: 'Trợ lý học tập' },
       { to: '/curriculum', icon: BookMarked, label: 'Giáo trình' },
     ],
@@ -374,7 +377,8 @@ export function Sidebar() {
                         className={({ isActive }) => `nav-item nav-item-child ${isActive ? 'active' : ''}`}
                       >
                         <item.icon size={16} />
-                        <span>{item.label}</span>
+                        <span className="nav-item-label">{item.label}</span>
+                        {item.badge ? <span className="nav-item-badge">{item.badge}</span> : null}
                       </NavLink>
                     ))}
                   </div>

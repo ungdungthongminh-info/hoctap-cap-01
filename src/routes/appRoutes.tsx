@@ -41,6 +41,7 @@ const PwaSettingsPage      = lazy(() => import('@student/pages/PwaSettingsPage')
 const SmartReviewPage      = lazy(() => import('@student/pages/SmartReviewPage').then(m => ({ default: m.SmartReviewPage })));
 const CurriculumPage       = lazy(() => import('@student/pages/CurriculumPage').then(m => ({ default: m.CurriculumPage })));
 const LearningAssistantPage = lazy(() => import('@student/pages/LearningAssistantPage').then(m => ({ default: m.LearningAssistantPage })));
+const MindMapPage          = lazy(() => import('@student/pages/MindMapPage').then(m => ({ default: m.MindMapPage })));
 const ProfileSwitcherPage  = lazy(() => import('@student/pages/ProfileSwitcherPage').then(m => ({ default: m.ProfileSwitcherPage })));
 const PricingPage          = lazy(() => import('@student/pages/PricingPage').then(m => ({ default: m.PricingPage })));
 const AnalyticsDashboardPage = lazy(() => import('@student/pages/AnalyticsDashboardPage').then(m => ({ default: m.AnalyticsDashboardPage })));
@@ -141,6 +142,7 @@ export function AppRoutes({ AdminGate, AdminErrorBoundary }: AppRoutesProps) {
           <Route path="/competition"         element={<FeatureGuard requiredPlan="standard" title="Tinh nang thi dau dang bi khoa" description="Thi dau Bot va PvP chi mo tu goi Standard tro len."><CompetitionPage /></FeatureGuard>} />
           <Route path="/pwa"                 element={<FeatureGuard requiredPlan="standard" title="Che do ngoai tuyen dang bi khoa" description="Goi Free khong mo man hinh cai dat offline/PWA. Nang cap Standard hoac Premium de tai va dung ngoai tuyen."><PwaSettingsPage /></FeatureGuard>} />
           <Route path="/smart-review"        element={<FeatureGuard requiredPlan="standard" title="On tap thong minh dang bi khoa" description="On tap thong minh AI chi mo cho goi Standard/Premium da kich hoat key."><SmartReviewPage /></FeatureGuard>} />
+          <Route path="/mind-map"            element={<MindMapPage />} />
           <Route path="/curriculum"          element={<FeatureGuard requiredPlan="standard" title="Giao trinh nang cao dang bi khoa" description="Trang giao trinh mo rong va tuy chinh chi mo cho goi Standard tro len."><CurriculumPage /></FeatureGuard>} />
           <Route path="/learning-assistant"  element={<FeatureGuard requiredPlan="standard" title="Tro ly hoc tap dang bi khoa" description="Tro ly hoc tap mo rong chi mo tu goi Standard tro len."><LearningAssistantPage /></FeatureGuard>} />
           <Route path="/profiles"            element={<ProfileSwitcherPage />} />

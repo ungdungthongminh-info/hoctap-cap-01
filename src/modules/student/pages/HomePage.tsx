@@ -19,6 +19,8 @@ import {
   ShoppingBag,
   Crown,
   Shield,
+  Network,
+  ArrowRight,
   PlayCircle,
   Trophy,
   type LucideIcon,
@@ -257,6 +259,29 @@ export function HomePage() {
         >
           <PlayCircle size={20} />
           Tiếp tục học
+        </button>
+      </section>
+
+      <section className="home-mindmap-spotlight card">
+        <div className="home-mindmap-spotlight__icon">
+          <Network size={30} />
+        </div>
+        <div className="home-mindmap-spotlight__content">
+          <span className="home-mindmap-spotlight__badge">
+            <Sparkles size={13} />
+            Sắp ra mắt
+          </span>
+          <h3>Mind-map học nhanh</h3>
+          <p>
+            Sơ đồ tư duy theo từng bài, giúp học sinh nhớ ý chính nhanh hơn và ôn tập đúng trọng tâm.
+          </p>
+        </div>
+        <button
+          className="home-mindmap-spotlight__cta"
+          onClick={() => navigate('/mind-map')}
+        >
+          Xem trước
+          <ArrowRight size={16} />
         </button>
       </section>
 

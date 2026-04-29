@@ -7,6 +7,7 @@ let mainWindow;
 function createWindow() {
   const appTitle = app.getName() || 'Hoc Hung Khoi Tieu Hoc';
   const isDev = !app.isPackaged && process.env.NODE_ENV !== 'production';
+  const devServerUrl = process.env.VITE_DEV_SERVER_URL || 'http://127.0.0.1:5190';
 
   mainWindow = new BrowserWindow({
     width: 1200,
@@ -25,7 +26,7 @@ function createWindow() {
 
   // Dev mode: load from Vite dev server
   if (isDev) {
-    mainWindow.loadURL('http://localhost:5173');
+    mainWindow.loadURL(devServerUrl);
   } else {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
   }
