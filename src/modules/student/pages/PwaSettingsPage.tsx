@@ -175,10 +175,10 @@ export function PwaSettingsPage() {
         <MascotCharacter size="sm" />
         <div>
           <h1 className="text-2xl font-bold" style={{ color: 'var(--color-primary-dark)' }}>
-            📲 Cài đặt ngoại tuyến
+            📲 Ngoại tuyến & cập nhật
           </h1>
           <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-            PWA & chế độ offline
+            PWA, offline và kiểm tra phiên bản mới
           </p>
         </div>
       </div>

@@ -112,7 +112,7 @@ const navGroups: NavGroup[] = [
     items: [
       { to: '/tts-settings', icon: Volume2, label: 'Giọng đọc' },
       { to: '/ai-settings', icon: Sparkles, label: 'Cài đặt AI' },
-      { to: '/pwa', icon: Smartphone, label: 'Ngoại tuyến' },
+      { to: '/pwa', icon: Smartphone, label: 'Ngoại tuyến & cập nhật' },
       { to: '/themes', icon: Palette, label: 'Giao diện' },
       { to: '/parent', icon: Users, label: 'Phụ huynh' },
       { to: '/data', icon: Database, label: 'Dữ liệu' },
@@ -244,6 +244,14 @@ export function Sidebar() {
       document.body.style.overflow = 'hidden';
       return () => { document.body.style.overflow = prev; };
     }
+  }, [isMobileNav, isMobileMenuOpen]);
+
+  useEffect(() => {
+    const shouldHideChatLauncher = isMobileNav && isMobileMenuOpen;
+    document.body.classList.toggle('sidebar-menu-open', shouldHideChatLauncher);
+    return () => {
+      document.body.classList.remove('sidebar-menu-open');
+    };
   }, [isMobileNav, isMobileMenuOpen]);
 
   const handleNavItemClick = () => {

@@ -411,9 +411,10 @@ export function MascotChatPanel() {
 
   const [bubbleIdx, setBubbleIdx] = useState(0);
   const [bubbleVisible, setBubbleVisible] = useState(false);
+  const ENABLE_IDLE_BUBBLE = false;
 
   useEffect(() => {
-    if (open) { setBubbleVisible(false); return; }
+    if (!ENABLE_IDLE_BUBBLE || open) { setBubbleVisible(false); return; }
     // Show bubble after 2s, rotate every 6s
     const showTimer = window.setTimeout(() => setBubbleVisible(true), 2000);
     const rotateTimer = setInterval(() => {
@@ -424,13 +425,13 @@ export function MascotChatPanel() {
       }, 400);
     }, 6000);
     return () => { clearTimeout(showTimer); clearInterval(rotateTimer); };
-  }, [open, idlePhrases.length, trackTimeout]);
+  }, [ENABLE_IDLE_BUBBLE, open, idlePhrases.length, trackTimeout]);
 
   const portalContent = (
     <>
       <div className="chat-launcher" aria-label="Nút chat mascot">
         {/* ====== Speech bubble (khi panel đóng) ====== */}
-        {!open && bubbleVisible && (
+        {ENABLE_IDLE_BUBBLE && !open && bubbleVisible && (
           <div
             className="chat-idle-bubble"
             onClick={() => setOpen(true)}

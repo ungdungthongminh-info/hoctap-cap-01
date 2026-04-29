@@ -152,12 +152,13 @@ function LicenseHeartbeat() {
     const sync = async () => {
       const result = await refreshCurrentLicenseState().catch(() => null);
       if (disposed || !result?.downgraded) return;
-      // Trigger listeners that mirror plan UI from localStorage.
+      // Revoke/expire phải rơi quyền ngay, tránh giữ premium cục bộ.
       window.dispatchEvent(new Event('storage'));
+      window.location.reload();
     };
 
     void sync();
-    const intervalId = window.setInterval(() => { void sync(); }, 60_000);
+    const intervalId = window.setInterval(() => { void sync(); }, 15_000);
     const onVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         void sync();
