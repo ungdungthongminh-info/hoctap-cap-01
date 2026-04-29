@@ -482,6 +482,74 @@ function decodeUtf8(bytes: Uint8Array): string {
   return new TextDecoder('utf-8').decode(bytes);
 }
 
+function decodeHtmlEntities(value: string): string {
+  return String(value || '')
+    .replace(/&amp;/gi, '&')
+    .replace(/&#x3d;/gi, '=')
+    .replace(/&#61;/gi, '=')
+    .replace(/&#x26;/gi, '&')
+    .replace(/&#38;/gi, '&');
+}
+
+function extractDriveConfirmTokenFromHtml(html: string): { confirm: string; id: string } | null {
+  const decoded = decodeHtmlEntities(String(html || ''));
+  const fullMatch = decoded.match(/confirm=([0-9A-Za-z_-]{2,})&id=([0-9A-Za-z_-]{10,})/i);
+  if (fullMatch?.[1] && fullMatch?.[2]) {
+    return { confirm: fullMatch[1], id: fullMatch[2] };
+  }
+
+  const confirmMatch = decoded.match(/[?&]confirm=([0-9A-Za-z_-]{2,})/i);
+  const idMatch = decoded.match(/[?&]id=([0-9A-Za-z_-]{10,})/i);
+  if (confirmMatch?.[1] && idMatch?.[1]) {
+    return { confirm: confirmMatch[1], id: idMatch[1] };
+  }
+
+  return null;
+}
+
+async function fetchPayloadBytesWithDriveFallback(
+  candidateUrl: string,
+): Promise<{ bytes: Uint8Array; finalUrl: string } | null> {
+  const response = await fetch(candidateUrl, { cache: 'no-cache' });
+  if (!response.ok) {
+    return null;
+  }
+
+  let payloadBytes = new Uint8Array(await response.arrayBuffer());
+  if (!payloadBytes.length) {
+    return null;
+  }
+
+  if (isZipSignature(payloadBytes)) {
+    return { bytes: payloadBytes, finalUrl: candidateUrl };
+  }
+
+  const contentType = String(response.headers.get('content-type') || '').toLowerCase();
+  const looksLikeHtml = contentType.includes('text/html') || contentType.includes('application/xhtml');
+  if (!looksLikeHtml) {
+    return { bytes: payloadBytes, finalUrl: candidateUrl };
+  }
+
+  const html = decodeUtf8(payloadBytes);
+  const token = extractDriveConfirmTokenFromHtml(html);
+  if (!token) {
+    return { bytes: payloadBytes, finalUrl: candidateUrl };
+  }
+
+  const confirmedUrl = `https://drive.google.com/uc?export=download&confirm=${encodeURIComponent(token.confirm)}&id=${encodeURIComponent(token.id)}`;
+  const confirmedResponse = await fetch(confirmedUrl, { cache: 'no-cache' });
+  if (!confirmedResponse.ok) {
+    return { bytes: payloadBytes, finalUrl: candidateUrl };
+  }
+
+  payloadBytes = new Uint8Array(await confirmedResponse.arrayBuffer());
+  if (!payloadBytes.length) {
+    return null;
+  }
+
+  return { bytes: payloadBytes, finalUrl: confirmedUrl };
+}
+
 function normalizeManifest(
   manifest: StaticTtsManifestFile,
   manifestUrl: string,
@@ -556,18 +624,17 @@ async function fetchStaticPackSource(manifestUrl?: string): Promise<StaticPackSo
 
   for (const candidateUrl of candidateUrls) {
     try {
-      const response = await fetch(candidateUrl, { cache: 'no-cache' });
-      if (!response.ok) {
+      const payloadResult = await fetchPayloadBytesWithDriveFallback(candidateUrl);
+      if (!payloadResult) {
         continue;
       }
-
-      const payloadBytes = new Uint8Array(await response.arrayBuffer());
+      const payloadBytes = payloadResult.bytes;
       if (!payloadBytes.length) {
         continue;
       }
 
       if (isZipSignature(payloadBytes)) {
-        const zipSource = parseStaticPackZip(payloadBytes, candidateUrl);
+        const zipSource = parseStaticPackZip(payloadBytes, payloadResult.finalUrl);
         if (zipSource) {
           return zipSource;
         }
@@ -580,8 +647,8 @@ async function fetchStaticPackSource(manifestUrl?: string): Promise<StaticPackSo
       }
 
       return {
-        manifestUrl: candidateUrl,
-        manifest: normalizeManifest(payload, candidateUrl),
+        manifestUrl: payloadResult.finalUrl,
+        manifest: normalizeManifest(payload, payloadResult.finalUrl),
         sourceType: 'manifest',
       };
     } catch {
