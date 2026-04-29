@@ -99,15 +99,29 @@ function buildDrivePackUrl(fileId: string): string {
   return `https://drive.usercontent.google.com/download?id=${encodeURIComponent(fileId)}&export=download&confirm=t`;
 }
 
-const GRADE_PACK_LINKS: Partial<Record<number, string>> = {
-  0: buildDrivePackUrl('1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN'),
-  1: buildDrivePackUrl('1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq'),
-  2: buildDrivePackUrl('1VY-VkQ9Wtunydd10rCCp_Xs9cTZRucyh'),
-  3: buildDrivePackUrl('1LKgjUtADcVkbDpvCkfzSNCdNoJG94YQv'),
-  4: buildDrivePackUrl('164Xxc7vlATmrBqSHd9EWSXnvk9Q37rFk'),
-  5: buildDrivePackUrl('1PinMxVGHSl-GkekhSvTYp5rLgmcUFOQV'),
+function buildPackProxyUrl(grade: number): string {
+  return `/tts-static-pack/by-grade/${grade}`;
+}
+
+const GRADE_PACK_FILE_IDS: Partial<Record<number, string>> = {
+  0: '1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
+  1: '1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq',
+  2: '1VY-VkQ9Wtunydd10rCCp_Xs9cTZRucyh',
+  3: '1LKgjUtADcVkbDpvCkfzSNCdNoJG94YQv',
+  4: '164Xxc7vlATmrBqSHd9EWSXnvk9Q37rFk',
+  5: '1PinMxVGHSl-GkekhSvTYp5rLgmcUFOQV',
   // Compatibility alias in case external data uses grade 6 for pre-primary pack.
-  6: buildDrivePackUrl('1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN'),
+  6: '1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
+};
+
+const GRADE_PACK_LINKS: Partial<Record<number, string>> = {
+  0: buildPackProxyUrl(0),
+  1: buildPackProxyUrl(1),
+  2: buildPackProxyUrl(2),
+  3: buildPackProxyUrl(3),
+  4: buildPackProxyUrl(4),
+  5: buildPackProxyUrl(5),
+  6: buildPackProxyUrl(0),
 };
 
 const GRADE_PACK_LABELS: Partial<Record<number, string>> = {
@@ -239,6 +253,46 @@ function isLegacyLocalManifestUrl(value: string): boolean {
     || normalized.endsWith('\\audio\\tts\\manifest.json')
     || normalized === 'audio/tts/manifest.json'
     || normalized === './audio/tts/manifest.json';
+}
+
+function extractGradeFromPackUrl(value: string): number | null {
+  const raw = String(value || '').trim();
+  if (!raw) {
+    return null;
+  }
+
+  const directMatch = raw.match(/\/tts-static-pack\/by-grade\/(\d+)(?:[/?#]|$)/i);
+  if (directMatch?.[1]) {
+    const grade = Number(directMatch[1]);
+    return Number.isFinite(grade) ? grade : null;
+  }
+
+  const legacyMatch = raw.match(/\/api\/v1\/tts\/static-pack\/by-grade\/(\d+)(?:[/?#]|$)/i);
+  if (legacyMatch?.[1]) {
+    const grade = Number(legacyMatch[1]);
+    return Number.isFinite(grade) ? grade : null;
+  }
+
+  return null;
+}
+
+function buildFallbackManifestCandidates(resolvedUrl: string): string[] {
+  const grade = extractGradeFromPackUrl(resolvedUrl);
+  if (grade === null) {
+    return [];
+  }
+
+  const fileId = GRADE_PACK_FILE_IDS[grade];
+  if (!fileId) {
+    return [];
+  }
+
+  const fallbacks = [
+    buildDrivePackUrl(fileId),
+    `https://drive.google.com/uc?export=download&id=${encodeURIComponent(fileId)}`,
+  ];
+
+  return fallbacks.filter((item) => item !== resolvedUrl);
 }
 
 function isLegacyBackendGradePackUrl(value: string): boolean {
@@ -498,35 +552,44 @@ function parseStaticPackZip(bytes: Uint8Array, manifestUrl: string): StaticPackS
 
 async function fetchStaticPackSource(manifestUrl?: string): Promise<StaticPackSource | null> {
   const resolvedUrl = normalizeManifestUrl(manifestUrl || getStaticPackManifestUrl());
+  const candidateUrls = [resolvedUrl, ...buildFallbackManifestCandidates(resolvedUrl)];
 
-  try {
-    const response = await fetch(resolvedUrl, { cache: 'no-cache' });
-    if (!response.ok) {
-      return null;
+  for (const candidateUrl of candidateUrls) {
+    try {
+      const response = await fetch(candidateUrl, { cache: 'no-cache' });
+      if (!response.ok) {
+        continue;
+      }
+
+      const payloadBytes = new Uint8Array(await response.arrayBuffer());
+      if (!payloadBytes.length) {
+        continue;
+      }
+
+      if (isZipSignature(payloadBytes)) {
+        const zipSource = parseStaticPackZip(payloadBytes, candidateUrl);
+        if (zipSource) {
+          return zipSource;
+        }
+        continue;
+      }
+
+      const payload = JSON.parse(decodeUtf8(payloadBytes));
+      if (!isLikelyManifest(payload)) {
+        continue;
+      }
+
+      return {
+        manifestUrl: candidateUrl,
+        manifest: normalizeManifest(payload, candidateUrl),
+        sourceType: 'manifest',
+      };
+    } catch {
+      // Try next candidate.
     }
-
-    const payloadBytes = new Uint8Array(await response.arrayBuffer());
-    if (!payloadBytes.length) {
-      return null;
-    }
-
-    if (isZipSignature(payloadBytes)) {
-      return parseStaticPackZip(payloadBytes, resolvedUrl);
-    }
-
-    const payload = JSON.parse(decodeUtf8(payloadBytes));
-    if (!isLikelyManifest(payload)) {
-      return null;
-    }
-
-    return {
-      manifestUrl: resolvedUrl,
-      manifest: normalizeManifest(payload, resolvedUrl),
-      sourceType: 'manifest',
-    };
-  } catch {
-    return null;
   }
+
+  return null;
 }
 
 export async function fetchStaticPackManifest(manifestUrl?: string): Promise<StaticTtsManifestFile | null> {
