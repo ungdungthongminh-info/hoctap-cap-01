@@ -419,6 +419,31 @@ export function clearLicenseCache(): void {
   localStorage.removeItem(LICENSE_CACHE_KEY);
 }
 
+function simplifyText(input: string): string {
+  return String(input || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+export function isLicenseInvalidOrRevokedError(message: string): boolean {
+  const normalized = simplifyText(message);
+  return normalized.includes('license invalid')
+    || normalized.includes('expired or revoked')
+    || normalized.includes('key khong hop le')
+    || normalized.includes('da het han')
+    || normalized.includes('bi thu hoi');
+}
+
+export function clearLocalPaidActivation(status: 'revoked' | 'expired' | 'inactive' = 'revoked'): void {
+  localStorage.setItem(SUB_STATUS_KEY, status);
+  localStorage.setItem(PLAN_KEY, 'free');
+  localStorage.removeItem(ACTIVATION_SOURCE_KEY);
+  localStorage.removeItem(SUB_EXPIRY_KEY);
+  localStorage.removeItem(SUB_BILLING_KEY);
+  localStorage.removeItem(LICENSE_KEY);
+}
+
 function syncLocalActivationFromServerLicenses(licenses: AppLicense[]): void {
   const now = Date.now();
   const activeLicenses = (licenses || []).filter((license) => {
@@ -436,12 +461,7 @@ function syncLocalActivationFromServerLicenses(licenses: AppLicense[]): void {
   }
 
   // Server says user has no active license => clear local paid state immediately.
-  localStorage.setItem(SUB_STATUS_KEY, 'revoked');
-  localStorage.setItem(PLAN_KEY, 'free');
-  localStorage.removeItem(ACTIVATION_SOURCE_KEY);
-  localStorage.removeItem(SUB_EXPIRY_KEY);
-  localStorage.removeItem(SUB_BILLING_KEY);
-  localStorage.removeItem(LICENSE_KEY);
+  clearLocalPaidActivation('revoked');
 }
 
 /** Kiểm tra cache còn hiệu lực trong offline grace không */
@@ -590,6 +610,8 @@ export async function verifyLicenseKey(params: {
     const backendLower = backendError.toLowerCase();
 
     if (backendLower.includes('license invalid') || backendLower.includes('expired or revoked')) {
+      clearLocalPaidActivation('revoked');
+      clearLicenseCache();
       throw new Error('Key không hợp lệ, đã hết hạn, hoặc đã bị thu hồi trên hệ thống cấp key (Web Tổng).');
     }
 
@@ -646,6 +668,54 @@ export async function renewCurrentLicenseLease(appId = 'app-study-12'): Promise<
     ...(deviceName ? { deviceName } : {}),
     clientProfile: getRuntimeClientProfile(),
   });
+}
+
+export async function refreshCurrentLicenseState(appId = 'app-study-12'): Promise<{
+  verified: boolean;
+  downgraded: boolean;
+  reason?: string;
+}> {
+  const licenseKey = getStoredLicenseKey();
+  if (!licenseKey) {
+    return { verified: false, downgraded: false };
+  }
+
+  const cache = readLicenseCache();
+  const bridgeCustomer = getBridgeCustomer();
+  const knownCustomerId = String(cache?.customerId || bridgeCustomer?.id || '').trim();
+  const deviceName = typeof navigator === 'undefined'
+    ? null
+    : `${navigator.platform} / ${navigator.userAgent.slice(0, 80)}`;
+
+  try {
+    const verifyResult = await verifyLicenseKey({
+      licenseKey,
+      appId,
+      ...(knownCustomerId ? { customerId: knownCustomerId } : {}),
+      deviceId: getDeviceId(),
+      ...(deviceName ? { deviceName } : {}),
+      clientProfile: getRuntimeClientProfile(),
+    });
+
+    const resolvedCustomerId = String(verifyResult.license?.customerId || knownCustomerId || '').trim();
+    if (resolvedCustomerId) {
+      const existingCustomer = getBridgeCustomer();
+      if (!existingCustomer?.id || String(existingCustomer.id).trim() !== resolvedCustomerId) {
+        setBridgeCustomer({ ...(existingCustomer || {}), id: resolvedCustomerId });
+      }
+      await fetchAndCacheLicenses(resolvedCustomerId, appId);
+    }
+
+    return { verified: true, downgraded: false };
+  } catch (error: any) {
+    const message = String(error?.message || 'License verify failed');
+    if (isLicenseInvalidOrRevokedError(message)) {
+      clearLocalPaidActivation('revoked');
+      clearLicenseCache();
+      return { verified: false, downgraded: true, reason: message };
+    }
+    return { verified: false, downgraded: false, reason: message };
+  }
 }
 
 export async function lockStandardGrades(params: {

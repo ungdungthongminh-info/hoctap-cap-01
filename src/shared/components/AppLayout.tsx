@@ -3,6 +3,7 @@ import { Sidebar } from './Sidebar';
 import { PageTransition } from './PageTransition';
 import { MascotChatPanel } from './MascotChatPanel';
 import { InternalBuildBanner } from './AccessGuard';
+import { AppUpdateBanner } from './AppUpdateBanner';
 
 export function AppLayout({ children }: { children?: React.ReactNode }) {
   const location = useLocation();
@@ -11,6 +12,7 @@ export function AppLayout({ children }: { children?: React.ReactNode }) {
       <Sidebar />
       <main className="app-main">
         <InternalBuildBanner />
+        <AppUpdateBanner />
         <PageTransition key={location.pathname}>
           {children ?? <Outlet />}
         </PageTransition>

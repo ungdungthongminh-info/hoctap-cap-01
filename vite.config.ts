@@ -4,9 +4,13 @@ import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
 const isWebBuild = process.env.VITE_WEB === 'true';
+const appVersion = process.env.npm_package_version || process.env.VITE_APP_VERSION || '0.1.0';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  define: {
+    __APP_VERSION__: JSON.stringify(appVersion),
+  },
   server: {
     port: 5173,
     strictPort: true,

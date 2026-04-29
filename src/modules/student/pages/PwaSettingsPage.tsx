@@ -1,7 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Wifi, WifiOff, Download, RefreshCw, Smartphone, CheckCircle } from 'lucide-react';
+import { Wifi, WifiOff, Download, RefreshCw, Smartphone, CheckCircle, BellRing, Link2 } from 'lucide-react';
 import { playClick } from '../../../shared/utils/sounds';
 import { MascotCharacter } from '../../../shared/components';
+import { useToast } from '../../../shared/components/Toast';
+import {
+  checkAppUpdate,
+  getAppUpdateDownloadUrl,
+  getCurrentAppVersion,
+  getUpdateFeedUrlOverride,
+  setUpdateFeedUrlOverride,
+  type AppUpdateCheckResult,
+} from '../../../shared/services/appUpdate';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -9,11 +18,15 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export function PwaSettingsPage() {
+  const { showToast } = useToast();
   const [online, setOnline] = useState(navigator.onLine);
   const [swStatus, setSwStatus] = useState<'none' | 'installing' | 'active'>('none');
   const [cacheSize, setCacheSize] = useState<string | null>(null);
   const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [installState, setInstallState] = useState<'ready' | 'installed' | 'unavailable'>('unavailable');
+  const [updateResult, setUpdateResult] = useState<AppUpdateCheckResult | null>(null);
+  const [checkingUpdate, setCheckingUpdate] = useState(false);
+  const [updateFeedUrlInput, setUpdateFeedUrlInput] = useState(() => getUpdateFeedUrlOverride());
 
   useEffect(() => {
     const onOn = () => setOnline(true);
@@ -40,6 +53,19 @@ export function PwaSettingsPage() {
       window.removeEventListener('beforeinstallprompt', onBeforeInstall as EventListener);
       window.removeEventListener('appinstalled', onInstalled);
     };
+  }, []);
+
+  useEffect(() => {
+    const run = async () => {
+      setCheckingUpdate(true);
+      try {
+        const result = await checkAppUpdate();
+        setUpdateResult(result);
+      } finally {
+        setCheckingUpdate(false);
+      }
+    };
+    void run();
   }, []);
 
   useEffect(() => {
@@ -90,7 +116,57 @@ export function PwaSettingsPage() {
     }
   };
 
+  const handleCheckUpdate = async () => {
+    playClick();
+    setCheckingUpdate(true);
+    try {
+      const result = await checkAppUpdate();
+      setUpdateResult(result);
+      if (result.state === 'up-to-date') {
+        showToast('Đang ở bản mới nhất.', 'success');
+      } else if (result.state === 'update-available' || result.state === 'update-required') {
+        showToast('Đã tìm thấy bản cập nhật mới.', 'info');
+      } else if (result.state === 'feed-unavailable') {
+        showToast('Chưa cấu hình kênh cập nhật.', 'warning');
+      } else if (result.state === 'error') {
+        showToast(result.message || 'Không kiểm tra được bản mới.', 'error');
+      }
+    } catch {
+      showToast('Không kiểm tra được bản cập nhật.', 'error');
+    } finally {
+      setCheckingUpdate(false);
+    }
+  };
+
+  const handleSaveUpdateFeed = () => {
+    playClick();
+    setUpdateFeedUrlOverride(updateFeedUrlInput);
+    showToast(updateFeedUrlInput.trim() ? 'Đã lưu URL kênh cập nhật.' : 'Đã trả về URL mặc định.', 'success');
+  };
+
+  const handleOpenUpdate = () => {
+    playClick();
+    const downloadUrl = getAppUpdateDownloadUrl(updateResult);
+    if (downloadUrl) {
+      window.open(downloadUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    window.location.reload();
+  };
+
   const isElectron = !!(window as any).electronAPI;
+  const currentVersion = getCurrentAppVersion();
+  const updateStateLabel = updateResult?.state === 'up-to-date'
+    ? 'Đang mới nhất'
+    : updateResult?.state === 'update-required'
+      ? 'Bắt buộc cập nhật'
+      : updateResult?.state === 'update-available'
+        ? 'Có bản mới'
+        : updateResult?.state === 'feed-unavailable'
+          ? 'Chưa có kênh cập nhật'
+          : updateResult?.state === 'error'
+            ? 'Lỗi kiểm tra'
+            : 'Chưa kiểm tra';
 
   return (
     <div className="fade-in max-w-lg mx-auto">
@@ -134,6 +210,83 @@ export function PwaSettingsPage() {
           </div>
           <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
             {isElectron ? '🖥️ Electron Desktop — offline đầy đủ' : '🌐 Trình duyệt Web — cài PWA để dùng offline'}
+          </div>
+        </div>
+      </div>
+
+      {/* App update */}
+      <div className="card mb-4">
+        <div className="flex items-center gap-3 mb-3">
+          <BellRing size={20} style={{ color: 'var(--color-primary)' }} />
+          <div className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>Cập nhật ứng dụng</div>
+        </div>
+
+        <div className="space-y-2 text-xs">
+          <div className="flex items-center justify-between">
+            <span style={{ color: 'var(--color-text-light)' }}>Bản hiện tại:</span>
+            <span className="font-bold" style={{ color: 'var(--color-text)' }}>{currentVersion}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span style={{ color: 'var(--color-text-light)' }}>Trạng thái:</span>
+            <span className="font-bold" style={{
+              color: updateResult?.state === 'up-to-date'
+                ? '#10B981'
+                : updateResult?.state === 'update-available' || updateResult?.state === 'update-required'
+                  ? '#D97706'
+                  : '#6B7280',
+            }}>
+              {updateStateLabel}
+            </span>
+          </div>
+          {updateResult?.latestVersion && (
+            <div className="flex items-center justify-between">
+              <span style={{ color: 'var(--color-text-light)' }}>Bản mới nhất:</span>
+              <span className="font-bold" style={{ color: 'var(--color-text)' }}>{updateResult.latestVersion}</span>
+            </div>
+          )}
+          {updateResult?.message && (
+            <div className="rounded-lg px-3 py-2" style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}>
+              {updateResult.message}
+            </div>
+          )}
+        </div>
+
+        <div className="flex gap-2 mt-3">
+          <button className="btn btn-sm flex-1 flex items-center justify-center gap-1" onClick={handleCheckUpdate} disabled={checkingUpdate}>
+            <RefreshCw size={14} className={checkingUpdate ? 'spin' : ''} /> {checkingUpdate ? 'Đang kiểm tra...' : 'Kiểm tra cập nhật'}
+          </button>
+          {(updateResult?.state === 'update-available' || updateResult?.state === 'update-required') && (
+            <button className="btn btn-sm flex-1 flex items-center justify-center gap-1" onClick={handleOpenUpdate}>
+              <Download size={14} /> Cập nhật ngay
+            </button>
+          )}
+        </div>
+
+        <div className="mt-3 rounded-xl p-3" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+          <label className="text-xs font-bold flex items-center gap-1 mb-2" style={{ color: 'var(--color-text)' }}>
+            <Link2 size={13} /> URL kênh cập nhật (tùy chọn)
+          </label>
+          <input
+            value={updateFeedUrlInput}
+            onChange={(event) => setUpdateFeedUrlInput(event.target.value)}
+            placeholder="https://.../app-update.json"
+            className="w-full px-3 py-2 rounded-lg border text-xs"
+          />
+          <div className="flex gap-2 mt-2">
+            <button className="btn btn-sm flex-1" onClick={handleSaveUpdateFeed}>
+              Lưu URL cập nhật
+            </button>
+            <button
+              className="btn btn-sm flex-1"
+              style={{ background: 'var(--color-background-card)', color: 'var(--color-text)' }}
+              onClick={() => {
+                setUpdateFeedUrlInput('');
+                setUpdateFeedUrlOverride('');
+                showToast('Đã dùng lại URL mặc định.', 'success');
+              }}
+            >
+              Dùng mặc định
+            </button>
           </div>
         </div>
       </div>

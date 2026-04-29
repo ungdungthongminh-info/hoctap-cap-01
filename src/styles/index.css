@@ -219,6 +219,102 @@ body.pattern-sunny::before {
   position: relative;
 }
 
+.app-update-banner {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #93c5fd;
+  background: linear-gradient(140deg, #eff6ff, #dbeafe);
+  color: #1e3a8a;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  box-shadow: 0 10px 22px rgba(30, 64, 175, 0.12);
+}
+
+.app-update-banner__icon-wrap {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #2563eb;
+}
+
+.app-update-banner__body {
+  min-width: 0;
+}
+
+.app-update-banner__title {
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.app-update-banner__meta {
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #1d4ed8;
+}
+
+.app-update-banner__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-update-banner__btn {
+  border-radius: 999px;
+  border: 1px solid transparent;
+  min-height: 32px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.app-update-banner__btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.app-update-banner__btn--primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+}
+
+.app-update-banner__btn--ghost {
+  border-color: #93c5fd;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1e3a8a;
+}
+
+.app-update-banner__btn--close {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 0 9px;
+}
+
+.spin {
+  animation: app-update-spin 0.8s linear infinite;
+}
+
+@keyframes app-update-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* ============================================
    GLOBAL GRADE SELECTOR
    ============================================ */

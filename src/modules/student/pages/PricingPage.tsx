@@ -15,6 +15,7 @@ import {
   fetchPricingPlans,
   fetchAndCacheLicenses,
   getBridgeCustomer,
+  setBridgeCustomer,
   lockStandardGrades,
   verifyLicenseKey,
   type PricingPlanCatalogEntry,
@@ -1195,6 +1196,14 @@ export function PricingPage() {
         clientProfile,
       });
 
+      const resolvedCustomerId = String(verifyResult.license?.customerId || bridgeCustomerId || '').trim();
+      if (resolvedCustomerId) {
+        const bridgeCustomer = getBridgeCustomer();
+        if (!bridgeCustomer?.id || String(bridgeCustomer.id).trim() !== resolvedCustomerId) {
+          setBridgeCustomer({ ...(bridgeCustomer || {}), id: resolvedCustomerId });
+        }
+      }
+
       const wasAlreadyActivated = String(verifyResult.license?.status || '').trim().toLowerCase() === 'active'
         && Boolean(verifyResult.license?.activatedAt);
 
@@ -1305,9 +1314,9 @@ export function PricingPage() {
 
       // Đồng bộ lại licenses/features vào cache ngay sau khi verify thành công,
       // tránh trạng thái UI yêu cầu kích hoạt lặp lại ở các màn hình có gate theo cache.
-      if (bridgeCustomerId) {
+      if (resolvedCustomerId) {
         try {
-          await fetchAndCacheLicenses(bridgeCustomerId, WEB_TOTAL_APP_ID);
+          await fetchAndCacheLicenses(resolvedCustomerId, WEB_TOTAL_APP_ID);
         } catch {
           // Không chặn flow kích hoạt local nếu refresh cache tạm thời lỗi mạng.
         }

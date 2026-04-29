@@ -1,4 +1,4 @@
-import { useState, Component } from 'react';
+import { useState, useEffect, Component } from 'react';
 import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from './shared/themes';
 import { AppDataProvider } from './shared/providers/AppDataProvider';
@@ -6,6 +6,7 @@ import { ToastProvider } from './shared/components/Toast';
 import { isAdminUnlocked, unlockAdmin } from './shared/utils/adminAccess';
 import { STORAGE_KEYS } from './shared/constants/storageKeys';
 import { AppRoutes } from './routes/appRoutes';
+import { refreshCurrentLicenseState } from './shared/services/webTotalBridge';
 
 class RootErrorBoundary extends Component<{ children: React.ReactNode }, { hasError: boolean; message: string }> {
   constructor(props: { children: React.ReactNode }) {
@@ -144,11 +145,42 @@ function AdminGate({ children }: { children: React.ReactNode }) {
   );
 }
 
+function LicenseHeartbeat() {
+  useEffect(() => {
+    let disposed = false;
+
+    const sync = async () => {
+      const result = await refreshCurrentLicenseState().catch(() => null);
+      if (disposed || !result?.downgraded) return;
+      // Trigger listeners that mirror plan UI from localStorage.
+      window.dispatchEvent(new Event('storage'));
+    };
+
+    void sync();
+    const intervalId = window.setInterval(() => { void sync(); }, 60_000);
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        void sync();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
+    return () => {
+      disposed = true;
+      window.clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+    };
+  }, []);
+
+  return null;
+}
+
 export function App() {
   return (
     <RootErrorBoundary>
       <ThemeProvider>
         <AppDataProvider>
+          <LicenseHeartbeat />
           <ToastProvider>
             <HashRouter>
               <AppRoutes AdminGate={AdminGate} AdminErrorBoundary={AdminErrorBoundary} />

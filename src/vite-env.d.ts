@@ -1,5 +1,9 @@
 /// <reference types="vite/client" />
 
+declare global {
+  const __APP_VERSION__: string;
+}
+
 interface ElectronAPI {
   db: {
     query: (sql: string, params?: unknown[]) => Promise<unknown[]>;
