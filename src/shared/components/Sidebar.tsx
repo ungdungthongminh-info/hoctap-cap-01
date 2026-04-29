@@ -333,6 +333,15 @@ export function Sidebar() {
             </select>
           </label>
         </div>
+
+        <NavLink to="/profiles" className="sidebar-profile-card" onClick={handleNavItemClick}>
+          <UserCircle size={34} />
+          <span>
+            <strong>{state.student.fullName}</strong>
+            <small>{getGradeLabel(state.student.grade)} · {subject?.name || 'Toán'}</small>
+          </span>
+          <ChevronDown size={14} />
+        </NavLink>
       </div>
 
       <nav className="sidebar-nav">
@@ -389,14 +398,6 @@ export function Sidebar() {
         </div>
       </nav>
 
-      <NavLink to="/profiles" className="sidebar-profile-card">
-        <UserCircle size={34} />
-        <span>
-          <strong>{state.student.fullName}</strong>
-          <small>{getGradeLabel(state.student.grade)} · {subject?.name || 'Toán'}</small>
-        </span>
-        <ChevronDown size={14} />
-      </NavLink>
       </aside>
     </>
   );
