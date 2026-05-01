@@ -17,6 +17,7 @@ import {
   Brain,
   Swords,
   ShoppingBag,
+  Download,
   Crown,
   Shield,
   Network,
@@ -33,6 +34,7 @@ import { getAccessPlan } from '../../../shared/services/accessControl';
 import '../styles/premiumButtons.css';
 
 const SUB_EXPIRY_KEY = 'hhk_sub_expiry';
+const WEB_TOTAL_DOWNLOADS_URL = 'https://www.ungdungthongminh.shop/account?tab=downloads&highlight=app-study-12';
 
 type KeyExpiryBadge = {
   text: string;
@@ -184,6 +186,13 @@ export function HomePage() {
     };
   }, []);
 
+  const openWindowsDownload = () => {
+    const popup = window.open(WEB_TOTAL_DOWNLOADS_URL, '_blank', 'noopener,noreferrer');
+    if (!popup) {
+      window.location.assign(WEB_TOTAL_DOWNLOADS_URL);
+    }
+  };
+
   return (
     <div className="home-page-shell fade-in w-full max-w-[1480px] mx-auto pb-8">
       <section className="home-hero">
@@ -213,6 +222,13 @@ export function HomePage() {
             <span>
               <strong>Gói {planName}</strong>
               <small>{currentPlan === 'free' ? 'Xem gói & nhập key' : 'Quản lý key đang hoạt động'}</small>
+            </span>
+          </button>
+          <button className="home-plan-pill" onClick={openWindowsDownload}>
+            <Download size={18} />
+            <span>
+              <strong>Tải app Windows</strong>
+              <small>Mở khu tải app chính thức</small>
             </span>
           </button>
           {keyExpiryBadge && (
