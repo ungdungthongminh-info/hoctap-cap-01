@@ -85,8 +85,8 @@ async function boot() {
       </React.StrictMode>,
     );
 
-    // Best-effort background sync for static audio pack (if enabled).
-    void ensureStaticPackAutoSync().catch(() => undefined);
+    // Auto-sync status/errors are surfaced via global banner.
+    void ensureStaticPackAutoSync();
   } catch (err) {
     const msg = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
     renderFatal(msg);

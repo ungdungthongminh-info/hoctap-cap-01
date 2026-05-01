@@ -41,6 +41,14 @@ import { useAppData } from '../providers/AppDataProvider';
 import { getGradeLabel, getSubjectByCode, getSubjectsForGrade } from '../../data/subjects';
 import { MascotCharacter } from './MascotCharacter';
 import { isAdminUnlocked } from '../utils/adminAccess';
+import { checkAppUpdate, shouldShowUpdateBanner } from '../services/appUpdate';
+import {
+  checkDesktopUpdaterNow,
+  ensureDesktopUpdaterInitialized,
+  getDesktopUpdaterState,
+  subscribeDesktopUpdater,
+  type DesktopUpdaterState,
+} from '../services/desktopUpdater';
 
 interface NavItem {
   to: string;
@@ -140,6 +148,8 @@ export function Sidebar() {
   );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(() => getAccessPlan());
+  const [hasWebUpdateNotice, setHasWebUpdateNotice] = useState(false);
+  const [desktopUpdaterState, setDesktopUpdaterState] = useState<DesktopUpdaterState>(getDesktopUpdaterState());
   const canSeeAdmin = isAdminUnlocked();
   const subject = getSubjectByCode(state.student.subjectCode);
   const unlockedGrades = getUnlockedGrades(state.student.grade, currentPlan);
@@ -250,6 +260,47 @@ export function Sidebar() {
   }, [isMobileNav, isMobileMenuOpen]);
 
   useEffect(() => {
+    void ensureDesktopUpdaterInitialized();
+    const unsubscribe = subscribeDesktopUpdater(() => {
+      setDesktopUpdaterState(getDesktopUpdaterState());
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const runChecks = async () => {
+      try {
+        const updateResult = await checkAppUpdate();
+        setHasWebUpdateNotice(shouldShowUpdateBanner(updateResult));
+      } catch {
+        // Keep previous state if feed check fails.
+      }
+
+      void checkDesktopUpdaterNow();
+    };
+
+    void runChecks();
+    const timerId = window.setInterval(() => { void runChecks(); }, 15 * 60_000);
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') {
+        void runChecks();
+      }
+    };
+    window.addEventListener('focus', onVisible);
+    document.addEventListener('visibilitychange', onVisible);
+
+    return () => {
+      window.clearInterval(timerId);
+      window.removeEventListener('focus', onVisible);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
+  }, []);
+
+  const hasDesktopUpdateNotice = desktopUpdaterState.isSupported
+    && ['available', 'downloading', 'downloaded', 'error'].includes(desktopUpdaterState.phase);
+  const hasUpdateNotice = hasDesktopUpdateNotice || hasWebUpdateNotice;
+
+  useEffect(() => {
     const shouldHideChatLauncher = isMobileNav && isMobileMenuOpen;
     document.body.classList.toggle('sidebar-menu-open', shouldHideChatLauncher);
     return () => {
@@ -335,7 +386,10 @@ export function Sidebar() {
         </div>
 
         <NavLink to="/profiles" className="sidebar-profile-card" onClick={handleNavItemClick}>
-          <UserCircle size={34} />
+          <span className="sidebar-profile-avatar">
+            <UserCircle size={34} />
+            {hasUpdateNotice ? <span className="sidebar-update-dot" aria-hidden="true" /> : null}
+          </span>
           <span>
             <strong>{state.student.fullName}</strong>
             <small>{getGradeLabel(state.student.grade)} · {subject?.name || 'Toán'}</small>

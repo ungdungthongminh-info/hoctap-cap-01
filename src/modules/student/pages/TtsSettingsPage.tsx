@@ -25,12 +25,15 @@ import { VOICE_AUDIT_LINES } from '../../../shared/services/tts/ttsNarration';
 import { invalidateStaticTtsManifestCache } from '../../../shared/services/tts/staticTtsManifest';
 import { listStaticVoiceProfiles } from '../../../shared/services/tts/ttsVoiceProfiles';
 import {
+  STATIC_PACK_GRADE_OPTIONS,
   clearStaticAudioPack,
   getStaticAudioPackStats,
+  getStaticPackSelectedGrade,
+  getStaticPackUrlByGrade,
   getStaticPackManifestUrl,
   getStaticPackRecommendedLabel,
-  getStaticPackRecommendedUrl,
   isStaticPackAutoSyncEnabled,
+  setStaticPackSelectedGrade,
   setStaticPackAutoSyncEnabled,
   setStaticPackManifestUrl,
   syncStaticAudioPack,
@@ -101,6 +104,7 @@ export function TtsSettingsPage() {
   const [online, setOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
   const [activeProfileId, setActiveProfileId] = useState('');
   const [lastPlaybackMessage, setLastPlaybackMessage] = useState('');
+  const [selectedPackGrade, setSelectedPackGrade] = useState(getStaticPackSelectedGrade());
   const [packManifestUrl, setPackManifestUrl] = useState(getStaticPackManifestUrl());
   const [packAutoSync, setPackAutoSync] = useState(isStaticPackAutoSyncEnabled());
   const [packStats, setPackStats] = useState<StaticAudioPackStats | null>(null);
@@ -111,8 +115,7 @@ export function TtsSettingsPage() {
 
   const pref = getVoicePreferenceOptions();
   const showAdmin = import.meta.env.DEV || isAdminUnlocked();
-  const recommendedPackUrl = getStaticPackRecommendedUrl();
-  const recommendedPackLabel = getStaticPackRecommendedLabel();
+  const recommendedPackLabel = getStaticPackRecommendedLabel(selectedPackGrade);
   const visibleModeOptions = showAdmin
     ? modeOptions
     : modeOptions.filter((option) => option.value === 'static');
@@ -266,6 +269,15 @@ export function TtsSettingsPage() {
     setStaticPackAutoSyncEnabled(enabled);
   };
 
+  const handlePackGradeChange = (grade: number) => {
+    const nextGrade = setStaticPackSelectedGrade(grade);
+    const nextManifestUrl = getStaticPackUrlByGrade(nextGrade);
+    setSelectedPackGrade(nextGrade);
+    setPackManifestUrl(nextManifestUrl);
+    setStaticPackManifestUrl(nextManifestUrl);
+    setPackError('');
+  };
+
   const handleSavePackManifestUrl = () => {
     if (!showAdmin) {
       return;
@@ -281,7 +293,7 @@ export function TtsSettingsPage() {
     setPackProgress(null);
     setPackSyncing(true);
     try {
-      const syncUrl = showAdmin ? packManifestUrl : recommendedPackUrl;
+      const syncUrl = showAdmin ? packManifestUrl : getStaticPackUrlByGrade(selectedPackGrade);
       if (!showAdmin) {
         setPackManifestUrl(syncUrl);
         setStaticPackManifestUrl(syncUrl);
@@ -305,10 +317,10 @@ export function TtsSettingsPage() {
     if (showAdmin) {
       return;
     }
-    const nextUrl = recommendedPackUrl;
+    const nextUrl = getStaticPackUrlByGrade(selectedPackGrade);
     setPackManifestUrl(nextUrl);
     setStaticPackManifestUrl(nextUrl);
-  }, [recommendedPackUrl, showAdmin]);
+  }, [selectedPackGrade, showAdmin]);
 
   const handleClearStaticPack = async () => {
     setPackClearing(true);
@@ -528,6 +540,33 @@ export function TtsSettingsPage() {
           <h3 className="font-bold">Audio pack tải về máy (offline)</h3>
         </div>
 
+        <div className="mb-3 rounded-xl p-3" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+          <div className="text-sm font-bold">Gói audio theo lớp: {recommendedPackLabel}</div>
+          <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+            Chon lop truoc khi tai de tranh nham audio. Lua chon nay doc lap voi app state hien tai.
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {STATIC_PACK_GRADE_OPTIONS.map((option) => (
+              <button
+                key={option.grade}
+                type="button"
+                className="px-3 py-2 rounded-lg text-xs font-bold"
+                style={{
+                  border: selectedPackGrade === option.grade ? '2px solid var(--color-primary)' : '1px solid #CBD5E1',
+                  background: selectedPackGrade === option.grade ? '#EFF6FF' : '#FFFFFF',
+                  color: selectedPackGrade === option.grade ? 'var(--color-primary-dark)' : '#1F2937',
+                }}
+                onClick={() => handlePackGradeChange(option.grade)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+          <div className="text-xs mt-2" style={{ color: 'var(--color-text-light)' }}>
+            Lop dang chon: {recommendedPackLabel}
+          </div>
+        </div>
+
         {showAdmin ? (
           <>
             <label className="text-sm font-bold block mb-2">Đường dẫn audio pack (manifest.json hoặc .zip)</label>
@@ -549,14 +588,7 @@ export function TtsSettingsPage() {
               </button>
             </div>
           </>
-        ) : (
-          <div className="mb-3 rounded-xl p-3" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
-            <div className="text-sm font-bold">Gói audio tự động: {recommendedPackLabel}</div>
-            <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-              Chỉ cần bấm tải, app tự chọn đúng gói theo lớp và lưu offline trên máy.
-            </div>
-          </div>
-        )}
+        ) : null}
 
         <label className="flex items-center gap-2 text-sm mb-3">
           <input

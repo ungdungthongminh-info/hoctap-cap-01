@@ -2904,6 +2904,27 @@ body.sidebar-menu-open .chat-panel {
   box-shadow: 0 10px 22px rgba(15, 23, 42, 0.055);
 }
 
+.sidebar-profile-avatar {
+  position: relative;
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-update-dot {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #ef4444;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.18);
+}
+
 .sidebar-profile-card strong,
 .sidebar-profile-card small {
   display: block;

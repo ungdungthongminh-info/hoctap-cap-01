@@ -7,3 +7,4 @@ export { EmptyState } from './EmptyState';
 export { PageTransition } from './PageTransition';
 export { MascotCharacter, AllMascotsParade } from './MascotCharacter';
 export { LoginGuard, FeatureGuard, InternalBuildBanner, LessonAccessGuard } from './AccessGuard';
+export { StaticAudioSyncBanner } from './StaticAudioSyncBanner';

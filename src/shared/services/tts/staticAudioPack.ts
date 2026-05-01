@@ -10,6 +10,7 @@ const META_STORE = 'meta';
 const STORAGE_KEYS = {
   manifestUrl: 'hhk_tts_pack_manifest_url',
   autoSync: 'hhk_tts_pack_auto_sync',
+  selectedGrade: 'hhk_tts_pack_selected_grade',
 } as const;
 
 const META_IDS = {
@@ -84,6 +85,15 @@ export interface StaticPackSyncResult {
   totalBytes: number;
 }
 
+export interface StaticPackGlobalSyncStatus {
+  phase: 'idle' | 'syncing' | 'success' | 'error';
+  message: string;
+  hint: string;
+  progress: StaticPackSyncProgress | null;
+  canRetry: boolean;
+  updatedAt: number;
+}
+
 type StaticPackSourceType = 'manifest' | 'zip';
 
 interface StaticPackSource {
@@ -94,6 +104,15 @@ interface StaticPackSource {
 }
 
 let autoSyncPromise: Promise<StaticPackSyncResult | null> | null = null;
+const syncStatusListeners = new Set<() => void>();
+let globalSyncStatus: StaticPackGlobalSyncStatus = {
+  phase: 'idle',
+  message: '',
+  hint: '',
+  progress: null,
+  canRetry: false,
+  updatedAt: Date.now(),
+};
 
 function buildDrivePackUrl(fileId: string): string {
   return `https://drive.usercontent.google.com/download?id=${encodeURIComponent(fileId)}&export=download&confirm=t`;
@@ -134,6 +153,70 @@ const GRADE_PACK_LABELS: Partial<Record<number, string>> = {
   6: 'Tien lop 1',
 };
 
+export const STATIC_PACK_GRADE_OPTIONS: Array<{ grade: number; label: string }> = [
+  { grade: 0, label: 'Tien Tieu Hoc (Lop La)' },
+  { grade: 1, label: 'Lop 1' },
+  { grade: 2, label: 'Lop 2' },
+  { grade: 3, label: 'Lop 3' },
+  { grade: 4, label: 'Lop 4' },
+  { grade: 5, label: 'Lop 5' },
+];
+
+function normalizePackGrade(value: unknown): number {
+  const grade = Number(value);
+  if (Number.isFinite(grade) && GRADE_PACK_LINKS[grade] !== undefined) {
+    return grade;
+  }
+  return 1;
+}
+
+function buildSyncHint(phase: StaticPackGlobalSyncStatus['phase']): string {
+  if (phase === 'syncing') {
+    return 'Dang tai goi audio offline. Ban co the tiep tuc hoc, am thanh se san sang ngay sau khi dong bo xong.';
+  }
+  if (phase === 'success') {
+    return 'Dong bo audio thanh cong. Audio da san sang de nghe tren trinh duyet hien tai.';
+  }
+  if (phase === 'error') {
+    return 'Khong the dong bo audio pack. Kiem tra mang, chon dung lop audio, sau do bam Thu lai.';
+  }
+  return '';
+}
+
+function emitSyncStatus(): void {
+  syncStatusListeners.forEach((listener) => listener());
+}
+
+function setGlobalSyncStatus(patch: Partial<StaticPackGlobalSyncStatus>): void {
+  globalSyncStatus = {
+    ...globalSyncStatus,
+    ...patch,
+    updatedAt: Date.now(),
+  };
+  emitSyncStatus();
+}
+
+export function getStaticPackGlobalSyncStatus(): StaticPackGlobalSyncStatus {
+  return { ...globalSyncStatus };
+}
+
+export function subscribeStaticPackGlobalSyncStatus(listener: () => void): () => void {
+  syncStatusListeners.add(listener);
+  return () => {
+    syncStatusListeners.delete(listener);
+  };
+}
+
+export function dismissStaticPackGlobalSyncStatus(): void {
+  setGlobalSyncStatus({
+    phase: 'idle',
+    message: '',
+    hint: '',
+    progress: null,
+    canRetry: false,
+  });
+}
+
 function parseStudentGradeFromStoredState(): number | null {
   try {
     const raw = localStorage.getItem(APP_STORAGE_KEYS.APP_STATE);
@@ -149,19 +232,33 @@ function parseStudentGradeFromStoredState(): number | null {
 }
 
 function resolveDefaultPackUrlByGrade(): string {
-  const grade = parseStudentGradeFromStoredState();
-  if (grade !== null && GRADE_PACK_LINKS[grade]) {
-    return String(GRADE_PACK_LINKS[grade] || '');
-  }
-  return String(GRADE_PACK_LINKS[1] || '');
+  const grade = getStaticPackSelectedGrade();
+  return String(GRADE_PACK_LINKS[grade] || GRADE_PACK_LINKS[1] || '');
 }
 
 function getRecommendedPackGrade(): number {
-  const grade = parseStudentGradeFromStoredState();
-  if (grade !== null && GRADE_PACK_LINKS[grade]) {
-    return grade;
+  return getStaticPackSelectedGrade();
+}
+
+export function getStaticPackSelectedGrade(): number {
+  const selectedGradeRaw = safeStorageGet(STORAGE_KEYS.selectedGrade);
+  if (selectedGradeRaw) {
+    return normalizePackGrade(selectedGradeRaw);
   }
-  return 1;
+
+  const gradeFromState = parseStudentGradeFromStoredState();
+  return normalizePackGrade(gradeFromState);
+}
+
+export function setStaticPackSelectedGrade(grade: number): number {
+  const normalizedGrade = normalizePackGrade(grade);
+  safeStorageSet(STORAGE_KEYS.selectedGrade, String(normalizedGrade));
+  return normalizedGrade;
+}
+
+export function getStaticPackUrlByGrade(grade: number): string {
+  const normalizedGrade = normalizePackGrade(grade);
+  return normalizeManifestUrl(String(GRADE_PACK_LINKS[normalizedGrade] || GRADE_PACK_LINKS[1] || ''));
 }
 
 function normalizeGoogleDriveUrl(value: string): string {
@@ -303,12 +400,16 @@ function isLegacyBackendGradePackUrl(value: string): boolean {
   return /\/api\/v1\/tts\/static-pack\/by-grade\/\d+/.test(normalized);
 }
 
-export function getStaticPackRecommendedUrl(): string {
+export function getStaticPackRecommendedUrl(grade?: number): string {
+  if (grade !== undefined) {
+    return getStaticPackUrlByGrade(grade);
+  }
   return normalizeManifestUrl(resolveDefaultPackUrlByGrade());
 }
 
-export function getStaticPackRecommendedLabel(): string {
-  return String(GRADE_PACK_LABELS[getRecommendedPackGrade()] || 'Lop 1');
+export function getStaticPackRecommendedLabel(grade?: number): string {
+  const targetGrade = grade === undefined ? getRecommendedPackGrade() : normalizePackGrade(grade);
+  return String(GRADE_PACK_LABELS[targetGrade] || 'Lop 1');
 }
 
 export function getStaticPackManifestUrl(): string {
@@ -790,6 +891,20 @@ function guessMimeTypeFromPath(assetPath: string): string {
 
 export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): Promise<StaticPackSyncResult> {
   const manifestUrl = normalizeManifestUrl(options.manifestUrl || getStaticPackManifestUrl());
+  setGlobalSyncStatus({
+    phase: 'syncing',
+    message: 'Dang dong bo audio pack offline...',
+    hint: buildSyncHint('syncing'),
+    progress: {
+      phase: 'manifest',
+      totalEntries: 0,
+      processedEntries: 0,
+      downloadedEntries: 0,
+      skippedEntries: 0,
+      failedEntries: 0,
+    },
+    canRetry: false,
+  });
   options.onProgress?.({
     phase: 'manifest',
     totalEntries: 0,
@@ -827,7 +942,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
     && state.contentVersion === nextContentVersion
     && state.downloadedEntries >= availableEntries
   ) {
-    return {
+    const result: StaticPackSyncResult = {
       status: 'up-to-date',
       manifestUrl,
       contentVersion: state.contentVersion,
@@ -839,6 +954,14 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
       failedEntries: 0,
       totalBytes: state.totalBytes,
     };
+    setGlobalSyncStatus({
+      phase: 'success',
+      message: 'Audio pack da duoc dong bo day du, khong can tai them.',
+      hint: buildSyncHint('success'),
+      progress: null,
+      canRetry: false,
+    });
+    return result;
   }
 
   const entries = pickEntriesToSync(manifest, options);
@@ -914,6 +1037,21 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
           failedEntries,
           currentKey: entry.key,
         });
+        setGlobalSyncStatus({
+          phase: 'syncing',
+          message: `Dang tai audio pack (${processedEntries}/${totalEntries})`,
+          hint: buildSyncHint('syncing'),
+          progress: {
+            phase: 'downloading',
+            totalEntries,
+            processedEntries,
+            downloadedEntries,
+            skippedEntries,
+            failedEntries,
+            currentKey: entry.key,
+          },
+          canRetry: false,
+        });
       }
     }
   } finally {
@@ -928,6 +1066,20 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
     skippedEntries,
     failedEntries,
   });
+  setGlobalSyncStatus({
+    phase: 'syncing',
+    message: 'Dang chot du lieu audio local...',
+    hint: buildSyncHint('syncing'),
+    progress: {
+      phase: 'finalizing',
+      totalEntries,
+      processedEntries,
+      downloadedEntries,
+      skippedEntries,
+      failedEntries,
+    },
+    canRetry: false,
+  });
 
   const mergedDownloadedEntries = Object.keys(assetIndex).length;
   const nextState = toStateFromManifest(
@@ -941,7 +1093,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
   await writeMeta(META_IDS.manifest, manifest);
   await writeMeta(META_IDS.state, nextState);
 
-  return {
+  const result: StaticPackSyncResult = {
     status: 'completed',
     manifestUrl,
     contentVersion: nextState.contentVersion,
@@ -953,10 +1105,27 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
     failedEntries,
     totalBytes: nextState.totalBytes,
   };
+
+  setGlobalSyncStatus({
+    phase: 'success',
+    message: `Dong bo audio thanh cong (${result.downloadedEntries} file moi, ${result.skippedEntries} da co san).`,
+    hint: buildSyncHint('success'),
+    progress: null,
+    canRetry: false,
+  });
+
+  return result;
 }
 
 export async function ensureStaticPackAutoSync(): Promise<StaticPackSyncResult | null> {
   if (!isStaticPackAutoSyncEnabled()) {
+    setGlobalSyncStatus({
+      phase: 'idle',
+      message: '',
+      hint: '',
+      progress: null,
+      canRetry: false,
+    });
     return null;
   }
 
@@ -964,9 +1133,23 @@ export async function ensureStaticPackAutoSync(): Promise<StaticPackSyncResult |
     return autoSyncPromise;
   }
 
-  autoSyncPromise = syncStaticAudioPack().catch(() => null).finally(() => {
+  autoSyncPromise = syncStaticAudioPack().catch((error) => {
+    const message = error instanceof Error ? error.message : 'Khong the dong bo audio pack.';
+    setGlobalSyncStatus({
+      phase: 'error',
+      message,
+      hint: buildSyncHint('error'),
+      progress: null,
+      canRetry: true,
+    });
+    return null;
+  }).finally(() => {
     autoSyncPromise = null;
   });
 
   return autoSyncPromise;
+}
+
+export async function retryStaticPackAutoSync(): Promise<StaticPackSyncResult | null> {
+  return ensureStaticPackAutoSync();
 }
