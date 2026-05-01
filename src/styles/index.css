@@ -2944,6 +2944,29 @@ body.sidebar-menu-open .chat-panel {
   font-weight: 700;
 }
 
+.sidebar-download-app-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--color-primary-light) 36%, white);
+  background: linear-gradient(135deg, #2563EB, #1D4ED8);
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 10px 20px rgba(29, 78, 216, 0.26);
+  transition: transform 0.16s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.sidebar-download-app-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 24px rgba(29, 78, 216, 0.34);
+  filter: saturate(1.04);
+}
+
 .home-page-shell {
   display: flex;
   flex-direction: column;

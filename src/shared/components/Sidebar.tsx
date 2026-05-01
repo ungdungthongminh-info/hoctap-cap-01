@@ -26,6 +26,7 @@ import {
   ShoppingBag,
   Swords,
   Smartphone,
+  Download,
   ChevronDown,
   RefreshCw,
   Network,
@@ -63,6 +64,8 @@ interface NavGroup {
   emoji: string;
   items: NavItem[];
 }
+
+const WEB_TOTAL_DOWNLOADS_URL = 'https://www.ungdungthongminh.shop/account?tab=downloads&highlight=app-study-12';
 
 const primaryItems: NavItem[] = [
   { to: '/home', icon: Home, label: 'Trang chủ' },
@@ -396,6 +399,17 @@ export function Sidebar() {
           </span>
           <ChevronDown size={14} />
         </NavLink>
+
+        <a
+          className="sidebar-download-app-btn"
+          href={WEB_TOTAL_DOWNLOADS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={handleNavItemClick}
+        >
+          <Download size={14} />
+          <span>Tải app Windows</span>
+        </a>
       </div>
 
       <nav className="sidebar-nav">
