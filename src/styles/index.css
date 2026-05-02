@@ -2945,26 +2945,51 @@ body.sidebar-menu-open .chat-panel {
 }
 
 .sidebar-download-app-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
   min-height: 38px;
   border-radius: 12px;
-  border: 1px solid color-mix(in srgb, var(--color-primary-light) 36%, white);
-  background: linear-gradient(135deg, #2563EB, #1D4ED8);
+  border: 1px solid rgba(147, 197, 253, 0.72);
+  background: linear-gradient(135deg, #1E40AF 0%, #2563EB 52%, #0B3DA8 100%);
   color: #FFFFFF;
   text-decoration: none;
   font-size: 12px;
-  font-weight: 800;
-  box-shadow: 0 10px 20px rgba(29, 78, 216, 0.26);
+  font-weight: 900;
+  box-shadow: 0 12px 24px rgba(30, 64, 175, 0.34);
   transition: transform 0.16s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  animation: hhk-download-pulse 2.8s ease-in-out infinite;
+}
+
+.sidebar-download-app-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  pointer-events: none;
+}
+
+.sidebar-download-app-btn::after {
+  content: '';
+  position: absolute;
+  top: -12%;
+  left: -42%;
+  width: 34%;
+  height: 124%;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.44), rgba(255,255,255,0));
+  pointer-events: none;
+  animation: hhk-download-sheen 3.4s ease-in-out infinite;
 }
 
 .sidebar-download-app-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 24px rgba(29, 78, 216, 0.34);
-  filter: saturate(1.04);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 16px 28px rgba(30, 64, 175, 0.42);
+  filter: saturate(1.08);
 }
 
 .home-page-shell {
@@ -3170,6 +3195,48 @@ body.sidebar-menu-open .chat-panel {
   color: var(--color-text-light);
   font-size: 11px;
   font-weight: 800;
+}
+
+.home-plan-pill--download {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-color: rgba(147, 197, 253, 0.72);
+  background: linear-gradient(135deg, #1E40AF 0%, #2563EB 52%, #0B3DA8 100%);
+  color: #FFFFFF;
+  box-shadow: 0 14px 28px rgba(30, 64, 175, 0.34);
+  animation: hhk-download-pulse 2.8s ease-in-out infinite;
+}
+
+.home-plan-pill--download::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  pointer-events: none;
+}
+
+.home-plan-pill--download::after {
+  content: '';
+  position: absolute;
+  top: -12%;
+  left: -42%;
+  width: 34%;
+  height: 124%;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.44), rgba(255,255,255,0));
+  pointer-events: none;
+  animation: hhk-download-sheen 3.4s ease-in-out infinite;
+}
+
+.home-plan-pill--download > svg {
+  background: rgba(255, 255, 255, 0.18);
+  color: #F8FAFC;
+}
+
+.home-plan-pill--download strong,
+.home-plan-pill--download small {
+  color: #FFFFFF;
 }
 
 .home-key-expiry {

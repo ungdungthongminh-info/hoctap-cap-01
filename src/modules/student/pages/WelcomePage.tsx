@@ -195,10 +195,7 @@ export function WelcomePage() {
   };
 
   const openAppPricing = () => {
-    const popup = window.open(APP_PRICING_URL, '_blank', 'noopener,noreferrer');
-    if (!popup) {
-      window.location.assign(APP_PRICING_URL);
-    }
+    window.location.assign(APP_PRICING_URL);
   };
 
   return (

@@ -187,10 +187,7 @@ export function HomePage() {
   }, []);
 
   const openWindowsDownload = () => {
-    const popup = window.open(APP_PRICING_URL, '_blank', 'noopener,noreferrer');
-    if (!popup) {
-      window.location.assign(APP_PRICING_URL);
-    }
+    window.location.assign(APP_PRICING_URL);
   };
 
   return (
@@ -224,7 +221,7 @@ export function HomePage() {
               <small>{currentPlan === 'free' ? 'Xem gói & nhập key' : 'Quản lý key đang hoạt động'}</small>
             </span>
           </button>
-          <button className="home-plan-pill" onClick={openWindowsDownload}>
+          <button className="home-plan-pill home-plan-pill--download" onClick={openWindowsDownload}>
             <Download size={18} />
             <span>
               <strong>Tải app Windows</strong>
