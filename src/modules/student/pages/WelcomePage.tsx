@@ -6,6 +6,7 @@ import { getAccessPlan, type AccessPlan } from '../../../shared/services/accessC
 import '../styles/premiumButtons.css';
 
 const SUB_EXPIRY_KEY = 'hhk_sub_expiry';
+const APP_PRICING_URL = 'https://hoctap-cap-01.vercel.app/#/pricing';
 
 const QUICK_NOTES = [
   {
@@ -191,6 +192,13 @@ export function WelcomePage() {
     color: '#FFFFFF',
     border: '1px solid rgba(167,243,208,0.75)',
     boxShadow: '0 14px 24px rgba(5,150,105,0.45), inset 0 1px 0 rgba(255,255,255,0.34), inset 0 -2px 0 rgba(4,120,87,0.48)',
+  };
+
+  const openAppPricing = () => {
+    const popup = window.open(APP_PRICING_URL, '_blank', 'noopener,noreferrer');
+    if (!popup) {
+      window.location.assign(APP_PRICING_URL);
+    }
   };
 
   return (
@@ -398,6 +406,7 @@ export function WelcomePage() {
                 style={{
                   minWidth: 'unset',
                 }}
+                onClick={openAppPricing}
               >
                 {/* Windows logo SVG */}
                 <svg viewBox="0 0 24 24" width={26} height={26} fill="currentColor" aria-hidden="true">
@@ -416,6 +425,7 @@ export function WelcomePage() {
                 style={{
                   minWidth: 'unset',
                 }}
+                onClick={openAppPricing}
               >
                 {/* Apple logo SVG */}
                 <svg viewBox="0 0 24 24" width={26} height={26} fill="currentColor" aria-hidden="true">
