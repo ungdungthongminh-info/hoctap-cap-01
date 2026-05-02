@@ -223,6 +223,40 @@ const FEATURE_ROWS: Array<{ label: string; key: keyof PlanLimits; emoji: string 
   { label: 'Hỗ trợ ưu tiên', key: 'prioritySupport', emoji: '🛡️' },
 ];
 
+const MAX_PLAN_BULLETS = 5;
+
+function normalizeErrorText(raw: string): string {
+  return String(raw || '')
+    .replace(/[✅❌⏳🔒]/g, '')
+    .replace(/^Kích hoạt thất bại:\s*/i, '')
+    .trim();
+}
+
+function mapActivationFieldError(raw: string): string {
+  const message = normalizeErrorText(raw).toLowerCase();
+  if (!message) {
+    return '';
+  }
+
+  if (message.includes('email') && message.includes('không hợp lệ')) {
+    return 'Email không hợp lệ';
+  }
+  if (message.includes('khớp') && message.includes('email')) {
+    return 'Key không khớp email';
+  }
+  if (message.includes('hết hạn')) {
+    return 'Key đã hết hạn';
+  }
+  if (message.includes('thiết bị') || message.includes('id máy') || message.includes('device')) {
+    return 'Key đã được dùng trên thiết bị khác';
+  }
+  if (message.includes('key') || message.includes('license') || message.includes('mã')) {
+    return 'Key không đúng';
+  }
+
+  return '';
+}
+
 // ==================== CONSTANTS ====================
 const LICENSE_KEY = 'hhk_license';
 const PLAN_KEY = 'hhk_plan';
@@ -832,6 +866,12 @@ export function PricingPage() {
         : normalizedInputKey.startsWith('HHK-')
           ? '✅ Đã nhận diện key bản quyền HHK. Gói chính xác sẽ được xác định khi verify với backend.'
           : 'Đang nhận diện loại key. Vui lòng bấm Kích hoạt để xác thực chính xác với backend.';
+    const normalizedActivationEmailInput = activationEmail.trim().toLowerCase();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailFieldError = clientProfile === 'web' && normalizedActivationEmailInput.length > 0 && !emailPattern.test(normalizedActivationEmailInput)
+      ? 'Email không hợp lệ'
+      : '';
+    const keyFieldError = activateMsg?.type === 'error' ? mapActivationFieldError(activateMsg.text) : '';
 
   const toggleActivationGrade = (grade: number) => {
     if (isPremiumKeyFlow) return;
@@ -1208,7 +1248,7 @@ export function PricingPage() {
         return;
       }
 
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedActivationEmail)) {
+      if (!emailPattern.test(normalizedActivationEmail)) {
         setActivateMsg({ type: 'error', text: '❌ Email mua hàng không hợp lệ.' });
         setTimeout(() => setActivateMsg(null), 5000);
         return;
@@ -1481,12 +1521,6 @@ export function PricingPage() {
       boxShadow: '0 12px 20px rgba(10,31,67,0.22), inset 0 1px 0 rgba(255,255,255,0.34), inset 0 -2px 0 rgba(11,35,72,0.4)',
     };
   };
-  const getPlanSecondaryButtonStyle = (plan: PricingPlan) => ({
-    background: 'linear-gradient(180deg, #FFFFFF 0%, #EEF4FF 100%)',
-    color: plan.color,
-    border: `1px solid ${plan.color}55`,
-    boxShadow: '0 9px 16px rgba(16,41,84,0.12), inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -2px 0 rgba(131,153,196,0.16)',
-  });
   const gradeButtonStyle = (selected: boolean) => selected
     ? {
         background: '#FFFFFF',
@@ -1515,7 +1549,7 @@ export function PricingPage() {
       onScroll={handlePricingShellScroll}
     >
       <div className="pricing-page-container fade-in flex flex-col items-center gap-6 p-4 md:p-5 pb-28 md:pb-24 w-full">
-      <section className="pricing-pro-hero w-full">
+      <section className="pricing-pro-hero pricing-block-hero w-full">
         <div className="pricing-pro-title-card">
           <div className="pricing-pro-mark">
             <span>🎓</span>
@@ -1553,20 +1587,17 @@ export function PricingPage() {
           </div>
           <p>Mua đúng gói trên web, lấy key và quay lại đây để mở khóa ngay.</p>
           <div className="pricing-key-actions">
-            <button className={premiumButtonPrimaryClass} style={topPrimaryButtonStyle} onClick={() => navigate('/home')}>
-              Vào học ngay →
-            </button>
-            <button className={premiumButtonSecondaryClass} style={darkPrimaryButtonStyle} onClick={() => document.getElementById('activate-section')?.scrollIntoView({ behavior: 'smooth' })}>
+            <button className={premiumButtonPrimaryClass} style={topPrimaryButtonStyle} onClick={() => document.getElementById('activate-section')?.scrollIntoView({ behavior: 'smooth' })}>
               <Unlock size={14} /> Kích hoạt key
             </button>
-            <button className={premiumButtonSecondaryClass} style={neutralGhostButtonStyle} onClick={() => setShowComparison(true)}>
-              Xem bảng gói
+            <button className={premiumButtonSecondaryClass} style={darkPrimaryButtonStyle} onClick={() => document.getElementById('activate-section')?.scrollIntoView({ behavior: 'smooth' })}>
+              Đăng nhập
             </button>
           </div>
         </div>
       </section>
 
-      <section className="pricing-pro-heading w-full">
+      <section className="pricing-pro-heading pricing-block-plan-heading w-full">
         <div>
           <div className="pricing-section-kicker">Gói sử dụng</div>
           <h2>Free mặc định. <span>Paid</span> mở bằng key.</h2>
@@ -1585,13 +1616,15 @@ export function PricingPage() {
         </div>
       </section>
 
-      <section className="pricing-grid-modern pricing-pro-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 w-full items-stretch">
+      <section className="pricing-grid-modern pricing-pro-grid pricing-block-plan-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 w-full items-stretch">
         {visiblePlans.map(plan => {
           const isActive = plan.id === currentPlan || (plan.id === 'standard_1year_1grade' && currentPlanStorageId === 'standard_1year_1grade');
           const price = getPrice(plan);
           const savings = getSavings(plan);
           const productUrl = WEB_TOTAL_PRODUCT_URLS[plan.id as keyof typeof WEB_TOTAL_PRODUCT_URLS]?.[billing];
           const canCheckout = plan.id !== 'free' && plan.pricingSource !== 'local-fallback' && Boolean(productUrl);
+          const highlightedFeatures = plan.features.slice(0, MAX_PLAN_BULLETS);
+          const detailedFeatures = plan.features.slice(MAX_PLAN_BULLETS);
 
           return (
             <div
@@ -1625,7 +1658,7 @@ export function PricingPage() {
               </div>
 
               <ul className="pricing-feature-list flex-1">
-                {plan.features.map((f, i) => (
+                {highlightedFeatures.map((f, i) => (
                   <li key={i}>
                     <span className="feature-check" style={{ background: plan.color }}>
                       <Check size={12} />
@@ -1635,6 +1668,17 @@ export function PricingPage() {
                 ))}
               </ul>
 
+              {detailedFeatures.length > 0 && (
+                <details className="pricing-plan-details">
+                  <summary>Xem chi tiết</summary>
+                  <ul>
+                    {detailedFeatures.map((feature) => (
+                      <li key={feature}>{feature}</li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+
               {!isActive && plan.id !== 'free' ? (
                 <div className="pricing-card-actions">
                   {canCheckout ? (
@@ -1643,7 +1687,7 @@ export function PricingPage() {
                       style={getPlanPrimaryButtonStyle(plan)}
                       onClick={() => openQRPayment(plan)}
                     >
-                      <ExternalLink size={14} /> Xem gói trên Web Tổng
+                      <ExternalLink size={14} /> Chọn gói này
                     </button>
                   ) : (
                     <div
@@ -1655,16 +1699,6 @@ export function PricingPage() {
                         : 'Chưa mở bán trực tuyến trên Web tổng'}
                     </div>
                   )}
-                  <button
-                    className={`${premiumButtonBaseClass} w-full px-4 py-2.5 text-xs pricing-card-sub-btn`}
-                    style={getPlanSecondaryButtonStyle(plan)}
-                    onClick={() => {
-                      const section = document.getElementById('activate-section');
-                      section?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                  >
-                    <Unlock size={12} className="inline mr-1" /> Tôi đã có key
-                  </button>
                 </div>
               ) : plan.id === 'free' ? (
                 <button
@@ -1672,11 +1706,11 @@ export function PricingPage() {
                   style={darkPrimaryButtonStyle}
                   onClick={() => navigate('/home')}
                 >
-                  Vào app với Free
+                  Chọn gói này
                 </button>
               ) : (
                 <button className={`${premiumButtonPrimaryClass} w-full pricing-card-main-btn`} style={topPrimaryButtonStyle} onClick={() => navigate('/home')}>
-                  Vào học ngay
+                  Chọn gói này
                 </button>
               )}
             </div>
@@ -1684,7 +1718,7 @@ export function PricingPage() {
         })}
       </section>
 
-      <section className="pricing-proof-row w-full">
+      <section className="pricing-proof-row pricing-block-proof w-full">
         <div className="proof-item">
           <div className="proof-icon">⚡</div>
           <div>
@@ -1708,7 +1742,7 @@ export function PricingPage() {
         </div>
       </section>
 
-      <section className="pricing-bottom-status w-full">
+      <section className="pricing-bottom-status pricing-block-status w-full">
         <div>● Trạng thái hiện tại: <strong>{currentPlanMeta?.name}</strong></div>
         <div><Clock size={14} /> {remaining !== null && remaining !== Infinity ? `Còn ${remaining} ngày${subExpiry ? ` (đến ${formatDate(subExpiry)})` : ''}` : 'Không giới hạn'}</div>
         <button onClick={() => setShowComparison((prev) => !prev)}>
@@ -1718,7 +1752,7 @@ export function PricingPage() {
 
       {/* Feature comparison table */}
       {showComparison && (
-        <div className="pricing-comparison-card w-full overflow-x-auto">
+        <div className="pricing-comparison-card pricing-block-comparison w-full overflow-x-auto">
           <table className="w-full text-sm border-collapse">
             <thead>
               <tr>
@@ -1760,7 +1794,7 @@ export function PricingPage() {
 
       {/* Active subscription management */}
       {activeSub && currentPlan !== 'free' && (
-        <div className="pricing-section-card card w-full p-6">
+        <div className="pricing-section-card pricing-block-active-sub card w-full p-6">
           <h3 className="text-base font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--color-primary-dark)' }}>
             <CreditCard size={18} /> Quản lý gói đăng ký
           </h3>
@@ -1838,23 +1872,16 @@ export function PricingPage() {
       )}
 
       {/* Activate license */}
-      <div id="activate-section" className="pricing-activation-card card w-full p-6">
+      <div id="activate-section" className="pricing-activation-card pricing-block-activate card w-full p-6">
         <div className="pricing-activation-head">
           <div>
             <div className="pricing-section-kicker">Kích hoạt key</div>
             <h3 className="pricing-activation-title">
-              <Unlock size={18} /> {clientProfile === 'web' ? 'Nhập email + key hoặc mở đúng sản phẩm trên web' : 'Nhập key hoặc mở đúng sản phẩm trên web'}
+              <Unlock size={18} /> Kích hoạt tài khoản học tập
             </h3>
             <p className="pricing-activation-copy">
-              {clientProfile === 'web'
-                ? 'Nếu chưa có key, mở đúng gói bên dưới trên Web Tổng. Nếu đã có key, nhập email mua hàng và key để web app xác minh đúng gói.'
-                : 'Nếu chưa có key, mở đúng gói bên dưới trên Web Tổng. Nếu đã có key, nhập trực tiếp để hệ thống tự nhận diện và hướng dẫn bước tiếp theo.'}
+              Nhập email và mã key đã được cấp để mở khóa ứng dụng.
             </p>
-          </div>
-          <div className="pricing-activation-steps">
-            <span>1. Chọn gói</span>
-            <span>2. Nhận key</span>
-            <span>3. Kích hoạt</span>
           </div>
         </div>
         <div className="pricing-activation-shortcut-grid">
@@ -1916,25 +1943,29 @@ export function PricingPage() {
           </div>
         </div>
         <div className="mb-4 rounded-2xl p-4 activation-key-spotlight" style={{ background: 'linear-gradient(135deg, #FFF7E6 0%, #FFFFFF 60%, #EFF6FF 100%)', border: '2px solid #FDBA74', boxShadow: '0 14px 30px rgba(217,119,6,0.16)' }}>
-          <div className="text-[13px] font-extrabold tracking-[0.02em]" style={{ color: '#9A3412' }}>{clientProfile === 'web' ? 'NHẬP EMAIL + KEY ĐỂ VÀO WEB APP' : 'NHẬP KEY KÍCH HOẠT NGAY'}</div>
-          <div className="text-xs mt-1 mb-3" style={{ color: '#7C2D12' }}>
-            {clientProfile === 'web'
-              ? 'Web app cần đúng email mua hàng và key để xác minh gói. Sau khi đúng, hệ thống tự nhận diện quyền sử dụng.'
-              : 'Sau khi nhập key, hệ thống tự nhận diện gói và hướng dẫn bước tiếp theo.'}
-          </div>
+          <div className="text-[13px] font-extrabold tracking-[0.02em]" style={{ color: '#9A3412' }}>Nhập email và mã key</div>
           {clientProfile === 'web' && (
             <div className="mb-3 rounded-2xl p-2" style={{ background: 'rgba(255,255,255,0.92)', border: '1px solid #FED7AA' }}>
+              <label className="block px-2 pb-1 text-[12px] font-bold" style={{ color: '#7C2D12' }}>
+                Email
+              </label>
               <input
                 type="email"
                 className="premium-input w-full px-4 py-3 rounded-xl text-sm"
-                placeholder="Email mua hàng trên Web Tổng"
+                placeholder="you@example.com"
                 value={activationEmail}
                 onChange={(e) => setActivationEmail(e.target.value.toLowerCase())}
                 autoComplete="email"
                 disabled={isActivating}
               />
+              {emailFieldError && (
+                <p className="mt-2 px-2 text-xs font-bold" style={{ color: '#B91C1C' }}>{emailFieldError}</p>
+              )}
             </div>
           )}
+          <label className="block px-2 pb-1 text-[12px] font-bold" style={{ color: '#7C2D12' }}>
+            Mã kích hoạt / License Key
+          </label>
           <div className={`flex gap-2 items-stretch rounded-2xl p-2 activation-key-input-shell ${activateMsg?.type === 'error' ? 'is-error' : activateMsg?.type === 'success' ? 'is-success' : ''}`} style={{
             background: '#FFFFFF',
             border: activateMsg?.type === 'error' ? '1px solid #FCA5A5' : activateMsg?.type === 'success' ? '1px solid #86EFAC' : '1px solid #FED7AA',
@@ -1947,7 +1978,7 @@ export function PricingPage() {
           <input
             type="text"
             className={`premium-input flex-1 px-4 py-3 rounded-xl text-sm uppercase ${activateMsg?.type === 'error' ? 'activation-key-input-error' : activateMsg?.type === 'success' ? 'activation-key-input-success' : ''}`}
-            placeholder={clientProfile === 'web' ? 'Nhập license key để vào web app' : 'Ví dụ: HHK-STANDARD-AB12CD34'}
+            placeholder="KB-XXXX-XXXX-XXXX"
             value={licenseKey}
             onChange={e => setLicenseKey(e.target.value.toUpperCase())}
             maxLength={25}
@@ -1955,14 +1986,25 @@ export function PricingPage() {
           />
             <button className={`${premiumButtonPrimaryClass} activation-key-primary-btn`} onClick={activateLicense} disabled={!licenseKey.trim() || (clientProfile === 'web' && !activationEmail.trim()) || isActivating} style={{ ...darkPrimaryButtonStyle, minWidth: 170 }}>
               {isActivating ? <RefreshCw size={16} className="animate-spin" /> : <Unlock size={16} />}
-              {isActivating ? 'Đang xác minh...' : clientProfile === 'web' ? 'Vào web app' : 'Kích hoạt ngay'}
+              {isActivating ? 'Đang xác minh...' : 'Kích hoạt ngay'}
             </button>
           </div>
+          {keyFieldError && (
+            <p className="mt-2 px-2 text-xs font-bold" style={{ color: '#B91C1C' }}>{keyFieldError}</p>
+          )}
           {isActivating && (
             <div className="mt-2 text-xs font-bold" style={{ color: '#1D4ED8' }}>
               Đang kiểm tra key với hệ thống, vui lòng không tắt ứng dụng...
             </div>
           )}
+          <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
+            <button className="pricing-inline-link" onClick={() => navigate('/pricing#activate-section')}>
+              Đã kích hoạt rồi? Đăng nhập
+            </button>
+            <button className="pricing-inline-link" onClick={() => document.querySelector('.pricing-block-plan-grid')?.scrollIntoView({ behavior: 'smooth' })}>
+              Chưa có key? Xem bảng giá
+            </button>
+          </div>
           <div
             className="text-xs mt-2 rounded-xl px-3 py-2 font-bold"
             style={
@@ -2176,33 +2218,27 @@ export function PricingPage() {
       )}
 
       {/* Purchase info */}
-      <div className="pricing-section-card card w-full p-6">
+      <div className="pricing-section-card pricing-block-guide card w-full p-6">
         <h3 className="text-base font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--color-primary-dark)' }}>
-          <Gift size={18} /> Hướng dẫn mua hàng
+          <Gift size={18} /> Hướng dẫn nhanh
         </h3>
         <div className="flex flex-col gap-3 text-sm" style={{ color: 'var(--color-text)' }}>
           <div className="flex items-start gap-2">
             <span className="text-lg">1️⃣</span>
             <div>
-              <strong>Chọn gói</strong> phù hợp ở trên → Bấm <strong>"Xem gói trên Web Tổng"</strong>
+              <strong>Chọn gói</strong> phù hợp trong bảng giá.
             </div>
           </div>
           <div className="flex items-start gap-2">
             <span className="text-lg">2️⃣</span>
             <div>
-              <strong>Mua đúng gói</strong> trên Web Tổng và hoàn tất thanh toán tại đó.
+              <strong>Thanh toán trên Web Tổng</strong> để nhận key.
             </div>
           </div>
           <div className="flex items-start gap-2">
             <span className="text-lg">3️⃣</span>
             <div>
-              <strong>Nhận key kích hoạt</strong> từ trang đơn hàng hoặc cổng khách hàng của Web Tổng.
-            </div>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-lg">4️⃣</span>
-            <div>
-              <strong>Nhập key</strong> vào ô <em>"Nhập mã kích hoạt"</em> trong app để mở đúng gói đã mua.
+              <strong>Nhập email + key</strong> tại khung kích hoạt để mở khóa ứng dụng.
             </div>
           </div>
         </div>
@@ -2221,7 +2257,7 @@ export function PricingPage() {
       </div>
 
       {/* Refund policy */}
-      <div className="pricing-policy-card card w-full p-5" style={{ background: '#FFF7ED', border: '1px solid #FDBA74' }}>
+      <div className="pricing-policy-card pricing-block-policy card w-full p-5" style={{ background: '#FFF7ED', border: '1px solid #FDBA74' }}>
         <h3 className="text-sm font-bold flex items-center gap-2" style={{ color: '#9A3412' }}>
           <Shield size={16} /> Chính sách hoàn tiền
         </h3>
@@ -2232,7 +2268,7 @@ export function PricingPage() {
       </div>
 
       {/* Promotions */}
-      <div className="pricing-promo-card card w-full p-5 text-center" style={{ background: 'linear-gradient(135deg, #FEF3C7, #FDE68A)', border: '2px solid #F59E0B' }}>
+      <div className="pricing-promo-card pricing-block-promo card w-full p-5 text-center" style={{ background: 'linear-gradient(135deg, #FEF3C7, #FDE68A)', border: '2px solid #F59E0B' }}>
         <span className="text-3xl">🎁</span>
         <h3 className="text-base font-bold mt-2" style={{ color: '#92400E' }}>Ưu đãi đặc biệt!</h3>
         <div className="flex flex-col gap-1 mt-2 text-sm" style={{ color: '#78350F' }}>
@@ -2244,7 +2280,7 @@ export function PricingPage() {
       </div>
 
       {/* FAQ */}
-      <div className="pricing-section-card card w-full p-6">
+      <div className="pricing-section-card pricing-block-faq card w-full p-6">
         <h3 className="text-base font-bold mb-3" style={{ color: 'var(--color-primary-dark)' }}>❓ Câu hỏi thường gặp</h3>
         <div className="flex flex-col gap-3 text-sm">
           <div>

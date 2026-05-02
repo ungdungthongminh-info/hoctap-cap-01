@@ -331,6 +331,19 @@
   max-width: 100%;
 }
 
+.pricing-block-hero { order: 1; }
+.pricing-block-activate { order: 2; }
+.pricing-block-plan-heading { order: 3; }
+.pricing-block-plan-grid { order: 4; }
+.pricing-block-guide { order: 5; }
+.pricing-block-proof { order: 6; }
+.pricing-block-status { order: 7; }
+.pricing-block-comparison { order: 8; }
+.pricing-block-active-sub { order: 9; }
+.pricing-block-policy { order: 10; }
+.pricing-block-promo { order: 11; }
+.pricing-block-faq { order: 12; }
+
 .pricing-pro-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 360px;
@@ -737,6 +750,29 @@
   font-size: 14px;
 }
 
+.pricing-plan-details {
+  margin-top: -6px;
+  margin-bottom: 12px;
+  border-top: 1px dashed rgba(148, 163, 184, 0.34);
+  padding-top: 10px;
+}
+
+.pricing-plan-details summary {
+  color: #bfdbfe;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.pricing-plan-details ul {
+  margin: 8px 0 0;
+  padding-left: 16px;
+  color: rgba(226, 232, 240, 0.84);
+  font-size: 12px;
+  display: grid;
+  gap: 5px;
+}
+
 .feature-check {
   display: inline-grid;
   place-items: center;
@@ -962,10 +998,18 @@
 }
 
 .pricing-activation-card {
+  display: flex;
+  flex-direction: column;
   border-radius: 30px;
   background:
     linear-gradient(135deg, rgba(239, 246, 255, 0.92), rgba(255, 255, 255, 0.96) 54%, rgba(255, 251, 235, 0.76));
 }
+
+.pricing-activation-head { order: 1; }
+.activation-key-spotlight { order: 2; }
+.pricing-activation-shortcut-grid { order: 3; }
+.pricing-activation-meta-grid { order: 4; }
+.activation-grade-card { order: 5; }
 
 #activate-section {
   scroll-margin-top: 26px;
@@ -1300,6 +1344,16 @@
   white-space: nowrap;
 }
 
+.pricing-inline-link {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #1d4ed8;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .activation-key-spotlight::after {
   content: '';
   position: absolute;
@@ -1374,6 +1428,12 @@
 }
 
 @media (max-width: 768px) {
+  .pricing-block-hero { order: 1; }
+  .pricing-block-activate { order: 2; }
+  .pricing-block-plan-heading { order: 3; }
+  .pricing-block-plan-grid { order: 4; }
+  .pricing-block-guide { order: 5; }
+
   .pricing-page-shell {
     background:
       radial-gradient(circle at 16% 0%, rgba(56, 189, 248, 0.14), transparent 34%),

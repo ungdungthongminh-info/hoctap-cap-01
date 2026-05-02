@@ -139,7 +139,6 @@ export function WelcomePage() {
   const navigate = useNavigate();
   const [currentPlan, setCurrentPlan] = useState<AccessPlan>(() => getAccessPlan());
   const [keyStatus, setKeyStatus] = useState<KeyStatusSnapshot>(() => getKeyStatusSnapshot(getAccessPlan()));
-  const [isFreeTrialPulseActive, setIsFreeTrialPulseActive] = useState(false);
 
   useEffect(() => {
     const syncPlan = () => {
@@ -154,14 +153,6 @@ export function WelcomePage() {
       window.removeEventListener('focus', syncPlan);
       window.removeEventListener('storage', syncPlan);
     };
-  }, []);
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setIsFreeTrialPulseActive(true);
-    }, 2000);
-
-    return () => window.clearTimeout(timer);
   }, []);
 
   const statusTheme = STATUS_THEME[keyStatus.tone];
@@ -180,21 +171,7 @@ export function WelcomePage() {
     boxShadow: '0 12px 22px rgba(8,21,49,0.38), inset 0 1px 0 rgba(255,255,255,0.32), inset 0 -2px 0 rgba(8,27,56,0.42)',
   };
 
-  const heroGhostButtonStyle = {
-    background: 'linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.04) 44%, rgba(0,0,0,0.2) 100%), rgba(9,28,61,0.52)',
-    color: '#D3E4FF',
-    border: '1px solid rgba(123,155,211,0.54)',
-    boxShadow: '0 10px 18px rgba(7,20,45,0.32), inset 0 1px 0 rgba(255,255,255,0.25)',
-  };
-
-  const freeTrialButtonStyle = {
-    background: 'linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.12) 40%, rgba(0,0,0,0.12) 100%), linear-gradient(135deg, #34D399 0%, #059669 100%)',
-    color: '#FFFFFF',
-    border: '1px solid rgba(167,243,208,0.75)',
-    boxShadow: '0 14px 24px rgba(5,150,105,0.45), inset 0 1px 0 rgba(255,255,255,0.34), inset 0 -2px 0 rgba(4,120,87,0.48)',
-  };
-
-  const openAppPricing = () => {
+  const openWindowsDownload = () => {
     openWindowsAppDownload();
   };
 
@@ -214,6 +191,34 @@ export function WelcomePage() {
             boxShadow: '0 28px 56px rgba(1,8,25,0.52)',
           }}
         >
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#36578A] bg-[#061E44]/70 px-3 py-3 sm:px-4">
+            <button
+              className="text-left text-sm font-black tracking-[0.02em]"
+              style={{ color: '#E9D39A' }}
+                onClick={() => navigate('/')}
+            >
+              Học Hứng Khởi
+            </button>
+            <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+              <button className="px-3 py-2 rounded-xl font-semibold" style={{ color: '#D7E3FF' }} onClick={() => document.getElementById('welcome-features')?.scrollIntoView({ behavior: 'smooth' })}>Tính năng</button>
+              <button className="px-3 py-2 rounded-xl font-semibold" style={{ color: '#D7E3FF' }} onClick={() => navigate('/pricing')}>Bảng giá</button>
+              <button
+                className="px-3 py-2 rounded-xl font-extrabold"
+                style={{ background: '#F3DFB1', color: '#1D2A4D', border: '1px solid rgba(255,255,255,0.52)' }}
+                onClick={() => navigate('/pricing#activate-section')}
+              >
+                Kích hoạt key
+              </button>
+              <button
+                className="px-3 py-2 rounded-xl font-bold"
+                style={{ background: '#123463', color: '#E6F0FF', border: '1px solid rgba(150,184,238,0.58)' }}
+                onClick={() => navigate('/pricing#activate-section')}
+              >
+                Đăng nhập
+              </button>
+            </div>
+          </div>
+
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="flex items-start gap-3 sm:items-center">
               <div
@@ -224,10 +229,26 @@ export function WelcomePage() {
               </div>
               <div>
                 <div className="text-[1.3rem] leading-tight sm:text-[1.65rem] md:text-[2.4rem] font-bold tracking-[-0.025em]" style={{ color: '#E9D39A' }}>
-                  Chào mừng đến với Học Hứng Khởi
+                  Kích hoạt key trong 1 phút để mở khóa học tập
                 </div>
                 <div className="text-[13px] sm:text-sm mt-1" style={{ color: '#D7E3FF' }}>
-                  Chọn một thao tác nhanh để bắt đầu.
+                  Đăng nhập bằng email và license key để vào đúng gói đã mua.
+                </div>
+                <div className="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                  <button
+                    className={`${glossyButtonBaseClass} premium-btn-sheen px-6 py-3.5 text-base font-extrabold inline-flex items-center justify-center gap-2 hover:brightness-105 w-full sm:w-auto`}
+                    style={heroPrimaryButtonStyle}
+                    onClick={() => navigate('/pricing#activate-section')}
+                  >
+                    <KeyRound size={18} /> Kích hoạt key
+                  </button>
+                  <button
+                    className={`${glossyButtonBaseClass} px-6 py-3.5 text-base inline-flex items-center justify-center gap-2 hover:brightness-110 w-full sm:w-auto`}
+                    style={heroSecondaryButtonStyle}
+                    onClick={() => navigate('/pricing#activate-section')}
+                  >
+                    Đăng nhập
+                  </button>
                 </div>
               </div>
             </div>
@@ -248,53 +269,20 @@ export function WelcomePage() {
                 <div className="text-[13px] mt-0.5" style={{ color: statusTheme.text }}>{keyStatus.detail}</div>
                 <div className="text-[12px] mt-1.5" style={{ color: statusTheme.hint }}>{keyStatus.hint}</div>
               </div>
-
-              <button
-                className={`${glossyButtonBaseClass} premium-btn-sheen px-6 py-3.5 text-base font-extrabold inline-flex items-center justify-center gap-2 hover:brightness-105 w-full md:w-auto`}
-                style={heroPrimaryButtonStyle}
-                onClick={openAppPricing}
-              >
-                ⬇ Tải app Windows
-              </button>
-
-              {currentPlan === 'free' && (
+              <div className="text-xs text-right">
                 <button
-                  className={`${glossyButtonBaseClass} premium-btn-sheen px-7 py-4 text-[1.05rem] font-extrabold inline-flex items-center justify-center gap-2.5 w-full md:w-auto hover:brightness-105 ${isFreeTrialPulseActive ? 'welcome-free-pulse' : ''}`}
-                  style={freeTrialButtonStyle}
-                  onClick={() => navigate('/home')}
+                  className="inline-flex items-center gap-2 font-bold underline"
+                  style={{ color: '#CFE0FF' }}
+                  onClick={openWindowsDownload}
                 >
-                  <MonitorSmartphone size={17} /> Dùng thử miễn phí
-                </button>
-              )}
-
-              <div className="flex flex-col sm:flex-row sm:flex-wrap w-full sm:w-auto items-stretch sm:items-center justify-end gap-2">
-                <button
-                  className={`${glossyButtonBaseClass} premium-btn-sheen px-6 py-3.5 text-base font-extrabold inline-flex items-center justify-center gap-2 hover:brightness-105 w-full sm:w-auto`}
-                  style={heroPrimaryButtonStyle}
-                  onClick={() => navigate('/pricing')}
-                >
-                  Xem gói ngay <ArrowRight size={18} />
-                </button>
-                <button
-                  className={`${glossyButtonBaseClass} px-6 py-3.5 text-base inline-flex items-center justify-center gap-2 hover:brightness-110 w-full sm:w-auto`}
-                  style={heroSecondaryButtonStyle}
-                  onClick={() => navigate('/pricing#activate-section')}
-                >
-                  <KeyRound size={18} /> Nhập key ngay
-                </button>
-                <button
-                  className={`${glossyButtonBaseClass} px-6 py-3.5 text-base hover:brightness-110 w-full sm:w-auto`}
-                  style={heroGhostButtonStyle}
-                  onClick={() => navigate('/home')}
-                >
-                  Vào học ngay
+                  <ArrowRight size={14} /> Tải app Windows
                 </button>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="mt-5 sm:mt-6 w-full rounded-[20px] md:rounded-[24px] p-3.5 sm:p-4 md:p-6 lg:p-7" style={{ background: 'rgba(255,255,255,0.9)', border: '1px solid #CFDDF6', boxShadow: '0 20px 44px rgba(12,35,75,0.18)' }}>
+        <section id="welcome-features" className="mt-5 sm:mt-6 w-full rounded-[20px] md:rounded-[24px] p-3.5 sm:p-4 md:p-6 lg:p-7" style={{ background: 'rgba(255,255,255,0.9)', border: '1px solid #CFDDF6', boxShadow: '0 20px 44px rgba(12,35,75,0.18)' }}>
           <div className="text-xs uppercase tracking-[0.18em] font-bold" style={{ color: '#6B7FA3' }}>Bắt đầu nhanh</div>
           <div className="text-[1.65rem] leading-tight sm:text-2xl md:text-4xl font-bold tracking-[-0.03em]" style={{ color: '#123E72' }}>
             2 bước để dùng đầy đủ tính năng
