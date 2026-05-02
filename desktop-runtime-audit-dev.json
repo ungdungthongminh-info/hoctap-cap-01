@@ -1,0 +1,42 @@
+{
+  "startedAt": "2026-05-02T15:53:03.703Z",
+  "outputPath": "F:\\1_A_Disk_D\\Tool\\Hoc_Tap\\CAp_01\\desktop-runtime-audit-dev.json",
+  "clickOk": true,
+  "runtimeLogs": [],
+  "consoleRuntimeLogs": [],
+  "networkEvents": [
+    {
+      "type": "allowed",
+      "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hJFQNcOM.woff2",
+      "timestamp": "2026-05-02T15:53:04.018Z"
+    },
+    {
+      "type": "allowed",
+      "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hJVQNcOM.woff2",
+      "timestamp": "2026-05-02T15:53:04.021Z"
+    },
+    {
+      "type": "allowed",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-02T15:53:05.785Z"
+    },
+    {
+      "type": "allowed",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-02T15:53:05.785Z"
+    },
+    {
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-02T15:53:23.543Z"
+    },
+    {
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-02T15:53:23.544Z"
+    }
+  ],
+  "pass": false,
+  "reason": "Khong thu duoc runtime log completed/error trong thoi gian cho.",
+  "finishedAt": "2026-05-02T15:54:08.662Z"
+}

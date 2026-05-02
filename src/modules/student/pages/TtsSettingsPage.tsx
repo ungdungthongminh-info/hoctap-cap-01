@@ -36,7 +36,6 @@ import {
   getStaticPackSelectedGrade,
   getStaticPackUrlByGrade,
   getStaticPackRecommendedLabel,
-  getStaticPackRecommendedUrl,
   isStaticPackAutoSyncEnabled,
   setStaticPackAutoSyncEnabled,
   setStaticPackManifestUrl,
