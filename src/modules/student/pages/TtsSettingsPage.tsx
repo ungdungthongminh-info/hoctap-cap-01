@@ -35,7 +35,6 @@ import {
   getStaticPackManifestUrl,
   getStaticPackSelectedGrade,
   getStaticPackUrlByGrade,
-  getStaticPackRecommendedLabel,
   isStaticPackAutoSyncEnabled,
   setStaticPackAutoSyncEnabled,
   setStaticPackManifestUrl,
@@ -147,7 +146,8 @@ export function TtsSettingsPage() {
   const pref = getVoicePreferenceOptions();
   const showAdmin = import.meta.env.DEV || isAdminUnlocked();
   const hasDesktopAudioStore = typeof window !== 'undefined' && Boolean(window.electronAPI?.audioPacks);
-  const recommendedPackLabel = getStaticPackRecommendedLabel();
+  const selectedPackGrade = getStaticPackSelectedGrade();
+  const selectedPackLabel = `Lớp ${selectedPackGrade}`;
   const hasFullOfflinePack = Boolean(
     packStats
     && Number(packStats.availableEntries || 0) > 0
@@ -621,13 +621,13 @@ export function TtsSettingsPage() {
       <div className="card mb-4">
         <div className="flex items-center gap-2 mb-3">
           <Download size={18} style={{ color: 'var(--color-primary)' }} />
-          <h3 className="font-bold">Tải gói tiếng đọc đầy đủ (mọi lớp)</h3>
+          <h3 className="font-bold">Tải gói tiếng đọc cho lớp hiện tại</h3>
         </div>
 
         <div className="mb-3 rounded-xl p-3" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
-          <div className="text-sm font-bold">Gói mặc định: {recommendedPackLabel}</div>
+          <div className="text-sm font-bold">Gói đang tải: {selectedPackLabel}</div>
           <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-            Mot lan tai de dung tieng doc cho tat ca lop ngay tren trinh duyet hien tai.
+            Gói này chỉ dùng cho lớp đang chọn trên thiết bị hiện tại.
           </div>
         </div>
 
@@ -724,7 +724,7 @@ export function TtsSettingsPage() {
           <div className="text-xs mb-3 px-3 py-2 rounded-lg" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
             {showAdmin || packError.toLowerCase().includes('tam khoa dong bo offline pack')
               ? packError
-              : 'Khong tai duoc goi tieng doc day du. Vui long kiem tra mang, sau do bam tai lai.'}
+              : 'Khong tai duoc goi tieng doc cho lop hien tai. Vui long kiem tra mang, sau do bam tai lai.'}
           </div>
         )}
 
@@ -736,7 +736,7 @@ export function TtsSettingsPage() {
             disabled={packSyncing || !online || Boolean(packSyncBlockedReason)}
           >
             <Download size={16} />
-            {packSyncing ? 'Đang tải gói tiếng đọc đầy đủ...' : 'Tải gói tiếng đọc đầy đủ (mọi lớp)'}
+            {packSyncing ? 'Đang tải gói tiếng đọc cho lớp hiện tại...' : 'Tải gói tiếng đọc cho lớp hiện tại'}
           </button>
           <button
             type="button"
@@ -751,7 +751,7 @@ export function TtsSettingsPage() {
         </div>
 
         <p className="text-xs mt-3" style={{ color: 'var(--color-text-light)' }}>
-          Sau khi tải xong, người học có thể nghe cho mọi lớp từ dữ liệu đã lưu trên trình duyệt này.
+          Sau khi tải xong, người học có thể nghe offline cho lớp đang chọn từ dữ liệu đã lưu trên trình duyệt này.
         </p>
       </div>
       )}
