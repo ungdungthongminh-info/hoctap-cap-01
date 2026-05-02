@@ -120,6 +120,16 @@ const ALL_GRADE_PACKS = [0, 1, 2, 3, 4, 5] as const;
 const PRODUCTION_TTS_PACK_API_BASE = 'https://www.ungdungthongminh.shop/api/v1';
 const MAX_MANIFEST_SOURCE_FAILURES_BEFORE_ABORT = 25;
 
+const GRADE_PACK_FILE_IDS: Partial<Record<number, string>> = {
+  0: '1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
+  1: '1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq',
+  2: '1VY-VkQ9Wtunydd10rCCp_Xs9cTZRucyh',
+  3: '1LKgjUtADcVkbDpvCkfzSNCdNoJG94YQv',
+  4: '164Xxc7vlATmrBqSHd9EWSXnvk9Q37rFk',
+  5: '1PinMxVGHSl-GkekhSvTYp5rLgmcUFOQV',
+  6: '1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
+};
+
 function normalizeApiBase(value: string): string {
   return String(value || '').trim().replace(/\/+$/, '');
 }
@@ -128,8 +138,16 @@ function buildPackProxyUrl(grade: number, apiBase = BACKEND_API_BASE): string {
   return `${normalizeApiBase(apiBase)}/tts/static-pack/by-grade/${grade}`;
 }
 
+function buildDrivePackUrl(grade: number): string {
+  const fileId = GRADE_PACK_FILE_IDS[grade];
+  return fileId
+    ? `https://drive.usercontent.google.com/download?id=${encodeURIComponent(fileId)}&export=download&confirm=t`
+    : '';
+}
+
 function buildPackProxyUrlCandidates(grade: number): string[] {
   const urls = [
+    buildDrivePackUrl(grade),
     buildPackProxyUrl(grade, BACKEND_API_BASE),
     buildPackProxyUrl(grade, PRODUCTION_TTS_PACK_API_BASE),
   ];
@@ -686,11 +704,26 @@ function parseStaticPackZip(bytes: Uint8Array, manifestUrl: string): StaticPackS
   }
 }
 
-async function fetchStaticPackSource(manifestUrl?: string): Promise<StaticPackSource | null> {
+async function fetchStaticPackSource(
+  manifestUrl?: string,
+  onSourceProgress?: (progress: StaticPackSyncProgress) => void,
+): Promise<StaticPackSource | null> {
   const resolvedUrl = normalizeManifestUrl(manifestUrl || getStaticPackManifestUrl());
   if (isAllGradesBundleUrl(resolvedUrl)) {
     const sources: StaticPackSource[] = [];
+    let processedGrades = 0;
+    let loadedGrades = 0;
+    let failedGrades = 0;
     for (const grade of ALL_GRADE_PACKS) {
+      onSourceProgress?.({
+        phase: 'manifest',
+        totalEntries: ALL_GRADE_PACKS.length,
+        processedEntries: processedGrades,
+        downloadedEntries: loadedGrades,
+        skippedEntries: 0,
+        failedEntries: failedGrades,
+        currentKey: `grade-${grade}`,
+      });
       let gradeSource: StaticPackSource | null = null;
       for (const candidateUrl of buildPackProxyUrlCandidates(grade)) {
         gradeSource = await fetchStaticPackSource(candidateUrl);
@@ -699,9 +732,30 @@ async function fetchStaticPackSource(manifestUrl?: string): Promise<StaticPackSo
         }
       }
       if (!gradeSource) {
+        failedGrades += 1;
+        onSourceProgress?.({
+          phase: 'manifest',
+          totalEntries: ALL_GRADE_PACKS.length,
+          processedEntries: processedGrades,
+          downloadedEntries: loadedGrades,
+          skippedEntries: 0,
+          failedEntries: failedGrades,
+          currentKey: `grade-${grade}`,
+        });
         return null;
       }
       sources.push(gradeSource);
+      processedGrades += 1;
+      loadedGrades += 1;
+      onSourceProgress?.({
+        phase: 'manifest',
+        totalEntries: ALL_GRADE_PACKS.length,
+        processedEntries: processedGrades,
+        downloadedEntries: loadedGrades,
+        skippedEntries: 0,
+        failedEntries: failedGrades,
+        currentKey: `grade-${grade}`,
+      });
     }
 
     const mergedEntries: StaticTtsManifestFile['entries'] = {};
@@ -1044,7 +1098,18 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
     failedEntries: 0,
   });
 
-  const source = await fetchStaticPackSource(manifestUrl);
+  const source = await fetchStaticPackSource(manifestUrl, (progress) => {
+    options.onProgress?.(progress);
+    setGlobalSyncStatus({
+      phase: 'syncing',
+      message: progress.totalEntries > 0
+        ? `Dang tai nguon audio pack (${progress.processedEntries}/${progress.totalEntries})`
+        : 'Dang doc thong tin goi audio...',
+      hint: buildSyncHint('syncing'),
+      progress,
+      canRetry: false,
+    });
+  });
   if (!source) {
     throw new Error(
       'Khong tai duoc goi tieng doc day du tu backend hoac goi tich hop san. Kiem tra mang va thu lai.',

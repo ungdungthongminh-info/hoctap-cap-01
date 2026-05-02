@@ -657,7 +657,9 @@ export function TtsSettingsPage() {
           <div className="mb-3 p-3 rounded-xl" style={{ background: '#EFF6FF' }}>
             <div className="text-xs font-bold mb-1">
               {packProgress.phase === 'manifest'
-                ? 'Đang đọc thông tin pack...'
+                ? packProgress.totalEntries > 0
+                  ? `Đang tải nguồn pack ${packProgress.processedEntries}/${packProgress.totalEntries}`
+                  : 'Đang đọc thông tin pack...'
                 : packProgress.phase === 'finalizing'
                   ? 'Đang chốt dữ liệu local...'
                   : `Đang tải ${packProgress.processedEntries}/${packProgress.totalEntries}`}
@@ -1090,4 +1092,3 @@ export function TtsSettingsPage() {
     </div>
   );
 }
-

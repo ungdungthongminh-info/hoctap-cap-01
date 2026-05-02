@@ -33,7 +33,9 @@ export function StaticAudioSyncBanner() {
       return '';
     }
     if (status.progress.phase === 'manifest') {
-      return 'Dang doc thong tin goi audio...';
+      return status.progress.totalEntries > 0
+        ? `Dang tai nguon audio pack: ${status.progress.processedEntries}/${status.progress.totalEntries}`
+        : 'Dang doc thong tin goi audio...';
     }
     if (status.progress.phase === 'finalizing') {
       return 'Dang chot du lieu audio local...';
