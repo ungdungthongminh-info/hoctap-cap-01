@@ -1313,8 +1313,12 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
   }
 
   const remoteManifestUrl = String(remotePolicy.manifestUrl || '').trim();
-  const manifestUrl = normalizeManifestUrl(options.manifestUrl || getStaticPackManifestUrl());
-  const effectiveManifestUrl = remoteManifestUrl ? normalizeManifestUrl(remoteManifestUrl) : manifestUrl;
+  const explicitManifestUrl = normalizeUrl(options.manifestUrl);
+  const hasExplicitManifestUrl = Boolean(explicitManifestUrl);
+  const manifestUrl = normalizeManifestUrl(hasExplicitManifestUrl ? explicitManifestUrl : getStaticPackManifestUrl());
+  const effectiveManifestUrl = !hasExplicitManifestUrl && remoteManifestUrl
+    ? normalizeManifestUrl(remoteManifestUrl)
+    : manifestUrl;
   setGlobalSyncStatus({
     phase: 'syncing',
     message: 'Dang tai goi tieng doc day du...',
