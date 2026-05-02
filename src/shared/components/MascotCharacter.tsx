@@ -2,6 +2,7 @@
    🐬 MASCOT CHARACTER — SVG mascot sống động
    Mỗi loài có chuyển động riêng để thu hút trẻ em
    ============================================ */
+import { useEffect, useState } from 'react';
 import { getThemeById, useTheme } from '../themes';
 
 type MascotSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -22,7 +23,12 @@ export function MascotCharacter({ size = 'md', className = '', onClick, themeId 
   const theme = themeId ? getThemeById(themeId) : currentTheme;
   const px = sizeMap[size];
   const Mascot = mascotMap[theme.id] || DolphinMascot;
-  const useAvatarImage = Boolean(theme.mascotAvatarSrc) && (size === 'xs' || size === 'sm' || size === 'md');
+  const [avatarLoadFailed, setAvatarLoadFailed] = useState(false);
+  const useAvatarImage = Boolean(theme.mascotAvatarSrc) && !avatarLoadFailed && (size === 'xs' || size === 'sm' || size === 'md');
+
+  useEffect(() => {
+    setAvatarLoadFailed(false);
+  }, [theme.id, theme.mascotAvatarSrc, size]);
 
   if (useAvatarImage && theme.mascotAvatarSrc) {
     return (
@@ -38,6 +44,7 @@ export function MascotCharacter({ size = 'md', className = '', onClick, themeId 
           src={theme.mascotAvatarSrc}
           alt={theme.mascotName}
           draggable={false}
+          onError={() => setAvatarLoadFailed(true)}
           style={{
             width: '100%',
             height: '100%',

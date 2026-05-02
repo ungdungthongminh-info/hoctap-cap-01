@@ -32,7 +32,7 @@
       "destination": "https://drive.usercontent.google.com/download?id=1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN&export=download&confirm=t"
     },
     {
-      "source": "/((?!tts-static-pack/by-grade/)(?!app-update\\.json).*)",
+      "source": "/((?!tts-static-pack/by-grade/)(?!app-update\\.json)(?!mascots/).*)",
       "destination": "/index.html"
     }
   ]

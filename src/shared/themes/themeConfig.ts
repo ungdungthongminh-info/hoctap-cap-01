@@ -28,12 +28,18 @@ export interface ThemeConfig {
   patternClass: string;
 }
 
+function resolvePublicAssetUrl(relativePath: string): string {
+  const baseUrl = import.meta.env.BASE_URL || '/';
+  const normalizedBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+  return `${normalizedBase}${relativePath.replace(/^\/+/, '')}`;
+}
+
 const oceanTheme: ThemeConfig = {
   id: 'ocean',
   name: 'Đại Dương Xanh',
   emoji: '🐬',
   mascotName: 'Dopi',
-  mascotAvatarSrc: '/mascots/dopi-avatar.png',
+  mascotAvatarSrc: resolvePublicAssetUrl('mascots/dopi-avatar.png'),
   colors: {
     primary: '#0EA5E9',
     primaryLight: '#7DD3FC',

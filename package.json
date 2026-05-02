@@ -11,7 +11,8 @@
     "preview:local": "npm run build && vite preview --host",
     "build:strict": "npm run data:check && npm run build",
     "electron:dev": "cross-env ELECTRON_RUN_AS_NODE=0 VITE_DEV_SERVER_URL=http://127.0.0.1:5190 concurrently \"vite --host 127.0.0.1 --port 5190 --strictPort\" \"wait-on http://127.0.0.1:5190 && electron .\"",
-    "electron:build": "npm run build && electron-builder",
+    "desktop:clean-artifacts": "node scripts/cleanup-desktop-artifacts.js",
+    "electron:build": "npm run desktop:clean-artifacts && npm run build && electron-builder",
     "db:seed": "node scripts/seed.js",
     "data:audit": "tsx scripts/audit-curriculum.ts",
     "data:check": "cross-env STRICT_DATA_CHECK=1 tsx scripts/audit-curriculum.ts",
@@ -60,7 +61,7 @@
           ]
         }
       ],
-      "artifactName": "HocHungKhoi_Desktopapp-Win.${ext}"
+      "artifactName": "HocHungKhoi_Desktopapp-Win-${version}.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -86,7 +87,7 @@
           ]
         }
       ],
-      "artifactName": "HocHungKhoi_Desktopapp-Macbook.${ext}"
+      "artifactName": "HocHungKhoi_Desktopapp-Macbook-${version}.${ext}"
     }
   },
   "dependencies": {
