@@ -36,6 +36,7 @@ import {
   getStaticPackSelectedGrade,
   getStaticPackUrlByGrade,
   isStaticPackAutoSyncEnabled,
+  setStaticPackSelectedGrade,
   setStaticPackAutoSyncEnabled,
   setStaticPackManifestUrl,
   syncStaticAudioPack,
@@ -118,6 +119,15 @@ function toRuntimeSourceLabel(provider: string | null, hasDesktopAudioStore: boo
   return 'Chua phat audio';
 }
 
+function parsePackGradeFromManifestUrl(manifestUrl?: string | null): number | null {
+  const raw = String(manifestUrl || '').trim();
+  if (!raw) return null;
+  const hit = raw.match(/\/by-grade\/(\d+)\.zip/i);
+  if (!hit) return null;
+  const grade = Number(hit[1]);
+  return Number.isFinite(grade) ? grade : null;
+}
+
 export function TtsSettingsPage() {
   const [ttsInfo, setTtsInfo] = useState<TtsInfo | null>(null);
   const [mode, setModeState] = useState(getTtsMode());
@@ -142,12 +152,14 @@ export function TtsSettingsPage() {
   const [packError, setPackError] = useState('');
   const [packSyncBlockedReason, setPackSyncBlockedReason] = useState('');
   const [runtimeStatus, setRuntimeStatus] = useState(getTtsRuntimeStatus());
+  const [selectedPackGrade, setSelectedPackGradeState] = useState(getStaticPackSelectedGrade());
 
   const pref = getVoicePreferenceOptions();
   const showAdmin = import.meta.env.DEV || isAdminUnlocked();
   const hasDesktopAudioStore = typeof window !== 'undefined' && Boolean(window.electronAPI?.audioPacks);
-  const selectedPackGrade = getStaticPackSelectedGrade();
   const selectedPackLabel = `Lớp ${selectedPackGrade}`;
+  const loadedPackGrade = parsePackGradeFromManifestUrl(packStats?.manifestUrl);
+  const selectedPackAlreadyLoaded = loadedPackGrade !== null && loadedPackGrade === selectedPackGrade;
   const hasFullOfflinePack = Boolean(
     packStats
     && Number(packStats.availableEntries || 0) > 0
@@ -333,6 +345,21 @@ export function TtsSettingsPage() {
     setStaticPackAutoSyncEnabled(enabled);
   };
 
+  const handlePackGradeChange = (gradeRaw: string) => {
+    const nextGrade = Number(gradeRaw);
+    if (!Number.isFinite(nextGrade)) {
+      return;
+    }
+    const normalizedGrade = setStaticPackSelectedGrade(nextGrade);
+    setSelectedPackGradeState(normalizedGrade);
+    if (!showAdmin) {
+      const nextUrl = getStaticPackUrlByGrade(normalizedGrade);
+      setPackManifestUrl(nextUrl);
+      setStaticPackManifestUrl(nextUrl);
+    }
+    setPackError('');
+  };
+
   const handleSavePackManifestUrl = () => {
     if (!showAdmin) {
       return;
@@ -364,7 +391,19 @@ export function TtsSettingsPage() {
     setPackProgress(null);
     setPackSyncing(true);
     try {
-      const selectedGrade = getStaticPackSelectedGrade();
+      const selectedGrade = selectedPackGrade;
+      if (
+        !hasDesktopAudioStore
+        && Number(packStats?.downloadedEntries || 0) > 0
+        && loadedPackGrade !== null
+        && loadedPackGrade !== selectedGrade
+      ) {
+        const confirmed = window.confirm('Tải lớp mới sẽ thay thế audio offline hiện tại. Bạn có muốn tiếp tục?');
+        if (!confirmed) {
+          setPackSyncing(false);
+          return;
+        }
+      }
       const syncUrl = showAdmin ? packManifestUrl : getStaticPackUrlByGrade(selectedGrade);
       logPackSync('start', { selectedGrade, syncUrl, showAdmin });
       if (!showAdmin) {
@@ -624,10 +663,28 @@ export function TtsSettingsPage() {
           <h3 className="font-bold">Tải gói tiếng đọc cho lớp hiện tại</h3>
         </div>
 
+        <div className="mb-3">
+          <label className="text-sm font-bold block mb-2">Chọn lớp tải offline</label>
+          <select
+            className="w-full p-2 rounded-lg text-sm"
+            style={{ border: '1px solid #D1D5DB', background: '#FFFFFF' }}
+            value={selectedPackGrade}
+            onChange={(event) => handlePackGradeChange(event.target.value)}
+            disabled={packSyncing}
+          >
+            {[0, 1, 2, 3, 4, 5].map((grade) => (
+              <option key={grade} value={grade}>{`Lớp ${grade}`}</option>
+            ))}
+          </select>
+        </div>
+
         <div className="mb-3 rounded-xl p-3" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
           <div className="text-sm font-bold">Gói đang tải: {selectedPackLabel}</div>
           <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
             Gói này chỉ dùng cho lớp đang chọn trên thiết bị hiện tại.
+          </div>
+          <div className="text-xs mt-1" style={{ color: '#92400E' }}>
+            Trình duyệt hiện chỉ lưu 1 lớp offline tại một thời điểm.
           </div>
         </div>
 
@@ -699,7 +756,11 @@ export function TtsSettingsPage() {
                   : 'Audio offline chưa tải'}
             </div>
             <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-              Đã lưu: {packStats?.downloadedEntries || 0}/{packStats?.availableEntries || 0} file | Dung lượng: {((packStats?.totalBytes || 0) / 1024 / 1024).toFixed(2)} MB
+              {selectedPackAlreadyLoaded
+                ? `${selectedPackLabel} đã tải ${packStats?.downloadedEntries || 0}/${packStats?.availableEntries || 0} file | Dung lượng: ${((packStats?.totalBytes || 0) / 1024 / 1024).toFixed(2)} MB`
+                : loadedPackGrade !== null
+                  ? `Hiện đang lưu Lớp ${loadedPackGrade}. ${selectedPackLabel} chưa tải trên trình duyệt này.`
+                  : `${selectedPackLabel} chưa tải trên trình duyệt này.`}
             </div>
           </div>
         )}
@@ -736,7 +797,7 @@ export function TtsSettingsPage() {
             disabled={packSyncing || !online || Boolean(packSyncBlockedReason)}
           >
             <Download size={16} />
-            {packSyncing ? 'Đang tải gói tiếng đọc cho lớp hiện tại...' : 'Tải gói tiếng đọc cho lớp hiện tại'}
+            {packSyncing ? `Đang tải audio cho ${selectedPackLabel}...` : `Tải audio cho ${selectedPackLabel}`}
           </button>
           <button
             type="button"
