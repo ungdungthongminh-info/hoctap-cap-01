@@ -396,12 +396,9 @@ function extractGradeFromPackUrl(value: string): number | null {
 }
 
 function buildFallbackManifestCandidates(resolvedUrl: string): string[] {
-  // For Vercel proxy URLs, skip direct Drive fallbacks — those fetches would be
-  // CORS-blocked from the browser. The proxy is the only viable path.
-  if (resolvedUrl.includes('/tts-static-pack/by-grade/')) {
-    return [];
-  }
-
+  // Even for Vercel proxy URLs, provide Drive fallbacks.
+  // If Vercel proxy returns HTML (Drive confirmation), fallback attempts may work
+  // (especially if user is authenticated to Google).
   const grade = extractGradeFromPackUrl(resolvedUrl);
   if (grade === null) {
     return [];
