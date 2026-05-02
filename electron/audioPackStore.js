@@ -265,11 +265,33 @@ function recalcTotalBytes(indexData) {
     .reduce((acc, item) => acc + Number(item?.summary?.bytes || 0), 0);
 }
 
-function buildLessonCoverage(summary) {
-  const byUsage = Array.isArray(summary?.byUsage) ? summary.byUsage : [];
-  const lesson = byUsage.find((item) => String(item?.usage || '') === 'lesson-read-all') || null;
-  const total = Number(lesson?.total || 0);
-  const available = Number(lesson?.available || 0);
+function buildLessonCoverage(manifestOrSummary) {
+  const byUsage = Array.isArray(manifestOrSummary?.byUsage) ? manifestOrSummary.byUsage : [];
+  const lessonFromUsage = byUsage.find((item) => String(item?.usage || '') === 'lesson-read-all') || null;
+  const usageTotal = Number(lessonFromUsage?.total || 0);
+  const usageAvailable = Number(lessonFromUsage?.available || 0);
+  if (usageTotal > 0) {
+    return {
+      available: usageAvailable,
+      total: usageTotal,
+      missing: Math.max(0, usageTotal - usageAvailable),
+      ratio: usageTotal > 0 ? Math.round((usageAvailable / usageTotal) * 100) : 0,
+    };
+  }
+
+  const entries = manifestOrSummary?.entries && typeof manifestOrSummary.entries === 'object'
+    ? Object.values(manifestOrSummary.entries)
+    : [];
+  let total = 0;
+  let available = 0;
+  for (const entry of entries) {
+    if (String(entry?.usage || '') !== 'lesson-read-all') continue;
+    total += 1;
+    if (Boolean(entry?.available)) {
+      available += 1;
+    }
+  }
+
   return {
     available,
     total,
@@ -354,7 +376,7 @@ async function downloadPack({ grade, replace = false, onProgress }) {
   const folderStats = await computeFolderStats(gradeDir);
   const summary = manifestData?.summary || null;
   const availableEntries = Number(summary?.availableEntries || 0);
-  const lessonCoverage = buildLessonCoverage(summary);
+  const lessonCoverage = buildLessonCoverage(manifestData || summary);
   const status = availableEntries > 0
     ? (folderStats.mp3Count >= availableEntries ? 'ready' : 'partial')
     : (folderStats.mp3Count > 0 ? 'downloaded' : 'error');
@@ -482,7 +504,7 @@ async function verifyPack({ grade }) {
   const manifestAbsolutePath = await findManifestFile(gradeDir);
   const manifestData = manifestAbsolutePath ? await readJsonSafe(manifestAbsolutePath, null) : null;
   const availableEntries = Number(manifestData?.summary?.availableEntries || 0);
-  const lessonCoverage = buildLessonCoverage(manifestData?.summary || null);
+  const lessonCoverage = buildLessonCoverage(manifestData || manifestData?.summary || null);
 
   const refreshed = {
     ...(existing || {

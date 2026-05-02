@@ -42,6 +42,31 @@ const sourceStateMeta: Record<LessonCardSourceState, { label: string; bg: string
   device: { label: 'Nguồn đọc: Giọng dự phòng của thiết bị', bg: '#FEF3C7', color: '#92400E' },
 };
 
+function logPlaybackRuntime(payload: {
+  cardId: number;
+  assetKey: string;
+  provider: string;
+  resolvedSource?: string | null;
+  assetUrl?: string;
+  status: string;
+  error?: string;
+}) {
+  const stamped = {
+    ...payload,
+    timestamp: new Date().toISOString(),
+  };
+  console.info('[TTS_RUNTIME_RESULT]', stamped);
+  try {
+    const host = window as unknown as { __HHK_TTS_RUNTIME_LOGS__?: unknown[] };
+    if (!Array.isArray(host.__HHK_TTS_RUNTIME_LOGS__)) {
+      host.__HHK_TTS_RUNTIME_LOGS__ = [];
+    }
+    host.__HHK_TTS_RUNTIME_LOGS__.push(stamped);
+  } catch {
+    // Ignore runtime logging failures.
+  }
+}
+
 function toCardSourceState(result: { resolvedSource?: string | null; provider: string }, hasDesktopAudioStore: boolean): LessonCardSourceState {
   if (result.resolvedSource === 'desktop-offline') return 'desktop-offline';
   if (result.resolvedSource === 'web-offline-pack' || result.resolvedSource === 'web-offline-manifest') return 'web-offline';
@@ -195,9 +220,10 @@ export function LessonDetailPage() {
     const currentRun = runRef.current;
     setSpeakingCardId(card.id);
 
+    const assetKey = buildLessonCardAssetKey(card.id);
     const result = await speakTextAsync(buildLessonCardNarrationText(card), lang, {
       policy: 'lesson-read-all',
-      assetKey: buildLessonCardAssetKey(card.id),
+      assetKey,
       onStatusChange: (status) => {
         if (currentRun !== runRef.current) return;
         if (status === 'loading' || status === 'fallback-native') {
@@ -211,6 +237,15 @@ export function LessonDetailPage() {
     });
 
     if (currentRun !== runRef.current) return;
+    logPlaybackRuntime({
+      cardId: card.id,
+      assetKey,
+      provider: result.provider,
+      resolvedSource: result.resolvedSource || null,
+      assetUrl: result.assetUrl,
+      status: result.status,
+      error: result.error,
+    });
     setSpeakingCardId(null);
     const isCompletedManagedAudio = result.status === 'completed'
       && (result.provider === 'static-manifest' || result.provider === 'google-cloud');
@@ -235,9 +270,10 @@ export function LessonDetailPage() {
       if (currentRun !== runRef.current) break;
 
       setSpeakingCardId(card.id);
+      const assetKey = buildLessonCardAssetKey(card.id);
       const result = await speakTextAsync(buildLessonCardNarrationText(card), lang, {
         policy: 'lesson-read-all',
-        assetKey: buildLessonCardAssetKey(card.id),
+        assetKey,
         onStatusChange: (status) => {
           if (currentRun !== runRef.current) return;
           if (status === 'loading' || status === 'fallback-native') {
@@ -253,6 +289,16 @@ export function LessonDetailPage() {
       if (currentRun !== runRef.current || result.status === 'stopped') {
         break;
       }
+
+      logPlaybackRuntime({
+        cardId: card.id,
+        assetKey,
+        provider: result.provider,
+        resolvedSource: result.resolvedSource || null,
+        assetUrl: result.assetUrl,
+        status: result.status,
+        error: result.error,
+      });
 
       const isCompletedManagedAudio = result.status === 'completed'
         && (result.provider === 'static-manifest' || result.provider === 'google-cloud');

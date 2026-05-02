@@ -363,19 +363,42 @@ function dedupeUrls(urls: string[]): string[] {
   return output;
 }
 
+function isLocalHostName(hostname: string): boolean {
+  const normalized = String(hostname || '').trim().toLowerCase();
+  return normalized === 'localhost' || normalized === '127.0.0.1' || normalized === '::1';
+}
+
+function isLocalRuntimeHost(): boolean {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  return isLocalHostName(window.location.hostname || '');
+}
+
 function buildUpdateFeedCandidates(): string[] {
   const envUrl = normalizeUrl(import.meta.env.VITE_APP_UPDATE_URL);
   const urls: string[] = [];
   if (envUrl) urls.push(envUrl);
 
+  let useProductionFallback = true;
   if (typeof window !== 'undefined') {
     const { protocol, origin } = window.location;
     if (protocol === 'http:' || protocol === 'https:') {
       urls.push(`${origin.replace(/\/+$/, '')}/app-update.json`);
     }
+    try {
+      const host = new URL(origin).hostname;
+      if (isLocalHostName(host)) {
+        useProductionFallback = false;
+      }
+    } catch {
+      // Keep fallback enabled if origin cannot be parsed.
+    }
   }
 
-  urls.push(FALLBACK_UPDATE_FEED_URL);
+  if (useProductionFallback) {
+    urls.push(FALLBACK_UPDATE_FEED_URL);
+  }
   return dedupeUrls(urls);
 }
 
@@ -406,15 +429,27 @@ function readRemoteTtsPolicyFromManifest(payload: unknown): RemoteTtsPolicy {
 }
 
 export async function getRemoteTtsPolicy(force = false): Promise<RemoteTtsPolicy> {
-  const now = Date.now();
-  if (!force && remoteTtsPolicyCache && remoteTtsPolicyCache.expiresAt > now) {
-    return remoteTtsPolicyCache.policy;
-  }
-
   const fallback: RemoteTtsPolicy = {
     offlineSyncEnabled: true,
     offlineSyncReason: '',
   };
+
+  if (typeof window !== 'undefined') {
+    const host = String(window.location.hostname || '').trim().toLowerCase();
+    if (isLocalHostName(host)) {
+      const nowLocal = Date.now();
+      remoteTtsPolicyCache = {
+        expiresAt: nowLocal + REMOTE_TTS_POLICY_TTL_MS,
+        policy: fallback,
+      };
+      return fallback;
+    }
+  }
+
+  const now = Date.now();
+  if (!force && remoteTtsPolicyCache && remoteTtsPolicyCache.expiresAt > now) {
+    return remoteTtsPolicyCache.policy;
+  }
 
   for (const url of buildUpdateFeedCandidates()) {
     try {
@@ -1265,7 +1300,7 @@ async function runManifestAudioPreflight(source: StaticPackSource): Promise<void
 
 export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): Promise<StaticPackSyncResult> {
   const remotePolicy = await getRemoteTtsPolicy();
-  if (!remotePolicy.offlineSyncEnabled) {
+  if (!isLocalRuntimeHost() && !remotePolicy.offlineSyncEnabled) {
     const blockedMessage = remotePolicy.offlineSyncReason || 'Tam khoa dong bo offline pack de tranh loi nguon audio.';
     setGlobalSyncStatus({
       phase: 'idle',
@@ -1578,7 +1613,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
 
 export async function ensureStaticPackAutoSync(): Promise<StaticPackSyncResult | null> {
   const remotePolicy = await getRemoteTtsPolicy();
-  if (!remotePolicy.offlineSyncEnabled) {
+  if (!isLocalRuntimeHost() && !remotePolicy.offlineSyncEnabled) {
     setGlobalSyncStatus({
       phase: 'idle',
       message: remotePolicy.offlineSyncReason || 'Tam khoa dong bo offline pack de tranh loi nguon audio.',

@@ -33,6 +33,8 @@ import {
   getRemoteTtsPolicy,
   getStaticAudioPackStats,
   getStaticPackManifestUrl,
+  getStaticPackSelectedGrade,
+  getStaticPackUrlByGrade,
   getStaticPackRecommendedLabel,
   getStaticPackRecommendedUrl,
   isStaticPackAutoSyncEnabled,
@@ -259,6 +261,12 @@ export function TtsSettingsPage() {
     void loadStats();
     void loadPackStats();
     void getRemoteTtsPolicy().then((policy) => {
+      const isLocalHost = typeof window !== 'undefined'
+        && (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' || window.location.hostname === '::1');
+      if (isLocalHost) {
+        setPackSyncBlockedReason('');
+        return;
+      }
       if (!policy.offlineSyncEnabled) {
         const reason = policy.offlineSyncReason || 'Tam khoa dong bo offline pack de tranh loi nguon audio.';
         setPackSyncBlockedReason(reason);
@@ -337,11 +345,29 @@ export function TtsSettingsPage() {
   };
 
   const handleSyncPack = async () => {
+    const logPackSync = (phase: string, payload?: Record<string, unknown>) => {
+      try {
+        const host = window as unknown as { __HHK_PACK_SYNC_LOGS__?: unknown[] };
+        if (!Array.isArray(host.__HHK_PACK_SYNC_LOGS__)) {
+          host.__HHK_PACK_SYNC_LOGS__ = [];
+        }
+        host.__HHK_PACK_SYNC_LOGS__.push({
+          phase,
+          timestamp: new Date().toISOString(),
+          ...(payload || {}),
+        });
+      } catch {
+        // Ignore logging failures.
+      }
+    };
+
     setPackError('');
     setPackProgress(null);
     setPackSyncing(true);
     try {
-      const syncUrl = showAdmin ? packManifestUrl : getStaticPackRecommendedUrl();
+      const selectedGrade = getStaticPackSelectedGrade();
+      const syncUrl = showAdmin ? packManifestUrl : getStaticPackUrlByGrade(selectedGrade);
+      logPackSync('start', { selectedGrade, syncUrl, showAdmin });
       if (!showAdmin) {
         setPackManifestUrl(syncUrl);
         setStaticPackManifestUrl(syncUrl);
@@ -351,10 +377,14 @@ export function TtsSettingsPage() {
         profileId: defaultProfileId || undefined,
         onProgress: (progress) => setPackProgress(progress),
       });
+      logPackSync('success', { selectedGrade, syncUrl });
       invalidateStaticTtsManifestCache();
       await loadPackStats();
       await loadStats();
     } catch (error) {
+      logPackSync('error', {
+        message: error instanceof Error ? error.message : 'sync-failed',
+      });
       setPackError(error instanceof Error ? error.message : 'Không đồng bộ được audio pack.');
     } finally {
       setPackSyncing(false);

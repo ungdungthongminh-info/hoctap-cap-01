@@ -54,6 +54,8 @@ export interface TtsPlaybackResult {
   status: 'completed' | 'stopped' | 'error';
   provider: TtsPlaybackProvider;
   resolvedSource?: TtsPlaybackResolvedSource;
+  assetKey?: string;
+  assetUrl?: string;
   cacheStatus?: 'hit' | 'miss' | 'fallback';
   fallbackNative?: boolean;
   error?: string;
@@ -513,6 +515,7 @@ function playAudioUrl(
   options: SpeakTextOptions,
   token: number,
   resolvedSource: TtsPlaybackResolvedSource = defaultResolvedSource(provider),
+  debugMeta?: { assetKey?: string; assetUrl?: string },
 ): Promise<TtsPlaybackResult> {
   return new Promise<TtsPlaybackResult>((resolve) => {
     const audio = new Audio(sourceUrl);
@@ -546,6 +549,8 @@ function playAudioUrl(
         status: 'completed',
         provider,
         resolvedSource,
+        assetKey: debugMeta?.assetKey,
+        assetUrl: debugMeta?.assetUrl,
         cacheStatus,
       });
     };
@@ -560,6 +565,8 @@ function playAudioUrl(
         status: 'error',
         provider,
         resolvedSource,
+        assetKey: debugMeta?.assetKey,
+        assetUrl: debugMeta?.assetUrl,
         cacheStatus,
         error: 'Cached MP3 playback failed.',
       });
@@ -575,6 +582,8 @@ function playAudioUrl(
         status: 'error',
         provider,
         resolvedSource,
+        assetKey: debugMeta?.assetKey,
+        assetUrl: debugMeta?.assetUrl,
         cacheStatus,
         error: 'Unable to start cached MP3 playback.',
       });
@@ -708,7 +717,16 @@ async function tryPlayFromStaticManifest(
           error: null,
         });
         options.onStatusChange?.('ready');
-        return await playAudioUrl(desktopUrl, 'static-manifest', 'hit', speed, options, token, 'desktop-offline');
+        return await playAudioUrl(
+          desktopUrl,
+          'static-manifest',
+          'hit',
+          speed,
+          options,
+          token,
+          'desktop-offline',
+          { assetKey, assetUrl: desktopUrl },
+        );
       }
     } catch {
       // Continue fallback chain below.
@@ -726,7 +744,16 @@ async function tryPlayFromStaticManifest(
           error: null,
         });
         options.onStatusChange?.('ready');
-        return await playAudioUrl(objectUrl, 'static-manifest', 'hit', speed, options, token, 'web-offline-pack');
+        return await playAudioUrl(
+          objectUrl,
+          'static-manifest',
+          'hit',
+          speed,
+          options,
+          token,
+          'web-offline-pack',
+          { assetKey, assetUrl: objectUrl },
+        );
       }
     } catch {
       // Continue fallback chain below.
@@ -749,7 +776,16 @@ async function tryPlayFromStaticManifest(
       error: null,
     });
     options.onStatusChange?.('ready');
-    return await playAudioUrl(entry.audioUrl, 'static-manifest', 'hit', speed, options, token, 'web-offline-manifest');
+    return await playAudioUrl(
+      entry.audioUrl,
+      'static-manifest',
+      'hit',
+      speed,
+      options,
+      token,
+      'web-offline-manifest',
+      { assetKey, assetUrl: entry.audioUrl },
+    );
   } catch {
     return null;
   }
@@ -832,6 +868,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
       status: 'error',
       provider: 'static-manifest',
       resolvedSource: 'web-offline-manifest',
+      assetKey: options.assetKey,
       cacheStatus: 'fallback',
       fallbackNative: false,
       error: reason,
