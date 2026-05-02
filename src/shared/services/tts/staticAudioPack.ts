@@ -130,6 +130,11 @@ const GRADE_PACK_FILE_IDS: Partial<Record<number, string>> = {
   6: '1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
 };
 
+function buildAppAssetUrl(pathname: string): string {
+  const base = import.meta.env.BASE_URL || '/';
+  return `${base.replace(/\/?$/, '/')}${pathname.replace(/^\/+/, '')}`.replace(/([^:]\/)\/+/g, '$1');
+}
+
 function normalizeApiBase(value: string): string {
   return String(value || '').trim().replace(/\/+$/, '');
 }
@@ -145,8 +150,13 @@ function buildDrivePackUrl(grade: number): string {
     : '';
 }
 
+function buildStaticHostedPackUrl(grade: number): string {
+  return buildAppAssetUrl(`tts-static-pack/by-grade/${grade}.zip`);
+}
+
 function buildPackProxyUrlCandidates(grade: number): string[] {
   const urls = [
+    buildStaticHostedPackUrl(grade),
     buildDrivePackUrl(grade),
     buildPackProxyUrl(grade, BACKEND_API_BASE),
     buildPackProxyUrl(grade, PRODUCTION_TTS_PACK_API_BASE),
@@ -155,13 +165,13 @@ function buildPackProxyUrlCandidates(grade: number): string[] {
 }
 
 const GRADE_PACK_LINKS: Partial<Record<number, string>> = {
-  0: buildPackProxyUrl(0),
-  1: buildPackProxyUrl(1),
-  2: buildPackProxyUrl(2),
-  3: buildPackProxyUrl(3),
-  4: buildPackProxyUrl(4),
-  5: buildPackProxyUrl(5),
-  6: buildPackProxyUrl(0),
+  0: buildStaticHostedPackUrl(0),
+  1: buildStaticHostedPackUrl(1),
+  2: buildStaticHostedPackUrl(2),
+  3: buildStaticHostedPackUrl(3),
+  4: buildStaticHostedPackUrl(4),
+  5: buildStaticHostedPackUrl(5),
+  6: buildStaticHostedPackUrl(0),
 };
 
 export const STATIC_PACK_GRADE_OPTIONS: Array<{ grade: number; label: string }> = [
@@ -393,7 +403,7 @@ function isLegacyBackendGradePackUrl(value: string): boolean {
 }
 
 function parseGradeFromPackUrl(value: string): number | null {
-  const match = String(value || '').match(/\/tts\/static-pack\/by-grade\/(pre-k|prek|pre_k|\d+)/i);
+  const match = String(value || '').match(/\/(?:tts\/static-pack|tts-static-pack)\/by-grade\/(pre-k|prek|pre_k|\d+)/i);
   if (!match) {
     return null;
   }
