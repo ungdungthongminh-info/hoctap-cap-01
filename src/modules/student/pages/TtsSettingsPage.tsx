@@ -64,7 +64,7 @@ const modeOptions: Array<{ value: TtsModeOption; label: string; desc: string }> 
   {
     value: 'static',
     label: 'Mặc định - Audio tĩnh',
-    desc: 'Dùng audio pre-generate trong manifest. Nếu thiếu file sẽ rơi về native.',
+    desc: 'Dùng audio pre-generate trong manifest. Nếu thiếu hoặc lỗi file sẽ thử audio mạng trước khi về giọng hệ thống.',
   },
   {
     value: 'advanced',

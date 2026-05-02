@@ -749,7 +749,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
 
   const policy = getTtsPolicy(options.policy || 'practice-on-demand');
   const desiredMode = options.mode || getTtsMode();
-  const allowAdvancedFallback = desiredMode === 'advanced' && policy.preferBackend;
+  const allowManagedFallback = desiredMode !== 'native' && policy.preferBackend;
   const speed = clampTtsSpeed(options.speed ?? getTtsSpeed());
   const backendVoiceId = resolveBackendVoiceId(lang, options.voiceId);
   const ssml = buildAdvancedSsml(cleanedText, lang, policy.id);
@@ -784,7 +784,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
     return staticPlayback;
   }
 
-  if (!allowAdvancedFallback) {
+  if (!allowManagedFallback) {
     setRuntimeStatus({
       isLoading: false,
       error: options.assetKey ? 'Audio tinh chua duoc tao san cho noi dung nay.' : null,
@@ -878,7 +878,7 @@ export async function prefetchText(text: string, lang: TtsLang = 'vi', options: 
 
   const policy = getTtsPolicy(options.policy || 'lesson-prefetch');
   const desiredMode = options.mode || getTtsMode();
-  const allowAdvancedFallback = desiredMode === 'advanced' && policy.preferBackend;
+  const allowManagedFallback = desiredMode !== 'native' && policy.preferBackend;
   const ssml = buildAdvancedSsml(cleanedText, lang, policy.id);
 
   if (options.assetKey) {
@@ -892,7 +892,7 @@ export async function prefetchText(text: string, lang: TtsLang = 'vi', options: 
     }
   }
 
-  if (!allowAdvancedFallback) {
+  if (!allowManagedFallback) {
     return { status: 'skipped' };
   }
 
