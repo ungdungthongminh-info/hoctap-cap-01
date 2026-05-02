@@ -278,6 +278,10 @@ function defaultManifestUrl(): string {
   return `${import.meta.env.BASE_URL || '/'}audio/tts/manifest.json`.replace(/([^:]\/)\/+/g, '$1');
 }
 
+function getBundledManifestUrl(): string {
+  return `${import.meta.env.BASE_URL || '/'}audio/tts/manifest.json`.replace(/([^:]\/)\/+/g, '$1');
+}
+
 function safeStorageGet(key: string): string {
   try {
     return localStorage.getItem(key) || '';
@@ -647,7 +651,9 @@ async function fetchStaticPackSource(manifestUrl?: string): Promise<StaticPackSo
     for (const grade of ALL_GRADE_PACKS) {
       const gradeSource = await fetchStaticPackSource(getStaticPackUrlByGrade(grade));
       if (!gradeSource) {
-        return null;
+        // Emergency fallback: use bundled static manifest/assets from current web build
+        // when production backend static-pack route is not ready.
+        return fetchStaticPackSource(getBundledManifestUrl());
       }
       sources.push(gradeSource);
     }
@@ -945,7 +951,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
   const source = await fetchStaticPackSource(manifestUrl);
   if (!source) {
     throw new Error(
-      'Khong tai duoc goi tieng doc day du tu backend. Kiem tra mang va thu lai.',
+      'Khong tai duoc goi tieng doc day du tu backend hoac goi tich hop san. Kiem tra mang va thu lai.',
     );
   }
   const manifest = source.manifest;
