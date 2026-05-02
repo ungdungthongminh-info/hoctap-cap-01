@@ -117,9 +117,23 @@ let globalSyncStatus: StaticPackGlobalSyncStatus = {
 
 const ALL_GRADES_BUNDLE_URL = 'bundle://tts-static-pack/all-grades';
 const ALL_GRADE_PACKS = [0, 1, 2, 3, 4, 5] as const;
+const PRODUCTION_TTS_PACK_API_BASE = 'https://www.ungdungthongminh.shop/api/v1';
+const MAX_MANIFEST_SOURCE_FAILURES_BEFORE_ABORT = 25;
 
-function buildPackProxyUrl(grade: number): string {
-  return `${BACKEND_API_BASE}/tts/static-pack/by-grade/${grade}`;
+function normalizeApiBase(value: string): string {
+  return String(value || '').trim().replace(/\/+$/, '');
+}
+
+function buildPackProxyUrl(grade: number, apiBase = BACKEND_API_BASE): string {
+  return `${normalizeApiBase(apiBase)}/tts/static-pack/by-grade/${grade}`;
+}
+
+function buildPackProxyUrlCandidates(grade: number): string[] {
+  const urls = [
+    buildPackProxyUrl(grade, BACKEND_API_BASE),
+    buildPackProxyUrl(grade, PRODUCTION_TTS_PACK_API_BASE),
+  ];
+  return urls.filter((url, index) => url && urls.indexOf(url) === index);
 }
 
 const GRADE_PACK_LINKS: Partial<Record<number, string>> = {
@@ -278,10 +292,6 @@ function defaultManifestUrl(): string {
   return `${import.meta.env.BASE_URL || '/'}audio/tts/manifest.json`.replace(/([^:]\/)\/+/g, '$1');
 }
 
-function getBundledManifestUrl(): string {
-  return `${import.meta.env.BASE_URL || '/'}audio/tts/manifest.json`.replace(/([^:]\/)\/+/g, '$1');
-}
-
 function safeStorageGet(key: string): string {
   try {
     return localStorage.getItem(key) || '';
@@ -362,6 +372,14 @@ function isLegacyBackendGradePackUrl(value: string): boolean {
     return false;
   }
   return /\/api\/v1\/tts\/static-pack\/by-grade\/\d+/.test(normalized);
+}
+
+function parseGradeFromPackUrl(value: string): number | null {
+  const match = String(value || '').match(/\/tts\/static-pack\/by-grade\/(pre-k|prek|pre_k|\d+)/i);
+  if (!match) {
+    return null;
+  }
+  return normalizePackGrade(match[1]);
 }
 
 export function getStaticPackRecommendedUrl(): string {
@@ -528,7 +546,18 @@ function resolveEntryAudioUrl(entry: { assetPath: string; audioUrl?: string }, m
   }
 
   try {
-    return new URL(assetPath.replace(/^\/+/, ''), manifestUrl).toString();
+    const normalizedAssetPath = normalizeAssetPath(assetPath);
+    if (/^(https?:|blob:|file:|data:)/i.test(normalizedAssetPath)) {
+      return normalizedAssetPath;
+    }
+
+    const manifestBase = new URL(manifestUrl, window.location.href);
+    if (/^audio\/tts\//i.test(normalizedAssetPath)) {
+      const appBase = new URL(import.meta.env.BASE_URL || '/', window.location.href);
+      return new URL(normalizedAssetPath, appBase).toString();
+    }
+
+    return new URL(normalizedAssetPath, manifestBase).toString();
   } catch {
     return assetPath;
   }
@@ -662,11 +691,15 @@ async function fetchStaticPackSource(manifestUrl?: string): Promise<StaticPackSo
   if (isAllGradesBundleUrl(resolvedUrl)) {
     const sources: StaticPackSource[] = [];
     for (const grade of ALL_GRADE_PACKS) {
-      const gradeSource = await fetchStaticPackSource(getStaticPackUrlByGrade(grade));
+      let gradeSource: StaticPackSource | null = null;
+      for (const candidateUrl of buildPackProxyUrlCandidates(grade)) {
+        gradeSource = await fetchStaticPackSource(candidateUrl);
+        if (gradeSource) {
+          break;
+        }
+      }
       if (!gradeSource) {
-        // Emergency fallback: use bundled static manifest/assets from current web build
-        // when production backend static-pack route is not ready.
-        return fetchStaticPackSource(getBundledManifestUrl());
+        return null;
       }
       sources.push(gradeSource);
     }
@@ -768,7 +801,13 @@ async function fetchStaticPackSource(manifestUrl?: string): Promise<StaticPackSo
     };
   }
 
-  const candidateUrls = [resolvedUrl];
+  const gradeFromPackUrl = parseGradeFromPackUrl(resolvedUrl);
+  const candidateUrls = gradeFromPackUrl === null
+    ? [resolvedUrl]
+    : [
+      resolvedUrl,
+      ...buildPackProxyUrlCandidates(gradeFromPackUrl),
+    ].filter((url, index, list) => url && list.indexOf(url) === index);
 
   for (const candidateUrl of candidateUrls) {
     try {
@@ -1062,6 +1101,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
   let skippedEntries = 0;
   let failedEntries = 0;
   let firstFailureReason = '';
+  let manifestSourceFailureStreak = 0;
   let totalBytes = totalBytesFromState;
   let pendingIndexWrites = 0;
   const db = await openDb();
@@ -1071,9 +1111,11 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
 
   try {
     for (const entry of entries) {
+      let fatalSyncError: Error | null = null;
       const cachedBlob = await getAssetBlobWithDb(db, entry.key).catch(() => null);
       const alreadySynced = assetIndex[entry.key] === entry.textHash && isLikelyAudioBlob(cachedBlob);
       if (alreadySynced && !options.forceRedownload) {
+        manifestSourceFailureStreak = 0;
         processedEntries += 1;
         skippedEntries += 1;
         options.onProgress?.({
@@ -1109,6 +1151,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
         totalBytes += blob.size - previousByteSize;
         if (totalBytes < 0) totalBytes = 0;
         downloadedEntries += 1;
+        manifestSourceFailureStreak = 0;
         assetIndex[entry.key] = entry.textHash;
         pendingIndexWrites += 1;
         if (pendingIndexWrites >= 25) {
@@ -1119,6 +1162,14 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
         failedEntries += 1;
         if (!firstFailureReason) {
           firstFailureReason = error instanceof Error ? error.message : 'Unknown audio download error.';
+        }
+        if (source.sourceType === 'manifest' && downloadedEntries === 0 && skippedEntries === 0) {
+          manifestSourceFailureStreak += 1;
+          if (manifestSourceFailureStreak >= MAX_MANIFEST_SOURCE_FAILURES_BEFORE_ABORT) {
+            fatalSyncError = new Error(
+              `Nguon audio pack khong tra ve MP3 hop le (${firstFailureReason}). Vui long thu lai sau khi backend/proxy audio pack san sang.`,
+            );
+          }
         }
       } finally {
         processedEntries += 1;
@@ -1146,6 +1197,17 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
           },
           canRetry: false,
         });
+      }
+
+      if (fatalSyncError) {
+        setGlobalSyncStatus({
+          phase: 'error',
+          message: 'Khong tai duoc audio pack: nguon tai khong co MP3 hop le.',
+          hint: fatalSyncError.message,
+          progress: null,
+          canRetry: true,
+        });
+        throw fatalSyncError;
       }
     }
   } finally {

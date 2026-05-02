@@ -157,10 +157,41 @@ function buildDownloadCandidates(fileId) {
   ];
 }
 
+function isZipHeader(buffer) {
+  return buffer.length >= 4
+    && buffer[0] === 0x50
+    && buffer[1] === 0x4b
+    && (buffer[2] === 0x03 || buffer[2] === 0x05 || buffer[2] === 0x07)
+    && (buffer[3] === 0x04 || buffer[3] === 0x06 || buffer[3] === 0x08);
+}
+
+function isHtmlContentType(contentType) {
+  const normalized = String(contentType || '').toLowerCase();
+  return normalized.includes('text/html') || normalized.includes('application/xhtml');
+}
+
+async function assertZipFile(filePath) {
+  const handle = await fsp.open(filePath, 'r');
+  try {
+    const header = Buffer.alloc(4);
+    const { bytesRead } = await handle.read(header, 0, 4, 0);
+    if (bytesRead < 4 || !isZipHeader(header)) {
+      throw new Error('Nguon tai khong tra ve file ZIP audio hop le.');
+    }
+  } finally {
+    await handle.close();
+  }
+}
+
 async function streamDownload(url, outputPath, onProgress) {
   const response = await fetch(url);
   if (!response.ok || !response.body) {
     throw new Error(`Tai zip that bai (${response.status})`);
+  }
+
+  const contentType = response.headers.get('content-type') || '';
+  if (isHtmlContentType(contentType)) {
+    throw new Error(`Nguon tai tra ve HTML thay vi ZIP (${contentType}).`);
   }
 
   const totalBytes = Number(response.headers.get('content-length') || 0);
@@ -206,8 +237,11 @@ async function downloadGradeZip({ grade, zipPath, onProgress }) {
 
   for (const candidateUrl of candidates) {
     try {
-      return await streamDownload(candidateUrl, zipPath, onProgress);
+      const result = await streamDownload(candidateUrl, zipPath, onProgress);
+      await assertZipFile(zipPath);
+      return result;
     } catch (error) {
+      await fsp.rm(zipPath, { force: true }).catch(() => undefined);
       lastError = error;
     }
   }
