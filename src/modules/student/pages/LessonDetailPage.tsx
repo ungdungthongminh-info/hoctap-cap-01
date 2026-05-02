@@ -9,6 +9,7 @@ import { buildLessonCardAssetKey } from '../../../shared/services/tts/ttsAssetKe
 import { buildLessonCardNarrationText } from '../../../shared/services/tts/ttsNarration';
 
 type LessonCardAudioState = 'idle' | 'loading' | 'ready' | 'playing';
+type LessonCardSourceState = 'unknown' | 'desktop-offline' | 'web-offline' | 'online' | 'device';
 
 const cardTypeIcon: Record<string, { icon: React.ReactNode; color: string; bg: string }> = {
   intro: { icon: <BookOpen size={20} />, color: '#2563EB', bg: '#DBEAFE' },
@@ -33,12 +34,35 @@ const audioStateMeta: Record<LessonCardAudioState, { label: string; bg: string; 
   playing: { label: 'Đang phát', bg: '#DBEAFE', color: '#1D4ED8' },
 };
 
+const sourceStateMeta: Record<LessonCardSourceState, { label: string; bg: string; color: string }> = {
+  unknown: { label: 'Nguồn đọc: Chưa đọc', bg: '#F3F4F6', color: '#6B7280' },
+  'desktop-offline': { label: 'Nguồn đọc: Từ máy (offline)', bg: '#DCFCE7', color: '#166534' },
+  'web-offline': { label: 'Nguồn đọc: Đã lưu sẵn', bg: '#E0F2FE', color: '#0C4A6E' },
+  online: { label: 'Nguồn đọc: Từ mạng', bg: '#DBEAFE', color: '#1D4ED8' },
+  device: { label: 'Nguồn đọc: Giọng dự phòng của thiết bị', bg: '#FEF3C7', color: '#92400E' },
+};
+
+function toCardSourceState(result: { resolvedSource?: string | null; provider: string }, hasDesktopAudioStore: boolean): LessonCardSourceState {
+  if (result.resolvedSource === 'desktop-offline') return 'desktop-offline';
+  if (result.resolvedSource === 'web-offline-pack' || result.resolvedSource === 'web-offline-manifest') return 'web-offline';
+  if (result.resolvedSource === 'online-audio') return 'online';
+  if (result.resolvedSource === 'device-voice' || result.resolvedSource === 'fallback-device-voice') return 'device';
+
+  if (result.provider === 'native') return 'device';
+  if (result.provider === 'google-cloud') return 'online';
+  if (result.provider === 'static-manifest') {
+    return hasDesktopAudioStore ? 'desktop-offline' : 'web-offline';
+  }
+  return 'unknown';
+}
+
 export function LessonDetailPage() {
   const { lessonId } = useParams<{ lessonId: string }>();
   const navigate = useNavigate();
   const { state, getLessonCards, getLessonQuestions, getLessonProgress } = useAppData();
   const [speakingCardId, setSpeakingCardId] = useState<number | null>(null);
   const [cardStatuses, setCardStatuses] = useState<Record<number, LessonCardAudioState>>({});
+  const [cardSources, setCardSources] = useState<Record<number, LessonCardSourceState>>({});
   const [isReadingAll, setIsReadingAll] = useState(false);
   const [isPrefetching, setIsPrefetching] = useState(false);
   const runRef = useRef(0);
@@ -53,6 +77,7 @@ export function LessonDetailPage() {
   const questionCount = getLessonQuestions(id).length;
   const progress = getLessonProgress(id);
   const lang = state.student.subjectCode === 'english' ? 'en' : 'vi';
+  const hasDesktopAudioStore = typeof window !== 'undefined' && Boolean(window.electronAPI?.audioPacks);
 
   const setCardStatus = useCallback((cardId: number, status: LessonCardAudioState) => {
     setCardStatuses((prev) => (prev[cardId] === status ? prev : { ...prev, [cardId]: status }));
@@ -111,6 +136,13 @@ export function LessonDetailPage() {
       const next: Record<number, LessonCardAudioState> = {};
       cards.forEach((card) => {
         next[card.id] = prev[card.id] === 'ready' ? 'ready' : 'idle';
+      });
+      return next;
+    });
+    setCardSources((prev) => {
+      const next: Record<number, LessonCardSourceState> = {};
+      cards.forEach((card) => {
+        next[card.id] = prev[card.id] || 'unknown';
       });
       return next;
     });
@@ -181,7 +213,8 @@ export function LessonDetailPage() {
     if (currentRun !== runRef.current) return;
     setSpeakingCardId(null);
     setCardStatus(card.id, result.provider === 'static-manifest' || result.provider === 'google-cloud' ? 'ready' : 'idle');
-  }, [cardStatuses, isReadingAll, lang, resetPlaybackState, setCardStatus, speakingCardId]);
+    setCardSources((prev) => ({ ...prev, [card.id]: toCardSourceState(result, hasDesktopAudioStore) }));
+  }, [cardStatuses, hasDesktopAudioStore, isReadingAll, lang, resetPlaybackState, setCardStatus, speakingCardId]);
 
   const readAllCards = useCallback(async () => {
     if (isReadingAll) {
@@ -220,13 +253,14 @@ export function LessonDetailPage() {
       }
 
       setCardStatus(card.id, result.provider === 'static-manifest' || result.provider === 'google-cloud' ? 'ready' : 'idle');
+      setCardSources((prev) => ({ ...prev, [card.id]: toCardSourceState(result, hasDesktopAudioStore) }));
     }
 
     if (currentRun === runRef.current) {
       setIsReadingAll(false);
       setSpeakingCardId(null);
     }
-  }, [cards, isReadingAll, lang, resetPlaybackState, setCardStatus]);
+  }, [cards, hasDesktopAudioStore, isReadingAll, lang, resetPlaybackState, setCardStatus]);
 
   if (isHydrating) {
     return (
@@ -321,6 +355,7 @@ export function LessonDetailPage() {
         {cards.map((card, index) => {
           const cardType = cardTypeIcon[card.cardType] || cardTypeIcon.intro;
           const audioState = audioStateMeta[cardStatuses[card.id] || 'idle'];
+          const sourceState = sourceStateMeta[cardSources[card.id] || 'unknown'];
           const isCardPlaying = speakingCardId === card.id;
 
           return (
@@ -343,6 +378,12 @@ export function LessonDetailPage() {
                   style={{ background: audioState.bg, color: audioState.color }}
                 >
                   {audioState.label}
+                </span>
+                <span
+                  className="text-[11px] px-2 py-1 rounded-full"
+                  style={{ background: sourceState.bg, color: sourceState.color }}
+                >
+                  {sourceState.label}
                 </span>
                 <span className="flex-1" />
                 <button

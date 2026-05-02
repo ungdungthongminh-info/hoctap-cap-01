@@ -29,6 +29,60 @@ interface ElectronAPI {
     quitAndInstall: () => Promise<boolean>;
     onStatus: (handler: (payload: unknown) => void) => () => void;
   };
+  audioPacks: {
+    getStorageInfo: () => Promise<{
+      rootPath: string;
+      totalBytes: number;
+      packCount: number;
+      schemaVersion: number;
+    }>;
+    list: () => Promise<{
+      schemaVersion: number;
+      updatedAt: string;
+      storageRoot: string;
+      totalBytes: number;
+      packs: Array<{
+        grade: number;
+        gradeLabel: string;
+        status: string;
+        contentVersion: string;
+        installedAt: string;
+        updatedAt: string;
+        profiles?: Array<{
+          id: string;
+          label: string;
+          voiceId: string;
+        }>;
+        summary: {
+          bytes: number;
+          fileCount: number;
+          mp3Count: number;
+          availableEntries: number;
+          missingEntries: number;
+          isPlayableOffline: boolean;
+          lessonCoverage?: {
+            available: number;
+            total: number;
+            missing: number;
+            ratio: number;
+          };
+        };
+      }>;
+    }>;
+    download: (payload: { grade: number; replace?: boolean }) => Promise<unknown>;
+    remove: (payload: { grade: number }) => Promise<unknown>;
+    verify: (payload: { grade: number }) => Promise<unknown>;
+    openFolder: (payload?: { grade?: number }) => Promise<{ path: string }>;
+    getAssetUrl: (payload: { assetKey: string; grade?: number }) => Promise<{ url: string; grade: number; profileId: string } | null>;
+    onProgress: (handler: (payload: {
+      grade: number;
+      phase: 'downloading' | 'extracting' | 'done';
+      downloadedBytes: number;
+      totalBytes: number;
+      message: string;
+      updatedAt: number;
+    }) => void) => () => void;
+  };
 }
 
 declare global {

@@ -5,6 +5,7 @@ import {
   fetchTtsCacheStats,
   getGoogleVoiceCatalog,
   getPreferredVoice,
+  getTtsRuntimeStatus,
   getTtsCacheMode,
   getTtsMode,
   getTtsSpeed,
@@ -16,10 +17,12 @@ import {
   setTtsSpeed,
   speakTextAsync,
   stopSpeaking,
+  subscribeTtsRuntime,
   type TtsCacheMode,
   type TtsInfo,
 } from '../../../shared/utils/sounds';
 import { MascotCharacter } from '../../../shared/components';
+import { DesktopAudioPackPanel } from '../../../shared/components/DesktopAudioPackPanel';
 import { buildVoiceAuditAssetKey } from '../../../shared/services/tts/ttsAssetKeys';
 import { VOICE_AUDIT_LINES } from '../../../shared/services/tts/ttsNarration';
 import { invalidateStaticTtsManifestCache } from '../../../shared/services/tts/staticTtsManifest';
@@ -89,6 +92,15 @@ function toPlaybackLabel(source: PlaybackSource): string {
   return 'native fallback';
 }
 
+function toRuntimeSourceLabel(provider: string | null, hasDesktopAudioStore: boolean): string {
+  if (provider === 'static-manifest') {
+    return hasDesktopAudioStore ? 'Dang doc tu tep tren may' : 'Dang doc tu du lieu da luu tren web';
+  }
+  if (provider === 'google-cloud') return 'Dang doc qua mang';
+  if (provider === 'native') return 'Dang doc bang giong cua thiet bi';
+  return 'Chua phat audio';
+}
+
 export function TtsSettingsPage() {
   const [ttsInfo, setTtsInfo] = useState<TtsInfo | null>(null);
   const [mode, setModeState] = useState(getTtsMode());
@@ -112,9 +124,11 @@ export function TtsSettingsPage() {
   const [packClearing, setPackClearing] = useState(false);
   const [packProgress, setPackProgress] = useState<StaticPackSyncProgress | null>(null);
   const [packError, setPackError] = useState('');
+  const [runtimeStatus, setRuntimeStatus] = useState(getTtsRuntimeStatus());
 
   const pref = getVoicePreferenceOptions();
   const showAdmin = import.meta.env.DEV || isAdminUnlocked();
+  const hasDesktopAudioStore = typeof window !== 'undefined' && Boolean(window.electronAPI?.audioPacks);
   const recommendedPackLabel = getStaticPackRecommendedLabel(selectedPackGrade);
   const visibleModeOptions = showAdmin
     ? modeOptions
@@ -212,6 +226,9 @@ export function TtsSettingsPage() {
 
   useEffect(() => {
     const cleanup = onVoicesReady((info) => setTtsInfo(info));
+    const unsubscribeRuntime = subscribeTtsRuntime(() => {
+      setRuntimeStatus(getTtsRuntimeStatus());
+    });
     void loadStats();
     void loadPackStats();
 
@@ -220,6 +237,7 @@ export function TtsSettingsPage() {
     window.addEventListener('offline', handleNetwork);
     return () => {
       cleanup();
+      unsubscribeRuntime();
       window.removeEventListener('online', handleNetwork);
       window.removeEventListener('offline', handleNetwork);
     };
@@ -485,11 +503,11 @@ export function TtsSettingsPage() {
         <div className="card flex items-start gap-3">
           <MonitorSpeaker size={20} style={{ color: ttsInfo?.hasVietnameseVoice ? 'var(--color-success)' : '#D97706' }} />
           <div>
-            <div className="text-sm font-bold" style={{ color: ttsInfo?.hasVietnameseVoice ? 'var(--color-success)' : '#D97706' }}>
-              {ttsInfo?.hasVietnameseVoice ? 'Co native TV du phong' : 'Chua thay native TV'}
+            <div className="text-sm font-bold" style={{ color: runtimeStatus.activeProvider ? 'var(--color-success)' : '#D97706' }}>
+              {toRuntimeSourceLabel(runtimeStatus.activeProvider, hasDesktopAudioStore)}
             </div>
             <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-              Native la lop an toan khi static/advanced khong kha dung.
+              Nguon phat hien tai se doi theo audio da tai, online, hoac giong du phong cua may.
             </div>
           </div>
         </div>
@@ -534,6 +552,9 @@ export function TtsSettingsPage() {
         )}
       </div>
 
+      <DesktopAudioPackPanel />
+
+      {!hasDesktopAudioStore && (
       <div className="card mb-4">
         <div className="flex items-center gap-2 mb-3">
           <Download size={18} style={{ color: 'var(--color-primary)' }} />
@@ -675,6 +696,7 @@ export function TtsSettingsPage() {
           Sau khi tải xong, người học có thể nghe offline từ file đã lưu trên máy, không cần gọi API TTS cho flow mặc định.
         </p>
       </div>
+      )}
 
       {showAdmin ? (
       <div className="card mb-4">

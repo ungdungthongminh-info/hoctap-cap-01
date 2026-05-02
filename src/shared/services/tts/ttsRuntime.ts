@@ -10,6 +10,7 @@ import { getStaticTtsManifestEntry, getStaticTtsManifestSummary, prefetchStaticT
 import { getTtsPolicy, type TtsPolicyId } from './ttsPolicy';
 import { buildNarrationSsml, type TtsSsmlStyleId } from './ttsNarration';
 import { getStaticPackAudioBlob } from './staticAudioPack';
+import { getDesktopAudioAssetUrl, getPreferredDesktopPackGrade } from './desktopAudioPack';
 
 export type { TtsCacheStats } from './ttsClient';
 
@@ -17,6 +18,13 @@ export type TtsLang = 'vi' | 'en';
 export type TtsMode = 'static' | 'advanced' | 'native';
 export type TtsCacheMode = 'manual' | 'balanced' | 'aggressive';
 export type TtsPlaybackProvider = 'static-manifest' | 'google-cloud' | 'native';
+export type TtsPlaybackResolvedSource =
+  | 'desktop-offline'
+  | 'web-offline-pack'
+  | 'web-offline-manifest'
+  | 'online-audio'
+  | 'device-voice'
+  | 'fallback-device-voice';
 export type TtsPlaybackEvent = 'loading' | 'ready' | 'playing' | 'ended' | 'stopped' | 'error' | 'fallback-native';
 
 export interface TtsInfo {
@@ -44,6 +52,7 @@ export interface SpeakTextOptions {
 export interface TtsPlaybackResult {
   status: 'completed' | 'stopped' | 'error';
   provider: TtsPlaybackProvider;
+  resolvedSource?: TtsPlaybackResolvedSource;
   cacheStatus?: 'hit' | 'miss' | 'fallback';
   fallbackNative?: boolean;
   error?: string;
@@ -357,6 +366,12 @@ function completePlayback(result: TtsPlaybackResult): void {
   resolver?.(result);
 }
 
+function defaultResolvedSource(provider: TtsPlaybackProvider): TtsPlaybackResolvedSource {
+  if (provider === 'google-cloud') return 'online-audio';
+  if (provider === 'static-manifest') return 'web-offline-manifest';
+  return 'device-voice';
+}
+
 export function stopSpeaking(): void {
   playbackToken += 1;
 
@@ -379,6 +394,7 @@ export function stopSpeaking(): void {
   completePlayback({
     status: 'stopped',
     provider,
+    resolvedSource: defaultResolvedSource(provider),
     cacheStatus: runtimeStatus.lastCacheStatus || undefined,
   });
 }
@@ -407,7 +423,14 @@ export function isSpeaking(): boolean {
   return runtimeStatus.isSpeaking || ('speechSynthesis' in window && window.speechSynthesis.speaking);
 }
 
-function playNativeSpeech(text: string, lang: TtsLang, speed: number, options: SpeakTextOptions, token: number): Promise<TtsPlaybackResult> {
+function playNativeSpeech(
+  text: string,
+  lang: TtsLang,
+  speed: number,
+  options: SpeakTextOptions,
+  token: number,
+  resolvedSource: TtsPlaybackResolvedSource = 'device-voice',
+): Promise<TtsPlaybackResult> {
   return new Promise<TtsPlaybackResult>((resolve) => {
     if (!('speechSynthesis' in window)) {
       setRuntimeStatus({
@@ -420,6 +443,7 @@ function playNativeSpeech(text: string, lang: TtsLang, speed: number, options: S
       resolve({
         status: 'error',
         provider: 'native',
+        resolvedSource,
         error: 'Speech synthesis is unavailable.',
       });
       return;
@@ -455,6 +479,7 @@ function playNativeSpeech(text: string, lang: TtsLang, speed: number, options: S
       completePlayback({
         status: 'completed',
         provider: 'native',
+        resolvedSource,
         cacheStatus: runtimeStatus.lastCacheStatus || undefined,
       });
     };
@@ -468,6 +493,7 @@ function playNativeSpeech(text: string, lang: TtsLang, speed: number, options: S
       completePlayback({
         status: 'error',
         provider: 'native',
+        resolvedSource,
         cacheStatus: runtimeStatus.lastCacheStatus || undefined,
         error: 'Native TTS playback failed.',
       });
@@ -485,6 +511,7 @@ function playAudioUrl(
   speed: number,
   options: SpeakTextOptions,
   token: number,
+  resolvedSource: TtsPlaybackResolvedSource = defaultResolvedSource(provider),
 ): Promise<TtsPlaybackResult> {
   return new Promise<TtsPlaybackResult>((resolve) => {
     const audio = new Audio(sourceUrl);
@@ -517,6 +544,7 @@ function playAudioUrl(
       finish({
         status: 'completed',
         provider,
+        resolvedSource,
         cacheStatus,
       });
     };
@@ -530,6 +558,7 @@ function playAudioUrl(
       finish({
         status: 'error',
         provider,
+        resolvedSource,
         cacheStatus,
         error: 'Cached MP3 playback failed.',
       });
@@ -544,6 +573,7 @@ function playAudioUrl(
       finish({
         status: 'error',
         provider,
+        resolvedSource,
         cacheStatus,
         error: 'Unable to start cached MP3 playback.',
       });
@@ -622,7 +652,7 @@ async function tryPlayFromLocalCache(
       error: null,
     });
     options.onStatusChange?.('ready');
-    return playAudioUrl(objectUrl, 'google-cloud', 'hit', speed, options, token);
+    return playAudioUrl(objectUrl, 'google-cloud', 'hit', speed, options, token, 'online-audio');
   } catch {
     return null;
   }
@@ -636,6 +666,23 @@ async function tryPlayFromStaticManifest(
 ): Promise<TtsPlaybackResult | null> {
   if (assetKey) {
     try {
+      const preferredGrade = getPreferredDesktopPackGrade();
+      const desktopUrl = await getDesktopAudioAssetUrl(assetKey, preferredGrade);
+      if (desktopUrl) {
+        setRuntimeStatus({
+          lastCacheStatus: 'hit',
+          error: null,
+        });
+        options.onStatusChange?.('ready');
+        return await playAudioUrl(desktopUrl, 'static-manifest', 'hit', speed, options, token, 'desktop-offline');
+      }
+    } catch {
+      // Continue fallback chain below.
+    }
+  }
+
+  if (assetKey) {
+    try {
       const blob = await getStaticPackAudioBlob(assetKey);
       if (blob) {
         const objectUrl = URL.createObjectURL(blob);
@@ -645,7 +692,7 @@ async function tryPlayFromStaticManifest(
           error: null,
         });
         options.onStatusChange?.('ready');
-        return await playAudioUrl(objectUrl, 'static-manifest', 'hit', speed, options, token);
+        return await playAudioUrl(objectUrl, 'static-manifest', 'hit', speed, options, token, 'web-offline-pack');
       }
     } catch {
       // Continue fallback chain below.
@@ -663,7 +710,7 @@ async function tryPlayFromStaticManifest(
       error: null,
     });
     options.onStatusChange?.('ready');
-    return await playAudioUrl(entry.audioUrl, 'static-manifest', 'hit', speed, options, token);
+    return await playAudioUrl(entry.audioUrl, 'static-manifest', 'hit', speed, options, token, 'web-offline-manifest');
   } catch {
     return null;
   }
@@ -696,6 +743,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
     return {
       status: 'stopped',
       provider: 'native',
+      resolvedSource: 'device-voice',
     };
   }
 
@@ -728,7 +776,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
   });
 
   if (desiredMode === 'native') {
-    return playNativeSpeech(cleanedText, lang, speed, options, token);
+    return playNativeSpeech(cleanedText, lang, speed, options, token, 'device-voice');
   }
 
   const staticPlayback = await tryPlayFromStaticManifest(options.assetKey, speed, options, token);
@@ -742,7 +790,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
       error: options.assetKey ? 'Audio tinh chua duoc tao san cho noi dung nay.' : null,
     });
     options.onStatusChange?.('fallback-native');
-    return playNativeSpeech(cleanedText, lang, speed, options, token);
+    return playNativeSpeech(cleanedText, lang, speed, options, token, 'fallback-device-voice');
   }
 
   const localPlayback = await tryPlayFromLocalCache(localDescriptor, speed, options, token);
@@ -776,6 +824,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
       return {
         status: 'stopped',
         provider: 'google-cloud',
+        resolvedSource: 'online-audio',
         cacheStatus: response.cacheStatus,
       };
     }
@@ -797,7 +846,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
     const playableUrl = await cacheAndResolvePlayableUrl(localDescriptor, response);
     if (!playableUrl) {
       options.onStatusChange?.('fallback-native');
-      return playNativeSpeech(cleanedText, lang, speed, options, token);
+      return playNativeSpeech(cleanedText, lang, speed, options, token, 'fallback-device-voice');
     }
     return playAudioUrl(playableUrl, 'google-cloud', response.cacheStatus, speed, options, token);
   } catch (error) {
@@ -813,7 +862,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
     }
 
     options.onStatusChange?.('fallback-native');
-    return playNativeSpeech(cleanedText, lang, speed, options, token);
+    return playNativeSpeech(cleanedText, lang, speed, options, token, 'fallback-device-voice');
   }
 }
 

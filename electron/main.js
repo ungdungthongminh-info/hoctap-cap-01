@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { initDatabase } = require('./database');
 const { autoUpdater } = require('electron-updater');
+const audioPackStore = require('./audioPackStore');
 
 let mainWindow;
 let updaterCheckTimer = null;
@@ -189,6 +190,46 @@ function createWindow() {
   }
 }
 
+function setupAudioPackIpc() {
+  ipcMain.handle('audioPacks:get-storage-info', async () => audioPackStore.getStorageInfo());
+  ipcMain.handle('audioPacks:list', async () => audioPackStore.listPacks());
+  ipcMain.handle('audioPacks:download', async (_event, payload) => {
+    const grade = Number(payload?.grade);
+    const replace = Boolean(payload?.replace);
+    return audioPackStore.downloadPack({
+      grade,
+      replace,
+      onProgress: (progress) => {
+        if (mainWindow && !mainWindow.isDestroyed()) {
+          mainWindow.webContents.send('audioPacks:progress', {
+            grade,
+            ...progress,
+            updatedAt: Date.now(),
+          });
+        }
+      },
+    });
+  });
+  ipcMain.handle('audioPacks:remove', async (_event, payload) => {
+    const grade = Number(payload?.grade);
+    return audioPackStore.removePack({ grade });
+  });
+  ipcMain.handle('audioPacks:verify', async (_event, payload) => {
+    const grade = Number(payload?.grade);
+    return audioPackStore.verifyPack({ grade });
+  });
+  ipcMain.handle('audioPacks:open-folder', async (_event, payload) => {
+    const hasGrade = payload && payload.grade !== undefined && payload.grade !== null;
+    return audioPackStore.openFolder({ grade: hasGrade ? Number(payload.grade) : undefined });
+  });
+  ipcMain.handle('audioPacks:get-asset-url', async (_event, payload) => {
+    return audioPackStore.getAssetUrl({
+      assetKey: String(payload?.assetKey || ''),
+      grade: payload?.grade,
+    });
+  });
+}
+
 app.whenReady().then(() => {
   const db = initDatabase();
 
@@ -211,6 +252,7 @@ app.whenReady().then(() => {
   createWindow();
 
   setupAutoUpdater();
+  setupAudioPackIpc();
 });
 
 app.on('window-all-closed', () => {

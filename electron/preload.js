@@ -18,4 +18,19 @@ contextBridge.exposeInMainWorld('electronAPI', {
       return () => ipcRenderer.removeListener('updater:status', wrapped);
     },
   },
+  audioPacks: {
+    getStorageInfo: () => ipcRenderer.invoke('audioPacks:get-storage-info'),
+    list: () => ipcRenderer.invoke('audioPacks:list'),
+    download: (payload) => ipcRenderer.invoke('audioPacks:download', payload),
+    remove: (payload) => ipcRenderer.invoke('audioPacks:remove', payload),
+    verify: (payload) => ipcRenderer.invoke('audioPacks:verify', payload),
+    openFolder: (payload) => ipcRenderer.invoke('audioPacks:open-folder', payload),
+    getAssetUrl: (payload) => ipcRenderer.invoke('audioPacks:get-asset-url', payload),
+    onProgress: (handler) => {
+      if (typeof handler !== 'function') return () => undefined;
+      const wrapped = (_event, payload) => handler(payload);
+      ipcRenderer.on('audioPacks:progress', wrapped);
+      return () => ipcRenderer.removeListener('audioPacks:progress', wrapped);
+    },
+  },
 });
