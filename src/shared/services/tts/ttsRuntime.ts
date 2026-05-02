@@ -861,7 +861,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
 
   if (desiredMode === 'static') {
     if (strictOffline) {
-      return rejectStaticPlayback('Thieu file audio offline cho bai nay trong static pack/manifest.');
+      return rejectStaticPlayback('Chưa có file giọng đọc offline cho bài này');
     }
     return rejectStaticPlayback('Che do static dang bat nhung khong tim thay audio tinh. Vui long cap nhat static pack.');
   }
