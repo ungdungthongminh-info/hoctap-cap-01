@@ -264,7 +264,7 @@ function parseStudentGradeFromStoredState(): number | null {
 }
 
 function resolveDefaultPackUrlByGrade(): string {
-  return ALL_GRADES_BUNDLE_URL;
+  return buildStaticHostedPackUrl(1);
 }
 
 export function getStaticPackSelectedGrade(): number {

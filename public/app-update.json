@@ -12,7 +12,8 @@
   ],
   "tts": {
     "offlineSyncEnabled": true,
-    "offlineSyncReason": ""
+    "offlineSyncReason": "",
+    "manifestUrl": "/tts-static-pack/by-grade/1.zip"
   },
   "downloadUrl": "https://github.com/ungdungthongminh-info/hoctap-cap-01/releases/latest/download/HocHungKhoi_Desktopapp-Win.exe"
 }

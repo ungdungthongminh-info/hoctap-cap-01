@@ -6,5 +6,6 @@ content-patches/
 mascots/
 *.db
 *.zip
+!public/tts-static-pack/**/*.zip
 *.exe
 *.blockmap
