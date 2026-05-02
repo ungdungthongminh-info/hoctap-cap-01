@@ -30,6 +30,7 @@ import { invalidateStaticTtsManifestCache } from '../../../shared/services/tts/s
 import { listStaticVoiceProfiles } from '../../../shared/services/tts/ttsVoiceProfiles';
 import {
   clearStaticAudioPack,
+  getRemoteTtsPolicy,
   getStaticAudioPackStats,
   getStaticPackManifestUrl,
   getStaticPackRecommendedLabel,
@@ -139,6 +140,7 @@ export function TtsSettingsPage() {
   const [packClearing, setPackClearing] = useState(false);
   const [packProgress, setPackProgress] = useState<StaticPackSyncProgress | null>(null);
   const [packError, setPackError] = useState('');
+  const [packSyncBlockedReason, setPackSyncBlockedReason] = useState('');
   const [runtimeStatus, setRuntimeStatus] = useState(getTtsRuntimeStatus());
 
   const pref = getVoicePreferenceOptions();
@@ -256,6 +258,18 @@ export function TtsSettingsPage() {
     });
     void loadStats();
     void loadPackStats();
+    void getRemoteTtsPolicy().then((policy) => {
+      if (!policy.offlineSyncEnabled) {
+        const reason = policy.offlineSyncReason || 'Tam khoa dong bo offline pack de tranh loi nguon audio.';
+        setPackSyncBlockedReason(reason);
+        setPackAutoSync(false);
+        setStaticPackAutoSyncEnabled(false);
+      } else {
+        setPackSyncBlockedReason('');
+      }
+    }).catch(() => {
+      setPackSyncBlockedReason('');
+    });
 
     const handleNetwork = () => setOnline(navigator.onLine);
     window.addEventListener('online', handleNetwork);
@@ -616,9 +630,16 @@ export function TtsSettingsPage() {
             type="checkbox"
             checked={packAutoSync}
             onChange={(event) => handlePackAutoSyncChange(event.target.checked)}
+            disabled={Boolean(packSyncBlockedReason)}
           />
           Tự đồng bộ audio pack khi mở app/web
         </label>
+
+        {packSyncBlockedReason && (
+          <div className="text-xs mb-3 px-3 py-2 rounded-lg" style={{ background: '#FEF3C7', color: '#92400E' }}>
+            {packSyncBlockedReason}. Van nghe online binh thuong.
+          </div>
+        )}
 
         {showAdmin ? (
           <div className="grid gap-2 md:grid-cols-4 mb-3">
@@ -672,7 +693,9 @@ export function TtsSettingsPage() {
 
         {packError && (
           <div className="text-xs mb-3 px-3 py-2 rounded-lg" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
-            {showAdmin ? packError : 'Khong tai duoc goi tieng doc day du. Vui long kiem tra mang, sau do bam tai lai.'}
+            {showAdmin || packError.toLowerCase().includes('tam khoa dong bo offline pack')
+              ? packError
+              : 'Khong tai duoc goi tieng doc day du. Vui long kiem tra mang, sau do bam tai lai.'}
           </div>
         )}
 
@@ -681,7 +704,7 @@ export function TtsSettingsPage() {
             type="button"
             className="btn btn-primary flex items-center gap-2"
             onClick={() => void handleSyncPack()}
-            disabled={packSyncing || !online}
+            disabled={packSyncing || !online || Boolean(packSyncBlockedReason)}
           >
             <Download size={16} />
             {packSyncing ? 'Đang tải gói tiếng đọc đầy đủ...' : 'Tải gói tiếng đọc đầy đủ (mọi lớp)'}

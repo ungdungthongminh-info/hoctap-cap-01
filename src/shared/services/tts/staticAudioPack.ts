@@ -120,6 +120,16 @@ const ALL_GRADES_BUNDLE_URL = 'bundle://tts-static-pack/all-grades';
 const ALL_GRADE_PACKS = [0, 1, 2, 3, 4, 5] as const;
 const PRODUCTION_TTS_PACK_API_BASE = 'https://www.ungdungthongminh.shop/api/v1';
 const MAX_MANIFEST_SOURCE_FAILURES_BEFORE_ABORT = 25;
+const FALLBACK_UPDATE_FEED_URL = 'https://hoctap-cap-01-livid.vercel.app/app-update.json';
+const REMOTE_TTS_POLICY_TTL_MS = 5 * 60 * 1000;
+
+interface RemoteTtsPolicy {
+  offlineSyncEnabled: boolean;
+  offlineSyncReason: string;
+  manifestUrl?: string;
+}
+
+let remoteTtsPolicyCache: { expiresAt: number; policy: RemoteTtsPolicy } | null = null;
 
 const GRADE_PACK_FILE_IDS: Partial<Record<number, string>> = {
   0: '1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
@@ -335,6 +345,100 @@ function safeStorageSet(key: string, value: string): void {
   } catch {
     // Ignore storage quota errors.
   }
+}
+
+function normalizeUrl(value?: string | null): string {
+  return String(value || '').trim();
+}
+
+function dedupeUrls(urls: string[]): string[] {
+  const seen = new Set<string>();
+  const output: string[] = [];
+  for (const raw of urls) {
+    const value = normalizeUrl(raw);
+    if (!value || seen.has(value)) continue;
+    seen.add(value);
+    output.push(value);
+  }
+  return output;
+}
+
+function buildUpdateFeedCandidates(): string[] {
+  const envUrl = normalizeUrl(import.meta.env.VITE_APP_UPDATE_URL);
+  const urls: string[] = [];
+  if (envUrl) urls.push(envUrl);
+
+  if (typeof window !== 'undefined') {
+    const { protocol, origin } = window.location;
+    if (protocol === 'http:' || protocol === 'https:') {
+      urls.push(`${origin.replace(/\/+$/, '')}/app-update.json`);
+    }
+  }
+
+  urls.push(FALLBACK_UPDATE_FEED_URL);
+  return dedupeUrls(urls);
+}
+
+function readRemoteTtsPolicyFromManifest(payload: unknown): RemoteTtsPolicy {
+  const fallback: RemoteTtsPolicy = {
+    offlineSyncEnabled: true,
+    offlineSyncReason: '',
+  };
+  if (!payload || typeof payload !== 'object') {
+    return fallback;
+  }
+
+  const tts = (payload as { tts?: unknown }).tts;
+  if (!tts || typeof tts !== 'object') {
+    return fallback;
+  }
+
+  const cast = tts as {
+    offlineSyncEnabled?: unknown;
+    offlineSyncReason?: unknown;
+    manifestUrl?: unknown;
+  };
+  return {
+    offlineSyncEnabled: cast.offlineSyncEnabled !== false,
+    offlineSyncReason: String(cast.offlineSyncReason || '').trim(),
+    manifestUrl: String(cast.manifestUrl || '').trim() || undefined,
+  };
+}
+
+export async function getRemoteTtsPolicy(force = false): Promise<RemoteTtsPolicy> {
+  const now = Date.now();
+  if (!force && remoteTtsPolicyCache && remoteTtsPolicyCache.expiresAt > now) {
+    return remoteTtsPolicyCache.policy;
+  }
+
+  const fallback: RemoteTtsPolicy = {
+    offlineSyncEnabled: true,
+    offlineSyncReason: '',
+  };
+
+  for (const url of buildUpdateFeedCandidates()) {
+    try {
+      const response = await fetch(url, { method: 'GET', cache: 'no-store' });
+      if (!response.ok) {
+        continue;
+      }
+      const payload = await response.json();
+      const policy = readRemoteTtsPolicyFromManifest(payload);
+      remoteTtsPolicyCache = {
+        expiresAt: now + REMOTE_TTS_POLICY_TTL_MS,
+        policy,
+      };
+      return policy;
+    } catch {
+      // Try next feed candidate.
+    }
+  }
+
+  remoteTtsPolicyCache = {
+    expiresAt: now + REMOTE_TTS_POLICY_TTL_MS,
+    policy: fallback,
+  };
+  return fallback;
 }
 
 function isNonAudioPackUrl(value: string): boolean {
@@ -1138,8 +1242,44 @@ async function fetchValidatedAudioBlob(audioUrl: string): Promise<Blob> {
   return blob;
 }
 
+async function runManifestAudioPreflight(source: StaticPackSource): Promise<void> {
+  if (source.sourceType !== 'manifest') {
+    return;
+  }
+
+  const probeEntry = Object.values(source.manifest.entries || {}).find((entry) => Boolean(entry.available && entry.audioUrl));
+  if (!probeEntry?.audioUrl) {
+    return;
+  }
+
+  const response = await fetch(probeEntry.audioUrl, { cache: 'no-cache' });
+  if (!response.ok) {
+    throw new Error(`Preflight audio fail: HTTP ${response.status}`);
+  }
+
+  const contentType = String(response.headers.get('content-type') || '').toLowerCase();
+  if (!isAudioLikeContentType(contentType)) {
+    throw new Error(`Preflight audio content-type khong hop le: ${contentType || 'unknown'}`);
+  }
+}
+
 export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): Promise<StaticPackSyncResult> {
+  const remotePolicy = await getRemoteTtsPolicy();
+  if (!remotePolicy.offlineSyncEnabled) {
+    const blockedMessage = remotePolicy.offlineSyncReason || 'Tam khoa dong bo offline pack de tranh loi nguon audio.';
+    setGlobalSyncStatus({
+      phase: 'idle',
+      message: blockedMessage,
+      hint: 'Van nghe online binh thuong. Dong bo offline se mo lai khi nguon on dinh.',
+      progress: null,
+      canRetry: false,
+    });
+    throw new Error(blockedMessage);
+  }
+
+  const remoteManifestUrl = String(remotePolicy.manifestUrl || '').trim();
   const manifestUrl = normalizeManifestUrl(options.manifestUrl || getStaticPackManifestUrl());
+  const effectiveManifestUrl = remoteManifestUrl ? normalizeManifestUrl(remoteManifestUrl) : manifestUrl;
   setGlobalSyncStatus({
     phase: 'syncing',
     message: 'Dang tai goi tieng doc day du...',
@@ -1163,7 +1303,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
     failedEntries: 0,
   });
 
-  const source = await fetchStaticPackSource(manifestUrl, (progress) => {
+  const source = await fetchStaticPackSource(effectiveManifestUrl, (progress) => {
     options.onProgress?.(progress);
     setGlobalSyncStatus({
       phase: 'syncing',
@@ -1180,6 +1320,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
       'Khong tai duoc goi tieng doc day du tu backend hoac goi tich hop san. Kiem tra mang va thu lai.',
     );
   }
+  await runManifestAudioPreflight(source);
   const manifest = source.manifest;
 
   const state = await readMeta<StaticPackState>(META_IDS.state);
@@ -1197,13 +1338,13 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
   if (
     !options.forceRedownload
     && state
-    && state.manifestUrl === manifestUrl
+    && state.manifestUrl === effectiveManifestUrl
     && state.contentVersion === nextContentVersion
     && state.downloadedEntries >= availableEntries
   ) {
     const result: StaticPackSyncResult = {
       status: 'up-to-date',
-      manifestUrl,
+      manifestUrl: effectiveManifestUrl,
       contentVersion: state.contentVersion,
       totalEntries: state.totalEntries,
       availableEntries: state.availableEntries,
@@ -1400,7 +1541,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
   const mergedDownloadedEntries = Object.keys(assetIndex).length;
   const nextState = toStateFromManifest(
     manifest,
-    manifestUrl,
+    effectiveManifestUrl,
     mergedDownloadedEntries,
     totalBytes,
   );
@@ -1411,7 +1552,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
 
   const result: StaticPackSyncResult = {
     status: 'completed',
-    manifestUrl,
+    manifestUrl: effectiveManifestUrl,
     contentVersion: nextState.contentVersion,
     totalEntries: nextState.totalEntries,
     availableEntries: nextState.availableEntries,
@@ -1436,6 +1577,18 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
 }
 
 export async function ensureStaticPackAutoSync(): Promise<StaticPackSyncResult | null> {
+  const remotePolicy = await getRemoteTtsPolicy();
+  if (!remotePolicy.offlineSyncEnabled) {
+    setGlobalSyncStatus({
+      phase: 'idle',
+      message: remotePolicy.offlineSyncReason || 'Tam khoa dong bo offline pack de tranh loi nguon audio.',
+      hint: 'Van nghe online binh thuong. Dong bo offline se mo lai khi nguon on dinh.',
+      progress: null,
+      canRetry: false,
+    });
+    return null;
+  }
+
   if (!isStaticPackAutoSyncEnabled()) {
     setGlobalSyncStatus({
       phase: 'idle',
