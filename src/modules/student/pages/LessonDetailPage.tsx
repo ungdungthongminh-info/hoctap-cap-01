@@ -212,7 +212,9 @@ export function LessonDetailPage() {
 
     if (currentRun !== runRef.current) return;
     setSpeakingCardId(null);
-    setCardStatus(card.id, result.provider === 'static-manifest' || result.provider === 'google-cloud' ? 'ready' : 'idle');
+    const isCompletedManagedAudio = result.status === 'completed'
+      && (result.provider === 'static-manifest' || result.provider === 'google-cloud');
+    setCardStatus(card.id, isCompletedManagedAudio ? 'ready' : 'idle');
     setCardSources((prev) => ({ ...prev, [card.id]: toCardSourceState(result, hasDesktopAudioStore) }));
   }, [cardStatuses, hasDesktopAudioStore, isReadingAll, lang, resetPlaybackState, setCardStatus, speakingCardId]);
 
@@ -252,7 +254,9 @@ export function LessonDetailPage() {
         break;
       }
 
-      setCardStatus(card.id, result.provider === 'static-manifest' || result.provider === 'google-cloud' ? 'ready' : 'idle');
+      const isCompletedManagedAudio = result.status === 'completed'
+        && (result.provider === 'static-manifest' || result.provider === 'google-cloud');
+      setCardStatus(card.id, isCompletedManagedAudio ? 'ready' : 'idle');
       setCardSources((prev) => ({ ...prev, [card.id]: toCardSourceState(result, hasDesktopAudioStore) }));
     }
 

@@ -126,6 +126,16 @@ export function TtsSettingsPage() {
   const showAdmin = import.meta.env.DEV || isAdminUnlocked();
   const hasDesktopAudioStore = typeof window !== 'undefined' && Boolean(window.electronAPI?.audioPacks);
   const recommendedPackLabel = getStaticPackRecommendedLabel();
+  const hasFullOfflinePack = Boolean(
+    packStats
+    && Number(packStats.availableEntries || 0) > 0
+    && Number(packStats.downloadedEntries || 0) >= Number(packStats.availableEntries || 0),
+  );
+  const hasPartialOfflinePack = Boolean(
+    packStats
+    && Number(packStats.downloadedEntries || 0) > 0
+    && !hasFullOfflinePack,
+  );
   const visibleModeOptions = showAdmin
     ? modeOptions
     : modeOptions.filter((option) => option.value === 'static');
@@ -599,11 +609,15 @@ export function TtsSettingsPage() {
           </div>
         ) : (
           <div className="mb-3 p-3 rounded-xl" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
-            <div className="text-sm font-bold" style={{ color: packStats?.downloadedEntries ? 'var(--color-success)' : 'var(--color-primary-dark)' }}>
-              {packStats?.downloadedEntries ? 'Audio offline đã sẵn sàng' : 'Audio offline chưa tải'}
+            <div className="text-sm font-bold" style={{ color: hasFullOfflinePack ? 'var(--color-success)' : hasPartialOfflinePack ? '#B45309' : 'var(--color-primary-dark)' }}>
+              {hasFullOfflinePack
+                ? 'Audio offline đã sẵn sàng'
+                : hasPartialOfflinePack
+                  ? 'Audio offline đang tải dở'
+                  : 'Audio offline chưa tải'}
             </div>
             <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-              Đã lưu: {packStats?.downloadedEntries || 0} file | Dung lượng: {((packStats?.totalBytes || 0) / 1024 / 1024).toFixed(2)} MB
+              Đã lưu: {packStats?.downloadedEntries || 0}/{packStats?.availableEntries || 0} file | Dung lượng: {((packStats?.totalBytes || 0) / 1024 / 1024).toFixed(2)} MB
             </div>
           </div>
         )}

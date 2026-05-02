@@ -780,7 +780,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
   }
 
   const staticPlayback = await tryPlayFromStaticManifest(options.assetKey, speed, options, token);
-  if (staticPlayback) {
+  if (staticPlayback?.status === 'completed' || staticPlayback?.status === 'stopped') {
     return staticPlayback;
   }
 
