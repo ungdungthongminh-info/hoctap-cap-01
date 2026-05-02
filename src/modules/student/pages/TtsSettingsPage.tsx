@@ -381,23 +381,18 @@ export function TtsSettingsPage() {
       const result = await speakTextAsync(text, 'vi', {
         mode: 'static',
         policy: 'lesson-read-all',
+        voiceId: profile.voiceId,
+        allowNativeFallback: false,
         assetKey: buildVoiceAuditAssetKey(profile.id, sampleId),
       });
       return requireCompletedPlayback(result);
     }
 
-    if (online && stats?.backendReachable !== false) {
-      const result = await speakTextAsync(text, 'vi', {
-        mode: 'advanced',
-        policy: 'practice-on-demand',
-        voiceId: profile.voiceId,
-      });
-      return requireCompletedPlayback(result);
-    }
-
     const result = await speakTextAsync(text, 'vi', {
-      mode: 'native',
-      policy: 'fallback-native',
+      mode: 'advanced',
+      policy: 'practice-on-demand',
+      voiceId: profile.voiceId,
+      allowNativeFallback: false,
     });
     return requireCompletedPlayback(result);
   };

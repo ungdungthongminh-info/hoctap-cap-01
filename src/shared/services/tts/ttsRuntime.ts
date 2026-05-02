@@ -43,6 +43,7 @@ export interface SpeakTextOptions {
   policy?: TtsPolicyId;
   mode?: TtsMode;
   voiceId?: string;
+  allowNativeFallback?: boolean;
   speed?: number;
   contentVersion?: string;
   assetKey?: string;
@@ -788,6 +789,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
   const policy = getTtsPolicy(options.policy || 'practice-on-demand');
   const desiredMode = options.mode || getTtsMode();
   const allowManagedFallback = desiredMode !== 'native' && policy.preferBackend;
+  const allowNativeFallback = options.allowNativeFallback !== false;
   const speed = clampTtsSpeed(options.speed ?? getTtsSpeed());
   const backendVoiceId = resolveBackendVoiceId(lang, options.voiceId);
   const ssml = buildAdvancedSsml(cleanedText, lang, policy.id);
@@ -817,6 +819,22 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
     return playNativeSpeech(cleanedText, lang, speed, options, token, 'device-voice');
   }
 
+  const rejectNativeFallback = (reason: string): TtsPlaybackResult => {
+    setRuntimeStatus({
+      isLoading: false,
+      isSpeaking: false,
+      error: reason,
+    });
+    options.onStatusChange?.('error');
+    return {
+      status: 'error',
+      provider: 'native',
+      resolvedSource: 'fallback-device-voice',
+      fallbackNative: true,
+      error: reason,
+    };
+  };
+
   const staticPlayback = await tryPlayFromStaticManifest(options.assetKey, speed, options, token);
   if (staticPlayback?.status === 'completed' || staticPlayback?.status === 'stopped') {
     return staticPlayback;
@@ -827,6 +845,11 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
       isLoading: false,
       error: options.assetKey ? 'Audio tinh chua duoc tao san cho noi dung nay.' : null,
     });
+    if (!allowNativeFallback) {
+      return rejectNativeFallback(options.assetKey
+        ? 'Khong the nghe dung giong da chon vi audio tinh chua san sang.'
+        : 'Khong the nghe dung giong da chon trong che do hien tai.');
+    }
     options.onStatusChange?.('fallback-native');
     return playNativeSpeech(cleanedText, lang, speed, options, token, 'fallback-device-voice');
   }
@@ -841,6 +864,9 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
       isLoading: false,
       error: 'Dang offline va chua co audio da luu tren may.',
     });
+    if (!allowNativeFallback) {
+      return rejectNativeFallback('Dang offline nen khong the nghe dung giong da chon.');
+    }
     options.onStatusChange?.('fallback-native');
     return playNativeSpeech(cleanedText, lang, speed, options, token);
   }
@@ -872,6 +898,9 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
     });
 
     if (response.fallbackNative || !response.audioUrl) {
+      if (!allowNativeFallback) {
+        return rejectNativeFallback(response.warning || 'Backend khong tra duoc audio dung giong da chon.');
+      }
       options.onStatusChange?.('fallback-native');
       setRuntimeStatus({
         isLoading: false,
@@ -883,6 +912,9 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
     options.onStatusChange?.('ready');
     const playableUrl = await cacheAndResolvePlayableUrl(localDescriptor, response);
     if (!playableUrl) {
+      if (!allowNativeFallback) {
+        return rejectNativeFallback('Khong tai duoc file audio dung giong da chon.');
+      }
       options.onStatusChange?.('fallback-native');
       return playNativeSpeech(cleanedText, lang, speed, options, token, 'fallback-device-voice');
     }
@@ -897,6 +929,10 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
     const retryLocalPlayback = await tryPlayFromLocalCache(localDescriptor, speed, options, token);
     if (retryLocalPlayback) {
       return retryLocalPlayback;
+    }
+
+    if (!allowNativeFallback) {
+      return rejectNativeFallback('Khong the tao audio dung giong da chon. Vui long thu lai sau.');
     }
 
     options.onStatusChange?.('fallback-native');
