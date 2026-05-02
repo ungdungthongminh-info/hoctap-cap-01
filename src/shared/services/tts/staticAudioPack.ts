@@ -769,6 +769,12 @@ async function fetchStaticPackSource(
 ): Promise<StaticPackSource | null> {
   const resolvedUrl = normalizeManifestUrl(manifestUrl || getStaticPackManifestUrl());
   if (isAllGradesBundleUrl(resolvedUrl)) {
+    const bundledManifestUrl = normalizeManifestUrl(buildAppAssetUrl('audio/tts/manifest.json'));
+    const bundledManifestSource = await fetchStaticPackSource(bundledManifestUrl);
+    if (bundledManifestSource && Object.keys(bundledManifestSource.manifest.entries || {}).length > 0) {
+      return bundledManifestSource;
+    }
+
     const sources: StaticPackSource[] = [];
     let processedGrades = 0;
     let loadedGrades = 0;
