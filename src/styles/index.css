@@ -2864,6 +2864,8 @@ body.sidebar-menu-open .chat-panel {
   flex: 1;
   flex-direction: column;
   gap: 12px;
+  overflow-y: auto;
+  padding-right: 2px;
 }
 
 .sidebar-primary-nav,
@@ -2963,6 +2965,7 @@ body.sidebar-menu-open .chat-panel {
   box-shadow: 0 12px 24px rgba(30, 64, 175, 0.34);
   transition: transform 0.16s ease, box-shadow 0.2s ease, filter 0.2s ease;
   animation: hhk-download-pulse 2.8s ease-in-out infinite;
+  cursor: pointer;
 }
 
 .sidebar-download-app-btn::before {

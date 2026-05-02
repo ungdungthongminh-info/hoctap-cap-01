@@ -50,6 +50,7 @@ import {
   subscribeDesktopUpdater,
   type DesktopUpdaterState,
 } from '../services/desktopUpdater';
+import { openWindowsAppDownload } from '../services/windowsAppDownload';
 
 interface NavItem {
   to: string;
@@ -64,8 +65,6 @@ interface NavGroup {
   emoji: string;
   items: NavItem[];
 }
-
-const APP_PRICING_URL = 'https://hoctap-cap-01.vercel.app/#/pricing';
 
 const primaryItems: NavItem[] = [
   { to: '/home', icon: Home, label: 'Trang chủ' },
@@ -164,7 +163,7 @@ export function Sidebar() {
   const lessonCountByGrade = (g: number) => state.lessons.filter((l) => l.grade === g).length;
 
   const [openGroups, setOpenGroups] = useState<Set<string>>(() => {
-    const initial = new Set<string>();
+    const initial = new Set<string>(['settings']);
     for (const g of navGroups) {
       if (groupContainsPath(g, location.pathname)) initial.add(g.id);
     }
@@ -189,7 +188,19 @@ export function Sidebar() {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (isMobileNav) return;
+    setOpenGroups((prev) => {
+      if (prev.has('settings')) return prev;
+      return new Set(prev).add('settings');
+    });
+  }, [isMobileNav]);
+
   const toggleGroup = (id: string) => {
+    if (!isMobileNav && id === 'settings') {
+      return;
+    }
+
     setOpenGroups((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -400,16 +411,17 @@ export function Sidebar() {
           <ChevronDown size={14} />
         </NavLink>
 
-        <a
+        <button
+          type="button"
           className="sidebar-download-app-btn"
-          href={APP_PRICING_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={handleNavItemClick}
+          onClick={() => {
+            openWindowsAppDownload();
+            handleNavItemClick();
+          }}
         >
           <Download size={14} />
           <span>Tải app Windows</span>
-        </a>
+        </button>
       </div>
 
       <nav className="sidebar-nav">

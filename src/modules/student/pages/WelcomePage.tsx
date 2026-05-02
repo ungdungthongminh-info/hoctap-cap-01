@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, BadgeCheck, Clock3, KeyRound, MonitorSmartphone, Shield, Sparkles } from 'lucide-react';
 import { MascotCharacter, AllMascotsParade } from '../../../shared/components';
 import { getAccessPlan, type AccessPlan } from '../../../shared/services/accessControl';
+import { openWindowsAppDownload } from '../../../shared/services/windowsAppDownload';
 import '../styles/premiumButtons.css';
 
 const SUB_EXPIRY_KEY = 'hhk_sub_expiry';
-const APP_PRICING_URL = 'https://hoctap-cap-01.vercel.app/#/pricing';
 
 const QUICK_NOTES = [
   {
@@ -195,7 +195,7 @@ export function WelcomePage() {
   };
 
   const openAppPricing = () => {
-    window.location.assign(APP_PRICING_URL);
+    openWindowsAppDownload();
   };
 
   return (

@@ -31,10 +31,10 @@ import { MascotCharacter } from '../../../shared/components';
 import { getXpData } from '../../../shared/utils/achievements';
 import { STORAGE_KEYS } from '../../../shared/constants/storageKeys';
 import { getAccessPlan } from '../../../shared/services/accessControl';
+import { openWindowsAppDownload } from '../../../shared/services/windowsAppDownload';
 import '../styles/premiumButtons.css';
 
 const SUB_EXPIRY_KEY = 'hhk_sub_expiry';
-const APP_PRICING_URL = 'https://hoctap-cap-01.vercel.app/#/pricing';
 
 type KeyExpiryBadge = {
   text: string;
@@ -187,7 +187,7 @@ export function HomePage() {
   }, []);
 
   const openWindowsDownload = () => {
-    window.location.assign(APP_PRICING_URL);
+    openWindowsAppDownload();
   };
 
   return (
