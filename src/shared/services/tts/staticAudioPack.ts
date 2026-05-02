@@ -1061,6 +1061,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
   let downloadedEntries = 0;
   let skippedEntries = 0;
   let failedEntries = 0;
+  let firstFailureReason = '';
   let totalBytes = totalBytesFromState;
   let pendingIndexWrites = 0;
   const db = await openDb();
@@ -1114,8 +1115,11 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
           await writeMeta(META_IDS.assetIndex, assetIndex);
           pendingIndexWrites = 0;
         }
-      } catch {
+      } catch (error) {
         failedEntries += 1;
+        if (!firstFailureReason) {
+          firstFailureReason = error instanceof Error ? error.message : 'Unknown audio download error.';
+        }
       } finally {
         processedEntries += 1;
         options.onProgress?.({
@@ -1171,6 +1175,17 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
     canRetry: false,
   });
 
+  if (failedEntries > 0 && downloadedEntries === 0 && skippedEntries === 0) {
+    setGlobalSyncStatus({
+      phase: 'error',
+      message: `Khong tai duoc audio pack (${failedEntries} file loi).`,
+      hint: firstFailureReason || 'Nguon pack khong tra ve file audio hop le.',
+      progress: null,
+      canRetry: true,
+    });
+    throw new Error(firstFailureReason || 'Khong tai duoc audio pack: nguon du lieu khong hop le hoac khong truy cap duoc.');
+  }
+
   const mergedDownloadedEntries = Object.keys(assetIndex).length;
   const nextState = toStateFromManifest(
     manifest,
@@ -1197,11 +1212,13 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
   };
 
   setGlobalSyncStatus({
-    phase: 'success',
-    message: `Dong bo audio thanh cong (${result.downloadedEntries} file moi, ${result.skippedEntries} da co san).`,
+    phase: failedEntries > 0 ? 'error' : 'success',
+    message: failedEntries > 0
+      ? `Dong bo audio mot phan (${result.downloadedEntries} moi, ${result.skippedEntries} co san, ${failedEntries} loi).`
+      : `Dong bo audio thanh cong (${result.downloadedEntries} file moi, ${result.skippedEntries} da co san).`,
     hint: buildSyncHint('success'),
     progress: null,
-    canRetry: false,
+    canRetry: failedEntries > 0,
   });
 
   return result;
