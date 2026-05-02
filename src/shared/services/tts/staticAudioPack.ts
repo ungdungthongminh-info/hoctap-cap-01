@@ -499,6 +499,19 @@ async function upsertAssetWithDb(db: IDBDatabase, key: string, blob: Blob): Prom
   return Number(existing?.byteSize || 0);
 }
 
+async function getAssetBlobWithDb(db: IDBDatabase, key: string): Promise<Blob | null> {
+  const tx = db.transaction(ASSET_STORE, 'readonly');
+  const record = await runRequest<StaticPackAssetRecord | undefined>(
+    tx.objectStore(ASSET_STORE).get(key),
+  ).catch(() => undefined);
+  await new Promise<void>((resolve, reject) => {
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error || new Error('IndexedDB transaction failed.'));
+    tx.onabort = () => reject(tx.error || new Error('IndexedDB transaction aborted.'));
+  });
+  return record?.blob || null;
+}
+
 function resolveEntryAudioUrl(entry: { assetPath: string; audioUrl?: string }, manifestUrl: string): string {
   const fromEntry = String(entry.audioUrl || '').trim();
   if (fromEntry) {
@@ -820,7 +833,8 @@ export async function getStaticPackAudioBlob(assetKey: string): Promise<Blob | n
       tx.onerror = () => reject(tx.error || new Error('IndexedDB transaction failed.'));
       tx.onabort = () => reject(tx.error || new Error('IndexedDB transaction aborted.'));
     });
-    return record?.blob || null;
+    const blob = record?.blob || null;
+    return isLikelyAudioBlob(blob) ? blob : null;
   }).catch(() => null);
 }
 
@@ -923,6 +937,49 @@ function guessMimeTypeFromPath(assetPath: string): string {
   return 'application/octet-stream';
 }
 
+function isAudioLikeContentType(contentType: string): boolean {
+  const normalized = String(contentType || '').trim().toLowerCase();
+  if (!normalized) {
+    return true;
+  }
+
+  return normalized.startsWith('audio/')
+    || normalized.includes('octet-stream')
+    || normalized.includes('mpeg');
+}
+
+function isLikelyAudioBlob(blob: Blob | null | undefined): boolean {
+  if (!blob || blob.size <= 0) {
+    return false;
+  }
+
+  const normalized = String(blob.type || '').trim().toLowerCase();
+  if (!normalized) {
+    return true;
+  }
+
+  return isAudioLikeContentType(normalized);
+}
+
+async function fetchValidatedAudioBlob(audioUrl: string): Promise<Blob> {
+  const response = await fetch(audioUrl, { cache: 'no-cache' });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+
+  const contentType = String(response.headers.get('content-type') || '').toLowerCase();
+  if (!isAudioLikeContentType(contentType)) {
+    throw new Error(`Invalid audio content-type: ${contentType || 'unknown'}`);
+  }
+
+  const blob = await response.blob();
+  if (!isLikelyAudioBlob(blob)) {
+    throw new Error(`Invalid audio blob type: ${blob.type || 'unknown'}`);
+  }
+
+  return blob;
+}
+
 export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): Promise<StaticPackSyncResult> {
   const manifestUrl = normalizeManifestUrl(options.manifestUrl || getStaticPackManifestUrl());
   setGlobalSyncStatus({
@@ -1013,7 +1070,8 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
 
   try {
     for (const entry of entries) {
-      const alreadySynced = assetIndex[entry.key] === entry.textHash;
+      const cachedBlob = await getAssetBlobWithDb(db, entry.key).catch(() => null);
+      const alreadySynced = assetIndex[entry.key] === entry.textHash && isLikelyAudioBlob(cachedBlob);
       if (alreadySynced && !options.forceRedownload) {
         processedEntries += 1;
         skippedEntries += 1;
@@ -1040,12 +1098,11 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
           const byteCopy = new Uint8Array(bytes.length);
           byteCopy.set(bytes);
           blob = new Blob([byteCopy], { type: guessMimeTypeFromPath(assetPath) });
-        } else {
-          const response = await fetch(entry.audioUrl, { cache: 'no-cache' });
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+          if (!isLikelyAudioBlob(blob)) {
+            throw new Error(`Invalid bundled audio blob: ${assetPath}`);
           }
-          blob = await response.blob();
+        } else {
+          blob = await fetchValidatedAudioBlob(entry.audioUrl);
         }
         const previousByteSize = await upsertAssetWithDb(db, entry.key, blob);
         totalBytes += blob.size - previousByteSize;

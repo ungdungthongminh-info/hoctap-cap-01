@@ -581,6 +581,39 @@ function playAudioUrl(
   });
 }
 
+async function isLikelyPlayableAudioUrl(sourceUrl: string): Promise<boolean> {
+  if (typeof fetch !== 'function') {
+    return true;
+  }
+
+  try {
+    const response = await fetch(sourceUrl, {
+      method: 'HEAD',
+      cache: 'no-cache',
+    });
+    if (!response.ok) {
+      return false;
+    }
+
+    const contentType = String(response.headers.get('content-type') || '').toLowerCase();
+    if (!contentType) {
+      return true;
+    }
+
+    if (contentType.startsWith('audio/') || contentType.includes('octet-stream')) {
+      return true;
+    }
+
+    if (contentType.startsWith('text/') || contentType.includes('json')) {
+      return false;
+    }
+
+    return true;
+  } catch {
+    return true;
+  }
+}
+
 function toBackendLang(lang: TtsLang): string {
   return lang === 'en' ? 'en-US' : 'vi-VN';
 }
@@ -705,6 +738,11 @@ async function tryPlayFromStaticManifest(
   }
 
   try {
+    const audioUrlLooksValid = await isLikelyPlayableAudioUrl(entry.audioUrl);
+    if (!audioUrlLooksValid) {
+      return null;
+    }
+
     setRuntimeStatus({
       lastCacheStatus: 'hit',
       error: null,

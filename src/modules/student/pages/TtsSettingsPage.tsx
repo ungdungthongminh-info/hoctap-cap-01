@@ -20,6 +20,7 @@ import {
   subscribeTtsRuntime,
   type TtsCacheMode,
   type TtsInfo,
+  type TtsPlaybackResult,
 } from '../../../shared/utils/sounds';
 import { MascotCharacter } from '../../../shared/components';
 import { DesktopAudioPackPanel } from '../../../shared/components/DesktopAudioPackPanel';
@@ -87,6 +88,24 @@ function toPlaybackLabel(source: PlaybackSource): string {
   if (source === 'static') return 'asset MP3 tinh';
   if (source === 'advanced') return 'advanced generator';
   return 'native fallback';
+}
+
+function resolvePlaybackSource(result: TtsPlaybackResult): PlaybackSource {
+  if (result.provider === 'static-manifest') return 'static';
+  if (result.provider === 'google-cloud') return 'advanced';
+  return 'native';
+}
+
+function requireCompletedPlayback(result: TtsPlaybackResult): PlaybackSource {
+  if (result.status === 'completed') {
+    return resolvePlaybackSource(result);
+  }
+
+  if (result.status === 'stopped') {
+    throw new Error('Da dung phat audio hien tai.');
+  }
+
+  throw new Error(result.error || 'Khong phat duoc audio thu.');
 }
 
 function toRuntimeSourceLabel(provider: string | null, hasDesktopAudioStore: boolean): string {
@@ -359,28 +378,28 @@ export function TtsSettingsPage() {
   ): Promise<PlaybackSource> => {
     const sampleAvailable = Boolean(auditAvailableMap.get(`${profile.id}:${sampleId}`));
     if (sampleAvailable) {
-      await speakTextAsync(text, 'vi', {
+      const result = await speakTextAsync(text, 'vi', {
         mode: 'static',
         policy: 'lesson-read-all',
         assetKey: buildVoiceAuditAssetKey(profile.id, sampleId),
       });
-      return 'static';
+      return requireCompletedPlayback(result);
     }
 
     if (online && stats?.backendReachable !== false) {
-      await speakTextAsync(text, 'vi', {
+      const result = await speakTextAsync(text, 'vi', {
         mode: 'advanced',
         policy: 'practice-on-demand',
         voiceId: profile.voiceId,
       });
-      return 'advanced';
+      return requireCompletedPlayback(result);
     }
 
-    await speakTextAsync(text, 'vi', {
+    const result = await speakTextAsync(text, 'vi', {
       mode: 'native',
       policy: 'fallback-native',
     });
-    return 'native';
+    return requireCompletedPlayback(result);
   };
 
   const handlePreviewProfile = async (profileId: string) => {
@@ -392,8 +411,12 @@ export function TtsSettingsPage() {
 
     setActiveProfileId(profile.id);
     await runWithTesting(`profile:${profile.id}:reading-rhythm`, async () => {
-      const source = await playAuditLine(profile, readingLine.id, readingLine.text);
-      setLastPlaybackMessage(`Da thu ${profile.label} bang ${toPlaybackLabel(source)}.`);
+      try {
+        const source = await playAuditLine(profile, readingLine.id, readingLine.text);
+        setLastPlaybackMessage(`Da thu ${profile.label} bang ${toPlaybackLabel(source)}.`);
+      } catch (error) {
+        setLastPlaybackMessage(error instanceof Error ? error.message : 'Khong phat duoc audio thu.');
+      }
     });
   };
 
@@ -403,14 +426,18 @@ export function TtsSettingsPage() {
     }
 
     await runWithTesting(`audit:${activeProfile.id}:${sampleId}`, async () => {
-      const source = await playAuditLine(activeProfile, sampleId, text);
-      setLastPlaybackMessage(`Da kiem tra "${label}" cho ${activeProfile.label} bang ${toPlaybackLabel(source)}.`);
+      try {
+        const source = await playAuditLine(activeProfile, sampleId, text);
+        setLastPlaybackMessage(`Da kiem tra "${label}" cho ${activeProfile.label} bang ${toPlaybackLabel(source)}.`);
+      } catch (error) {
+        setLastPlaybackMessage(error instanceof Error ? error.message : 'Khong phat duoc audio thu.');
+      }
     });
   };
 
   const handleAdvancedTest = async () => {
     await runWithTesting('advanced:vi', async () => {
-      await speakTextAsync(
+      const result = await speakTextAsync(
         'Xin chao. Day la cau thu de nghe che do advanced generator.',
         'vi',
         {
@@ -419,13 +446,18 @@ export function TtsSettingsPage() {
           voiceId: activeProfile?.voiceId || undefined,
         },
       );
-      setLastPlaybackMessage('Da thu advanced generator.');
+      try {
+        const source = requireCompletedPlayback(result);
+        setLastPlaybackMessage(`Da thu ${toPlaybackLabel(source)}.`);
+      } catch (error) {
+        setLastPlaybackMessage(error instanceof Error ? error.message : 'Khong phat duoc audio thu.');
+      }
     });
   };
 
   const handleNativeTest = async () => {
     await runWithTesting('native:vi', async () => {
-      await speakTextAsync(
+      const result = await speakTextAsync(
         'Xin chao. Day la cau thu cua giong native tren thiet bi.',
         'vi',
         {
@@ -433,7 +465,12 @@ export function TtsSettingsPage() {
           policy: 'fallback-native',
         },
       );
-      setLastPlaybackMessage('Da thu native fallback.');
+      try {
+        const source = requireCompletedPlayback(result);
+        setLastPlaybackMessage(`Da thu ${toPlaybackLabel(source)}.`);
+      } catch (error) {
+        setLastPlaybackMessage(error instanceof Error ? error.message : 'Khong phat duoc audio thu.');
+      }
     });
   };
 
