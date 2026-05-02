@@ -4,7 +4,7 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/((?!tts-static-pack/by-grade/)(?!app-update\\.json)(?!mascots/).*)",
+      "source": "/((?!audio/tts/)(?!tts-static-pack/by-grade/)(?!app-update\\.json)(?!mascots/).*)",
       "destination": "/index.html"
     }
   ]
