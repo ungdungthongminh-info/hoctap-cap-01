@@ -72,7 +72,7 @@
     "publish": [
       {
         "provider": "generic",
-        "url": "https://hoctap-cap-01.vercel.app/desktop-updates"
+        "url": "https://hoctap-cap-01-livid.vercel.app/desktop-updates"
       }
     ],
     "mac": {

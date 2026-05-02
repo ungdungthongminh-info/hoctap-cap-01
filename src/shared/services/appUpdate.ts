@@ -1,7 +1,7 @@
 const UPDATE_FEED_URL_KEY = 'hhk_update_feed_url';
 const UPDATE_DISMISSED_VERSION_KEY = 'hhk_update_dismissed_version';
 
-const FALLBACK_UPDATE_FEED_URL = 'https://hoctap-cap-01.vercel.app/app-update.json';
+const FALLBACK_UPDATE_FEED_URL = 'https://hoctap-cap-01-livid.vercel.app/app-update.json';
 
 export interface AppUpdateManifest {
   appId?: string;
