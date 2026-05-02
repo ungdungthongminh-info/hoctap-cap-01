@@ -132,16 +132,6 @@ const GRADE_PACK_LINKS: Partial<Record<number, string>> = {
   6: buildPackProxyUrl(0),
 };
 
-const GRADE_PACK_LABELS: Partial<Record<number, string>> = {
-  0: 'Tien lop 1',
-  1: 'Lop 1',
-  2: 'Lop 2',
-  3: 'Lop 3',
-  4: 'Lop 4',
-  5: 'Lop 5',
-  6: 'Tien lop 1',
-};
-
 export const STATIC_PACK_GRADE_OPTIONS: Array<{ grade: number; label: string }> = [
   { grade: 0, label: 'Tien Tieu Hoc (Lop La)' },
   { grade: 1, label: 'Lop 1' },
@@ -222,10 +212,6 @@ function parseStudentGradeFromStoredState(): number | null {
 
 function resolveDefaultPackUrlByGrade(): string {
   return ALL_GRADES_BUNDLE_URL;
-}
-
-function getRecommendedPackGrade(): number {
-  return getStaticPackSelectedGrade();
 }
 
 export function getStaticPackSelectedGrade(): number {
@@ -374,11 +360,11 @@ function isLegacyBackendGradePackUrl(value: string): boolean {
   return /\/api\/v1\/tts\/static-pack\/by-grade\/\d+/.test(normalized);
 }
 
-export function getStaticPackRecommendedUrl(grade?: number): string {
+export function getStaticPackRecommendedUrl(): string {
   return normalizeManifestUrl(resolveDefaultPackUrlByGrade());
 }
 
-export function getStaticPackRecommendedLabel(grade?: number): string {
+export function getStaticPackRecommendedLabel(): string {
   return 'Goi day du moi lop';
 }
 
