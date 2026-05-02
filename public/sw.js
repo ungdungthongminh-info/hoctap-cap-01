@@ -36,6 +36,11 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== location.origin) return;
   if (url.pathname.includes('/api/')) return;
 
+  // Skip binary download routes — never cache EXE, blockmap, or audio ZIPs
+  if (url.pathname.startsWith('/desktop-updates/') || url.pathname.startsWith('/tts-static-pack/')) {
+    return;
+  }
+
   // HTML navigations → network-first
   if (event.request.mode === 'navigate') {
     event.respondWith(

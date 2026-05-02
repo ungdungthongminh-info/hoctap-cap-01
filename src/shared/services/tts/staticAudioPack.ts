@@ -396,6 +396,12 @@ function extractGradeFromPackUrl(value: string): number | null {
 }
 
 function buildFallbackManifestCandidates(resolvedUrl: string): string[] {
+  // For Vercel proxy URLs, skip direct Drive fallbacks — those fetches would be
+  // CORS-blocked from the browser. The proxy is the only viable path.
+  if (resolvedUrl.includes('/tts-static-pack/by-grade/')) {
+    return [];
+  }
+
   const grade = extractGradeFromPackUrl(resolvedUrl);
   if (grade === null) {
     return [];
@@ -605,31 +611,6 @@ function decodeUtf8(bytes: Uint8Array): string {
   return new TextDecoder('utf-8').decode(bytes);
 }
 
-function decodeHtmlEntities(value: string): string {
-  return String(value || '')
-    .replace(/&amp;/gi, '&')
-    .replace(/&#x3d;/gi, '=')
-    .replace(/&#61;/gi, '=')
-    .replace(/&#x26;/gi, '&')
-    .replace(/&#38;/gi, '&');
-}
-
-function extractDriveConfirmTokenFromHtml(html: string): { confirm: string; id: string } | null {
-  const decoded = decodeHtmlEntities(String(html || ''));
-  const fullMatch = decoded.match(/confirm=([0-9A-Za-z_-]{2,})&id=([0-9A-Za-z_-]{10,})/i);
-  if (fullMatch?.[1] && fullMatch?.[2]) {
-    return { confirm: fullMatch[1], id: fullMatch[2] };
-  }
-
-  const confirmMatch = decoded.match(/[?&]confirm=([0-9A-Za-z_-]{2,})/i);
-  const idMatch = decoded.match(/[?&]id=([0-9A-Za-z_-]{10,})/i);
-  if (confirmMatch?.[1] && idMatch?.[1]) {
-    return { confirm: confirmMatch[1], id: idMatch[1] };
-  }
-
-  return null;
-}
-
 async function fetchPayloadBytesWithDriveFallback(
   candidateUrl: string,
 ): Promise<{ bytes: Uint8Array; finalUrl: string } | null> {
@@ -653,24 +634,10 @@ async function fetchPayloadBytesWithDriveFallback(
     return { bytes: payloadBytes, finalUrl: candidateUrl };
   }
 
-  const html = decodeUtf8(payloadBytes);
-  const token = extractDriveConfirmTokenFromHtml(html);
-  if (!token) {
-    return { bytes: payloadBytes, finalUrl: candidateUrl };
-  }
-
-  const confirmedUrl = `https://drive.google.com/uc?export=download&confirm=${encodeURIComponent(token.confirm)}&id=${encodeURIComponent(token.id)}`;
-  const confirmedResponse = await fetch(confirmedUrl, { cache: 'no-cache' });
-  if (!confirmedResponse.ok) {
-    return { bytes: payloadBytes, finalUrl: candidateUrl };
-  }
-
-  payloadBytes = new Uint8Array(await confirmedResponse.arrayBuffer());
-  if (!payloadBytes.length) {
-    return null;
-  }
-
-  return { bytes: payloadBytes, finalUrl: confirmedUrl };
+  // Drive returned an HTML confirmation page. Direct Drive fetches from the browser
+  // are CORS-blocked, so we cannot follow the confirm token from client side.
+  // Return null to surface a clear error and let the caller try the next candidate.
+  return null;
 }
 
 function normalizeManifest(

@@ -1,6 +1,6 @@
 {
   "name": "hoc-hung-khoi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "productName": "Học Hứng Khởi Tiểu Học",
   "main": "electron/main.js",
   "scripts": {
@@ -71,8 +71,9 @@
     },
     "publish": [
       {
-        "provider": "generic",
-        "url": "https://hoctap-cap-01-livid.vercel.app/desktop-updates"
+        "provider": "github",
+        "owner": "ungdungthongminh-info",
+        "repo": "hoctap-cap-01"
       }
     ],
     "mac": {
