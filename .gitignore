@@ -18,3 +18,5 @@ backend/secrets/*.json
 public/audio/tts/assets/
 public/audio/tts/**/*.zip
 public/audio/tts/**/*.wav
+
+.vercel

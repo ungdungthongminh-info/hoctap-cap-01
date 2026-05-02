@@ -65,7 +65,7 @@ interface NavGroup {
   items: NavItem[];
 }
 
-const WEB_TOTAL_DOWNLOADS_URL = 'https://www.ungdungthongminh.shop/account?tab=downloads&highlight=app-study-12';
+const APP_PRICING_URL = 'https://hoctap-cap-01.vercel.app/#/pricing';
 
 const primaryItems: NavItem[] = [
   { to: '/home', icon: Home, label: 'Trang chủ' },
@@ -402,7 +402,7 @@ export function Sidebar() {
 
         <a
           className="sidebar-download-app-btn"
-          href={WEB_TOTAL_DOWNLOADS_URL}
+          href={APP_PRICING_URL}
           target="_blank"
           rel="noopener noreferrer"
           onClick={handleNavItemClick}

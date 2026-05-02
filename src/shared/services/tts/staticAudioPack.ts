@@ -320,14 +320,36 @@ function safeStorageSet(key: string, value: string): void {
   }
 }
 
+function isNonAudioPackUrl(value: string): boolean {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (!normalized) {
+    return false;
+  }
+
+  return normalized.includes('/#/pricing')
+    || normalized.includes('/pricing')
+    || normalized.includes('tab=downloads')
+    || normalized.includes('/account?')
+    || normalized.includes('/desktop-updates/')
+    || normalized.endsWith('/app-update.json');
+}
+
 function normalizeManifestUrl(value: string): string {
   const raw = String(value || '').trim();
   if (!raw) {
     return defaultManifestUrl();
   }
 
+  if (isNonAudioPackUrl(raw)) {
+    return defaultManifestUrl();
+  }
+
   try {
-    return normalizeGoogleDriveUrl(new URL(raw, window.location.href).toString());
+    const resolved = new URL(raw, window.location.href).toString();
+    if (isNonAudioPackUrl(resolved)) {
+      return defaultManifestUrl();
+    }
+    return normalizeGoogleDriveUrl(resolved);
   } catch {
     return normalizeGoogleDriveUrl(raw);
   }

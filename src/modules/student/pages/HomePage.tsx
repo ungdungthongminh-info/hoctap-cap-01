@@ -34,7 +34,7 @@ import { getAccessPlan } from '../../../shared/services/accessControl';
 import '../styles/premiumButtons.css';
 
 const SUB_EXPIRY_KEY = 'hhk_sub_expiry';
-const WEB_TOTAL_DOWNLOADS_URL = 'https://www.ungdungthongminh.shop/account?tab=downloads&highlight=app-study-12';
+const APP_PRICING_URL = 'https://hoctap-cap-01.vercel.app/#/pricing';
 
 type KeyExpiryBadge = {
   text: string;
@@ -187,9 +187,9 @@ export function HomePage() {
   }, []);
 
   const openWindowsDownload = () => {
-    const popup = window.open(WEB_TOTAL_DOWNLOADS_URL, '_blank', 'noopener,noreferrer');
+    const popup = window.open(APP_PRICING_URL, '_blank', 'noopener,noreferrer');
     if (!popup) {
-      window.location.assign(WEB_TOTAL_DOWNLOADS_URL);
+      window.location.assign(APP_PRICING_URL);
     }
   };
 

@@ -1,0 +1,10 @@
+node_modules/
+release/
+backend/
+backups/
+content-patches/
+mascots/
+*.db
+*.zip
+*.exe
+*.blockmap
