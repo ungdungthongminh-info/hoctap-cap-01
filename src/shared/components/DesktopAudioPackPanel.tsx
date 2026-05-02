@@ -117,7 +117,6 @@ export function DesktopAudioPackPanel() {
         },
       }));
       if (payload.phase === 'done') {
-        setBusyGrade(null);
         void refresh();
       }
     });
@@ -131,43 +130,62 @@ export function DesktopAudioPackPanel() {
     [packs],
   );
 
-  const downloadGrade = async (grade: number) => {
+  const totalCoverage = useMemo(() => {
+    return GRADE_OPTIONS.reduce((acc, option) => {
+      const coverage = packs[option.grade]?.summary?.lessonCoverage;
+      acc.available += Number(coverage?.available || 0);
+      acc.total += Number(coverage?.total || 0);
+      return acc;
+    }, { available: 0, total: 0 });
+  }, [packs]);
+
+  const isProcessingAll = busyGrade !== null;
+
+  const downloadAllPacks = async () => {
     if (!window.electronAPI?.audioPacks) return;
-    setBusyGrade(grade);
     setError('');
     try {
-      await window.electronAPI.audioPacks.download({ grade, replace: true });
+      for (const option of GRADE_OPTIONS) {
+        setBusyGrade(option.grade);
+        await window.electronAPI.audioPacks.download({ grade: option.grade, replace: true });
+      }
       await refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Khong tai duoc goi audio.');
+      setError(e instanceof Error ? e.message : 'Khong tai duoc goi tieng doc day du.');
     } finally {
       setBusyGrade(null);
     }
   };
 
-  const removeGrade = async (grade: number) => {
+  const verifyAllPacks = async () => {
     if (!window.electronAPI?.audioPacks) return;
-    setBusyGrade(grade);
     setError('');
     try {
-      await window.electronAPI.audioPacks.remove({ grade });
+      for (const option of GRADE_OPTIONS) {
+        if (!packs[option.grade]) continue;
+        setBusyGrade(option.grade);
+        await window.electronAPI.audioPacks.verify({ grade: option.grade });
+      }
       await refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Khong xoa duoc goi audio.');
+      setError(e instanceof Error ? e.message : 'Khong kiem tra duoc goi tieng doc.');
     } finally {
       setBusyGrade(null);
     }
   };
 
-  const verifyGrade = async (grade: number) => {
+  const removeAllPacks = async () => {
     if (!window.electronAPI?.audioPacks) return;
-    setBusyGrade(grade);
     setError('');
     try {
-      await window.electronAPI.audioPacks.verify({ grade });
+      for (const option of GRADE_OPTIONS) {
+        if (!packs[option.grade]) continue;
+        setBusyGrade(option.grade);
+        await window.electronAPI.audioPacks.remove({ grade: option.grade });
+      }
       await refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Khong kiem tra duoc goi audio.');
+      setError(e instanceof Error ? e.message : 'Khong xoa duoc goi tieng doc.');
     } finally {
       setBusyGrade(null);
     }
@@ -197,7 +215,7 @@ export function DesktopAudioPackPanel() {
         <div>
           <h3 className="font-bold">Tieng doc da luu tren may</h3>
           <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-            Moi lop co tinh trang rieng. Nhin vao la biet lop nao da du tieng doc.
+            Bam mot lan de tai day du tieng doc cho moi lop. Bang ben duoi cho biet lop nao da du.
           </div>
         </div>
         <button
@@ -226,11 +244,52 @@ export function DesktopAudioPackPanel() {
         </div>
       </div>
 
+      <div className="mb-3 p-3 rounded-xl" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+        <div className="text-sm font-bold">Tong bai hoc da co tieng doc</div>
+        <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
+          {totalCoverage.total > 0
+            ? `${totalCoverage.available}/${totalCoverage.total} bai hoc da co tieng doc tren may nay.`
+            : 'Chua co du lieu tieng doc da luu tren may.'}
+        </div>
+      </div>
+
       {error && (
         <div className="text-xs mb-3 px-3 py-2 rounded-lg" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
           {error}
         </div>
       )}
+
+      <div className="flex gap-3 flex-wrap mb-3">
+        <button
+          type="button"
+          className="btn btn-primary flex items-center gap-2"
+          onClick={() => void downloadAllPacks()}
+          disabled={isProcessingAll}
+        >
+          <Download size={16} />
+          {isProcessingAll ? 'Dang tai goi day du...' : 'Tai goi tieng doc day du (moi lop)'}
+        </button>
+        <button
+          type="button"
+          className="btn flex items-center gap-2"
+          style={{ background: 'var(--color-surface)', color: 'var(--color-primary)' }}
+          onClick={() => void verifyAllPacks()}
+          disabled={isProcessingAll}
+        >
+          <RefreshCw size={16} />
+          Kiem tra lai
+        </button>
+        <button
+          type="button"
+          className="btn flex items-center gap-2"
+          style={{ background: '#FEF2F2', color: '#B91C1C' }}
+          onClick={() => void removeAllPacks()}
+          disabled={isProcessingAll}
+        >
+          <Trash2 size={16} />
+          Xoa goi da tai
+        </button>
+      </div>
 
       <div className="grid gap-3">
         {GRADE_OPTIONS.map((option) => {
@@ -240,6 +299,7 @@ export function DesktopAudioPackPanel() {
             ? progress.phase
             : (pack?.status || 'not-installed');
           const isBusy = busyGrade === option.grade || status === 'downloading' || status === 'extracting';
+
           return (
             <div key={option.grade} className="p-3 rounded-xl" style={{ border: '1px solid #E2E8F0', background: '#FFFFFF' }}>
               <div className="flex items-start justify-between gap-3">
@@ -255,47 +315,16 @@ export function DesktopAudioPackPanel() {
                     Bai hoc da co tieng doc: {toCoverageLabel(pack)}
                   </div>
                 </div>
-                <div className="flex gap-2 flex-wrap justify-end">
-                  <button
-                    type="button"
-                    className="btn btn-primary flex items-center gap-1"
-                    onClick={() => void downloadGrade(option.grade)}
-                    disabled={isBusy}
-                  >
-                    <Download size={14} />
-                    {isBusy ? 'Dang xu ly...' : (pack ? 'Tai lai' : 'Tai')}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn"
-                    style={{ background: 'var(--color-surface)', color: 'var(--color-primary)' }}
-                    onClick={() => void verifyGrade(option.grade)}
-                    disabled={isBusy}
-                  >
-                    <RefreshCw size={14} />
-                    Kiem tra
-                  </button>
-                  <button
-                    type="button"
-                    className="btn"
-                    style={{ background: '#F8FAFC', color: '#334155' }}
-                    onClick={() => void openFolder(option.grade)}
-                    disabled={isBusy}
-                  >
-                    <FolderOpen size={14} />
-                    Mo thu muc
-                  </button>
-                  <button
-                    type="button"
-                    className="btn"
-                    style={{ background: '#FEF2F2', color: '#B91C1C' }}
-                    onClick={() => void removeGrade(option.grade)}
-                    disabled={isBusy || !pack}
-                  >
-                    <Trash2 size={14} />
-                    Xoa
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className="btn"
+                  style={{ background: '#F8FAFC', color: '#334155' }}
+                  onClick={() => void openFolder(option.grade)}
+                  disabled={isBusy || !pack}
+                >
+                  <FolderOpen size={14} />
+                  Mo thu muc
+                </button>
               </div>
 
               {progress && (status === 'downloading' || status === 'extracting') && (

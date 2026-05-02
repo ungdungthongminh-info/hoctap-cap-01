@@ -6,7 +6,7 @@ import { getGradeLabel, getSubjectByCode } from '../../../data/subjects';
 import { CheckCircle, RefreshCw, ChevronRight, Play } from 'lucide-react';
 import { EmptyState, MascotCharacter } from '../../../shared/components';
 import { getAccessPlan } from '../../../shared/services/accessControl';
-import { getStaticAudioPackStats, getStaticPackRecommendedLabel, getStaticPackSelectedGrade } from '../../../shared/services/tts/staticAudioPack';
+import { getStaticAudioPackStats, getStaticPackRecommendedLabel } from '../../../shared/services/tts/staticAudioPack';
 
 type Tab = 'all' | 'review' | 'done';
 
@@ -217,10 +217,10 @@ export function LessonsPage() {
         ) : (
           <>
             <div className="text-xs mb-3" style={{ color: 'var(--color-text-light)' }}>
-              Ban dang hoc tren web. Tieng doc duoc luu theo trinh duyet hien tai, khong tach rieng tung lop tren may desktop.
+              Ban dang hoc tren web. He thong se tai mot goi tieng doc day du cho moi lop va luu tren trinh duyet hien tai.
             </div>
             <div className="p-3 rounded-xl" style={{ border: '1px solid #E5E7EB', background: '#FFFFFF' }}>
-              <div className="text-sm font-bold">{getStaticPackRecommendedLabel(getStaticPackSelectedGrade())}</div>
+              <div className="text-sm font-bold">{getStaticPackRecommendedLabel()}</div>
               <div className="text-xs mt-1" style={{ color: 'var(--color-text-light)' }}>
                 {webCoverage ? toCoverageText(webCoverage) : 'Chua co du lieu tieng doc da luu tren trinh duyet.'}
               </div>

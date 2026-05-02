@@ -4,34 +4,6 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/tts-static-pack/by-grade/0",
-      "destination": "https://drive.usercontent.google.com/download?id=1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN&export=download&confirm=t"
-    },
-    {
-      "source": "/tts-static-pack/by-grade/1",
-      "destination": "https://drive.usercontent.google.com/download?id=1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq&export=download&confirm=t"
-    },
-    {
-      "source": "/tts-static-pack/by-grade/2",
-      "destination": "https://drive.usercontent.google.com/download?id=1VY-VkQ9Wtunydd10rCCp_Xs9cTZRucyh&export=download&confirm=t"
-    },
-    {
-      "source": "/tts-static-pack/by-grade/3",
-      "destination": "https://drive.usercontent.google.com/download?id=1LKgjUtADcVkbDpvCkfzSNCdNoJG94YQv&export=download&confirm=t"
-    },
-    {
-      "source": "/tts-static-pack/by-grade/4",
-      "destination": "https://drive.usercontent.google.com/download?id=164Xxc7vlATmrBqSHd9EWSXnvk9Q37rFk&export=download&confirm=t"
-    },
-    {
-      "source": "/tts-static-pack/by-grade/5",
-      "destination": "https://drive.usercontent.google.com/download?id=1PinMxVGHSl-GkekhSvTYp5rLgmcUFOQV&export=download&confirm=t"
-    },
-    {
-      "source": "/tts-static-pack/by-grade/6",
-      "destination": "https://drive.usercontent.google.com/download?id=1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN&export=download&confirm=t"
-    },
-    {
       "source": "/((?!tts-static-pack/by-grade/)(?!app-update\\.json)(?!mascots/).*)",
       "destination": "/index.html"
     }

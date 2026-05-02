@@ -28,15 +28,12 @@ import { VOICE_AUDIT_LINES } from '../../../shared/services/tts/ttsNarration';
 import { invalidateStaticTtsManifestCache } from '../../../shared/services/tts/staticTtsManifest';
 import { listStaticVoiceProfiles } from '../../../shared/services/tts/ttsVoiceProfiles';
 import {
-  STATIC_PACK_GRADE_OPTIONS,
   clearStaticAudioPack,
   getStaticAudioPackStats,
-  getStaticPackSelectedGrade,
-  getStaticPackUrlByGrade,
   getStaticPackManifestUrl,
   getStaticPackRecommendedLabel,
+  getStaticPackRecommendedUrl,
   isStaticPackAutoSyncEnabled,
-  setStaticPackSelectedGrade,
   setStaticPackAutoSyncEnabled,
   setStaticPackManifestUrl,
   syncStaticAudioPack,
@@ -116,7 +113,6 @@ export function TtsSettingsPage() {
   const [online, setOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
   const [activeProfileId, setActiveProfileId] = useState('');
   const [lastPlaybackMessage, setLastPlaybackMessage] = useState('');
-  const [selectedPackGrade, setSelectedPackGrade] = useState(getStaticPackSelectedGrade());
   const [packManifestUrl, setPackManifestUrl] = useState(getStaticPackManifestUrl());
   const [packAutoSync, setPackAutoSync] = useState(isStaticPackAutoSyncEnabled());
   const [packStats, setPackStats] = useState<StaticAudioPackStats | null>(null);
@@ -129,7 +125,7 @@ export function TtsSettingsPage() {
   const pref = getVoicePreferenceOptions();
   const showAdmin = import.meta.env.DEV || isAdminUnlocked();
   const hasDesktopAudioStore = typeof window !== 'undefined' && Boolean(window.electronAPI?.audioPacks);
-  const recommendedPackLabel = getStaticPackRecommendedLabel(selectedPackGrade);
+  const recommendedPackLabel = getStaticPackRecommendedLabel();
   const visibleModeOptions = showAdmin
     ? modeOptions
     : modeOptions.filter((option) => option.value === 'static');
@@ -287,15 +283,6 @@ export function TtsSettingsPage() {
     setStaticPackAutoSyncEnabled(enabled);
   };
 
-  const handlePackGradeChange = (grade: number) => {
-    const nextGrade = setStaticPackSelectedGrade(grade);
-    const nextManifestUrl = getStaticPackUrlByGrade(nextGrade);
-    setSelectedPackGrade(nextGrade);
-    setPackManifestUrl(nextManifestUrl);
-    setStaticPackManifestUrl(nextManifestUrl);
-    setPackError('');
-  };
-
   const handleSavePackManifestUrl = () => {
     if (!showAdmin) {
       return;
@@ -311,7 +298,7 @@ export function TtsSettingsPage() {
     setPackProgress(null);
     setPackSyncing(true);
     try {
-      const syncUrl = showAdmin ? packManifestUrl : getStaticPackUrlByGrade(selectedPackGrade);
+      const syncUrl = showAdmin ? packManifestUrl : getStaticPackRecommendedUrl();
       if (!showAdmin) {
         setPackManifestUrl(syncUrl);
         setStaticPackManifestUrl(syncUrl);
@@ -330,15 +317,6 @@ export function TtsSettingsPage() {
       setPackSyncing(false);
     }
   };
-
-  useEffect(() => {
-    if (showAdmin) {
-      return;
-    }
-    const nextUrl = getStaticPackUrlByGrade(selectedPackGrade);
-    setPackManifestUrl(nextUrl);
-    setStaticPackManifestUrl(nextUrl);
-  }, [selectedPackGrade, showAdmin]);
 
   const handleClearStaticPack = async () => {
     setPackClearing(true);
@@ -558,33 +536,13 @@ export function TtsSettingsPage() {
       <div className="card mb-4">
         <div className="flex items-center gap-2 mb-3">
           <Download size={18} style={{ color: 'var(--color-primary)' }} />
-          <h3 className="font-bold">Audio pack tải về máy (offline)</h3>
+          <h3 className="font-bold">Tải gói tiếng đọc đầy đủ (mọi lớp)</h3>
         </div>
 
         <div className="mb-3 rounded-xl p-3" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
-          <div className="text-sm font-bold">Gói audio theo lớp: {recommendedPackLabel}</div>
+          <div className="text-sm font-bold">Gói mặc định: {recommendedPackLabel}</div>
           <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-            Chon lop truoc khi tai de tranh nham audio. Lua chon nay doc lap voi app state hien tai.
-          </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {STATIC_PACK_GRADE_OPTIONS.map((option) => (
-              <button
-                key={option.grade}
-                type="button"
-                className="px-3 py-2 rounded-lg text-xs font-bold"
-                style={{
-                  border: selectedPackGrade === option.grade ? '2px solid var(--color-primary)' : '1px solid #CBD5E1',
-                  background: selectedPackGrade === option.grade ? '#EFF6FF' : '#FFFFFF',
-                  color: selectedPackGrade === option.grade ? 'var(--color-primary-dark)' : '#1F2937',
-                }}
-                onClick={() => handlePackGradeChange(option.grade)}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-          <div className="text-xs mt-2" style={{ color: 'var(--color-text-light)' }}>
-            Lop dang chon: {recommendedPackLabel}
+            Mot lan tai de dung tieng doc cho tat ca lop ngay tren trinh duyet hien tai.
           </div>
         </div>
 
@@ -597,7 +555,7 @@ export function TtsSettingsPage() {
                 style={{ border: '1px solid #D1D5DB' }}
                 value={packManifestUrl}
                 onChange={(event) => setPackManifestUrl(event.target.value)}
-                placeholder="https://.../manifest.json hoặc https://.../vi-v1-grade-1.zip"
+                placeholder="https://.../manifest.json hoặc bundle://tts-static-pack/all-grades"
               />
               <button
                 type="button"
@@ -666,7 +624,7 @@ export function TtsSettingsPage() {
 
         {packError && (
           <div className="text-xs mb-3 px-3 py-2 rounded-lg" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
-            {showAdmin ? packError : 'Khong tai duoc audio pack. Vui long kiem tra mang, sau do bam tai lai.'}
+            {showAdmin ? packError : 'Khong tai duoc goi tieng doc day du. Vui long kiem tra mang, sau do bam tai lai.'}
           </div>
         )}
 
@@ -678,7 +636,7 @@ export function TtsSettingsPage() {
             disabled={packSyncing || !online}
           >
             <Download size={16} />
-            {packSyncing ? 'Đang tải audio pack...' : 'Tải/đồng bộ audio pack'}
+            {packSyncing ? 'Đang tải gói tiếng đọc đầy đủ...' : 'Tải gói tiếng đọc đầy đủ (mọi lớp)'}
           </button>
           <button
             type="button"
@@ -693,7 +651,7 @@ export function TtsSettingsPage() {
         </div>
 
         <p className="text-xs mt-3" style={{ color: 'var(--color-text-light)' }}>
-          Sau khi tải xong, người học có thể nghe offline từ file đã lưu trên máy, không cần gọi API TTS cho flow mặc định.
+          Sau khi tải xong, người học có thể nghe cho mọi lớp từ dữ liệu đã lưu trên trình duyệt này.
         </p>
       </div>
       )}

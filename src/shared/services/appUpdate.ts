@@ -1,3 +1,5 @@
+import { getWindowsAppDownloadUrl } from './windowsAppDownload';
+
 const UPDATE_FEED_URL_KEY = 'hhk_update_feed_url';
 const UPDATE_DISMISSED_VERSION_KEY = 'hhk_update_dismissed_version';
 
@@ -239,6 +241,6 @@ export async function checkAppUpdate(): Promise<AppUpdateCheckResult> {
 }
 
 export function getAppUpdateDownloadUrl(result: AppUpdateCheckResult | null): string {
-  return normalizeUrl(result?.manifest?.downloadUrl);
+  return getWindowsAppDownloadUrl(result?.latestVersion || result?.manifest?.latestVersion);
 }
 

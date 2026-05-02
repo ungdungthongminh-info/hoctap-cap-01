@@ -47,7 +47,9 @@ export function corsMiddleware(req: Request, res: Response, next: NextFunction) 
     'http://localhost:5173',
     'http://localhost:5174',
     'http://127.0.0.1:5173',
-    'http://127.0.0.1:5174'
+    'http://127.0.0.1:5174',
+    'https://hoctap-cap-01.vercel.app',
+    'https://www.ungdungthongminh.shop'
   ];
   const envOrigins = (process.env.CORS_ORIGIN || '')
     .split(',')

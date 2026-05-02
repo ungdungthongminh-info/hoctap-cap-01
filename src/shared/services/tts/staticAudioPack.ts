@@ -1,6 +1,7 @@
 import type { StaticTtsManifestFile, StaticTtsManifestEntry } from './staticTtsManifest';
 import { unzipSync } from 'fflate';
 import { STORAGE_KEYS as APP_STORAGE_KEYS } from '../../constants/storageKeys';
+import { BACKEND_API_BASE } from '../webTotalBridge';
 
 const DB_NAME = 'hhk_tts_static_pack';
 const DB_VERSION = 1;
@@ -114,24 +115,12 @@ let globalSyncStatus: StaticPackGlobalSyncStatus = {
   updatedAt: Date.now(),
 };
 
-function buildDrivePackUrl(fileId: string): string {
-  return `https://drive.usercontent.google.com/download?id=${encodeURIComponent(fileId)}&export=download&confirm=t`;
-}
+const ALL_GRADES_BUNDLE_URL = 'bundle://tts-static-pack/all-grades';
+const ALL_GRADE_PACKS = [0, 1, 2, 3, 4, 5] as const;
 
 function buildPackProxyUrl(grade: number): string {
-  return `/tts-static-pack/by-grade/${grade}`;
+  return `${BACKEND_API_BASE}/tts/static-pack/by-grade/${grade}`;
 }
-
-const GRADE_PACK_FILE_IDS: Partial<Record<number, string>> = {
-  0: '1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
-  1: '1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq',
-  2: '1VY-VkQ9Wtunydd10rCCp_Xs9cTZRucyh',
-  3: '1LKgjUtADcVkbDpvCkfzSNCdNoJG94YQv',
-  4: '164Xxc7vlATmrBqSHd9EWSXnvk9Q37rFk',
-  5: '1PinMxVGHSl-GkekhSvTYp5rLgmcUFOQV',
-  // Compatibility alias in case external data uses grade 6 for pre-primary pack.
-  6: '1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
-};
 
 const GRADE_PACK_LINKS: Partial<Record<number, string>> = {
   0: buildPackProxyUrl(0),
@@ -172,13 +161,13 @@ function normalizePackGrade(value: unknown): number {
 
 function buildSyncHint(phase: StaticPackGlobalSyncStatus['phase']): string {
   if (phase === 'syncing') {
-    return 'Dang tai goi audio offline. Ban co the tiep tuc hoc, am thanh se san sang ngay sau khi dong bo xong.';
+    return 'Dang tai goi tieng doc day du cho moi lop. Ban co the tiep tuc hoc trong khi he thong tai ve.';
   }
   if (phase === 'success') {
-    return 'Dong bo audio thanh cong. Audio da san sang de nghe tren trinh duyet hien tai.';
+    return 'Da tai xong goi tieng doc day du. Ban co the nghe cho moi lop tren trinh duyet nay.';
   }
   if (phase === 'error') {
-    return 'Khong the dong bo audio pack. Kiem tra mang, chon dung lop audio, sau do bam Thu lai.';
+    return 'Khong the tai goi tieng doc day du. Kiem tra mang, sau do bam Thu lai.';
   }
   return '';
 }
@@ -232,8 +221,7 @@ function parseStudentGradeFromStoredState(): number | null {
 }
 
 function resolveDefaultPackUrlByGrade(): string {
-  const grade = getStaticPackSelectedGrade();
-  return String(GRADE_PACK_LINKS[grade] || GRADE_PACK_LINKS[1] || '');
+  return ALL_GRADES_BUNDLE_URL;
 }
 
 function getRecommendedPackGrade(): number {
@@ -340,6 +328,10 @@ function normalizeManifestUrl(value: string): string {
     return defaultManifestUrl();
   }
 
+  if (raw === ALL_GRADES_BUNDLE_URL) {
+    return raw;
+  }
+
   if (isNonAudioPackUrl(raw)) {
     return defaultManifestUrl();
   }
@@ -374,49 +366,6 @@ function isLegacyLocalManifestUrl(value: string): boolean {
     || normalized === './audio/tts/manifest.json';
 }
 
-function extractGradeFromPackUrl(value: string): number | null {
-  const raw = String(value || '').trim();
-  if (!raw) {
-    return null;
-  }
-
-  const directMatch = raw.match(/\/tts-static-pack\/by-grade\/(\d+)(?:[/?#]|$)/i);
-  if (directMatch?.[1]) {
-    const grade = Number(directMatch[1]);
-    return Number.isFinite(grade) ? grade : null;
-  }
-
-  const legacyMatch = raw.match(/\/api\/v1\/tts\/static-pack\/by-grade\/(\d+)(?:[/?#]|$)/i);
-  if (legacyMatch?.[1]) {
-    const grade = Number(legacyMatch[1]);
-    return Number.isFinite(grade) ? grade : null;
-  }
-
-  return null;
-}
-
-function buildFallbackManifestCandidates(resolvedUrl: string): string[] {
-  // Even for Vercel proxy URLs, provide Drive fallbacks.
-  // If Vercel proxy returns HTML (Drive confirmation), fallback attempts may work
-  // (especially if user is authenticated to Google).
-  const grade = extractGradeFromPackUrl(resolvedUrl);
-  if (grade === null) {
-    return [];
-  }
-
-  const fileId = GRADE_PACK_FILE_IDS[grade];
-  if (!fileId) {
-    return [];
-  }
-
-  const fallbacks = [
-    buildDrivePackUrl(fileId),
-    `https://drive.google.com/uc?export=download&id=${encodeURIComponent(fileId)}`,
-  ];
-
-  return fallbacks.filter((item) => item !== resolvedUrl);
-}
-
 function isLegacyBackendGradePackUrl(value: string): boolean {
   const normalized = String(value || '').trim().toLowerCase();
   if (!normalized) {
@@ -426,15 +375,11 @@ function isLegacyBackendGradePackUrl(value: string): boolean {
 }
 
 export function getStaticPackRecommendedUrl(grade?: number): string {
-  if (grade !== undefined) {
-    return getStaticPackUrlByGrade(grade);
-  }
   return normalizeManifestUrl(resolveDefaultPackUrlByGrade());
 }
 
 export function getStaticPackRecommendedLabel(grade?: number): string {
-  const targetGrade = grade === undefined ? getRecommendedPackGrade() : normalizePackGrade(grade);
-  return String(GRADE_PACK_LABELS[targetGrade] || 'Lop 1');
+  return 'Goi day du moi lop';
 }
 
 export function getStaticPackManifestUrl(): string {
@@ -594,6 +539,10 @@ function normalizeAssetPath(value: string): string {
     .replace(/^\.\//, '');
 }
 
+function isAllGradesBundleUrl(value: string): boolean {
+  return String(value || '').trim() === ALL_GRADES_BUNDLE_URL;
+}
+
 function isZipSignature(bytes: Uint8Array): boolean {
   return (
     bytes.length >= 4
@@ -707,7 +656,114 @@ function parseStaticPackZip(bytes: Uint8Array, manifestUrl: string): StaticPackS
 
 async function fetchStaticPackSource(manifestUrl?: string): Promise<StaticPackSource | null> {
   const resolvedUrl = normalizeManifestUrl(manifestUrl || getStaticPackManifestUrl());
-  const candidateUrls = [resolvedUrl, ...buildFallbackManifestCandidates(resolvedUrl)];
+  if (isAllGradesBundleUrl(resolvedUrl)) {
+    const sources: StaticPackSource[] = [];
+    for (const grade of ALL_GRADE_PACKS) {
+      const gradeSource = await fetchStaticPackSource(getStaticPackUrlByGrade(grade));
+      if (!gradeSource) {
+        return null;
+      }
+      sources.push(gradeSource);
+    }
+
+    const mergedEntries: StaticTtsManifestFile['entries'] = {};
+    const mergedZipAssets = new Map<string, Uint8Array>();
+    const voiceProfileMap = new Map<string, StaticTtsManifestFile['summary']['voiceProfiles'][number]>();
+    const auditSampleMap = new Map<string, StaticTtsManifestFile['summary']['auditSamples'][number]>();
+    const usageMap = new Map<string, { usage: string; total: number; available: number }>();
+    const contentVersions = new Set<string>();
+    const generatedAtCandidates: string[] = [];
+    let defaultProfileId = '';
+    let allZip = true;
+
+    sources.forEach((source) => {
+      Object.entries(source.manifest.entries || {}).forEach(([key, entry]) => {
+        mergedEntries[key] = entry;
+      });
+
+      (source.manifest.summary?.voiceProfiles || []).forEach((profile) => {
+        if (!voiceProfileMap.has(profile.id)) {
+          voiceProfileMap.set(profile.id, profile);
+        }
+      });
+
+      (source.manifest.summary?.auditSamples || []).forEach((sample) => {
+        const sampleKey = `${sample.profileId}:${sample.sampleId}`;
+        if (!auditSampleMap.has(sampleKey)) {
+          auditSampleMap.set(sampleKey, sample);
+        }
+      });
+
+      (source.manifest.summary?.byUsage || []).forEach((item) => {
+        const usage = String(item.usage || '').trim();
+        if (!usage) return;
+        const current = usageMap.get(usage) || { usage, total: 0, available: 0 };
+        current.total += Number(item.total || 0);
+        current.available += Number(item.available || 0);
+        usageMap.set(usage, current);
+      });
+
+      const version = String(source.manifest.summary?.contentVersion || source.manifest.meta?.contentVersion || '').trim();
+      if (version) {
+        contentVersions.add(version);
+      }
+
+      const generatedAt = String(source.manifest.summary?.generatedAt || source.manifest.meta?.generatedAt || '').trim();
+      if (generatedAt) {
+        generatedAtCandidates.push(generatedAt);
+      }
+
+      if (!defaultProfileId) {
+        defaultProfileId = String(source.manifest.summary?.defaultProfileId || source.manifest.meta?.defaultProfileId || '').trim();
+      }
+
+      if (source.sourceType === 'zip') {
+        source.zipAssets?.forEach((bytes, assetPath) => {
+          if (!mergedZipAssets.has(assetPath)) {
+            mergedZipAssets.set(assetPath, bytes);
+          }
+        });
+      } else {
+        allZip = false;
+      }
+    });
+
+    const totalEntries = Object.keys(mergedEntries).length;
+    const availableEntries = Object.values(mergedEntries).filter((entry) => Boolean(entry.available)).length;
+    const contentVersion = contentVersions.size === 1
+      ? Array.from(contentVersions)[0]
+      : Array.from(contentVersions).join('+');
+    const generatedAt = generatedAtCandidates.sort().slice(-1)[0] || '';
+
+    return {
+      manifestUrl: ALL_GRADES_BUNDLE_URL,
+      manifest: {
+        meta: {
+          contentVersion,
+          generatedAt,
+          defaultProfileId,
+          audioBasePath: 'bundle://tts-static-pack/assets',
+        },
+        summary: {
+          totalEntries,
+          availableEntries,
+          missingEntries: Math.max(0, totalEntries - availableEntries),
+          defaultProfileId,
+          contentVersion,
+          generatedAt,
+          audioBasePath: 'bundle://tts-static-pack/assets',
+          voiceProfiles: Array.from(voiceProfileMap.values()),
+          auditSamples: Array.from(auditSampleMap.values()),
+          byUsage: Array.from(usageMap.values()),
+        },
+        entries: mergedEntries,
+      },
+      sourceType: allZip ? 'zip' : 'manifest',
+      zipAssets: allZip ? mergedZipAssets : undefined,
+    };
+  }
+
+  const candidateUrls = [resolvedUrl];
 
   for (const candidateUrl of candidateUrls) {
     try {
@@ -879,7 +935,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
   const manifestUrl = normalizeManifestUrl(options.manifestUrl || getStaticPackManifestUrl());
   setGlobalSyncStatus({
     phase: 'syncing',
-    message: 'Dang dong bo audio pack offline...',
+    message: 'Dang tai goi tieng doc day du...',
     hint: buildSyncHint('syncing'),
     progress: {
       phase: 'manifest',
@@ -903,8 +959,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
   const source = await fetchStaticPackSource(manifestUrl);
   if (!source) {
     throw new Error(
-      `Khong tai duoc audio pack tu duong dan da cau hinh: ${manifestUrl}. `
-      + 'Kiem tra ket noi internet hoac cap nhat lai duong dan audio pack.',
+      'Khong tai duoc goi tieng doc day du tu backend. Kiem tra mang va thu lai.',
     );
   }
   const manifest = source.manifest;
@@ -942,7 +997,7 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
     };
     setGlobalSyncStatus({
       phase: 'success',
-      message: 'Audio pack da duoc dong bo day du, khong can tai them.',
+      message: 'Goi tieng doc day du da san sang, khong can tai them.',
       hint: buildSyncHint('success'),
       progress: null,
       canRetry: false,
