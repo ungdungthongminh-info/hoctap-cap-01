@@ -788,6 +788,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
 
   const policy = getTtsPolicy(options.policy || 'practice-on-demand');
   const desiredMode = options.mode || getTtsMode();
+  const strictOffline = desiredMode === 'static' && Boolean(options.assetKey);
   const allowManagedFallback = desiredMode !== 'native' && policy.preferBackend;
   const allowNativeFallback = options.allowNativeFallback !== false;
   const speed = clampTtsSpeed(options.speed ?? getTtsSpeed());
@@ -819,6 +820,24 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
     return playNativeSpeech(cleanedText, lang, speed, options, token, 'device-voice');
   }
 
+  const rejectStaticPlayback = (reason: string): TtsPlaybackResult => {
+    setRuntimeStatus({
+      isLoading: false,
+      isSpeaking: false,
+      error: reason,
+      activeProvider: null,
+    });
+    options.onStatusChange?.('error');
+    return {
+      status: 'error',
+      provider: 'static-manifest',
+      resolvedSource: 'web-offline-manifest',
+      cacheStatus: 'fallback',
+      fallbackNative: false,
+      error: reason,
+    };
+  };
+
   const rejectNativeFallback = (reason: string): TtsPlaybackResult => {
     setRuntimeStatus({
       isLoading: false,
@@ -838,6 +857,13 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
   const staticPlayback = await tryPlayFromStaticManifest(options.assetKey, speed, options, token);
   if (staticPlayback?.status === 'completed' || staticPlayback?.status === 'stopped') {
     return staticPlayback;
+  }
+
+  if (desiredMode === 'static') {
+    if (strictOffline) {
+      return rejectStaticPlayback('Thieu file audio offline cho bai nay trong static pack/manifest.');
+    }
+    return rejectStaticPlayback('Che do static dang bat nhung khong tim thay audio tinh. Vui long cap nhat static pack.');
   }
 
   if (!allowManagedFallback) {
@@ -954,6 +980,30 @@ export async function prefetchText(text: string, lang: TtsLang = 'vi', options: 
   const desiredMode = options.mode || getTtsMode();
   const allowManagedFallback = desiredMode !== 'native' && policy.preferBackend;
   const ssml = buildAdvancedSsml(cleanedText, lang, policy.id);
+
+  if (desiredMode === 'static') {
+    if (!options.assetKey) {
+      return {
+        status: 'skipped',
+        warning: 'Che do static prefetch yeu cau assetKey.',
+      };
+    }
+
+    const staticEntry = await prefetchStaticTtsAsset(options.assetKey);
+    if (staticEntry?.available) {
+      return {
+        status: 'prefetched',
+        cacheStatus: 'hit',
+        provider: 'static-manifest',
+      };
+    }
+
+    return {
+      status: 'skipped',
+      provider: 'static-manifest',
+      warning: 'Khong co file audio offline trong static manifest.',
+    };
+  }
 
   if (options.assetKey) {
     const staticEntry = await prefetchStaticTtsAsset(options.assetKey);
