@@ -102,6 +102,7 @@ interface StaticPackSource {
   manifest: StaticTtsManifestFile;
   sourceType: StaticPackSourceType;
   zipAssets?: Map<string, Uint8Array>;
+  zipManifestDir?: string;
 }
 
 let autoSyncPromise: Promise<StaticPackSyncResult | null> | null = null;
@@ -687,10 +688,12 @@ function parseStaticPackZip(bytes: Uint8Array, manifestUrl: string): StaticPackS
     });
 
     let manifestBytes = files.get('manifest.json');
+    let manifestPath = 'manifest.json';
     if (!manifestBytes) {
       const nestedManifestPath = Array.from(files.keys()).find((item) => item.toLowerCase().endsWith('/manifest.json'));
       if (nestedManifestPath) {
         manifestBytes = files.get(nestedManifestPath);
+        manifestPath = nestedManifestPath;
       }
     }
 
@@ -703,15 +706,61 @@ function parseStaticPackZip(bytes: Uint8Array, manifestUrl: string): StaticPackS
       return null;
     }
 
+    const manifestDirIndex = manifestPath.lastIndexOf('/');
+    const zipManifestDir = manifestDirIndex >= 0
+      ? normalizeAssetPath(manifestPath.slice(0, manifestDirIndex))
+      : '';
+
     return {
       manifestUrl,
       manifest: normalizeManifest(payload, manifestUrl),
       sourceType: 'zip',
       zipAssets: files,
+      zipManifestDir,
     };
   } catch {
     return null;
   }
+}
+
+function getZipAssetBytes(source: StaticPackSource, assetPath: string): Uint8Array | null {
+  const normalizedAssetPath = normalizeAssetPath(assetPath);
+  if (!normalizedAssetPath) {
+    return null;
+  }
+
+  const zipAssets = source.zipAssets;
+  if (!zipAssets) {
+    return null;
+  }
+
+  const direct = zipAssets.get(normalizedAssetPath);
+  if (direct) {
+    return direct;
+  }
+
+  const manifestDir = normalizeAssetPath(source.zipManifestDir || '');
+  if (manifestDir) {
+    const prefixed = zipAssets.get(normalizeAssetPath(`${manifestDir}/${normalizedAssetPath}`));
+    if (prefixed) {
+      return prefixed;
+    }
+  }
+
+  const suffix = `/${normalizedAssetPath.toLowerCase()}`;
+  let matched: Uint8Array | null = null;
+  for (const [candidatePath, candidateBytes] of zipAssets.entries()) {
+    const normalizedCandidate = normalizeAssetPath(candidatePath).toLowerCase();
+    if (!normalizedCandidate.endsWith(suffix)) {
+      continue;
+    }
+    if (matched) {
+      return null;
+    }
+    matched = candidateBytes;
+  }
+
+  return matched;
 }
 
 async function fetchStaticPackSource(
@@ -1171,6 +1220,24 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
   const entries = pickEntriesToSync(manifest, options);
   const totalEntries = entries.length;
 
+  if (source.sourceType === 'zip' && totalEntries > 0) {
+    const sampleSize = Math.min(totalEntries, 20);
+    let matchedInSample = 0;
+    for (let i = 0; i < sampleSize; i += 1) {
+      const sampleEntry = entries[i];
+      const sampleBytes = getZipAssetBytes(source, sampleEntry.assetPath);
+      if (sampleBytes) {
+        matchedInSample += 1;
+      }
+    }
+
+    if (matchedInSample === 0) {
+      throw new Error(
+        'Cau truc file zip khong khop manifest (khong tim thay asset mau). Can dong goi lai zip dung root folder.',
+      );
+    }
+  }
+
   let processedEntries = 0;
   let downloadedEntries = 0;
   let skippedEntries = 0;
@@ -1209,9 +1276,10 @@ export async function syncStaticAudioPack(options: StaticPackSyncOptions = {}): 
       try {
         if (source.sourceType === 'zip') {
           const assetPath = normalizeAssetPath(entry.assetPath);
-          const bytes = source.zipAssets?.get(assetPath);
+          const bytes = getZipAssetBytes(source, assetPath);
           if (!bytes) {
-            throw new Error(`Missing asset in zip: ${assetPath}`);
+            const manifestDir = normalizeAssetPath(source.zipManifestDir || '');
+            throw new Error(`Missing asset in zip: ${assetPath}${manifestDir ? ` (manifestDir=${manifestDir})` : ''}`);
           }
           const byteCopy = new Uint8Array(bytes.length);
           byteCopy.set(bytes);
