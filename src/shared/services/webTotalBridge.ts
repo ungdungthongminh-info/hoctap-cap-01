@@ -560,41 +560,24 @@ export async function verifyLicenseKey(params: {
   const isCap01 = normalizedAppId === 'hoctap-cap-01' || normalizedAppId === 'app-study-12';
   let result;
 
-  if (isCap01) {
-    try {
-      result = await fetchBridgeResponse('/licenses/verify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(bridgeToken ? { Authorization: `Bearer ${bridgeToken}` } : {}),
-        },
-        body: JSON.stringify({
-          licenseKey: String(params.licenseKey || '').trim().toUpperCase(),
-          appId: 'hoctap-cap-01',
-          ...(params.deviceId ? { deviceId: params.deviceId } : {}),
-          ...(params.deviceName ? { deviceName: params.deviceName } : {}),
-        }),
-      }, { retryOnNotFound: true });
-    } catch {
-      throw new Error(
-        `Không kết nối được máy chủ kích hoạt của Web Tổng. Base đang thử: ${BACKEND_API_BASE_CANDIDATES.join(' | ')}`,
-      );
-    }
-  } else {
-    try {
-      result = await fetchBridgeResponse('/ai-app/licenses/verify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(bridgeToken ? { Authorization: `Bearer ${bridgeToken}` } : {}),
-        },
-        body: JSON.stringify(params),
-      }, { retryOnNotFound: true });
-    } catch {
-      throw new Error(
-        `Không kết nối được máy chủ kích hoạt của Web Tổng. App sẽ tự ưu tiên bridge production nếu build cũ còn giữ cấu hình sai, nhưng hiện vẫn không chạm được mạng. Base đang thử: ${BACKEND_API_BASE_CANDIDATES.join(' | ')}`,
-      );
-    }
+  try {
+    result = await fetchBridgeResponse('/licenses/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(bridgeToken ? { Authorization: `Bearer ${bridgeToken}` } : {}),
+      },
+      body: JSON.stringify({
+        licenseKey: String(params.licenseKey || '').trim().toUpperCase(),
+        appId: isCap01 ? 'hoctap-cap-01' : String(params.appId || '').trim() || 'hoctap-cap-01',
+        ...(params.deviceId ? { deviceId: params.deviceId } : {}),
+        ...(params.deviceName ? { deviceName: params.deviceName } : {}),
+      }),
+    }, { retryOnNotFound: true });
+  } catch {
+    throw new Error(
+      `Không kết nối được máy chủ kích hoạt của App Học. Base đang thử: ${BACKEND_API_BASE_CANDIDATES.join(' | ')}`,
+    );
   }
 
   const res = result.response;
@@ -671,7 +654,7 @@ export async function verifyLicenseKey(params: {
     ) {
       throw new Error(
         `Đang gọi sai endpoint backend/bridge (base hiện tại: ${resolvedBase}). `
-        + 'Web/mobile cần trỏ tới backend bridge có route /api/v1/ai-app/licenses/verify, không phải web tĩnh. '
+        + 'App Học cần route /api/licenses/verify từ backend hoạt động. '
         + 'Vui lòng cấu hình VITE_BACKEND_API_BASE đúng môi trường deploy và làm mới app để bỏ cache cũ.',
       );
     }
