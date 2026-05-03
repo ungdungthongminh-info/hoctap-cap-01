@@ -1,0 +1,67 @@
+{
+  "startedAt": "2026-05-03T13:25:28.867Z",
+  "outputPath": "f:\\1_A_Disk_D\\Tool\\Hoc_Tap\\CAp_01\\desktop-acceptance-report-20260503-202528-e2e-now.json",
+  "rootPath": "C:\\Users\\PC\\AppData\\Roaming\\Hoc Hung Khoi Tieu Hoc\\audio-packs",
+  "grade1": {
+    "manifestExists": true,
+    "packInfoExists": true,
+    "mp3Count": 703,
+    "runtimeLog": {
+      "cardId": 1,
+      "assetKey": "lesson-card:1",
+      "provider": "static-manifest",
+      "resolvedSource": "desktop-offline",
+      "assetUrl": "file:///C:/Users/PC/AppData/Roaming/Hoc%20Hung%20Khoi%20Tieu%20Hoc/audio-packs/grade-1/audio/tts/assets/vi-v1/lesson-card-1.mp3",
+      "status": "completed",
+      "timestamp": "2026-05-03T13:25:58.927Z"
+    }
+  },
+  "grade2": {
+    "manifestExists": true,
+    "packInfoExists": true,
+    "mp3Count": 703,
+    "runtimeLog": null
+  },
+  "gradeFoldersAfterDownload": {
+    "hasGrade1": true,
+    "hasGrade2": true
+  },
+  "offlineNetworkEvents": [
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-03T13:25:40.381Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-03T13:25:40.381Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-03T13:26:01.638Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-03T13:26:01.639Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://www.ungdungthongminh.shop/api/v1/ai-app/licenses/verify",
+      "timestamp": "2026-05-03T13:26:01.640Z"
+    }
+  ],
+  "noGoogleRequests": true,
+  "noBackendRequests": false,
+  "noNativeFallback": true,
+  "pass": false,
+  "reason": "Desktop acceptance FAIL: khong dat du file/runtime/network criteria.",
+  "finishedAt": "2026-05-03T13:27:02.793Z"
+}
