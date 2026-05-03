@@ -241,10 +241,18 @@ function mapActivationFieldError(raw: string): string {
   if (message.includes('email') && message.includes('không hợp lệ')) {
     return 'Email không hợp lệ';
   }
-  if (message.includes('khớp') && message.includes('email')) {
-    return 'Key không khớp email';
+  if (
+    message.includes('email_mismatch')
+    || message.includes('email không khớp')
+    || message.includes('email khong khop')
+    || (message.includes('email') && message.includes('khớp'))
+    || (message.includes('email') && message.includes('không tìm thấy'))
+    || (message.includes('email') && message.includes('mua hàng'))
+  ) {
+    return 'Email không khớp key';
   }
-  if (message.includes('hết hạn')) {
+  // Tránh bẫy "hết hạn" trong chuỗi thông báo phiên session - chỉ match nếu không có "phiên"
+  if (message.includes('hết hạn') && !message.includes('phiên')) {
     return 'Key đã hết hạn';
   }
   if (
@@ -258,9 +266,20 @@ function mapActivationFieldError(raw: string): string {
     || message.includes('phiên đó hết hạn')
     || message.includes('phien do het han')
   ) {
-    return 'Key đã được dùng trên thiết bị khác';
+    return 'Key đang dùng ở thiết bị khác';
   }
-  if (message.includes('key') || message.includes('license') || message.includes('mã')) {
+  // Không map plan-mapping error hoặc lỗi hệ thống thành "Key không đúng"
+  if (message.includes('chưa map được gói') || message.includes('chua map duoc goi')) {
+    return '';
+  }
+  // Chỉ map lỗi thực sự về key sai/invalid
+  if (
+    message.includes('không hợp lệ')
+    || message.includes('khong hop le')
+    || message.includes('key không tìm thấy')
+    || message.includes('invalid')
+    || message.includes('revoked')
+  ) {
     return 'Key không đúng';
   }
 

@@ -599,13 +599,22 @@ export async function verifyLicenseKey(params: {
   const dataNode = (payload?.data && typeof payload.data === 'object') ? payload.data : payload;
 
   if (isCap01 && res.ok && isSuccess) {
+    // Ưu tiên format mới /api/v1/ai-app/licenses/verify: { success, data: { license, features, grace } }
+    if (payload?.data?.license && typeof payload.data.license === 'object') {
+      return {
+        ok: true,
+        features: (Array.isArray(payload.data.features) ? payload.data.features : []) as string[],
+        grace: payload.data.grace,
+        license: payload.data.license,
+      };
+    }
+    // Fallback format cũ /api/v1/licenses/verify (desktop): { success, entitlement, offlineValidUntil }
     const entitlement = (payload?.entitlement && typeof payload.entitlement === 'object') ? payload.entitlement : {};
     const features = entitlement?.features && typeof entitlement.features === 'object'
       ? Object.entries(entitlement.features)
           .filter(([, enabled]) => Boolean(enabled))
           .map(([feature]) => String(feature))
       : [];
-
     return {
       ok: true,
       features,
@@ -637,10 +646,30 @@ export async function verifyLicenseKey(params: {
     const rawLower = rawText.toLowerCase();
     const backendLower = backendError.toLowerCase();
 
+    // Log debug để dễ trace lỗi
+    console.error('[verifyLicenseKey] Verify thất bại:', {
+      apiBase: resolvedBase,
+      endpoint: '/ai-app/licenses/verify',
+      status: res.status,
+      backendError,
+      clientProfile: runtimeProfile,
+      appId: isCap01 ? 'hoctap-cap-01' : String(params.appId || ''),
+      hasCustomerEmail: Boolean(params.customerEmail),
+    });
+
+    if (backendLower.includes('email_mismatch') || backendLower.includes('email không khớp') || backendLower.includes('email khong khop')) {
+      throw new Error('Email không khớp với key này. Vui lòng kiểm tra lại email đã dùng khi mua hàng.');
+    }
+
     if (backendLower.includes('license invalid') || backendLower.includes('expired or revoked')) {
+      // Phân biệt: nếu đây là do email không khớp (server trả cùng 404)
+      // thì thông báo gợi ý kiểm tra email trước khi báo key sai
+      if (params.customerEmail) {
+        throw new Error('Key không tìm thấy với email này. Vui lòng kiểm tra lại email mua hàng hoặc key.');
+      }
       clearLocalPaidActivation('revoked');
       clearLicenseCache();
-      throw new Error('Key không hợp lệ, đã hết hạn, hoặc đã bị thu hồi trên hệ thống cấp key (Web Tổng).');
+      throw new Error('Key không hợp lệ, đã hết hạn, hoặc đã bị thu hồi.');
     }
 
     if (backendLower.includes('customeremail is required')) {
