@@ -1120,7 +1120,8 @@ export async function getStaticPackAudioBlob(assetKey: string): Promise<Blob | n
     return null;
   }
 
-  return withDb(async (db) => {
+  // Try IndexedDB first (for web)
+  const indexedDbBlob = await withDb(async (db) => {
     const tx = db.transaction(ASSET_STORE, 'readonly');
     const record = await runRequest<StaticPackAssetRecord | undefined>(
       tx.objectStore(ASSET_STORE).get(safeKey),
@@ -1133,6 +1134,28 @@ export async function getStaticPackAudioBlob(assetKey: string): Promise<Blob | n
     const blob = record?.blob || null;
     return isLikelyAudioBlob(blob) ? blob : null;
   }).catch(() => null);
+
+  if (indexedDbBlob) {
+    return indexedDbBlob;
+  }
+
+  // Fallback: Try desktop offline pack (Electron only)
+  try {
+    const isDesktop = typeof window !== 'undefined' && !!window.electronAPI?.audioPacks;
+    if (isDesktop) {
+      const assetUrl = await window.electronAPI.audioPacks.getAssetUrl({ assetKey: safeKey });
+      if (assetUrl && assetUrl.url) {
+        const response = await fetch(assetUrl.url);
+        if (response.ok) {
+          return await response.blob();
+        }
+      }
+    }
+  } catch (error) {
+    // Silently fail - will fallback to other providers
+  }
+
+  return null;
 }
 
 function toStateFromManifest(

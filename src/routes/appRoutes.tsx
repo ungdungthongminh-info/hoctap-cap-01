@@ -33,6 +33,7 @@ const DailyChallengePage   = lazy(() => import('@student/pages/DailyChallengePag
 const DrawingPage          = lazy(() => import('@student/pages/DrawingPage').then(m => ({ default: m.DrawingPage })));
 const AchievementPage      = lazy(() => import('@student/pages/AchievementPage').then(m => ({ default: m.AchievementPage })));
 const TtsSettingsPage      = lazy(() => import('@student/pages/TtsSettingsPage').then(m => ({ default: m.TtsSettingsPage })));
+const DesktopAudioManagementPage = lazy(() => import('@student/pages/DesktopAudioManagementPage').then(m => ({ default: m.DesktopAudioManagementPage })));
 const AISettingsPage       = lazy(() => import('@student/pages/AISettingsPage').then(m => ({ default: m.AISettingsPage })));
 const MemoryRoomPage       = lazy(() => import('@student/pages/MemoryRoomPage').then(m => ({ default: m.MemoryRoomPage })));
 const AvatarShopPage       = lazy(() => import('@student/pages/AvatarShopPage').then(m => ({ default: m.AvatarShopPage })));
@@ -136,6 +137,7 @@ export function AppRoutes({ AdminGate, AdminErrorBoundary }: AppRoutesProps) {
           <Route path="/drawing"             element={<FeatureGuard requiredPlan="standard" title="Ve sang tao dang bi khoa" description="Tinh nang ve sang tao nam ngoai pham vi goi Free. Nang cap Standard hoac Premium de su dung."><DrawingPage /></FeatureGuard>} />
           <Route path="/achievements"        element={<FeatureGuard requiredPlan="standard" title="Thanh tich dang bi khoa" description="Trang thanh tich chi mo tu goi Standard tro len. Hay nang cap de xem toan bo ket qua va phan thuong."><AchievementPage /></FeatureGuard>} />
           <Route path="/tts-settings"        element={<FeatureGuard requiredPlan="standard" title="Cai dat giong doc dang bi khoa" description="Cai dat TTS tra phi chi mo khi goi da duoc nang cap bang key Standard hoac Premium."><TtsSettingsPage /></FeatureGuard>} />
+          <Route path="/desktop-audio"       element={<DesktopAudioManagementPage />} />
           <Route path="/ai-settings"         element={<FeatureGuard requiredPlan="standard" title="Cai dat AI dang bi khoa" description="Free khong mo man hinh cai dat AI. Hay nang cap Standard hoac Premium de cau hinh nha cung cap AI."><AISettingsPage /></FeatureGuard>} />
           <Route path="/memory"              element={<FeatureGuard requiredPlan="standard" title="Phong tri nho dang bi khoa" description="Phong tri nho thuoc goi Standard/Premium. Hay mua key tren Web Tong va kich hoat de su dung."><MemoryRoomPage /></FeatureGuard>} />
           <Route path="/avatar-shop"         element={<FeatureGuard requiredPlan="standard" title="Cua hang Avatar dang bi khoa" description="Cua hang Avatar chi duoc mo cho tai khoan da kich hoat Standard hoac Premium."><AvatarShopPage /></FeatureGuard>} />

@@ -124,6 +124,7 @@ const navGroups: NavGroup[] = [
     emoji: '⚙️',
     items: [
       { to: '/tts-settings', icon: Volume2, label: 'Giọng đọc' },
+      { to: '/desktop-audio', icon: Download, label: 'Quản lý offline' },
       { to: '/ai-settings', icon: Sparkles, label: 'Cài đặt AI' },
       { to: '/pwa', icon: Smartphone, label: 'Ngoại tuyến & cập nhật' },
       { to: '/themes', icon: Palette, label: 'Giao diện' },
