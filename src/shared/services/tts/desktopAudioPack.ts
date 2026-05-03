@@ -23,12 +23,13 @@ function getGradeFromAudioSetting(): number | null {
 }
 
 export function getPreferredDesktopPackGrade(): number | undefined {
-  const fromSetting = getGradeFromAudioSetting();
-  if (fromSetting !== null) {
-    return fromSetting;
-  }
   const fromState = getGradeFromAppState();
-  return fromState === null ? undefined : fromState;
+  if (fromState !== null) {
+    return fromState;
+  }
+
+  const fromSetting = getGradeFromAudioSetting();
+  return fromSetting === null ? undefined : fromSetting;
 }
 
 export async function getDesktopAudioAssetUrl(assetKey?: string, preferredGrade?: number): Promise<string | null> {
