@@ -1,0 +1,106 @@
+{
+  "startedAt": "2026-05-03T15:34:12.070Z",
+  "outputPath": "F:\\1_A_Disk_D\\Tool\\Hoc_Tap\\CAp_01\\runtime-audit-direct.json",
+  "clickOk": true,
+  "runtimeLogs": [
+    {
+      "cardId": 1,
+      "assetKey": "lesson-card:1",
+      "provider": "static-manifest",
+      "resolvedSource": "web-offline-manifest",
+      "status": "error",
+      "error": "Chưa có file giọng đọc offline cho lớp 1",
+      "timestamp": "2026-05-03T15:34:14.791Z"
+    },
+    {
+      "cardId": 2,
+      "assetKey": "lesson-card:2",
+      "provider": "static-manifest",
+      "resolvedSource": "web-offline-manifest",
+      "status": "error",
+      "error": "Chưa có file giọng đọc offline cho lớp 1",
+      "timestamp": "2026-05-03T15:34:14.792Z"
+    },
+    {
+      "cardId": 3,
+      "assetKey": "lesson-card:3",
+      "provider": "static-manifest",
+      "resolvedSource": "web-offline-manifest",
+      "status": "error",
+      "error": "Chưa có file giọng đọc offline cho lớp 1",
+      "timestamp": "2026-05-03T15:34:14.797Z"
+    },
+    {
+      "cardId": 4,
+      "assetKey": "lesson-card:4",
+      "provider": "static-manifest",
+      "resolvedSource": "web-offline-manifest",
+      "status": "error",
+      "error": "Chưa có file giọng đọc offline cho lớp 1",
+      "timestamp": "2026-05-03T15:34:14.798Z"
+    }
+  ],
+  "consoleRuntimeLogs": [
+    {
+      "cardId": 1,
+      "assetKey": "lesson-card:1",
+      "provider": "static-manifest",
+      "resolvedSource": "web-offline-manifest",
+      "status": "error",
+      "error": "Chưa có file giọng đọc offline cho lớp 1",
+      "timestamp": "2026-05-03T15:34:14.791Z"
+    },
+    {
+      "cardId": 2,
+      "assetKey": "lesson-card:2",
+      "provider": "static-manifest",
+      "resolvedSource": "web-offline-manifest",
+      "status": "error",
+      "error": "Chưa có file giọng đọc offline cho lớp 1",
+      "timestamp": "2026-05-03T15:34:14.792Z"
+    },
+    {
+      "cardId": 3,
+      "assetKey": "lesson-card:3",
+      "provider": "static-manifest",
+      "resolvedSource": "web-offline-manifest",
+      "status": "error",
+      "error": "Chưa có file giọng đọc offline cho lớp 1",
+      "timestamp": "2026-05-03T15:34:14.797Z"
+    },
+    {
+      "cardId": 4,
+      "assetKey": "lesson-card:4",
+      "provider": "static-manifest",
+      "resolvedSource": "web-offline-manifest",
+      "status": "error",
+      "error": "Chưa có file giọng đọc offline cho lớp 1",
+      "timestamp": "2026-05-03T15:34:14.798Z"
+    }
+  ],
+  "networkEvents": [
+    {
+      "type": "allowed",
+      "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hJFQNcOM.woff2",
+      "timestamp": "2026-05-03T15:34:12.677Z"
+    },
+    {
+      "type": "allowed",
+      "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hJVQNcOM.woff2",
+      "timestamp": "2026-05-03T15:34:12.680Z"
+    },
+    {
+      "type": "allowed",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-03T15:34:14.106Z"
+    },
+    {
+      "type": "allowed",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-03T15:34:14.107Z"
+    }
+  ],
+  "pass": false,
+  "reason": "Desktop runtime FAIL: khong dat du provider/resolvedSource/assetKey/assetUrl hoac con goi mang Google/backend.",
+  "finishedAt": "2026-05-03T15:34:17.119Z"
+}

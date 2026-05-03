@@ -906,6 +906,20 @@ function createWindow() {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
   }
 
+  if (!IS_DESKTOP_AUDIT_MODE) {
+    mainWindow.webContents.once('did-finish-load', () => {
+      void mainWindow.webContents.executeJavaScript(`
+        (() => {
+          const hash = String(location.hash || '').toLowerCase();
+          if (hash.startsWith('#/license/activate') || hash.startsWith('#/license/status')) {
+            location.hash = '#/home';
+          }
+          return true;
+        })();
+      `).catch(() => undefined);
+    });
+  }
+
   if (DESKTOP_RUNTIME_AUDIT) {
     mainWindow.webContents.once('did-finish-load', () => {
       void runDesktopRuntimeAudit(mainWindow);
