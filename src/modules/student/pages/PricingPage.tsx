@@ -247,7 +247,17 @@ function mapActivationFieldError(raw: string): string {
   if (message.includes('hết hạn')) {
     return 'Key đã hết hạn';
   }
-  if (message.includes('thiết bị') || message.includes('id máy') || message.includes('device')) {
+  if (
+    message.includes('thiết bị')
+    || message.includes('thiet bi')
+    || message.includes('id máy')
+    || message.includes('id may')
+    || message.includes('device')
+    || message.includes('đang được sử dụng')
+    || message.includes('dang duoc su dung')
+    || message.includes('phiên đó hết hạn')
+    || message.includes('phien do het han')
+  ) {
     return 'Key đã được dùng trên thiết bị khác';
   }
   if (message.includes('key') || message.includes('license') || message.includes('mã')) {
