@@ -269,7 +269,7 @@ async function runDesktopRuntimeAudit(windowRef) {
           const title = document.querySelector('h1');
           const hasReadBtn = Array.from(document.querySelectorAll('button')).some((btn) => {
             const label = String(btn.textContent || '').trim();
-            return label === 'Đọc';
+            return label.includes('Đọc');
           });
           return Boolean(title) && hasReadBtn;
         })();
@@ -286,10 +286,10 @@ async function runDesktopRuntimeAudit(windowRef) {
       (() => {
         window.__HHK_TTS_RUNTIME_LOGS__ = [];
         window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ = [];
-        const target = Array.from(document.querySelectorAll('button')).find((btn) => {
-          const label = String(btn.textContent || '').trim();
-          return label === 'Đọc';
-        });
+        const buttons = Array.from(document.querySelectorAll('button'));
+        const target = buttons.find((btn) => String(btn.textContent || '').trim().includes('Đọc cả bài'))
+          || buttons.find((btn) => String(btn.textContent || '').trim() === 'Đọc')
+          || buttons.find((btn) => String(btn.textContent || '').trim().includes('Đọc'));
         if (!target) {
           return { ok: false, reason: 'read-button-not-found' };
         }
@@ -421,10 +421,44 @@ async function runDesktopAcceptanceAudit(windowRef) {
   };
 
   const runReadAuditForGrade = async (grade) => {
+    const lessonId = await windowRef.webContents.executeJavaScript(`
+      (async () => {
+        try {
+          const raw = localStorage.getItem('hhk_app_state');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            const lessons = Array.isArray(parsed?.lessons) ? parsed.lessons : [];
+            const cards = Array.isArray(parsed?.lessonCards) ? parsed.lessonCards : [];
+            const withCards = new Set(
+              cards
+                .filter((card) => Number(card?.isActive) !== 0)
+                .map((card) => Number(card?.lessonId))
+                .filter((id) => Number.isFinite(id)),
+            );
+            const candidate = lessons.find((lesson) => (
+              Number(lesson?.grade) === ${grade}
+              && String(lesson?.subjectCode || '') === 'math'
+              && Number(lesson?.isActive) !== 0
+              && withCards.has(Number(lesson?.id))
+            ));
+            const resolved = Number(candidate?.id);
+            if (Number.isFinite(resolved)) return resolved;
+          }
+
+          // Fallback from known bundled IDs if app_state is not available yet.
+          const resolved = ${grade} === 2 ? 21 : 1;
+          if (Number.isFinite(resolved)) return resolved;
+        } catch {}
+
+        return ${grade} === 2 ? 21 : 1;
+      })();
+    `);
+
     await windowRef.webContents.executeJavaScript(`
       (() => {
         try {
-          localStorage.setItem('hhk_tts_pack_selected_grade', String(${grade}));
+          const reversedSelectedGrade = ${grade} === 1 ? 2 : 1;
+          localStorage.setItem('hhk_tts_pack_selected_grade', String(reversedSelectedGrade));
         } catch {}
         try {
           const raw = localStorage.getItem('hhk_app_state');
@@ -432,6 +466,7 @@ async function runDesktopAcceptanceAudit(windowRef) {
             const parsed = JSON.parse(raw);
             if (parsed && parsed.student) {
               parsed.student.grade = ${grade};
+              parsed.student.subjectCode = 'math';
               localStorage.setItem('hhk_app_state', JSON.stringify(parsed));
             }
           }
@@ -456,8 +491,8 @@ async function runDesktopAcceptanceAudit(windowRef) {
             window.__HHK_TTS_RUNTIME_HOOKED__ = true;
           }
         } catch {}
-        if (location.hash !== '#/lessons/1') {
-          location.hash = '#/lessons/1';
+        if (location.hash !== '#/lessons/${lessonId}') {
+          location.hash = '#/lessons/${lessonId}';
         }
         return true;
       })();

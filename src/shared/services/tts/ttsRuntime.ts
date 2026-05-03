@@ -707,9 +707,11 @@ async function tryPlayFromStaticManifest(
   options: SpeakTextOptions,
   token: number,
 ): Promise<TtsPlaybackResult | null> {
+  const preferredGrade = assetKey ? getPreferredDesktopPackGrade() : undefined;
+  const hasStrictDesktopGrade = Number.isFinite(Number(preferredGrade));
+
   if (assetKey) {
     try {
-      const preferredGrade = getPreferredDesktopPackGrade();
       const desktopUrl = await getDesktopAudioAssetUrl(assetKey, preferredGrade);
       if (desktopUrl) {
         setRuntimeStatus({
@@ -727,6 +729,25 @@ async function tryPlayFromStaticManifest(
           'desktop-offline',
           { assetKey, assetUrl: desktopUrl },
         );
+      }
+
+      if (hasStrictDesktopGrade) {
+        const grade = Number(preferredGrade);
+        const missingMessage = `Chua co file giong doc offline cho lop ${grade}`;
+        setRuntimeStatus({
+          isLoading: false,
+          error: missingMessage,
+        });
+        options.onStatusChange?.('error');
+        return {
+          status: 'error',
+          provider: 'static-manifest',
+          resolvedSource: 'desktop-offline',
+          assetKey,
+          cacheStatus: 'fallback',
+          fallbackNative: false,
+          error: missingMessage,
+        };
       }
     } catch {
       // Continue fallback chain below.

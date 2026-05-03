@@ -583,14 +583,8 @@ async function getAssetUrl({ assetKey, grade }) {
     if (normalizedGrade === null || !Number.isFinite(normalizedGrade)) {
       return packs;
     }
-    return packs
-      .slice()
-      .sort((a, b) => {
-        const aScore = Number(a.grade) === normalizedGrade ? 0 : 1;
-        const bScore = Number(b.grade) === normalizedGrade ? 0 : 1;
-        if (aScore !== bScore) return aScore - bScore;
-        return Number(a.grade) - Number(b.grade);
-      });
+    // Strict mode: when requested grade is provided, only resolve inside that grade.
+    return packs.filter((item) => Number(item?.grade) === normalizedGrade);
   })();
 
   for (const pack of prioritized) {
