@@ -556,6 +556,7 @@ export async function verifyLicenseKey(params: {
   clientProfile?: 'web' | 'desktop' | 'shared';
 }): Promise<VerifyLicenseResult> {
   const bridgeToken = getBridgeToken();
+  const runtimeProfile = params.clientProfile || getRuntimeClientProfile();
   const normalizedAppId = String(params?.appId || 'hoctap-cap-01').trim().toLowerCase();
   const isCap01 = normalizedAppId === 'hoctap-cap-01' || normalizedAppId === 'app-study-12';
   let result;
@@ -565,13 +566,17 @@ export async function verifyLicenseKey(params: {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-ai-app-profile': runtimeProfile,
         ...(bridgeToken ? { Authorization: `Bearer ${bridgeToken}` } : {}),
       },
       body: JSON.stringify({
         licenseKey: String(params.licenseKey || '').trim().toUpperCase(),
         appId: isCap01 ? 'hoctap-cap-01' : String(params.appId || '').trim() || 'hoctap-cap-01',
+        ...(params.customerId ? { customerId: String(params.customerId).trim() } : {}),
+        ...(params.customerEmail ? { customerEmail: String(params.customerEmail).trim().toLowerCase() } : {}),
         ...(params.deviceId ? { deviceId: params.deviceId } : {}),
         ...(params.deviceName ? { deviceName: params.deviceName } : {}),
+        clientProfile: runtimeProfile,
       }),
     }, { retryOnNotFound: true });
   } catch {
@@ -636,6 +641,14 @@ export async function verifyLicenseKey(params: {
       clearLocalPaidActivation('revoked');
       clearLicenseCache();
       throw new Error('Key không hợp lệ, đã hết hạn, hoặc đã bị thu hồi trên hệ thống cấp key (Web Tổng).');
+    }
+
+    if (backendLower.includes('customeremail is required')) {
+      throw new Error('Web app yêu cầu email mua hàng để xác minh key. Vui lòng nhập đúng email đã dùng khi mua.');
+    }
+
+    if (backendLower.includes('deviceid is required')) {
+      throw new Error('Thiếu ID thiết bị khi xác minh key. Vui lòng tải lại app rồi thử lại.');
     }
 
     if (
