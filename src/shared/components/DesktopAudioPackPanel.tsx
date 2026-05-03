@@ -162,6 +162,7 @@ export function DesktopAudioPackPanel() {
   }, [allowedOptions, packs]);
 
   const isProcessingAll = busyGrade !== null;
+  const offlinePackLocked = !canUseDesktopOffline;
 
   const downloadAllPacks = async () => {
     if (!window.electronAPI?.audioPacks) return;
@@ -234,14 +235,6 @@ export function DesktopAudioPackPanel() {
     return null;
   }
 
-  if (!canUseDesktopOffline) {
-    return (
-      <div className="card mb-4" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
-        Gói hiện tại chưa bật TTS offline desktop. Vui lòng kích hoạt key hợp lệ.
-      </div>
-    );
-  }
-
   return (
     <div className="card mb-4">
       <div className="flex items-start justify-between gap-3 mb-3">
@@ -286,6 +279,15 @@ export function DesktopAudioPackPanel() {
         </div>
       </div>
 
+      {offlinePackLocked && (
+        <div className="mb-3 p-3 rounded-xl" style={{ background: '#FFF7ED', border: '1px solid #FED7AA', color: '#9A3412' }}>
+          <div className="text-sm font-bold">Tính năng tải audio offline đang cần gói trả phí.</div>
+          <div className="text-xs mt-1">
+            Tải audio offline desktop là tính năng theo gói. Vui lòng kích hoạt mã bản quyền nếu muốn tải thêm gói offline.
+          </div>
+        </div>
+      )}
+
       {error && (
         <div className="text-xs mb-3 px-3 py-2 rounded-lg" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
           {error}
@@ -297,7 +299,7 @@ export function DesktopAudioPackPanel() {
           type="button"
           className="btn btn-primary flex items-center gap-2"
           onClick={() => void downloadAllPacks()}
-          disabled={isProcessingAll}
+          disabled={isProcessingAll || offlinePackLocked}
         >
           <Download size={16} />
           {isProcessingAll ? 'Dang tai goi day du...' : 'Tai goi tieng doc day du (moi lop)'}
@@ -307,7 +309,7 @@ export function DesktopAudioPackPanel() {
           className="btn flex items-center gap-2"
           style={{ background: 'var(--color-surface)', color: 'var(--color-primary)' }}
           onClick={() => void verifyAllPacks()}
-          disabled={isProcessingAll}
+          disabled={isProcessingAll || offlinePackLocked}
         >
           <RefreshCw size={16} />
           Kiem tra lai
@@ -317,7 +319,7 @@ export function DesktopAudioPackPanel() {
           className="btn flex items-center gap-2"
           style={{ background: '#FEF2F2', color: '#B91C1C' }}
           onClick={() => void removeAllPacks()}
-          disabled={isProcessingAll}
+          disabled={isProcessingAll || offlinePackLocked}
         >
           <Trash2 size={16} />
           Xoa goi da tai

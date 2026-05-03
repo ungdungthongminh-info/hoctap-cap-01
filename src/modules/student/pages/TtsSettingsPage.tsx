@@ -231,8 +231,6 @@ export function TtsSettingsPage() {
     }
   }, [activeProfileId, defaultProfileId, staticViProfiles]);
 
-  const activeProfile = staticViProfiles.find((profile) => profile.id === activeProfileId) || staticViProfiles[0] || null;
-
   const auditAvailableMap = useMemo(() => {
     const map = new Map<string, boolean>();
     (staticManifest?.auditSamples || []).forEach((sample) => {
@@ -240,6 +238,10 @@ export function TtsSettingsPage() {
     });
     return map;
   }, [staticManifest]);
+
+  const activeProfile = staticViProfiles.find((profile) => profile.id === activeProfileId) || staticViProfiles[0] || null;
+  const defaultSampleId = 'reading-rhythm';
+  const defaultSampleAvailable = Boolean(activeProfile && auditAvailableMap.get(`${activeProfile.id}:${defaultSampleId}`));
 
   const loadStats = async () => {
     setStatsLoading(true);
@@ -486,13 +488,21 @@ export function TtsSettingsPage() {
       return;
     }
 
+    const sampleAvailable = Boolean(auditAvailableMap.get(`${profile.id}:${readingLine.id}`));
+    if (!showAdmin && !sampleAvailable) {
+      setLastPlaybackMessage('Chưa có audio mẫu.');
+      return;
+    }
+
     setActiveProfileId(profile.id);
     await runWithTesting(`profile:${profile.id}:reading-rhythm`, async () => {
       try {
         const source = await playAuditLine(profile, readingLine.id, readingLine.text);
         setLastPlaybackMessage(`Da thu ${profile.label} bang ${toPlaybackLabel(source)}.`);
       } catch (error) {
-        setLastPlaybackMessage(error instanceof Error ? error.message : 'Khong phat duoc audio thu.');
+        setLastPlaybackMessage(showAdmin
+          ? (error instanceof Error ? error.message : 'Khong phat duoc audio thu.')
+          : 'Khong phat duoc audio mau.');
       }
     });
   };
@@ -597,7 +607,7 @@ export function TtsSettingsPage() {
             <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
               {hasAnyStaticAudio
                 ? `${staticManifest?.availableEntries || 0}/${staticManifest?.totalEntries || 0} entry da co file.`
-                : 'Van co the thu giong bang advanced/native, sau do generate MP3 tinh.'}
+                : 'Chua co audio mau tinh san trong app.'}
             </div>
           </div>
         </div>
@@ -938,6 +948,11 @@ export function TtsSettingsPage() {
           <div className="text-xs mb-3" style={{ color: 'var(--color-primary-dark)' }}>
             {activeProfile ? `${activeProfile.label} (${activeProfile.voiceId})` : 'Chua co profile audio tinh'}
           </div>
+          {!defaultSampleAvailable && (
+            <div className="text-xs mb-3" style={{ color: 'var(--color-text-light)' }}>
+              Chưa có audio mẫu.
+            </div>
+          )}
           <div className="flex gap-3 flex-wrap">
             <button
               type="button"
@@ -947,9 +962,10 @@ export function TtsSettingsPage() {
                   void handlePreviewProfile(activeProfile.id);
                 }
               }}
+              disabled={!activeProfile || !defaultSampleAvailable}
             >
               <Volume2 size={16} />
-              {testingId && testingId.startsWith('profile:') ? 'Dang nghe thu...' : 'Nghe thu giong mac dinh'}
+              {testingId && testingId.startsWith('profile:') ? 'Dang nghe thu...' : 'Nghe audio mẫu'}
             </button>
             <button
               type="button"
@@ -968,7 +984,7 @@ export function TtsSettingsPage() {
           )}
         </div>
       )}
-      {showAdmin ? (
+      {showAdmin && (
         <details className="card mb-4">
           <summary className="font-bold cursor-pointer">Advanced / Generator (kỹ thuật)</summary>
           <div className="text-sm mt-3 mb-4" style={{ color: 'var(--color-text-light)' }}>
@@ -1037,13 +1053,6 @@ export function TtsSettingsPage() {
             )}
           </div>
         </details>
-      ) : (
-        <div className="card mb-4">
-          <h3 className="font-bold mb-2">Advanced / Generator</h3>
-          <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-            Mục này dành cho kỹ thuật để tạo thêm audio mới bằng API. Flow học mặc định của app dùng audio tĩnh đã đóng gói.
-          </p>
-        </div>
       )}
 
       <div className="card mb-4">

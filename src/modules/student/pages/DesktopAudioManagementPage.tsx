@@ -160,6 +160,7 @@ export function DesktopAudioManagementPage() {
   }, [gradeOptionsForCurrentPlan, packs]);
 
   const isProcessing = busyGrade !== null;
+  const offlinePackLocked = !canUseDesktopOffline;
 
   const downloadPack = async (grade: number) => {
     if (!window.electronAPI?.audioPacks) return;
@@ -279,20 +280,6 @@ export function DesktopAudioManagementPage() {
     );
   }
 
-  if (!canUseDesktopOffline) {
-    return (
-      <div className="p-4 rounded-lg" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
-        <div className="flex gap-2 items-start">
-          <Info size={16} className="flex-shrink-0 mt-1" />
-          <div>
-            <strong>Gói hiện tại chưa bật TTS offline desktop.</strong>
-            <p className="mt-1 text-sm">Vui lòng kích hoạt mã bản quyền hợp lệ tại mục Kích hoạt bản quyền.</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-4">
       {/* Header */}
@@ -302,6 +289,18 @@ export function DesktopAudioManagementPage() {
           Tai cac goi tieng doc de su dung offline. Moi lop duoc luu rieng, khong ghi de nhau.
         </p>
       </div>
+
+      {offlinePackLocked && (
+        <div className="p-4 rounded-lg" style={{ background: '#FFF7ED', border: '1px solid #FED7AA', color: '#9A3412' }}>
+          <div className="flex gap-2 items-start">
+            <Info size={16} className="flex-shrink-0 mt-1" />
+            <div>
+              <strong>Tải audio offline desktop là tính năng theo gói.</strong>
+              <p className="mt-1 text-sm">Bạn vẫn có thể dùng các phần nghe có sẵn trong app. Hãy kích hoạt mã bản quyền nếu muốn tải thêm hoặc quản lý gói audio offline.</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Info Cards */}
       <div className="grid gap-3 md:grid-cols-4">
@@ -339,7 +338,7 @@ export function DesktopAudioManagementPage() {
             type="button"
             className="btn btn-primary flex items-center gap-2"
             onClick={() => void downloadAllPacks()}
-            disabled={isProcessing}
+            disabled={isProcessing || offlinePackLocked}
           >
             <Download size={16} />
             {isProcessing ? 'Dang xu ly...' : 'Tai tat ca cac lop'}
@@ -349,7 +348,7 @@ export function DesktopAudioManagementPage() {
             className="btn flex items-center gap-2"
             style={{ background: 'var(--color-surface)', color: 'var(--color-primary)' }}
             onClick={() => void verifyAllPacks()}
-            disabled={isProcessing}
+            disabled={isProcessing || offlinePackLocked}
           >
             <RefreshCw size={16} />
             Kiem tra tat ca
@@ -359,7 +358,7 @@ export function DesktopAudioManagementPage() {
             className="btn flex items-center gap-2"
             style={{ background: '#FEF2F2', color: '#B91C1C' }}
             onClick={() => void removeAllPacks()}
-            disabled={isProcessing}
+            disabled={isProcessing || offlinePackLocked}
           >
             <Trash2 size={16} />
             Xoa tat ca
@@ -433,7 +432,7 @@ export function DesktopAudioManagementPage() {
                     type="button"
                     className="btn btn-primary flex items-center justify-center gap-2 flex-1"
                     onClick={() => void downloadPack(option.grade)}
-                    disabled={isBusy}
+                    disabled={isBusy || offlinePackLocked}
                   >
                     <Download size={14} />
                     Tai {option.label}
@@ -444,7 +443,7 @@ export function DesktopAudioManagementPage() {
                       type="button"
                       className="btn btn-primary flex items-center justify-center gap-2 flex-1"
                       onClick={() => void downloadPack(option.grade)}
-                      disabled={isBusy}
+                      disabled={isBusy || offlinePackLocked}
                     >
                       <Download size={14} />
                       Cap nhat
@@ -464,7 +463,7 @@ export function DesktopAudioManagementPage() {
                       className="btn flex items-center justify-center gap-2 flex-1"
                       style={{ background: '#FEF2F2', color: '#B91C1C' }}
                       onClick={() => void removePack(option.grade)}
-                      disabled={isBusy}
+                      disabled={isBusy || offlinePackLocked}
                     >
                       <Trash2 size={14} />
                       Xoa
