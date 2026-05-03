@@ -461,6 +461,14 @@ async function runDesktopAcceptanceAudit(windowRef) {
           localStorage.setItem('hhk_tts_pack_selected_grade', String(reversedSelectedGrade));
         } catch {}
         try {
+          localStorage.setItem('hhk_plan', 'premium');
+          localStorage.setItem('hhk_sub_status', 'active');
+          localStorage.setItem('hhk_sub_expiry', '2099-12-31T23:59:59.999Z');
+          localStorage.setItem('hhk_activation_source', 'license_key');
+          localStorage.setItem('hhk_license', 'HHK-AUDIT-ABCDEFGH');
+          localStorage.setItem('hhk_unlocked_grades', JSON.stringify([1, 2, 3, 4, 5]));
+        } catch {}
+        try {
           const raw = localStorage.getItem('hhk_app_state');
           if (raw) {
             const parsed = JSON.parse(raw);
@@ -504,7 +512,7 @@ async function runDesktopAcceptanceAudit(windowRef) {
           const title = document.querySelector('h1');
           const hasReadBtn = Array.from(document.querySelectorAll('button')).some((btn) => {
             const label = String(btn.textContent || '').trim();
-            return label === 'Đọc';
+            return label.includes('Đọc');
           });
           return Boolean(title) && hasReadBtn;
         })();
@@ -519,10 +527,10 @@ async function runDesktopAcceptanceAudit(windowRef) {
       (() => {
         window.__HHK_TTS_RUNTIME_LOGS__ = [];
         window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ = [];
-        const target = Array.from(document.querySelectorAll('button')).find((btn) => {
-          const label = String(btn.textContent || '').trim();
-          return label === 'Đọc';
-        });
+        const buttons = Array.from(document.querySelectorAll('button'));
+        const target = buttons.find((btn) => String(btn.getAttribute('title') || '').includes('Đọc thẻ này'))
+          || buttons.find((btn) => String(btn.textContent || '').trim() === 'Đọc')
+          || buttons.find((btn) => String(btn.textContent || '').includes('Đọc'));
         if (!target) {
           return { ok: false, reason: 'read-button-not-found' };
         }
@@ -611,6 +619,8 @@ async function runDesktopAcceptanceAudit(windowRef) {
       && report.grade2.runtimeLog.provider === 'static-manifest'
       && report.grade2.runtimeLog.resolvedSource === 'desktop-offline'
       && report.grade2.runtimeLog.status === 'completed';
+    const runtime1GradeUrlOk = /\/grade-1\//i.test(String(report.grade1.runtimeLog?.assetUrl || ''));
+    const runtime2GradeUrlOk = /\/grade-2\//i.test(String(report.grade2.runtimeLog?.assetUrl || ''));
 
     const grade1FilesOk = report.grade1.manifestExists && report.grade1.packInfoExists && report.grade1.mp3Count >= 700;
     const grade2FilesOk = report.grade2.manifestExists && report.grade2.packInfoExists && report.grade2.mp3Count >= 700;
@@ -622,6 +632,8 @@ async function runDesktopAcceptanceAudit(windowRef) {
       && report.gradeFoldersAfterDownload.hasGrade2
       && runtime1Ok
       && runtime2Ok
+      && runtime1GradeUrlOk
+      && runtime2GradeUrlOk
       && report.noGoogleRequests
       && report.noBackendRequests
       && report.noNativeFallback,

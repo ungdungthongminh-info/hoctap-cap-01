@@ -129,10 +129,11 @@ export function LessonDetailPage() {
     const result = await prefetchText(buildLessonCardNarrationText(card), lang, {
       policy: 'lesson-prefetch',
       assetKey: buildLessonCardAssetKey(card.id),
+      currentGrade: lesson?.grade,
     });
     setCardStatus(card.id, result.status === 'prefetched' ? 'ready' : 'idle');
     return result;
-  }, [lang, setCardStatus]);
+  }, [lang, lesson?.grade, setCardStatus]);
 
   const prefetchAll = useCallback(async () => {
     if (isPrefetching || cards.length === 0) return;
@@ -186,6 +187,7 @@ export function LessonDetailPage() {
         const result = await prefetchText(buildLessonCardNarrationText(card), lang, {
           policy: 'lesson-prefetch',
           assetKey: buildLessonCardAssetKey(card.id),
+          currentGrade: lesson?.grade,
         });
         if (cancelled) return;
         setCardStatus(card.id, result.status === 'prefetched' ? 'ready' : 'idle');
@@ -199,7 +201,7 @@ export function LessonDetailPage() {
       cancelled = true;
       setIsPrefetching(false);
     };
-  }, [cardsKey, lang, setCardStatus]);
+  }, [cardsKey, lang, lesson?.grade, setCardStatus]);
 
   useEffect(() => {
     if (isHydrating) return;
@@ -224,6 +226,7 @@ export function LessonDetailPage() {
     const result = await speakTextAsync(buildLessonCardNarrationText(card), lang, {
       policy: 'lesson-read-all',
       assetKey,
+      currentGrade: lesson?.grade,
       onStatusChange: (status) => {
         if (currentRun !== runRef.current) return;
         if (status === 'loading' || status === 'fallback-native') {
@@ -251,7 +254,7 @@ export function LessonDetailPage() {
       && (result.provider === 'static-manifest' || result.provider === 'google-cloud');
     setCardStatus(card.id, isCompletedManagedAudio ? 'ready' : 'idle');
     setCardSources((prev) => ({ ...prev, [card.id]: toCardSourceState(result, hasDesktopAudioStore) }));
-  }, [cardStatuses, hasDesktopAudioStore, isReadingAll, lang, resetPlaybackState, setCardStatus, speakingCardId]);
+  }, [cardStatuses, hasDesktopAudioStore, isReadingAll, lang, lesson?.grade, resetPlaybackState, setCardStatus, speakingCardId]);
 
   const readAllCards = useCallback(async () => {
     if (isReadingAll) {
@@ -274,6 +277,7 @@ export function LessonDetailPage() {
       const result = await speakTextAsync(buildLessonCardNarrationText(card), lang, {
         policy: 'lesson-read-all',
         assetKey,
+        currentGrade: lesson?.grade,
         onStatusChange: (status) => {
           if (currentRun !== runRef.current) return;
           if (status === 'loading' || status === 'fallback-native') {
@@ -310,7 +314,7 @@ export function LessonDetailPage() {
       setIsReadingAll(false);
       setSpeakingCardId(null);
     }
-  }, [cards, hasDesktopAudioStore, isReadingAll, lang, resetPlaybackState, setCardStatus]);
+  }, [cards, hasDesktopAudioStore, isReadingAll, lang, lesson?.grade, resetPlaybackState, setCardStatus]);
 
   if (isHydrating) {
     return (

@@ -188,8 +188,9 @@ export function PracticePage() {
     speakText(buildQuestionNarrationText(currentQuestion), questionLang, {
       policy: isPreGrade ? 'pre-grade-auto' : 'practice-on-demand',
       assetKey: buildQuestionAssetKey(currentQuestion.id),
+      currentGrade: lesson?.grade,
     });
-  }, [currentQuestion, isPreGrade, questionLang]);
+  }, [currentQuestion, isPreGrade, lesson?.grade, questionLang]);
 
   // Auto-read question for pre-grade students
   useEffect(() => {

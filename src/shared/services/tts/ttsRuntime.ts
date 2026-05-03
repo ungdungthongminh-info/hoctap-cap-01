@@ -47,6 +47,7 @@ export interface SpeakTextOptions {
   speed?: number;
   contentVersion?: string;
   assetKey?: string;
+  currentGrade?: number;
   onStatusChange?: (status: TtsPlaybackEvent) => void;
 }
 
@@ -707,7 +708,16 @@ async function tryPlayFromStaticManifest(
   options: SpeakTextOptions,
   token: number,
 ): Promise<TtsPlaybackResult | null> {
-  const preferredGrade = assetKey ? getPreferredDesktopPackGrade() : undefined;
+  const preferredGrade = (() => {
+    if (!assetKey) {
+      return undefined;
+    }
+    const fromOption = Number(options.currentGrade);
+    if (Number.isFinite(fromOption)) {
+      return fromOption;
+    }
+    return getPreferredDesktopPackGrade();
+  })();
   const hasStrictDesktopGrade = Number.isFinite(Number(preferredGrade));
 
   if (assetKey) {
@@ -733,7 +743,7 @@ async function tryPlayFromStaticManifest(
 
       if (hasStrictDesktopGrade) {
         const grade = Number(preferredGrade);
-        const missingMessage = `Chua co file giong doc offline cho lop ${grade}`;
+        const missingMessage = `Chưa có file giọng đọc offline cho lớp ${grade}`;
         setRuntimeStatus({
           isLoading: false,
           error: missingMessage,
@@ -919,7 +929,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
 
   if (desiredMode === 'static') {
     if (strictOffline) {
-      return rejectStaticPlayback('Chưa có file giọng đọc offline cho bài này');
+      return rejectStaticPlayback(staticPlayback?.error || 'Chưa có file giọng đọc offline cho bài này');
     }
     return rejectStaticPlayback('Che do static dang bat nhung khong tim thay audio tinh. Vui long cap nhat static pack.');
   }
