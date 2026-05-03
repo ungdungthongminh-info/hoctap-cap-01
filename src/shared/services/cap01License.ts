@@ -74,11 +74,11 @@ function inferPlanFromProduct(productIdRaw: string): string {
   const productId = String(productIdRaw || '').trim().toLowerCase();
   if (productId === 'prod-study-month') return 'standard_month';
   if (productId === 'prod-study-year') return 'standard_year';
+  if (productId === 'standard_1year_1grade') return 'standard_1year_1grade';
   if (productId === 'prod-study-standard-lifetime') return 'standard_lifetime';
   if (productId === 'prod-study-premium-month') return 'premium_month';
   if (productId === 'prod-study-premium-year') return 'premium_year';
   if (productId === 'prod-study-premium-lifetime') return 'premium_lifetime';
-  if (productId === 'prod-study-topup') return 'topup_300_credit';
   return '';
 }
 
@@ -86,7 +86,7 @@ function mapStoragePlanId(entitlement: Cap01Entitlement): string {
   const rawPlan = String(entitlement?.plan || '').trim().toLowerCase();
   const fallbackPlan = inferPlanFromProduct(entitlement?.productId || '');
   const plan = rawPlan || fallbackPlan;
-  if (['beta_year_299', 'cap01_beta_year_299', 'one_grade_year_299'].includes(plan)) return 'standard';
+  if (['beta_year_299', 'cap01_beta_year_299', 'one_grade_year_299', 'standard_1year_1grade'].includes(plan)) return 'standard';
   if (plan.startsWith('premium')) return 'premium';
   if (plan.startsWith('standard')) return 'standard';
   return 'free';
