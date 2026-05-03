@@ -1,0 +1,28 @@
+{
+  "startedAt": "2026-05-03T11:44:02.169Z",
+  "outputPath": "F:\\1_A_Disk_D\\Tool\\Hoc_Tap\\CAp_01\\desktop-acceptance-report-20260503-184401-retest2.json",
+  "rootPath": "C:\\Users\\PC\\AppData\\Roaming\\Hoc Hung Khoi Tieu Hoc\\audio-packs",
+  "grade1": {
+    "manifestExists": true,
+    "packInfoExists": true,
+    "mp3Count": 703,
+    "runtimeLog": null
+  },
+  "grade2": {
+    "manifestExists": true,
+    "packInfoExists": true,
+    "mp3Count": 703,
+    "runtimeLog": null
+  },
+  "gradeFoldersAfterDownload": {
+    "hasGrade1": true,
+    "hasGrade2": true
+  },
+  "offlineNetworkEvents": [],
+  "noGoogleRequests": false,
+  "noBackendRequests": false,
+  "noNativeFallback": false,
+  "pass": false,
+  "reason": "Khong tim thay danh sach bai hoc cho lop 1.",
+  "finishedAt": "2026-05-03T11:44:59.054Z"
+}
