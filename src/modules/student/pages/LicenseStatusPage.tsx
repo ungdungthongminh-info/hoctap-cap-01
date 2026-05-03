@@ -15,6 +15,22 @@ function formatDate(value: string | null | undefined): string {
   return new Date(ms).toLocaleString('vi-VN');
 }
 
+function formatPlanLabel(planRaw: string | null | undefined): string {
+  const normalized = String(planRaw || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+
+  if (!normalized) return 'N/A';
+  if (['beta_year_299', 'one_grade_year_299', 'cap01_beta_year_299', 'standard_1year_1grade'].includes(normalized)) {
+    return 'Gói 1 lớp / 1 năm';
+  }
+  if (normalized.includes('premium')) return 'Gói cao cấp';
+  if (normalized.includes('standard') || normalized.includes('basic') || normalized.includes('std')) return 'Gói tiêu chuẩn';
+  return String(planRaw);
+}
+
 export function LicenseStatusPage() {
   const navigate = useNavigate();
   const [cache, setCache] = useState<Cap01LicenseCache | null>(null);
@@ -78,7 +94,7 @@ export function LicenseStatusPage() {
 
       <div className="card space-y-2 text-sm">
         <div>Trạng thái: <strong>{isActive ? 'Đã kích hoạt' : 'Chưa kích hoạt / Hết hạn'}</strong></div>
-        <div>Gói: <strong>{cache?.entitlement?.plan || 'N/A'}</strong></div>
+        <div>Gói: <strong>{formatPlanLabel(cache?.entitlement?.plan || null)}</strong></div>
         <div>Ngày hết hạn: <strong>{formatDate(cache?.entitlement?.license?.expiresAt || null)}</strong></div>
         <div>Lớp được mở: <strong>{isActive ? grades.join(', ') : 'N/A'}</strong></div>
         <div>TTS offline: <strong>{ttsEnabled ? 'bật' : 'tắt'}</strong></div>

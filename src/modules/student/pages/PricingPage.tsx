@@ -467,7 +467,7 @@ function resolvePlanFromLicensePayload(
     const text = normalizeTokens(value);
     if (!text) continue;
 
-    if (/\b(standard\s*1\s*year\s*1\s*grade|standard\s*1y\s*1g|1grade|single\s?grade|1lop|one\s?class|standard_1year_1grade)\b/.test(text)) {
+    if (/\b(standard\s*1\s*year\s*1\s*grade|standard\s*1y\s*1g|1grade|single\s?grade|1lop|one\s?class|standard_1year_1grade|one_grade_year_299|beta_year_299|cap01_beta_year_299|beta299)\b/.test(text)) {
       return 'standard_1year_1grade';
     }
 
@@ -1225,8 +1225,8 @@ export function PricingPage() {
       const licensePayload = verifyResult.license as unknown as Record<string, unknown>;
       const resolvedPlan = resolvePlanFromLicensePayload(licensePayload, verifyResult.features || []);
       const detectedPlanByKey = detectPlanFlowFromKey(key);
-      const isStandardYearOneGrade = false;
-      const isStandardYearThreeGrade = false;
+      const isStandardYearOneGrade = resolvedPlan === 'standard_1year_1grade';
+      const isStandardYearThreeGrade = resolvedPlan === 'standard_1year_3grade';
       const detectedBasePlan = detectedPlanByKey === 'premium' ? 'premium' : detectedPlanByKey ? 'standard' : null;
       const resolvedBasePlan = resolvedPlan ? normalizePlanId(resolvedPlan) : null;
       const planId = resolvedBasePlan || detectedBasePlan || normalizePlanId(String(verifyResult.license?.planCode || '').toLowerCase());

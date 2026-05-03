@@ -286,7 +286,7 @@ export function DesktopAudioManagementPage() {
           <Info size={16} className="flex-shrink-0 mt-1" />
           <div>
             <strong>Gói hiện tại chưa bật TTS offline desktop.</strong>
-            <p className="mt-1 text-sm">Vui lòng kích hoạt key beta hợp lệ tại mục Kích hoạt bản quyền.</p>
+            <p className="mt-1 text-sm">Vui lòng kích hoạt mã bản quyền hợp lệ tại mục Kích hoạt bản quyền.</p>
           </div>
         </div>
       </div>

@@ -86,6 +86,7 @@ function mapStoragePlanId(entitlement: Cap01Entitlement): string {
   const rawPlan = String(entitlement?.plan || '').trim().toLowerCase();
   const fallbackPlan = inferPlanFromProduct(entitlement?.productId || '');
   const plan = rawPlan || fallbackPlan;
+  if (['beta_year_299', 'cap01_beta_year_299', 'one_grade_year_299'].includes(plan)) return 'standard';
   if (plan.startsWith('premium')) return 'premium';
   if (plan.startsWith('standard')) return 'standard';
   return 'free';
