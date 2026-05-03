@@ -205,14 +205,14 @@ export function WelcomePage() {
               <button
                 className="px-3 py-2 rounded-xl font-extrabold"
                 style={{ background: '#F3DFB1', color: '#1D2A4D', border: '1px solid rgba(255,255,255,0.52)' }}
-                onClick={() => navigate('/license/activate')}
+                onClick={() => navigate('/pricing')}
               >
                 Kích hoạt key
               </button>
               <button
                 className="px-3 py-2 rounded-xl font-bold"
                 style={{ background: '#123463', color: '#E6F0FF', border: '1px solid rgba(150,184,238,0.58)' }}
-                onClick={() => navigate('/license/activate')}
+                onClick={() => navigate('/pricing')}
               >
                 Đăng nhập
               </button>
@@ -238,14 +238,14 @@ export function WelcomePage() {
                   <button
                     className={`${glossyButtonBaseClass} premium-btn-sheen px-6 py-3.5 text-base font-extrabold inline-flex items-center justify-center gap-2 hover:brightness-105 w-full sm:w-auto`}
                     style={heroPrimaryButtonStyle}
-                    onClick={() => navigate('/license/activate')}
+                    onClick={() => navigate('/pricing')}
                   >
                     <KeyRound size={18} /> Kích hoạt key
                   </button>
                   <button
                     className={`${glossyButtonBaseClass} px-6 py-3.5 text-base inline-flex items-center justify-center gap-2 hover:brightness-110 w-full sm:w-auto`}
                     style={heroSecondaryButtonStyle}
-                    onClick={() => navigate('/license/activate')}
+                    onClick={() => navigate('/pricing')}
                   >
                     Đăng nhập
                   </button>

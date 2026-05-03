@@ -117,7 +117,7 @@ export function LicenseStatusPage() {
         <button type="button" className="btn" onClick={() => void onClear()} disabled={actionLoading}>
           Đăng xuất / Xóa kích hoạt local
         </button>
-        <button type="button" className="btn" onClick={() => navigate('/license/activate')}>
+        <button type="button" className="btn" onClick={() => navigate('/pricing')}>
           Nhập key khác
         </button>
         <button type="button" className="btn" onClick={() => navigate('/pricing')}>
