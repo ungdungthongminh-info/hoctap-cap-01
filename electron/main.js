@@ -9,6 +9,7 @@ let mainWindow;
 let updaterCheckTimer = null;
 
 const DESKTOP_RUNTIME_AUDIT = process.env.HHK_DESKTOP_RUNTIME_TEST === '1';
+const DESKTOP_ACCEPTANCE_AUDIT = process.env.HHK_DESKTOP_ACCEPTANCE_TEST === '1';
 
 const updaterState = {
   phase: 'idle',
@@ -360,6 +361,254 @@ async function runDesktopRuntimeAudit(windowRef) {
   }, 500);
 }
 
+async function runDesktopAcceptanceAudit(windowRef) {
+  if (!DESKTOP_ACCEPTANCE_AUDIT || !windowRef || windowRef.isDestroyed()) {
+    return;
+  }
+
+  const outputPath = process.env.HHK_DESKTOP_ACCEPTANCE_OUTPUT
+    ? path.resolve(process.env.HHK_DESKTOP_ACCEPTANCE_OUTPUT)
+    : path.join(app.getPath('userData'), 'desktop-acceptance-report.json');
+
+  const sessionRef = windowRef.webContents.session;
+  const networkEvents = [];
+  let offlineMode = false;
+
+  sessionRef.webRequest.onBeforeRequest((details, callback) => {
+    const url = String(details?.url || '');
+    const isHttp = /^https?:\/\//i.test(url);
+    if (isHttp) {
+      networkEvents.push({
+        mode: offlineMode ? 'offline' : 'online',
+        type: offlineMode ? 'blocked' : 'allowed',
+        url,
+        timestamp: new Date().toISOString(),
+      });
+    }
+    if (offlineMode && isHttp) {
+      callback({ cancel: true });
+      return;
+    }
+    callback({});
+  });
+
+  const report = {
+    startedAt: new Date().toISOString(),
+    outputPath,
+    rootPath: '',
+    grade1: {
+      manifestExists: false,
+      packInfoExists: false,
+      mp3Count: 0,
+      runtimeLog: null,
+    },
+    grade2: {
+      manifestExists: false,
+      packInfoExists: false,
+      mp3Count: 0,
+      runtimeLog: null,
+    },
+    gradeFoldersAfterDownload: {
+      hasGrade1: false,
+      hasGrade2: false,
+    },
+    offlineNetworkEvents: [],
+    noGoogleRequests: false,
+    noBackendRequests: false,
+    noNativeFallback: false,
+    pass: false,
+    reason: '',
+  };
+
+  const runReadAuditForGrade = async (grade) => {
+    await windowRef.webContents.executeJavaScript(`
+      (() => {
+        try {
+          localStorage.setItem('hhk_tts_pack_selected_grade', String(${grade}));
+        } catch {}
+        try {
+          const raw = localStorage.getItem('hhk_app_state');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && parsed.student) {
+              parsed.student.grade = ${grade};
+              localStorage.setItem('hhk_app_state', JSON.stringify(parsed));
+            }
+          }
+        } catch {}
+        try {
+          window.__HHK_TTS_RUNTIME_LOGS__ = [];
+          window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ = [];
+          if (!window.__HHK_TTS_RUNTIME_HOOKED__) {
+            const originalInfo = console.info.bind(console);
+            console.info = (...args) => {
+              try {
+                if (args && args[0] === '[TTS_RUNTIME_RESULT]' && args[1]) {
+                  const host = window;
+                  if (!Array.isArray(host.__HHK_TTS_RUNTIME_CONSOLE_LOGS__)) {
+                    host.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ = [];
+                  }
+                  host.__HHK_TTS_RUNTIME_CONSOLE_LOGS__.push(args[1]);
+                }
+              } catch {}
+              originalInfo(...args);
+            };
+            window.__HHK_TTS_RUNTIME_HOOKED__ = true;
+          }
+        } catch {}
+        if (location.hash !== '#/lessons/1') {
+          location.hash = '#/lessons/1';
+        }
+        return true;
+      })();
+    `);
+
+    const lessonReady = await waitFor(async () => {
+      return windowRef.webContents.executeJavaScript(`
+        (() => {
+          const title = document.querySelector('h1');
+          const hasReadBtn = Array.from(document.querySelectorAll('button')).some((btn) => {
+            const label = String(btn.textContent || '').trim();
+            return label === 'Đọc';
+          });
+          return Boolean(title) && hasReadBtn;
+        })();
+      `);
+    }, 45_000, 700);
+
+    if (!lessonReady) {
+      throw new Error(`Khong vao duoc bai hoc cho lop ${grade} hoac khong tim thay nut Doc.`);
+    }
+
+    const clickResult = await windowRef.webContents.executeJavaScript(`
+      (() => {
+        window.__HHK_TTS_RUNTIME_LOGS__ = [];
+        window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ = [];
+        const target = Array.from(document.querySelectorAll('button')).find((btn) => {
+          const label = String(btn.textContent || '').trim();
+          return label === 'Đọc';
+        });
+        if (!target) {
+          return { ok: false, reason: 'read-button-not-found' };
+        }
+        target.click();
+        return { ok: true };
+      })();
+    `);
+
+    if (!clickResult?.ok) {
+      throw new Error(String(clickResult?.reason || `Khong bam duoc nut Doc cho lop ${grade}.`));
+    }
+
+    await waitFor(async () => {
+      return windowRef.webContents.executeJavaScript(`
+        (() => {
+          const logs = Array.isArray(window.__HHK_TTS_RUNTIME_LOGS__) ? window.__HHK_TTS_RUNTIME_LOGS__ : [];
+          const consoleLogs = Array.isArray(window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__) ? window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ : [];
+          const pool = logs.length > 0 ? logs : consoleLogs;
+          return pool.some((item) => item && (item.status === 'completed' || item.status === 'error'));
+        })();
+      `);
+    }, 60_000, 800);
+
+    await delay(1_200);
+
+    const runtimeLog = await windowRef.webContents.executeJavaScript(`
+      (() => {
+        const logs = Array.isArray(window.__HHK_TTS_RUNTIME_LOGS__) ? window.__HHK_TTS_RUNTIME_LOGS__ : [];
+        const consoleLogs = Array.isArray(window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__) ? window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ : [];
+        const pool = logs.length > 0 ? logs : consoleLogs;
+        const completed = pool.find((item) => item && item.status === 'completed');
+        return completed || pool[0] || null;
+      })();
+    `);
+
+    return runtimeLog;
+  };
+
+  try {
+    await delay(2_000);
+
+    const storageInfo = await audioPackStore.getStorageInfo();
+    report.rootPath = String(storageInfo?.rootPath || '');
+
+    await audioPackStore.downloadPack({ grade: 1, replace: true });
+    await audioPackStore.downloadPack({ grade: 2, replace: true });
+
+    const index = await audioPackStore.listPacks();
+    const grade1Pack = (index.packs || []).find((item) => Number(item?.grade) === 1) || null;
+    const grade2Pack = (index.packs || []).find((item) => Number(item?.grade) === 2) || null;
+
+    const grade1Dir = path.join(report.rootPath, 'grade-1');
+    const grade2Dir = path.join(report.rootPath, 'grade-2');
+    const grade1ManifestPath = path.join(grade1Dir, 'manifest.json');
+    const grade1PackInfoPath = path.join(grade1Dir, 'pack-info.json');
+    const grade2ManifestPath = path.join(grade2Dir, 'manifest.json');
+    const grade2PackInfoPath = path.join(grade2Dir, 'pack-info.json');
+
+    report.grade1.manifestExists = fs.existsSync(grade1ManifestPath);
+    report.grade1.packInfoExists = fs.existsSync(grade1PackInfoPath);
+    report.grade1.mp3Count = Number(grade1Pack?.summary?.mp3Count || 0);
+
+    report.grade2.manifestExists = fs.existsSync(grade2ManifestPath);
+    report.grade2.packInfoExists = fs.existsSync(grade2PackInfoPath);
+    report.grade2.mp3Count = Number(grade2Pack?.summary?.mp3Count || 0);
+
+    report.gradeFoldersAfterDownload.hasGrade1 = fs.existsSync(grade1Dir);
+    report.gradeFoldersAfterDownload.hasGrade2 = fs.existsSync(grade2Dir);
+
+    offlineMode = true;
+    report.grade1.runtimeLog = await runReadAuditForGrade(1);
+    report.grade2.runtimeLog = await runReadAuditForGrade(2);
+
+    const offlineEvents = networkEvents.filter((item) => item.mode === 'offline');
+    report.offlineNetworkEvents = offlineEvents;
+
+    report.noGoogleRequests = offlineEvents.every((evt) => !/googleapis|gstatic|google\.com/i.test(String(evt.url || '')));
+    report.noBackendRequests = offlineEvents.every((evt) => !/api\/v1\/tts|ungdungthongminh\.shop|127\.0\.0\.1:5000/i.test(String(evt.url || '')));
+    report.noNativeFallback = [report.grade1.runtimeLog, report.grade2.runtimeLog].every((entry) => String(entry?.provider || '') !== 'native');
+
+    const runtime1Ok = report.grade1.runtimeLog
+      && report.grade1.runtimeLog.provider === 'static-manifest'
+      && report.grade1.runtimeLog.resolvedSource === 'desktop-offline'
+      && report.grade1.runtimeLog.status === 'completed';
+    const runtime2Ok = report.grade2.runtimeLog
+      && report.grade2.runtimeLog.provider === 'static-manifest'
+      && report.grade2.runtimeLog.resolvedSource === 'desktop-offline'
+      && report.grade2.runtimeLog.status === 'completed';
+
+    const grade1FilesOk = report.grade1.manifestExists && report.grade1.packInfoExists && report.grade1.mp3Count >= 700;
+    const grade2FilesOk = report.grade2.manifestExists && report.grade2.packInfoExists && report.grade2.mp3Count >= 700;
+
+    report.pass = Boolean(
+      grade1FilesOk
+      && grade2FilesOk
+      && report.gradeFoldersAfterDownload.hasGrade1
+      && report.gradeFoldersAfterDownload.hasGrade2
+      && runtime1Ok
+      && runtime2Ok
+      && report.noGoogleRequests
+      && report.noBackendRequests
+      && report.noNativeFallback,
+    );
+
+    report.reason = report.pass
+      ? 'Desktop acceptance PASS.'
+      : 'Desktop acceptance FAIL: khong dat du file/runtime/network criteria.';
+  } catch (error) {
+    report.pass = false;
+    report.reason = String(error?.message || error || 'Desktop acceptance audit failed.');
+  }
+
+  report.finishedAt = new Date().toISOString();
+  fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), 'utf8');
+  console.log('[DESKTOP_ACCEPTANCE_AUDIT]', JSON.stringify(report));
+
+  setTimeout(() => {
+    app.quit();
+  }, 500);
+}
+
 function createWindow() {
   const appTitle = app.getName() || 'Hoc Hung Khoi Tieu Hoc';
   const isDev = !app.isPackaged && process.env.NODE_ENV !== 'production';
@@ -390,6 +639,12 @@ function createWindow() {
   if (DESKTOP_RUNTIME_AUDIT) {
     mainWindow.webContents.once('did-finish-load', () => {
       void runDesktopRuntimeAudit(mainWindow);
+    });
+  }
+
+  if (DESKTOP_ACCEPTANCE_AUDIT) {
+    mainWindow.webContents.once('did-finish-load', () => {
+      void runDesktopAcceptanceAudit(mainWindow);
     });
   }
 }
