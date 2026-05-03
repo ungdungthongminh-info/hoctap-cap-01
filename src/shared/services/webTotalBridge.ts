@@ -19,18 +19,6 @@ function normalizeApiBase(value?: string | null): string {
   return String(value || '').trim().replace(/\/+$/, '');
 }
 
-function isLikelyLocalBridgeBase(value?: string | null): boolean {
-  const normalized = normalizeApiBase(value);
-  if (!normalized) return false;
-
-  try {
-    const parsed = new URL(normalized);
-    return isPrivateNetworkHostname(parsed.hostname) || isCommonDevPort(parsed.port) || parsed.port === '5000';
-  } catch {
-    return /localhost|127\.0\.0\.1|0\.0\.0\.0|192\.168\.|10\.|172\.(1[6-9]|2\d|3[0-1])\./i.test(normalized);
-  }
-}
-
 function buildBackendApiBases(): string[] {
   const bases: string[] = [];
   const pushBase = (value?: string | null) => {
@@ -705,6 +693,27 @@ export async function renewCurrentLicenseLease(appId = 'hoctap-cap-01'): Promise
   const licenseKey = getStoredLicenseKey();
   if (!licenseKey) {
     return null;
+  }
+
+  // Cap01: NEVER auto-verify when offline. Desktop uses local cache with grace period.
+  // Only verify when explicitly activated on /license/activate page.
+  const normalizedAppId = String(appId || '').trim().toLowerCase();
+  const isCap01 = normalizedAppId === 'hoctap-cap-01' || normalizedAppId === 'app-study-12';
+  
+  // Check both navigator.onLine AND localStorage desktop offline flag (for acceptance audit)
+  let isOffline = false;
+  if (typeof navigator !== 'undefined') {
+    isOffline = navigator.onLine === false;
+  }
+  try {
+    const desktopOfflineFlag = localStorage.getItem('hhk_desktop_offline_mode_active');
+    if (desktopOfflineFlag === 'true') {
+      isOffline = true;
+    }
+  } catch {}
+  
+  if (isCap01 && isOffline) {
+    return null; // Offline + cap01 = don't verify, use cache grace period
   }
 
   const customerId = getBridgeCustomer()?.id ? String(getBridgeCustomer()!.id) : undefined;

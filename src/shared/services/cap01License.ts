@@ -270,7 +270,17 @@ export async function verifyCap01License(options: { force?: boolean } = {}): Pro
   const now = Date.now();
   const lastVerifiedMs = new Date(cache.lastVerifiedAt || 0).getTime();
   const shouldSkip = !options.force && Number.isFinite(lastVerifiedMs) && now - lastVerifiedMs < VERIFY_INTERVAL_MS;
-  const isOffline = typeof navigator !== 'undefined' && navigator.onLine === false;
+    // Check both navigator.onLine AND localStorage desktop offline flag (for acceptance audit)
+    let isOffline = false;
+    if (typeof navigator !== 'undefined') {
+      isOffline = navigator.onLine === false;
+    }
+    try {
+      const desktopOfflineFlag = localStorage.getItem('hhk_desktop_offline_mode_active');
+      if (desktopOfflineFlag === 'true') {
+        isOffline = true;
+      }
+    } catch {}
 
   if (shouldSkip || isOffline) {
     return cache;

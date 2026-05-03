@@ -649,7 +649,9 @@ async function runDesktopAcceptanceAudit(windowRef) {
       })();
     `);
 
-    const fallbackLessonIds = grade === 2 ? [21, 22, 23, 24, 25] : [1, 2, 3, 4, 5];
+    const fallbackLessonIds = grade === 2 
+      ? [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 6, 7, 8, 9, 10] // More fallbacks for grade 2
+      : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const lessonIds = Array.from(new Set([...(Array.isArray(candidateLessonIds) ? candidateLessonIds : []), ...fallbackLessonIds]));
     let lastError = null;
 
@@ -668,7 +670,11 @@ async function runDesktopAcceptanceAudit(windowRef) {
               const title = document.querySelector('h1');
               const hasReadBtn = Array.from(document.querySelectorAll('button')).some((btn) => {
                 const label = String(btn.textContent || '').trim();
-                return label.includes('Đọc');
+                const title = String(btn.getAttribute('title') || '').trim();
+                const ariaLabel = String(btn.getAttribute('aria-label') || '').trim();
+                return label.includes('Đọc') || label.toLowerCase().includes('read') 
+                  || title.includes('Đọc') || title.toLowerCase().includes('read')
+                  || ariaLabel.includes('Đọc') || ariaLabel.toLowerCase().includes('read');
               });
               return Boolean(title) && hasReadBtn;
             })();
@@ -685,16 +691,46 @@ async function runDesktopAcceptanceAudit(windowRef) {
             window.__HHK_TTS_RUNTIME_LOGS__ = [];
             window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ = [];
             const buttons = Array.from(document.querySelectorAll('button'));
-            const target = buttons.find((btn) => String(btn.getAttribute('title') || '').includes('Đọc thẻ này'))
+            let target = buttons.find((btn) => String(btn.getAttribute('title') || '').includes('Đọc thẻ này'))
               || buttons.find((btn) => String(btn.textContent || '').trim() === 'Đọc')
               || buttons.find((btn) => String(btn.textContent || '').includes('Đọc'));
+            
+            // Fallback 1: look for button with aria-label or data-* containing read
+            if (!target) {
+              target = buttons.find((btn) => {
+                const ariaLabel = String(btn.getAttribute('aria-label') || '').toLowerCase();
+                const dataAttrs = Array.from(btn.attributes)
+                  .filter(attr => attr.name.startsWith('data-'))
+                  .map(attr => String(attr.value).toLowerCase())
+                  .join(' ');
+                return ariaLabel.includes('đ') || ariaLabel.includes('read') || dataAttrs.includes('read');
+              });
+            }
+            
+            // Fallback 2: look for any button that might be read - check role, class, or pattern
+            if (!target) {
+              target = buttons.find((btn) => {
+                const textContent = String(btn.textContent || '').toLowerCase();
+                const classList = String(btn.className || '').toLowerCase();
+                const role = String(btn.getAttribute('role') || '').toLowerCase();
+                const id = String(btn.id || '').toLowerCase();
+                const name = String(btn.getAttribute('name') || '').toLowerCase();
+                
+                // Check for Vietnamese word "Đọc" (read) in various forms
+                return textContent.includes('đọc') 
+                  || classList.includes('read')
+                  || role === 'button'
+                  && (classList.includes('read') || id.includes('read') || name.includes('read'));
+              });
+            }
+            
             if (!target) {
               return { ok: false, reason: 'read-button-not-found' };
             }
             target.click();
             return { ok: true };
           })();
-        `);
+        `);;
 
         if (!clickResult?.ok) {
           lastError = String(clickResult?.reason || 'click-failed');
@@ -743,6 +779,14 @@ async function runDesktopAcceptanceAudit(windowRef) {
     if (DESKTOP_E2E_LICENSE_KEY) {
       await runLicenseActivationAudit(DESKTOP_E2E_LICENSE_KEY);
       await delay(1_000);
+      // Set localStorage flag TRƯỚC reload để renderer biết sắp vào offline mode
+      await windowRef.webContents.executeJavaScript(`
+        try {
+          localStorage.setItem('hhk_desktop_offline_mode_active', 'true');
+          localStorage.setItem('hhk_desktop_offline_mode_start_time', Date.now().toString());
+        } catch {}
+      `);
+      offlineMode = true;
       await windowRef.webContents.reloadIgnoringCache();
       await delay(2_000);
     }

@@ -15,9 +15,9 @@ import {
   isCacheWithinGrace,
   hasFeature as checkFeature,
   hasActiveLicense as checkActiveLicense,
-  renewCurrentLicenseLease,
   LicenseCache,
 } from '../services/webTotalBridge';
+import { verifyCap01License } from '../services/cap01License';
 
 export interface UseLicenseReturn {
   /** Cache hiện tại (null = chưa có dữ liệu license đã lưu) */
@@ -53,7 +53,9 @@ export function useLicense(): UseLicenseReturn {
     setLoading(true);
     setError(null);
     try {
-      await renewCurrentLicenseLease();
+      // For cap01: verify via cap01License service (includes offline grace support)
+      // For others: call old verify service
+      await verifyCap01License({ force: false }).catch(() => null);
       const cache = await fetchAndCacheLicenses(customerId);
       setLicenseCache(cache);
     } catch (err: any) {
