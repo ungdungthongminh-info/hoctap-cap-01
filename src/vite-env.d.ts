@@ -83,6 +83,12 @@ interface ElectronAPI {
       updatedAt: number;
     }) => void) => () => void;
   };
+  license: {
+    getCache: () => Promise<unknown | null>;
+    setCache: (payload: unknown) => Promise<unknown | null>;
+    clearCache: () => Promise<boolean>;
+    getDeviceInfo: () => Promise<{ deviceName: string; appVersion: string }>;
+  };
 }
 
 declare global {

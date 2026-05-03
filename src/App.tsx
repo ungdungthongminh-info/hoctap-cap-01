@@ -7,6 +7,7 @@ import { isAdminUnlocked, unlockAdmin } from './shared/utils/adminAccess';
 import { STORAGE_KEYS } from './shared/constants/storageKeys';
 import { AppRoutes } from './routes/appRoutes';
 import { refreshCurrentLicenseState } from './shared/services/webTotalBridge';
+import { verifyCap01License } from './shared/services/cap01License';
 
 class RootErrorBoundary extends Component<{ children: React.ReactNode }, { hasError: boolean; message: string }> {
   constructor(props: { children: React.ReactNode }) {
@@ -150,6 +151,11 @@ function LicenseHeartbeat() {
     let disposed = false;
 
     const sync = async () => {
+      if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+        return;
+      }
+
+      await verifyCap01License({ force: false }).catch(() => null);
       const result = await refreshCurrentLicenseState().catch(() => null);
       if (disposed || !result?.downgraded) return;
       // Revoke/expire phải rơi quyền ngay, tránh giữ premium cục bộ.
@@ -158,7 +164,6 @@ function LicenseHeartbeat() {
     };
 
     void sync();
-    const intervalId = window.setInterval(() => { void sync(); }, 15_000);
     const onVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         void sync();
@@ -168,7 +173,6 @@ function LicenseHeartbeat() {
 
     return () => {
       disposed = true;
-      window.clearInterval(intervalId);
       document.removeEventListener('visibilitychange', onVisibilityChange);
     };
   }, []);

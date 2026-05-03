@@ -33,4 +33,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
       return () => ipcRenderer.removeListener('audioPacks:progress', wrapped);
     },
   },
+  license: {
+    getCache: () => ipcRenderer.invoke('license:cache:get'),
+    setCache: (payload) => ipcRenderer.invoke('license:cache:set', payload),
+    clearCache: () => ipcRenderer.invoke('license:cache:clear'),
+    getDeviceInfo: () => ipcRenderer.invoke('license:get-device-info'),
+  },
 });

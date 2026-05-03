@@ -4,6 +4,7 @@ const fs = require('fs');
 const { initDatabase } = require('./database');
 const { autoUpdater } = require('electron-updater');
 const audioPackStore = require('./audioPackStore');
+const licenseCacheStore = require('./licenseCacheStore');
 
 let mainWindow;
 let updaterCheckTimer = null;
@@ -736,6 +737,24 @@ function setupAudioPackIpc() {
   });
 }
 
+function setupLicenseCacheIpc() {
+  ipcMain.handle('license:cache:get', async () => {
+    return licenseCacheStore.readCache();
+  });
+
+  ipcMain.handle('license:cache:set', async (_event, payload) => {
+    return licenseCacheStore.writeCache(payload || null);
+  });
+
+  ipcMain.handle('license:cache:clear', async () => {
+    return licenseCacheStore.clearCache();
+  });
+
+  ipcMain.handle('license:get-device-info', async () => {
+    return licenseCacheStore.getDeviceInfo();
+  });
+}
+
 app.whenReady().then(() => {
   const db = initDatabase();
 
@@ -759,6 +778,7 @@ app.whenReady().then(() => {
 
   setupAutoUpdater();
   setupAudioPackIpc();
+  setupLicenseCacheIpc();
 });
 
 app.on('window-all-closed', () => {

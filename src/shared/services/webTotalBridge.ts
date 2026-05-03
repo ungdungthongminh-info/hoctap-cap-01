@@ -477,7 +477,7 @@ export function isCacheWithinGrace(): boolean {
  */
 export async function fetchAndCacheLicenses(customerId: string, appId?: string): Promise<LicenseCache> {
   const bridgeToken = getBridgeToken();
-  const aid = appId || 'app-study-12';
+  const aid = appId || 'hoctap-cap-01';
   let res: Response;
   let payload: any = {};
 
@@ -650,7 +650,7 @@ export async function verifyLicenseKey(params: {
   };
 }
 
-export async function renewCurrentLicenseLease(appId = 'app-study-12'): Promise<VerifyLicenseResult | null> {
+export async function renewCurrentLicenseLease(appId = 'hoctap-cap-01'): Promise<VerifyLicenseResult | null> {
   const licenseKey = getStoredLicenseKey();
   if (!licenseKey) {
     return null;
@@ -671,7 +671,7 @@ export async function renewCurrentLicenseLease(appId = 'app-study-12'): Promise<
   });
 }
 
-export async function refreshCurrentLicenseState(appId = 'app-study-12'): Promise<{
+export async function refreshCurrentLicenseState(appId = 'hoctap-cap-01'): Promise<{
   verified: boolean;
   downgraded: boolean;
   reason?: string;

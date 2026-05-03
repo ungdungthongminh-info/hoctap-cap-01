@@ -45,6 +45,8 @@ const LearningAssistantPage = lazy(() => import('@student/pages/LearningAssistan
 const MindMapPage          = lazy(() => import('@student/pages/MindMapPage').then(m => ({ default: m.MindMapPage })));
 const ProfileSwitcherPage  = lazy(() => import('@student/pages/ProfileSwitcherPage').then(m => ({ default: m.ProfileSwitcherPage })));
 const PricingPage          = lazy(() => import('@student/pages/PricingPage').then(m => ({ default: m.PricingPage })));
+const LicenseActivationPage = lazy(() => import('@student/pages/LicenseActivationPage').then(m => ({ default: m.LicenseActivationPage })));
+const LicenseStatusPage     = lazy(() => import('@student/pages/LicenseStatusPage').then(m => ({ default: m.LicenseStatusPage })));
 const AnalyticsDashboardPage = lazy(() => import('@student/pages/AnalyticsDashboardPage').then(m => ({ default: m.AnalyticsDashboardPage })));
 const ThemePage            = lazy(() => import('@student/pages/ThemePage').then(m => ({ default: m.ThemePage })));
 
@@ -154,6 +156,8 @@ export function AppRoutes({ AdminGate, AdminErrorBoundary }: AppRoutesProps) {
           <Route path="/themes"              element={<ThemePage />} />
         </Route>
         <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/license/activate" element={<LicenseActivationPage />} />
+        <Route path="/license/status" element={<LicenseStatusPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>

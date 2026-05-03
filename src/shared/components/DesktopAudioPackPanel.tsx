@@ -1,5 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Download, FolderOpen, RefreshCw, Trash2 } from 'lucide-react';
+import {
+  readCap01LicenseCache,
+  resolveAllowedGrades,
+  isDesktopOfflineTtsEnabled,
+  type Cap01LicenseCache,
+} from '../services/cap01License';
 
 type PackStatus = 'not-installed' | 'downloading' | 'extracting' | 'ready' | 'partial' | 'downloaded' | 'error';
 
@@ -74,6 +80,15 @@ export function DesktopAudioPackPanel() {
   const [packs, setPacks] = useState<Record<number, any>>({});
   const [busyGrade, setBusyGrade] = useState<number | null>(null);
   const [progressByGrade, setProgressByGrade] = useState<Record<number, { phase: string; message: string; percent: number }>>({});
+  const [licenseCache, setLicenseCache] = useState<Cap01LicenseCache | null>(null);
+
+  const allowedGrades = useMemo(() => resolveAllowedGrades(licenseCache), [licenseCache]);
+  const allowedGradeSet = useMemo(() => new Set(allowedGrades), [allowedGrades]);
+  const canUseDesktopOffline = useMemo(() => isDesktopOfflineTtsEnabled(licenseCache), [licenseCache]);
+  const allowedOptions = useMemo(
+    () => GRADE_OPTIONS.filter((option) => allowedGradeSet.has(option.grade)),
+    [allowedGradeSet],
+  );
 
   const refresh = async () => {
     if (!window.electronAPI?.audioPacks) return;
@@ -125,19 +140,26 @@ export function DesktopAudioPackPanel() {
     return unsubscribe;
   }, [isDesktop]);
 
+  useEffect(() => {
+    void (async () => {
+      const cache = await readCap01LicenseCache();
+      setLicenseCache(cache);
+    })();
+  }, []);
+
   const installedCount = useMemo(
-    () => Object.values(packs).filter((pack) => pack && pack.status !== 'error').length,
-    [packs],
+    () => allowedOptions.filter((option) => packs[option.grade] && packs[option.grade].status !== 'error').length,
+    [allowedOptions, packs],
   );
 
   const totalCoverage = useMemo(() => {
-    return GRADE_OPTIONS.reduce((acc, option) => {
+    return allowedOptions.reduce((acc, option) => {
       const coverage = packs[option.grade]?.summary?.lessonCoverage;
       acc.available += Number(coverage?.available || 0);
       acc.total += Number(coverage?.total || 0);
       return acc;
     }, { available: 0, total: 0 });
-  }, [packs]);
+  }, [allowedOptions, packs]);
 
   const isProcessingAll = busyGrade !== null;
 
@@ -146,6 +168,7 @@ export function DesktopAudioPackPanel() {
     setError('');
     try {
       for (const option of GRADE_OPTIONS) {
+        if (!allowedGradeSet.has(option.grade)) continue;
         setBusyGrade(option.grade);
         await window.electronAPI.audioPacks.download({ grade: option.grade, replace: true });
       }
@@ -162,6 +185,7 @@ export function DesktopAudioPackPanel() {
     setError('');
     try {
       for (const option of GRADE_OPTIONS) {
+        if (!allowedGradeSet.has(option.grade)) continue;
         if (!packs[option.grade]) continue;
         setBusyGrade(option.grade);
         await window.electronAPI.audioPacks.verify({ grade: option.grade });
@@ -179,6 +203,7 @@ export function DesktopAudioPackPanel() {
     setError('');
     try {
       for (const option of GRADE_OPTIONS) {
+        if (!allowedGradeSet.has(option.grade)) continue;
         if (!packs[option.grade]) continue;
         setBusyGrade(option.grade);
         await window.electronAPI.audioPacks.remove({ grade: option.grade });
@@ -209,6 +234,14 @@ export function DesktopAudioPackPanel() {
     return null;
   }
 
+  if (!canUseDesktopOffline) {
+    return (
+      <div className="card mb-4" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
+        Gói hiện tại chưa bật TTS offline desktop. Vui lòng kích hoạt key hợp lệ.
+      </div>
+    );
+  }
+
   return (
     <div className="card mb-4">
       <div className="flex items-start justify-between gap-3 mb-3">
@@ -232,7 +265,7 @@ export function DesktopAudioPackPanel() {
       <div className="grid gap-2 md:grid-cols-3 mb-3">
         <div className="p-3 rounded-xl" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
           <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>So lop da tai</div>
-          <div className="text-sm font-bold">{installedCount}/{GRADE_OPTIONS.length}</div>
+          <div className="text-sm font-bold">{installedCount}/{allowedOptions.length}</div>
         </div>
         <div className="p-3 rounded-xl" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
           <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>Tong dung luong</div>
@@ -292,7 +325,7 @@ export function DesktopAudioPackPanel() {
       </div>
 
       <div className="grid gap-3">
-        {GRADE_OPTIONS.map((option) => {
+        {allowedOptions.map((option) => {
           const pack = packs[option.grade];
           const progress = progressByGrade[option.grade];
           const status = (progress?.phase === 'downloading' || progress?.phase === 'extracting')
