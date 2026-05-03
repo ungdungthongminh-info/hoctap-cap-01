@@ -6,7 +6,6 @@ import { ToastProvider } from './shared/components/Toast';
 import { isAdminUnlocked, unlockAdmin } from './shared/utils/adminAccess';
 import { STORAGE_KEYS } from './shared/constants/storageKeys';
 import { AppRoutes } from './routes/appRoutes';
-import { refreshCurrentLicenseState } from './shared/services/webTotalBridge';
 import { verifyCap01License } from './shared/services/cap01License';
 
 class RootErrorBoundary extends Component<{ children: React.ReactNode }, { hasError: boolean; message: string }> {
@@ -156,11 +155,7 @@ function LicenseHeartbeat() {
       }
 
       await verifyCap01License({ force: false }).catch(() => null);
-      const result = await refreshCurrentLicenseState().catch(() => null);
-      if (disposed || !result?.downgraded) return;
-      // Revoke/expire phải rơi quyền ngay, tránh giữ premium cục bộ.
-      window.dispatchEvent(new Event('storage'));
-      window.location.reload();
+      if (disposed) return;
     };
 
     void sync();

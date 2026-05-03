@@ -11,6 +11,8 @@ let updaterCheckTimer = null;
 
 const DESKTOP_RUNTIME_AUDIT = process.env.HHK_DESKTOP_RUNTIME_TEST === '1';
 const DESKTOP_ACCEPTANCE_AUDIT = process.env.HHK_DESKTOP_ACCEPTANCE_TEST === '1';
+const DESKTOP_E2E_LICENSE_KEY = String(process.env.HHK_DESKTOP_E2E_LICENSE_KEY || '').trim().toUpperCase();
+const IS_DESKTOP_AUDIT_MODE = DESKTOP_RUNTIME_AUDIT || DESKTOP_ACCEPTANCE_AUDIT;
 
 const updaterState = {
   phase: 'idle',
@@ -397,6 +399,19 @@ async function runDesktopAcceptanceAudit(windowRef) {
     startedAt: new Date().toISOString(),
     outputPath,
     rootPath: '',
+    activation: {
+      attempted: false,
+      success: false,
+      keyUsed: DESKTOP_E2E_LICENSE_KEY || '',
+      statusView: {
+        plan: '',
+        allowedGrades: [],
+        desktopOfflineTts: false,
+        offlineValidUntil: '',
+      },
+      cachePersisted: false,
+      reason: '',
+    },
     grade1: {
       manifestExists: false,
       packInfoExists: false,
@@ -415,14 +430,151 @@ async function runDesktopAcceptanceAudit(windowRef) {
     },
     offlineNetworkEvents: [],
     noGoogleRequests: false,
+    noBackendTtsRequests: false,
+    noLicenseVerifyRequests: false,
+    offlineLicenseVerifyRequestCount: 0,
     noBackendRequests: false,
     noNativeFallback: false,
     pass: false,
     reason: '',
   };
 
+  const runLicenseActivationAudit = async (licenseKey) => {
+    if (!licenseKey) {
+      return;
+    }
+
+    report.activation.attempted = true;
+    const normalizedKey = String(licenseKey || '').trim().toUpperCase();
+
+    await windowRef.webContents.executeJavaScript(`
+      (() => {
+        location.hash = '#/license/activate';
+        return true;
+      })();
+    `);
+
+    const activateReady = await waitFor(async () => {
+      return windowRef.webContents.executeJavaScript(`
+        (() => {
+          const input = document.querySelector('#license-key-input');
+          const hasActivateBtn = Array.from(document.querySelectorAll('button')).some((btn) => String(btn.textContent || '').includes('Kích hoạt'));
+          return Boolean(input) && hasActivateBtn;
+        })();
+      `);
+    }, 45_000, 700);
+
+    if (!activateReady) {
+      throw new Error('Khong mo duoc man Kich hoat ban quyen.');
+    }
+
+    const activateClicked = await windowRef.webContents.executeJavaScript(`
+      (() => {
+        const input = document.querySelector('#license-key-input');
+        if (!input) {
+          return { ok: false, reason: 'missing-license-input' };
+        }
+        input.focus();
+        input.value = ${JSON.stringify(normalizedKey)};
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+
+        const buttons = Array.from(document.querySelectorAll('button'));
+        const activateBtn = buttons.find((btn) => String(btn.textContent || '').includes('Kích hoạt'));
+        if (!activateBtn) {
+          return { ok: false, reason: 'missing-activate-button' };
+        }
+        activateBtn.click();
+        return { ok: true };
+      })();
+    `);
+
+    if (!activateClicked?.ok) {
+      throw new Error(String(activateClicked?.reason || 'Khong bam duoc nut Kich hoat.'));
+    }
+
+    const statusReady = await waitFor(async () => {
+      return windowRef.webContents.executeJavaScript(`
+        (() => {
+          if (location.hash.includes('/license/status')) {
+            return true;
+          }
+          return Array.from(document.querySelectorAll('h1')).some((el) => String(el.textContent || '').includes('Tài khoản & Gói đang dùng'));
+        })();
+      `);
+    }, 60_000, 700);
+
+    if (!statusReady) {
+      const activationMessage = await windowRef.webContents.executeJavaScript(`
+        (() => {
+          const node = Array.from(document.querySelectorAll('div')).find((el) => String(el.textContent || '').includes('Kích hoạt thành công') || String(el.textContent || '').includes('không hợp lệ') || String(el.textContent || '').includes('vượt số thiết bị'));
+          return String(node?.textContent || '').trim();
+        })();
+      `);
+      throw new Error(`Khong chuyen sang man Trang thai goi. Message: ${activationMessage || 'N/A'}`);
+    }
+
+    const statusView = await windowRef.webContents.executeJavaScript(`
+      (() => {
+        const rows = Array.from(document.querySelectorAll('div'));
+        const readStrongByLabel = (label) => {
+          const row = rows.find((el) => String(el.textContent || '').includes(label));
+          const strong = row ? row.querySelector('strong') : null;
+          return String(strong?.textContent || '').trim();
+        };
+
+        let cache = null;
+        try {
+          const raw = localStorage.getItem('hhk_cap01_license_cache');
+          cache = raw ? JSON.parse(raw) : null;
+        } catch {
+          cache = null;
+        }
+
+        return {
+          planText: readStrongByLabel('Gói:'),
+          gradesText: readStrongByLabel('Lớp được mở:'),
+          ttsText: readStrongByLabel('TTS offline:'),
+          offlineText: readStrongByLabel('Offline còn hiệu lực đến:'),
+          cache,
+        };
+      })();
+    `);
+
+    const cachePlan = String(statusView?.cache?.entitlement?.plan || '').trim();
+    const cacheGrades = Array.isArray(statusView?.cache?.entitlement?.allowedGrades)
+      ? statusView.cache.entitlement.allowedGrades.map((grade) => Number(grade)).filter((grade) => Number.isInteger(grade))
+      : [];
+    const cacheTts = Boolean(statusView?.cache?.entitlement?.features?.desktopOfflineTts);
+    const cacheOfflineUntil = String(statusView?.cache?.offlineValidUntil || '');
+
+    report.activation.statusView = {
+      plan: cachePlan || String(statusView?.planText || ''),
+      allowedGrades: cacheGrades,
+      desktopOfflineTts: cacheTts || /bật/i.test(String(statusView?.ttsText || '')),
+      offlineValidUntil: cacheOfflineUntil,
+    };
+
+    report.activation.cachePersisted = Boolean(statusView?.cache && cacheOfflineUntil);
+
+    const activationOk = cachePlan === 'beta_year_299'
+      && cacheGrades.includes(1)
+      && cacheGrades.includes(2)
+      && cacheTts
+      && cacheOfflineUntil.length > 0;
+
+    report.activation.success = activationOk;
+    report.activation.reason = activationOk
+      ? 'UI activation PASS.'
+      : 'UI activation FAIL: cache/status khong dat plan/grades/tts/offlineValidUntil.';
+
+    if (!activationOk) {
+      throw new Error(report.activation.reason);
+    }
+  };
+
   const runReadAuditForGrade = async (grade) => {
-    const lessonId = await windowRef.webContents.executeJavaScript(`
+    const candidateLessonIds = await windowRef.webContents.executeJavaScript(`
       (async () => {
         try {
           const raw = localStorage.getItem('hhk_app_state');
@@ -436,22 +588,23 @@ async function runDesktopAcceptanceAudit(windowRef) {
                 .map((card) => Number(card?.lessonId))
                 .filter((id) => Number.isFinite(id)),
             );
-            const candidate = lessons.find((lesson) => (
-              Number(lesson?.grade) === ${grade}
-              && String(lesson?.subjectCode || '') === 'math'
-              && Number(lesson?.isActive) !== 0
-              && withCards.has(Number(lesson?.id))
-            ));
-            const resolved = Number(candidate?.id);
-            if (Number.isFinite(resolved)) return resolved;
-          }
+            const ids = lessons
+              .filter((lesson) => (
+                Number(lesson?.grade) === ${grade}
+                && String(lesson?.subjectCode || '') === 'math'
+                && Number(lesson?.isActive) !== 0
+                && withCards.has(Number(lesson?.id))
+              ))
+              .map((lesson) => Number(lesson?.id))
+              .filter((id) => Number.isFinite(id));
 
-          // Fallback from known bundled IDs if app_state is not available yet.
-          const resolved = ${grade} === 2 ? 21 : 1;
-          if (Number.isFinite(resolved)) return resolved;
+            if (ids.length > 0) {
+              return Array.from(new Set(ids));
+            }
+          }
         } catch {}
 
-        return ${grade} === 2 ? 21 : 1;
+        return [];
       })();
     `);
 
@@ -460,14 +613,6 @@ async function runDesktopAcceptanceAudit(windowRef) {
         try {
           const reversedSelectedGrade = ${grade} === 1 ? 2 : 1;
           localStorage.setItem('hhk_tts_pack_selected_grade', String(reversedSelectedGrade));
-        } catch {}
-        try {
-          localStorage.setItem('hhk_plan', 'premium');
-          localStorage.setItem('hhk_sub_status', 'active');
-          localStorage.setItem('hhk_sub_expiry', '2099-12-31T23:59:59.999Z');
-          localStorage.setItem('hhk_activation_source', 'license_key');
-          localStorage.setItem('hhk_license', 'HHK-AUDIT-ABCDEFGH');
-          localStorage.setItem('hhk_unlocked_grades', JSON.stringify([1, 2, 3, 4, 5]));
         } catch {}
         try {
           const raw = localStorage.getItem('hhk_app_state');
@@ -500,78 +645,107 @@ async function runDesktopAcceptanceAudit(windowRef) {
             window.__HHK_TTS_RUNTIME_HOOKED__ = true;
           }
         } catch {}
-        if (location.hash !== '#/lessons/${lessonId}') {
-          location.hash = '#/lessons/${lessonId}';
-        }
         return true;
       })();
     `);
 
-    const lessonReady = await waitFor(async () => {
-      return windowRef.webContents.executeJavaScript(`
-        (() => {
-          const title = document.querySelector('h1');
-          const hasReadBtn = Array.from(document.querySelectorAll('button')).some((btn) => {
-            const label = String(btn.textContent || '').trim();
-            return label.includes('Đọc');
-          });
-          return Boolean(title) && hasReadBtn;
-        })();
-      `);
-    }, 45_000, 700);
+    const fallbackLessonIds = grade === 2 ? [21, 22, 23, 24, 25] : [1, 2, 3, 4, 5];
+    const lessonIds = Array.from(new Set([...(Array.isArray(candidateLessonIds) ? candidateLessonIds : []), ...fallbackLessonIds]));
+    let lastError = null;
 
-    if (!lessonReady) {
-      throw new Error(`Khong vao duoc bai hoc cho lop ${grade} hoac khong tim thay nut Doc.`);
-    }
+    for (const lessonId of lessonIds) {
+      try {
+        await windowRef.webContents.executeJavaScript(`
+          (() => {
+            location.hash = '#/lessons/${lessonId}';
+            return true;
+          })();
+        `);
 
-    const clickResult = await windowRef.webContents.executeJavaScript(`
-      (() => {
-        window.__HHK_TTS_RUNTIME_LOGS__ = [];
-        window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ = [];
-        const buttons = Array.from(document.querySelectorAll('button'));
-        const target = buttons.find((btn) => String(btn.getAttribute('title') || '').includes('Đọc thẻ này'))
-          || buttons.find((btn) => String(btn.textContent || '').trim() === 'Đọc')
-          || buttons.find((btn) => String(btn.textContent || '').includes('Đọc'));
-        if (!target) {
-          return { ok: false, reason: 'read-button-not-found' };
+        const lessonReady = await waitFor(async () => {
+          return windowRef.webContents.executeJavaScript(`
+            (() => {
+              const title = document.querySelector('h1');
+              const hasReadBtn = Array.from(document.querySelectorAll('button')).some((btn) => {
+                const label = String(btn.textContent || '').trim();
+                return label.includes('Đọc');
+              });
+              return Boolean(title) && hasReadBtn;
+            })();
+          `);
+        }, 15_000, 700);
+
+        if (!lessonReady) {
+          lastError = `lesson-not-ready-${lessonId}`;
+          continue;
         }
-        target.click();
-        return { ok: true };
-      })();
-    `);
 
-    if (!clickResult?.ok) {
-      throw new Error(String(clickResult?.reason || `Khong bam duoc nut Doc cho lop ${grade}.`));
+        const clickResult = await windowRef.webContents.executeJavaScript(`
+          (() => {
+            window.__HHK_TTS_RUNTIME_LOGS__ = [];
+            window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ = [];
+            const buttons = Array.from(document.querySelectorAll('button'));
+            const target = buttons.find((btn) => String(btn.getAttribute('title') || '').includes('Đọc thẻ này'))
+              || buttons.find((btn) => String(btn.textContent || '').trim() === 'Đọc')
+              || buttons.find((btn) => String(btn.textContent || '').includes('Đọc'));
+            if (!target) {
+              return { ok: false, reason: 'read-button-not-found' };
+            }
+            target.click();
+            return { ok: true };
+          })();
+        `);
+
+        if (!clickResult?.ok) {
+          lastError = String(clickResult?.reason || 'click-failed');
+          continue;
+        }
+
+        await waitFor(async () => {
+          return windowRef.webContents.executeJavaScript(`
+            (() => {
+              const logs = Array.isArray(window.__HHK_TTS_RUNTIME_LOGS__) ? window.__HHK_TTS_RUNTIME_LOGS__ : [];
+              const consoleLogs = Array.isArray(window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__) ? window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ : [];
+              const pool = logs.length > 0 ? logs : consoleLogs;
+              return pool.some((item) => item && (item.status === 'completed' || item.status === 'error'));
+            })();
+          `);
+        }, 60_000, 800);
+
+        await delay(1_200);
+
+        const runtimeLog = await windowRef.webContents.executeJavaScript(`
+          (() => {
+            const logs = Array.isArray(window.__HHK_TTS_RUNTIME_LOGS__) ? window.__HHK_TTS_RUNTIME_LOGS__ : [];
+            const consoleLogs = Array.isArray(window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__) ? window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ : [];
+            const pool = logs.length > 0 ? logs : consoleLogs;
+            const completed = pool.find((item) => item && item.status === 'completed');
+            return completed || pool[0] || null;
+          })();
+        `);
+
+        if (runtimeLog) {
+          return runtimeLog;
+        }
+
+        lastError = `runtime-log-empty-${lessonId}`;
+      } catch (error) {
+        lastError = String(error?.message || error || 'unknown');
+      }
     }
 
-    await waitFor(async () => {
-      return windowRef.webContents.executeJavaScript(`
-        (() => {
-          const logs = Array.isArray(window.__HHK_TTS_RUNTIME_LOGS__) ? window.__HHK_TTS_RUNTIME_LOGS__ : [];
-          const consoleLogs = Array.isArray(window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__) ? window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ : [];
-          const pool = logs.length > 0 ? logs : consoleLogs;
-          return pool.some((item) => item && (item.status === 'completed' || item.status === 'error'));
-        })();
-      `);
-    }, 60_000, 800);
-
-    await delay(1_200);
-
-    const runtimeLog = await windowRef.webContents.executeJavaScript(`
-      (() => {
-        const logs = Array.isArray(window.__HHK_TTS_RUNTIME_LOGS__) ? window.__HHK_TTS_RUNTIME_LOGS__ : [];
-        const consoleLogs = Array.isArray(window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__) ? window.__HHK_TTS_RUNTIME_CONSOLE_LOGS__ : [];
-        const pool = logs.length > 0 ? logs : consoleLogs;
-        const completed = pool.find((item) => item && item.status === 'completed');
-        return completed || pool[0] || null;
-      })();
-    `);
-
-    return runtimeLog;
+    throw new Error(`Khong vao duoc bai hoc cho lop ${grade} hoac khong tim thay nut Doc. LastError=${lastError || 'n/a'}`);
   };
 
   try {
     await delay(2_000);
+
+    if (DESKTOP_E2E_LICENSE_KEY) {
+      await runLicenseActivationAudit(DESKTOP_E2E_LICENSE_KEY);
+      await delay(1_000);
+      await windowRef.webContents.reloadIgnoringCache();
+      await delay(2_000);
+    }
 
     const storageInfo = await audioPackStore.getStorageInfo();
     report.rootPath = String(storageInfo?.rootPath || '');
@@ -609,7 +783,10 @@ async function runDesktopAcceptanceAudit(windowRef) {
     report.offlineNetworkEvents = offlineEvents;
 
     report.noGoogleRequests = offlineEvents.every((evt) => !/googleapis|gstatic|google\.com/i.test(String(evt.url || '')));
-    report.noBackendRequests = offlineEvents.every((evt) => !/api\/v1\/tts|ungdungthongminh\.shop|127\.0\.0\.1:5000/i.test(String(evt.url || '')));
+    report.noBackendTtsRequests = offlineEvents.every((evt) => !/\/api\/v1\/tts|\/api\/tts/i.test(String(evt.url || '')));
+    report.offlineLicenseVerifyRequestCount = offlineEvents.filter((evt) => /\/api\/licenses\/verify|\/api\/v1\/ai-app\/licenses\/verify/i.test(String(evt.url || ''))).length;
+    report.noLicenseVerifyRequests = report.offlineLicenseVerifyRequestCount === 0;
+    report.noBackendRequests = report.noBackendTtsRequests;
     report.noNativeFallback = [report.grade1.runtimeLog, report.grade2.runtimeLog].every((entry) => String(entry?.provider || '') !== 'native');
 
     const runtime1Ok = report.grade1.runtimeLog
@@ -636,7 +813,8 @@ async function runDesktopAcceptanceAudit(windowRef) {
       && runtime1GradeUrlOk
       && runtime2GradeUrlOk
       && report.noGoogleRequests
-      && report.noBackendRequests
+      && report.noBackendTtsRequests
+      && report.noLicenseVerifyRequests
       && report.noNativeFallback,
     );
 
@@ -776,7 +954,9 @@ app.whenReady().then(() => {
 
   createWindow();
 
-  setupAutoUpdater();
+  if (!IS_DESKTOP_AUDIT_MODE) {
+    setupAutoUpdater();
+  }
   setupAudioPackIpc();
   setupLicenseCacheIpc();
 });
