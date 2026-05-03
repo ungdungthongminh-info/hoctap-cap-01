@@ -70,11 +70,36 @@ function normalizeAllowedGrades(input: unknown): number[] {
   return normalized.length > 0 ? normalized : [1, 2];
 }
 
+function inferPlanFromProduct(productIdRaw: string): string {
+  const productId = String(productIdRaw || '').trim().toLowerCase();
+  if (productId === 'cap01_beta_year_299') return 'beta_year_299';
+  if (productId === 'prod-study-month') return 'standard_month';
+  if (productId === 'prod-study-year') return 'standard_year';
+  if (productId === 'prod-study-standard-lifetime') return 'standard_lifetime';
+  if (productId === 'prod-study-premium-month') return 'premium_month';
+  if (productId === 'prod-study-premium-year') return 'premium_year';
+  if (productId === 'prod-study-premium-lifetime') return 'premium_lifetime';
+  if (productId === 'prod-study-topup') return 'topup_300_credit';
+  return '';
+}
+
+function mapStoragePlanId(entitlement: Cap01Entitlement): string {
+  const rawPlan = String(entitlement?.plan || '').trim().toLowerCase();
+  const fallbackPlan = inferPlanFromProduct(entitlement?.productId || '');
+  const plan = rawPlan || fallbackPlan;
+  if (plan.startsWith('premium')) return 'premium';
+  if (plan === 'beta_year_299') return 'standard_1year_1grade';
+  if (plan.startsWith('standard')) return 'standard';
+  return 'free';
+}
+
 function normalizeEntitlement(input: Cap01Entitlement): Cap01Entitlement {
+  const productId = String(input?.productId || '').trim();
+  const inferredPlan = inferPlanFromProduct(productId);
   return {
     appId: APP_ID,
-    productId: String(input?.productId || 'cap01_beta_year_299'),
-    plan: String(input?.plan || 'beta_year_299'),
+    productId,
+    plan: String(input?.plan || inferredPlan || '').trim(),
     status: String(input?.status || 'active'),
     allowedGrades: normalizeAllowedGrades(input?.allowedGrades),
     features: {
@@ -160,7 +185,7 @@ export async function clearCap01LicenseCache(): Promise<void> {
 }
 
 function persistLocalPlanFromEntitlement(cache: Cap01LicenseCache): void {
-  localStorage.setItem(STORAGE_KEYS.plan, 'standard');
+  localStorage.setItem(STORAGE_KEYS.plan, mapStoragePlanId(cache.entitlement));
   localStorage.setItem(STORAGE_KEYS.status, 'active');
   localStorage.setItem(STORAGE_KEYS.source, 'license_key');
   localStorage.setItem(STORAGE_KEYS.license, cache.licenseKey);
