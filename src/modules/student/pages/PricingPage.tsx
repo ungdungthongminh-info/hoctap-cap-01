@@ -357,34 +357,6 @@ function hasKeyActivatedPaidPlan(planId: string, status: string | null, licenseK
   return PAID_LICENSE_PATTERN.test((licenseKey || '').toUpperCase());
 }
 
-function isStandardYearOneGradePlanId(planId: string | null | undefined): boolean {
-  const normalized = String(planId || '')
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '');
-
-  if (!normalized) return false;
-  const isStandardLike = normalized.includes('standard') || normalized.includes('basic');
-  const hasOneGradeSignal = normalized.includes('1grade') || normalized.includes('single_grade') || normalized.includes('1lop') || normalized.includes('one_class');
-  const hasYearSignal = normalized.includes('year') || normalized.includes('yearly') || normalized.includes('1y') || normalized.includes('12m') || normalized.includes('1nam');
-  return isStandardLike && hasOneGradeSignal && hasYearSignal;
-}
-
-function isStandardYearThreeGradePlanId(planId: string | null | undefined): boolean {
-  const normalized = String(planId || '')
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '');
-
-  if (!normalized) return false;
-  const isStandardLike = normalized.includes('standard') || normalized.includes('basic');
-  const hasThreeGradeSignal = normalized.includes('3grade') || normalized.includes('three_grade') || normalized.includes('3lop') || normalized.includes('three_class');
-  const hasYearSignal = normalized.includes('year') || normalized.includes('yearly') || normalized.includes('1y') || normalized.includes('12m') || normalized.includes('1nam');
-  return isStandardLike && hasThreeGradeSignal && hasYearSignal;
-}
-
 function isStandardLikePlanId(planId: string | null | undefined): boolean {
   const normalized = String(planId || '')
     .trim()
@@ -405,21 +377,12 @@ function detectPlanFlowFromKey(inputKey: string): 'standard' | 'standard_1year_1
   if (normalized.includes('-PREMIUM-') || normalized.includes('-VIP-')) return 'premium';
 
   const hasStandardSignal = normalized.includes('-STANDARD-') || normalized.includes('-BASIC-') || normalized.includes('-STD-');
-  const hasOneGradeSignal = /1GRADE|SINGLEGRADE|1LOP|ONECLASS|ONE_GRADE|1_GRADE/.test(normalized);
-  const hasYearSignal = /1YEAR|YEARLY|1Y|12M|1NAM/.test(normalized);
-
   // WSTL key chỉ là định dạng key Web Tổng, không chứa thông tin gói.
-  // Không được suy đoán 299/599 từ prefix này vì sẽ làm lệch toàn bộ key thực tế.
+  // App sẽ xác định gói thật từ backend thay vì suy đoán biến thể 1-lớp/3-lớp tại client.
   if (normalized.startsWith('WSTL-')) {
     return null;
   }
 
-  if ((hasStandardSignal && hasOneGradeSignal && hasYearSignal) || normalized.includes('1Y1G')) {
-    return 'standard_1year_1grade';
-  }
-  if (hasStandardSignal && hasYearSignal && /3GRADE|THREEGRADE|3LOP|THREECLASS|3_GRADE/.test(normalized)) {
-    return 'standard_1year_3grade';
-  }
   if (hasStandardSignal) return 'standard';
   return null;
 }
@@ -469,30 +432,6 @@ function playActivationTone(type: 'success' | 'error'): void {
   } catch {
     // Ignore audio errors to avoid blocking activation flow.
   }
-}
-
-function getPlanHintFromLicensePayload(license: Record<string, unknown> | undefined): string {
-  const metadata = (license?.metadata && typeof license.metadata === 'object') ? (license.metadata as Record<string, unknown>) : undefined;
-  const candidates = [
-    metadata?.planId,
-    metadata?.productId,
-    metadata?.productCode,
-    metadata?.planCode,
-    license?.planId,
-    license?.planCode,
-    license?.plan,
-    license?.productCode,
-    license?.productId,
-    license?.tier,
-    license?.licenseKey,
-  ];
-
-  for (const value of candidates) {
-    const text = String(value || '').trim();
-    if (text) return text;
-  }
-
-  return '';
 }
 
 function normalizePlanId(planId: string | null | undefined): 'free' | 'standard' | 'premium' {
@@ -613,6 +552,8 @@ function resolvePlanFromLicensePayload(
 
 function persistFreePlan(): void {
   localStorage.setItem(PLAN_KEY, 'free');
+  localStorage.removeItem(LICENSE_KEY);
+  localStorage.removeItem(SUB_STATUS_KEY);
   localStorage.removeItem(SUB_EXPIRY_KEY);
   localStorage.removeItem(SUB_BILLING_KEY);
   localStorage.removeItem(ACTIVATION_SOURCE_KEY);
@@ -760,8 +701,8 @@ export function PricingPage() {
   const isPendingOneGrade = pendingStandardActivation?.storagePlanId === 'standard_1year_1grade';
   const isPendingThreeGrade = pendingStandardActivation?.storagePlanId === 'standard_1year_3grade';
   const canSelectGradesNow = !isPremiumKeyFlow && !isStandardSelectionLocked && hasPendingStandardActivation;
-  const visiblePlans = pricingPlans.filter((plan) => plan.id !== 'basic');
-  const visibleComparisonPlans = PRICING_PLANS.filter((plan) => plan.id !== 'basic');
+  const visiblePlans = pricingPlans.filter((plan) => plan.id !== 'basic' && plan.id !== 'standard_1year_1grade' && plan.id !== 'standard_1year_3grade');
+  const visibleComparisonPlans = PRICING_PLANS.filter((plan) => plan.id !== 'basic' && plan.id !== 'standard_1year_1grade' && plan.id !== 'standard_1year_3grade');
   const currentPlanStorageId = String(activeSub?.planId || localStorage.getItem(PLAN_KEY) || '').trim().toLowerCase();
   const currentPlanMeta = visiblePlans.find((plan) => plan.id === currentPlanStorageId) || visiblePlans.find((plan) => plan.id === normalizePlanId(currentPlan)) || visiblePlans[0];
   const activeSubPlanMeta = activeSub ? (visiblePlans.find((plan) => plan.id === String(activeSub.planId || '').trim().toLowerCase()) || visiblePlans.find((plan) => plan.id === normalizePlanId(activeSub.planId))) : null;
@@ -805,14 +746,6 @@ export function PricingPage() {
       description: 'Mở 3 lớp tùy chọn, đủ các tính năng học tập và theo dõi tiến bộ.',
       billingCycle: billing,
       productUrl: WEB_TOTAL_PRODUCT_URLS.standard[billing],
-    },
-    {
-      id: 'standard_1year_1grade',
-      title: 'Gói 1 khóa',
-      badge: 'Tiết kiệm cho nhu cầu 1 lớp',
-      description: '01 năm - 01 lớp, đủ môn và hợp khi chỉ cần học tập trung theo một khối.',
-      billingCycle: 'yearly' as const,
-      productUrl: WEB_TOTAL_PRODUCT_URLS.standard_1year_1grade.yearly,
     },
     {
       id: 'premium',
@@ -1218,8 +1151,13 @@ export function PricingPage() {
 
   const openQRPayment = (plan: PricingPlan) => {
     if (plan.id === 'free') {
-      setActivateMsg({ type: 'success', text: 'Gói Free đã sẵn sàng. Bạn có thể vào app ngay mà không cần mua thêm.' });
-      setTimeout(() => setActivateMsg(null), 5000);
+      persistFreePlan();
+      setCurrentPlan('free');
+      setActiveSub(null);
+      setSubExpiry(null);
+      setActivationGrades(getUnlockedGrades(state.student.grade, 'free'));
+      setLicenseKey('');
+      navigate('/home');
       return;
     }
 
@@ -1286,20 +1224,9 @@ export function PricingPage() {
 
       const licensePayload = verifyResult.license as unknown as Record<string, unknown>;
       const resolvedPlan = resolvePlanFromLicensePayload(licensePayload, verifyResult.features || []);
-      const planHint = getPlanHintFromLicensePayload(licensePayload);
       const detectedPlanByKey = detectPlanFlowFromKey(key);
-      const isStandardYearOneGrade = detectedPlanByKey === 'standard_1year_1grade'
-        || resolvedPlan === 'standard_1year_1grade'
-        || String(verifyResult.license?.planId || '').trim().toLowerCase() === 'standard_1year_1grade'
-        || isStandardYearOneGradePlanId(planHint)
-        || String(verifyResult.license?.productId || '').trim().toLowerCase() === 'standard_1year_1grade';
-      const isStandardYearThreeGrade = !isStandardYearOneGrade && (
-        detectedPlanByKey === 'standard_1year_3grade'
-        || resolvedPlan === 'standard_1year_3grade'
-        || String(verifyResult.license?.planId || '').trim().toLowerCase() === 'standard_1year_3grade'
-        || isStandardYearThreeGradePlanId(planHint)
-        || String(verifyResult.license?.productId || '').trim().toLowerCase() === 'prod-study-year'
-      );
+      const isStandardYearOneGrade = false;
+      const isStandardYearThreeGrade = false;
       const detectedBasePlan = detectedPlanByKey === 'premium' ? 'premium' : detectedPlanByKey ? 'standard' : null;
       const resolvedBasePlan = resolvedPlan ? normalizePlanId(resolvedPlan) : null;
       const planId = resolvedBasePlan || detectedBasePlan || normalizePlanId(String(verifyResult.license?.planCode || '').toLowerCase());
@@ -1704,7 +1631,15 @@ export function PricingPage() {
                 <button
                   className={`${premiumButtonPrimaryClass} w-full pricing-card-main-btn`}
                   style={darkPrimaryButtonStyle}
-                  onClick={() => navigate('/home')}
+                  onClick={() => {
+                    persistFreePlan();
+                    setCurrentPlan('free');
+                    setActiveSub(null);
+                    setSubExpiry(null);
+                    setActivationGrades(getUnlockedGrades(state.student.grade, 'free'));
+                    setLicenseKey('');
+                    navigate('/home');
+                  }}
                 >
                   Chọn gói này
                 </button>

@@ -40,7 +40,7 @@ export function LicenseActivationPage() {
       <div className="card">
         <h1 className="text-2xl font-bold mb-1">Kích hoạt bản quyền</h1>
         <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-          Nhập license key từ Web Tổng để kích hoạt gói beta 299k/năm.
+          Nhập license key từ Web Tổng để kích hoạt gói đang mua.
         </p>
       </div>
 
@@ -52,7 +52,7 @@ export function LicenseActivationPage() {
           style={{ borderColor: '#CBD5E1' }}
           value={licenseKey}
           onChange={(event) => setLicenseKey(event.target.value.toUpperCase())}
-          placeholder="VD: HHK-BETA299-XXXX"
+          placeholder="VD: HHK-XXXX-XXXXXXXX"
           autoComplete="off"
           spellCheck={false}
         />

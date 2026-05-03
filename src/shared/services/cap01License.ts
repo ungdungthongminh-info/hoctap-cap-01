@@ -72,7 +72,6 @@ function normalizeAllowedGrades(input: unknown): number[] {
 
 function inferPlanFromProduct(productIdRaw: string): string {
   const productId = String(productIdRaw || '').trim().toLowerCase();
-  if (productId === 'cap01_beta_year_299') return 'beta_year_299';
   if (productId === 'prod-study-month') return 'standard_month';
   if (productId === 'prod-study-year') return 'standard_year';
   if (productId === 'prod-study-standard-lifetime') return 'standard_lifetime';
@@ -88,7 +87,6 @@ function mapStoragePlanId(entitlement: Cap01Entitlement): string {
   const fallbackPlan = inferPlanFromProduct(entitlement?.productId || '');
   const plan = rawPlan || fallbackPlan;
   if (plan.startsWith('premium')) return 'premium';
-  if (plan === 'beta_year_299') return 'standard_1year_1grade';
   if (plan.startsWith('standard')) return 'standard';
   return 'free';
 }

@@ -561,7 +561,7 @@ export async function verifyLicenseKey(params: {
   let result;
 
   try {
-    result = await fetchBridgeResponse('/licenses/verify', {
+    result = await fetchBridgeResponse('/ai-app/licenses/verify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -654,7 +654,7 @@ export async function verifyLicenseKey(params: {
     ) {
       throw new Error(
         `Đang gọi sai endpoint backend/bridge (base hiện tại: ${resolvedBase}). `
-        + 'App Học cần route /api/licenses/verify từ backend hoạt động. '
+        + 'App Học cần route /api/v1/ai-app/licenses/verify từ backend hoạt động. '
         + 'Vui lòng cấu hình VITE_BACKEND_API_BASE đúng môi trường deploy và làm mới app để bỏ cache cũ.',
       );
     }
