@@ -82,9 +82,25 @@ export function LicenseActivationPage() {
             type="button"
             className="btn"
             style={{ background: 'var(--color-surface)' }}
+            onClick={() => navigate('/pricing')}
+          >
+            Xem bảng giá
+          </button>
+          <button
+            type="button"
+            className="btn"
+            style={{ background: 'var(--color-surface)' }}
             onClick={() => navigate('/license/status')}
           >
             Xem trạng thái gói
+          </button>
+          <button
+            type="button"
+            className="btn"
+            style={{ background: 'var(--color-surface)' }}
+            onClick={() => navigate('/home')}
+          >
+            Vào học Free
           </button>
         </div>
       </div>

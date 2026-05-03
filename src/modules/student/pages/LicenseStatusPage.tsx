@@ -120,6 +120,12 @@ export function LicenseStatusPage() {
         <button type="button" className="btn" onClick={() => navigate('/license/activate')}>
           Nhập key khác
         </button>
+        <button type="button" className="btn" onClick={() => navigate('/pricing')}>
+          Xem bảng giá
+        </button>
+        <button type="button" className="btn" onClick={() => navigate('/home')}>
+          Vào học Free
+        </button>
       </div>
     </div>
   );
