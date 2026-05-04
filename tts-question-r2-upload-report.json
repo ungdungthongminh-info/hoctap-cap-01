@@ -1,0 +1,10 @@
+{
+  "generatedAt": "2026-05-04T12:59:10.010Z",
+  "pass": false,
+  "reason": "missing-r2-env",
+  "totalItems": 19043,
+  "uploaded": 0,
+  "skipped": 0,
+  "missingLocal": 19043,
+  "details": []
+}

@@ -1,0 +1,70 @@
+{
+  "generatedAt": "2026-05-04T15:03:00.000Z",
+  "pass": false,
+  "reason": "production-deploy-blocked",
+  "bucket": "hhk-tts-audio",
+  "publicBaseUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev",
+  "r2": {
+    "drivePacks": {
+      "pass": true,
+      "uploaded": 6,
+      "tested": 6
+    },
+    "lessonCardMvp": {
+      "pass": true,
+      "uploaded": 4288,
+      "sampleChecks": 6
+    }
+  },
+  "deployment": {
+    "productionUrl": "https://hoctap-cap-01.vercel.app/#/lessons/1",
+    "status": "failed",
+    "attempts": [
+      {
+        "command": "vercel deploy --prod --yes",
+        "status": "failed",
+        "reason": "socket hang up"
+      },
+      {
+        "command": "vercel build --prod",
+        "status": "passed"
+      },
+      {
+        "command": "vercel deploy --prebuilt --prod --yes",
+        "status": "failed",
+        "reason": "api-upload-free-more-than-5000"
+      },
+      {
+        "command": "vercel deploy --prebuilt --archive=tgz --prod --yes",
+        "status": "failed",
+        "reason": "api-upload-free-more-than-5000"
+      }
+    ]
+  },
+  "productionChecks": [
+    {
+      "scope": "production-web-runtime",
+      "url": "https://hoctap-cap-01.vercel.app/#/lessons/1",
+      "status": "failed",
+      "reason": "live-production-still-requests-google-drive",
+      "evidence": [
+        "Browser console showed a request to drive.usercontent.google.com blocked by CORS.",
+        "The live production page did not use R2 URLs during the lesson load."
+      ]
+    },
+    {
+      "scope": "r2-pack-public-urls",
+      "status": "passed",
+      "httpStatus": 200,
+      "contentType": "application/zip",
+      "magic": "PK"
+    },
+    {
+      "scope": "r2-lesson-card-public-urls",
+      "status": "passed",
+      "httpStatus": 200,
+      "contentType": "audio/mpeg",
+      "nonHtml": true
+    }
+  ]
+}

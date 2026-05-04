@@ -1,0 +1,84 @@
+{
+  "generatedAt": "2026-05-04T14:58:14.740Z",
+  "pass": true,
+  "checks": [
+    {
+      "grade": 0,
+      "key": "lesson-card:99001",
+      "fileName": "lesson-card-99001.mp3",
+      "publicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/vi-v1/lesson-card-99001.mp3",
+      "httpStatus": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 29184,
+      "isHtml": false,
+      "magic": "s",
+      "playApiStatus": "not-executed-in-node",
+      "pass": true
+    },
+    {
+      "grade": 1,
+      "key": "lesson-card:1",
+      "fileName": "lesson-card-1.mp3",
+      "publicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/vi-v1/lesson-card-1.mp3",
+      "httpStatus": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 70944,
+      "isHtml": false,
+      "magic": "s",
+      "playApiStatus": "not-executed-in-node",
+      "pass": true
+    },
+    {
+      "grade": 2,
+      "key": "lesson-card:81",
+      "fileName": "lesson-card-81.mp3",
+      "publicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/vi-v1/lesson-card-81.mp3",
+      "httpStatus": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 39648,
+      "isHtml": false,
+      "magic": "s",
+      "playApiStatus": "not-executed-in-node",
+      "pass": true
+    },
+    {
+      "grade": 3,
+      "key": "lesson-card:881",
+      "fileName": "lesson-card-881.mp3",
+      "publicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/vi-v1/lesson-card-881.mp3",
+      "httpStatus": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 40704,
+      "isHtml": false,
+      "magic": "s",
+      "playApiStatus": "not-executed-in-node",
+      "pass": true
+    },
+    {
+      "grade": 4,
+      "key": "lesson-card:961",
+      "fileName": "lesson-card-961.mp3",
+      "publicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/vi-v1/lesson-card-961.mp3",
+      "httpStatus": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 20256,
+      "isHtml": false,
+      "magic": "s",
+      "playApiStatus": "not-executed-in-node",
+      "pass": true
+    },
+    {
+      "grade": 5,
+      "key": "lesson-card:1041",
+      "fileName": "lesson-card-1041.mp3",
+      "publicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/vi-v1/lesson-card-1041.mp3",
+      "httpStatus": 200,
+      "contentType": "audio/mpeg",
+      "contentLength": 35040,
+      "isHtml": false,
+      "magic": "s",
+      "playApiStatus": "not-executed-in-node",
+      "pass": true
+    }
+  ]
+}

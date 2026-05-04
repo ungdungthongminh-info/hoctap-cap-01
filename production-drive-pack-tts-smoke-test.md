@@ -47,3 +47,8 @@
 ## Notes
 - Khong co ket luan "co tieng that" trong bao cao nay.
 - Khong ket luan voi nguyen nhan "quyen" mot cach don gian khi Drive tra HTML; da them xu ly confirm/interstitial page o backend de loai bo false fail do luong canh bao cua Drive.
+
+## R2 Migration Delta
+- Da tao day du script R2 cho download/upload/test packs va lesson-card MVP.
+- Da tai thu 6 file Drive ve scratch: grade 0/2/3 la ZIP hop le, grade 1/4/5 tra HTML interstitial.
+- Chua upload R2 do thieu gia tri that trong `.env.r2` (`R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_PUBLIC_BASE_URL`, `R2_ENDPOINT`).

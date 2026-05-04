@@ -594,9 +594,16 @@ function playAudioUrl(
   });
 }
 
-async function isLikelyPlayableAudioUrl(sourceUrl: string): Promise<boolean> {
+async function inspectPlayableAudioUrl(sourceUrl: string): Promise<{ ok: boolean; reason?: string }> {
+  const isWebProductionRuntime = (() => {
+    if (typeof window === 'undefined') return false;
+    const host = String(window.location.hostname || '').toLowerCase();
+    if (!host || host === 'localhost' || host === '127.0.0.1' || host === '::1') return false;
+    return !(window as any).electronAPI;
+  })();
+
   if (typeof fetch !== 'function') {
-    return true;
+    return { ok: true };
   }
 
   try {
@@ -605,25 +612,52 @@ async function isLikelyPlayableAudioUrl(sourceUrl: string): Promise<boolean> {
       cache: 'no-cache',
     });
     if (!response.ok) {
-      return false;
+      return { ok: false, reason: 'r2-audio-not-found' };
     }
 
     const contentType = String(response.headers.get('content-type') || '').toLowerCase();
+    const contentLength = Number(response.headers.get('content-length') || 0);
     if (!contentType) {
-      return true;
+      return isWebProductionRuntime
+        ? { ok: false, reason: 'r2-content-type-not-audio' }
+        : { ok: true };
     }
 
     if (contentType.startsWith('audio/') || contentType.includes('octet-stream')) {
-      return true;
+      if (isWebProductionRuntime && contentLength > 0 && contentLength <= 20 * 1024) {
+        return { ok: false, reason: 'r2-audio-too-small' };
+      }
+
+      if (isWebProductionRuntime) {
+        try {
+          const verifyResponse = await fetch(sourceUrl, {
+            method: 'GET',
+            cache: 'no-cache',
+            headers: { Range: 'bytes=0-511' },
+          });
+          const verifyBytes = new Uint8Array(await verifyResponse.arrayBuffer());
+          const decoder = new TextDecoder('utf-8');
+          const textHead = decoder.decode(verifyBytes.subarray(0, Math.min(verifyBytes.length, 512))).toLowerCase();
+          if (textHead.includes('<!doctype html') || textHead.includes('<html')) {
+            return { ok: false, reason: 'r2-html-fallback' };
+          }
+        } catch {
+          return { ok: false, reason: 'r2-playback-failed' };
+        }
+      }
+
+      return { ok: true };
     }
 
     if (contentType.startsWith('text/') || contentType.includes('json')) {
-      return false;
+      return { ok: false, reason: 'r2-content-type-not-audio' };
     }
 
-    return true;
+    return { ok: true };
   } catch {
-    return true;
+    return isWebProductionRuntime
+      ? { ok: false, reason: 'r2-playback-failed' }
+      : { ok: true };
   }
 }
 
@@ -800,9 +834,18 @@ async function tryPlayFromStaticManifest(
   }
 
   try {
-    const audioUrlLooksValid = await isLikelyPlayableAudioUrl(entry.audioUrl);
-    if (!audioUrlLooksValid) {
-      return null;
+    const inspect = await inspectPlayableAudioUrl(entry.audioUrl);
+    if (!inspect.ok) {
+      return {
+        status: 'error',
+        provider: 'static-manifest',
+        resolvedSource: 'web-public-static-manifest',
+        assetKey,
+        assetUrl: entry.audioUrl,
+        cacheStatus: 'fallback',
+        fallbackNative: false,
+        error: inspect.reason || 'r2-playback-failed',
+      };
     }
 
     setRuntimeStatus({
@@ -857,10 +900,18 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
   }
 
   const policy = getTtsPolicy(options.policy || 'practice-on-demand');
-  const desiredMode = options.mode || getTtsMode();
+  const requestedMode = options.mode || getTtsMode();
+  const isWebProductionRuntime = (() => {
+    if (typeof window === 'undefined') return false;
+    const host = String(window.location.hostname || '').toLowerCase();
+    if (!host || host === 'localhost' || host === '127.0.0.1' || host === '::1') return false;
+    return !(window as any).electronAPI;
+  })();
+  const isLessonCardR2Path = isWebProductionRuntime && lang === 'vi' && String(options.assetKey || '').startsWith('lesson-card:');
+  const desiredMode = isLessonCardR2Path ? 'static' : requestedMode;
   const strictOffline = desiredMode === 'static' && Boolean(options.assetKey);
-  const allowManagedFallback = desiredMode !== 'native' && policy.preferBackend;
-  const allowNativeFallback = options.allowNativeFallback !== false;
+  const allowManagedFallback = !isLessonCardR2Path && desiredMode !== 'native' && policy.preferBackend;
+  const allowNativeFallback = !isLessonCardR2Path && options.allowNativeFallback !== false;
   const speed = clampTtsSpeed(options.speed ?? getTtsSpeed());
   const backendVoiceId = resolveBackendVoiceId(lang, options.voiceId);
   const ssml = buildAdvancedSsml(cleanedText, lang, policy.id);
@@ -934,7 +985,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
     if (strictOffline) {
       return rejectStaticPlayback(staticPlayback?.error || 'Chưa có file giọng đọc offline cho bài này');
     }
-    return rejectStaticPlayback('Che do static dang bat nhung khong tim thay audio tinh. Vui long cap nhat static pack.');
+    return rejectStaticPlayback('r2-audio-not-found');
   }
 
   if (!allowManagedFallback) {

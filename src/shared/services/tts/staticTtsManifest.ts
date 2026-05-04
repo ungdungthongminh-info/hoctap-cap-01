@@ -48,6 +48,8 @@ export interface StaticTtsManifestFile {
 }
 
 const STATIC_MANIFEST_PATH = `${import.meta.env.BASE_URL || '/'}audio/tts/manifest.json`.replace(/([^:]\/)\/+/g, '$1');
+const DEFAULT_R2_PUBLIC_BASE_URL = 'https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev';
+const R2_PUBLIC_BASE_URL = String(import.meta.env.VITE_R2_PUBLIC_BASE_URL || DEFAULT_R2_PUBLIC_BASE_URL).trim().replace(/\/+$/, '');
 
 let manifestPromise: Promise<StaticTtsManifestFile | null> | null = null;
 
@@ -57,7 +59,12 @@ export function invalidateStaticTtsManifestCache(): void {
 
 function withResolvedAudioUrl(entry: Omit<StaticTtsManifestEntry, 'audioUrl'> & { audioUrl?: string }): StaticTtsManifestEntry {
   const assetPath = String(entry.assetPath || '').replace(/^\/+/, '');
-  const audioUrl = entry.audioUrl || `${import.meta.env.BASE_URL || '/'}${assetPath}`.replace(/([^:]\/)\/+/g, '$1');
+  const host = typeof window !== 'undefined' ? String(window.location.hostname || '').toLowerCase() : '';
+  const isWebProduction = Boolean(host && host !== 'localhost' && host !== '127.0.0.1' && host !== '::1' && !(window as any).electronAPI);
+  const isLessonCardViV1 = assetPath.startsWith('audio/tts/assets/vi-v1/lesson-card-');
+  const audioUrl = (isWebProduction && R2_PUBLIC_BASE_URL && isLessonCardViV1)
+    ? `${R2_PUBLIC_BASE_URL}/${assetPath}`
+    : (entry.audioUrl || `${import.meta.env.BASE_URL || '/'}${assetPath}`.replace(/([^:]\/)\/+/g, '$1'));
   return {
     ...entry,
     audioUrl,

@@ -1,0 +1,109 @@
+{
+  "generatedAt": "2026-05-04T13:00:36.261Z",
+  "assumptions": {
+    "costPer1mCharsUsd": {
+      "vi-v1": 16,
+      "en-v1": 16
+    },
+    "note": "Estimate only. Real billing depends on Google Cloud SKU, voice type, and region."
+  },
+  "totalItems": 19043,
+  "totalCharacters": 1619763,
+  "estimatedCostUsd": 25.9162,
+  "byProfile": {
+    "vi-v1": {
+      "totalItems": 16318,
+      "totalCharacters": 1391526,
+      "estimatedCostUsd": 22.2644
+    },
+    "en-v1": {
+      "totalItems": 2725,
+      "totalCharacters": 228237,
+      "estimatedCostUsd": 3.6518
+    }
+  },
+  "byGrade": {
+    "0": {
+      "totalItems": 132,
+      "totalCharacters": 11220
+    },
+    "1": {
+      "totalItems": 3278,
+      "totalCharacters": 278630
+    },
+    "2": {
+      "totalItems": 3259,
+      "totalCharacters": 277015
+    },
+    "3": {
+      "totalItems": 3786,
+      "totalCharacters": 321810
+    },
+    "4": {
+      "totalItems": 4323,
+      "totalCharacters": 367455
+    },
+    "5": {
+      "totalItems": 4265,
+      "totalCharacters": 362525
+    }
+  },
+  "bySubject": {
+    "math": {
+      "totalItems": 1500,
+      "totalCharacters": 127500
+    },
+    "vietnamese": {
+      "totalItems": 1500,
+      "totalCharacters": 127500
+    },
+    "nature": {
+      "totalItems": 900,
+      "totalCharacters": 76500
+    },
+    "ethics": {
+      "totalItems": 1443,
+      "totalCharacters": 122655
+    },
+    "english": {
+      "totalItems": 1500,
+      "totalCharacters": 127500
+    },
+    "science": {
+      "totalItems": 600,
+      "totalCharacters": 51000
+    },
+    "history_geo": {
+      "totalItems": 598,
+      "totalCharacters": 50830
+    },
+    "informatics": {
+      "totalItems": 1498,
+      "totalCharacters": 127330
+    },
+    "art": {
+      "totalItems": 2499,
+      "totalCharacters": 212415
+    },
+    "pre-grade": {
+      "totalItems": 132,
+      "totalCharacters": 11220
+    },
+    "extra_multi": {
+      "totalItems": 5400,
+      "totalCharacters": 459000
+    },
+    "math_expand": {
+      "totalItems": 233,
+      "totalCharacters": 19805
+    },
+    "vietnamese_expand": {
+      "totalItems": 115,
+      "totalCharacters": 9775
+    },
+    "expand_other": {
+      "totalItems": 1125,
+      "totalCharacters": 95625
+    }
+  }
+}

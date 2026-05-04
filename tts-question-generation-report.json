@@ -1,0 +1,10 @@
+{
+  "generatedAt": "2026-05-04T12:56:44.802Z",
+  "profile": "vi-v1",
+  "status": "skipped-no-google-credentials",
+  "totalItems": 16318,
+  "generated": 0,
+  "skipped": 16318,
+  "failed": 0,
+  "note": "Set GOOGLE_APPLICATION_CREDENTIALS, GOOGLE_CLOUD_PROJECT, GOOGLE_TTS_* before running real generation."
+}

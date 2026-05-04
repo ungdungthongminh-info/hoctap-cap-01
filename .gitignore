@@ -30,3 +30,13 @@ audio-packs/
 *.mp3
 
 .vercel
+
+# R2 local env/secrets
+.env.r2
+.env*.local
+
+# External scratch audio workspace (never commit)
+hhk-tts-audio/
+F:/1_A_Disk_D/Khương Bình/hhk-tts-audio/
+
+.vercel

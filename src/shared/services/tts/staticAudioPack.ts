@@ -122,8 +122,17 @@ const PRODUCTION_TTS_PACK_API_BASE = 'https://www.ungdungthongminh.shop/api/v1';
 const MAX_MANIFEST_SOURCE_FAILURES_BEFORE_ABORT = 25;
 const FALLBACK_UPDATE_FEED_URL = 'https://hoctap-cap-01-livid.vercel.app/app-update.json';
 const REMOTE_TTS_POLICY_TTL_MS = 5 * 60 * 1000;
+const DEFAULT_R2_PUBLIC_BASE_URL = 'https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev';
 
 const SUPPORTED_PACK_GRADES = [0, 1, 2, 3, 4, 5] as const;
+const R2_PACK_FILE_BY_GRADE: Record<number, string> = {
+  0: 'vi-v1-pre-k-2026-04-27-v1.zip',
+  1: 'vi-v1-grade-1-2026-04-27-v1.zip',
+  2: 'vi-v1-grade-2-2026-04-27-v1.zip',
+  3: 'vi-v1-grade-3-2026-04-27-v1.zip',
+  4: 'vi-v1-grade-4-2026-04-27-v1.zip',
+  5: 'vi-v1-grade-5-2026-04-27-v1.zip',
+};
 
 interface RemoteTtsPolicy {
   offlineSyncEnabled: boolean;
@@ -150,8 +159,18 @@ function buildStaticHostedPackUrl(grade: number): string {
   return buildAppAssetUrl(`audio/tts/packs/tts-vi-v1-grade-${grade}-lesson-card.zip`);
 }
 
+function buildR2PackUrl(grade: number): string {
+  const base = String(import.meta.env.VITE_R2_PUBLIC_BASE_URL || DEFAULT_R2_PUBLIC_BASE_URL).trim().replace(/\/+$/, '');
+  const fileName = R2_PACK_FILE_BY_GRADE[grade];
+  if (!base || !fileName) {
+    return '';
+  }
+  return `${base}/audio/tts/packs/${fileName}`;
+}
+
 function buildPackProxyUrlCandidates(grade: number): string[] {
   const urls = [
+    buildR2PackUrl(grade),
     buildPackProxyUrl(grade, BACKEND_API_BASE),
     buildPackProxyUrl(grade, PRODUCTION_TTS_PACK_API_BASE),
     buildStaticHostedPackUrl(grade),
@@ -160,12 +179,12 @@ function buildPackProxyUrlCandidates(grade: number): string[] {
 }
 
 const GRADE_PACK_LINKS: Partial<Record<number, string>> = {
-  0: buildPackProxyUrl(0, BACKEND_API_BASE),
-  1: buildPackProxyUrl(1, BACKEND_API_BASE),
-  2: buildPackProxyUrl(2, BACKEND_API_BASE),
-  3: buildPackProxyUrl(3, BACKEND_API_BASE),
-  4: buildPackProxyUrl(4, BACKEND_API_BASE),
-  5: buildPackProxyUrl(5, BACKEND_API_BASE),
+  0: buildR2PackUrl(0) || buildPackProxyUrl(0, BACKEND_API_BASE),
+  1: buildR2PackUrl(1) || buildPackProxyUrl(1, BACKEND_API_BASE),
+  2: buildR2PackUrl(2) || buildPackProxyUrl(2, BACKEND_API_BASE),
+  3: buildR2PackUrl(3) || buildPackProxyUrl(3, BACKEND_API_BASE),
+  4: buildR2PackUrl(4) || buildPackProxyUrl(4, BACKEND_API_BASE),
+  5: buildR2PackUrl(5) || buildPackProxyUrl(5, BACKEND_API_BASE),
 };
 
 export const STATIC_PACK_GRADE_OPTIONS: Array<{ grade: number; label: string }> = [
@@ -247,7 +266,7 @@ function parseStudentGradeFromStoredState(): number | null {
 }
 
 function resolveDefaultPackUrlByGrade(): string {
-  return buildDrivePackUrl(1) || buildStaticHostedPackUrl(1);
+  return getStaticPackUrlByGrade(1) || buildStaticHostedPackUrl(1);
 }
 
 export function getStaticPackSelectedGrade(): number {

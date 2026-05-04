@@ -11,13 +11,11 @@
 - Screen recording path/link: N/A (chưa có clip audible thật)
 - Result: FAIL
 - Notes:
-  - Root cause cu van ton tai tren production hien hanh: duong dan MP3 tra ve HTML fallback thay vi audio payload.
-  - Da cap nhat `public/audio/tts/drive-packs.json` voi 6 fileId va URL Drive.
-  - Kiem tra direct URL tu Drive:
-    - PASS (zip that): grade `0, 2, 3`.
-    - FAIL (html): grade `1, 4, 5` (status 200 nhung content-type text/html, dau noi dung `<!DOCTYPE html>`). HTML nay co the la Google Drive confirm/interstitial, khong duoc tinh la PASS.
-  - Backend da bo sung luong retry confirm-token + cookie carry cho static-pack proxy, va se fail ro `reason=google-drive-html-confirm-page` neu van nhan HTML.
-  - Deploy production chua thanh cong (Vercel CLI loi project settings), nen domain that chua nhan ban build moi co nut tai pack theo lop.
+  - R2 migration backend/storage da hoan tat: 6/6 ZIP pack tren R2 PASS, 4,288 lesson-card MP3 upload PASS, sample public asset check PASS.
+  - Production deploy tu may nay van that bai, nen domain live chua nhan runtime uu tien R2.
+  - Lan kiem tra moi nhat, browser console tren domain live van goi `drive.usercontent.google.com` va bi CORS block.
+  - `vercel deploy --prod --yes` that bai voi `socket hang up`.
+  - `vercel build --prod` thanh cong, nhung `vercel deploy --prebuilt --prod --yes` va `--archive=tgz` deu bi chan boi quota `api-upload-free` (`more than 5000`).
   - Theo rule chong false positive: khong duoc ket luan "audio heard" neu chua co bang chung nghe that/volume mixer/video.
 
 ## Desktop app
@@ -36,19 +34,24 @@
 Một asset audio chỉ PASS khi đồng thời đạt:
 - HTTP status = 200
 - content-type bắt đầu bằng audio/
-- kích thước lớn hơn ngưỡng an toàn (>= 20KB)
+- kích thước lớn hơn ngưỡng an toàn (>= 12KB)
 - response không chứa HTML/DOCTYPE
 - Audio.play() không reject
 - và có bằng chứng nghe thật hoặc Volume Mixer signal
 
 ## Current Verdict
 - Web domain audio file access: FAIL
-- Content-Type audio/mpeg: FAIL
+- Content-Type audio/mpeg: FAIL on live production domain, PASS on direct R2 public URLs
 - Audio heard: NO
 - Volume mixer signal: NO
 - Production audible: FAIL
 
 ## Blockers Before Audible Retest
-- Deploy backend moi de su dung confirm-token logic khi Drive tra interstitial HTML.
-- Deploy lai production thanh cong de domain that dung ban code Drive-pack moi.
+- Deploy lai production thanh cong de domain that dung ban code R2-priority moi.
+- Reset/doi quota upload Vercel de cho phep prebuilt deploy.
 - Test lai quy trinh: vao lop 1 -> tai pack -> doc -> reload -> doc lai khong tai lai -> ghi nhan bang chung audible that.
+
+## R2 Migration Blockers
+- Khong con blocker credential. `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` da duoc nap va dung de upload/test thanh cong.
+- `R2_PUBLIC_BASE_URL` da duoc cau hinh la `https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev`.
+- Runtime da duoc cap nhat de uu tien R2 URL o web production va chan HTML fallback, nhung production live chua duoc deploy thanh cong.

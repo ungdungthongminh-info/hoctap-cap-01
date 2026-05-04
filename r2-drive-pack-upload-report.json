@@ -1,0 +1,72 @@
+{
+  "generatedAt": "2026-05-04T13:31:01.791Z",
+  "pass": true,
+  "packs": [
+    {
+      "grade": 0,
+      "fileName": "vi-v1-pre-k-2026-04-27-v1.zip",
+      "r2Key": "audio/tts/packs/vi-v1-pre-k-2026-04-27-v1.zip",
+      "publicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-pre-k-2026-04-27-v1.zip",
+      "httpStatus": 200,
+      "contentType": "application/zip",
+      "magic": "PK",
+      "isHtml": false,
+      "pass": true
+    },
+    {
+      "grade": 1,
+      "fileName": "vi-v1-grade-1-2026-04-27-v1.zip",
+      "r2Key": "audio/tts/packs/vi-v1-grade-1-2026-04-27-v1.zip",
+      "publicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-grade-1-2026-04-27-v1.zip",
+      "httpStatus": 200,
+      "contentType": "application/zip",
+      "magic": "PK",
+      "isHtml": false,
+      "pass": true
+    },
+    {
+      "grade": 2,
+      "fileName": "vi-v1-grade-2-2026-04-27-v1.zip",
+      "r2Key": "audio/tts/packs/vi-v1-grade-2-2026-04-27-v1.zip",
+      "publicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-grade-2-2026-04-27-v1.zip",
+      "httpStatus": 200,
+      "contentType": "application/zip",
+      "magic": "PK",
+      "isHtml": false,
+      "pass": true
+    },
+    {
+      "grade": 3,
+      "fileName": "vi-v1-grade-3-2026-04-27-v1.zip",
+      "r2Key": "audio/tts/packs/vi-v1-grade-3-2026-04-27-v1.zip",
+      "publicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-grade-3-2026-04-27-v1.zip",
+      "httpStatus": 200,
+      "contentType": "application/zip",
+      "magic": "PK",
+      "isHtml": false,
+      "pass": true
+    },
+    {
+      "grade": 4,
+      "fileName": "vi-v1-grade-4-2026-04-27-v1.zip",
+      "r2Key": "audio/tts/packs/vi-v1-grade-4-2026-04-27-v1.zip",
+      "publicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-grade-4-2026-04-27-v1.zip",
+      "httpStatus": 200,
+      "contentType": "application/zip",
+      "magic": "PK",
+      "isHtml": false,
+      "pass": true
+    },
+    {
+      "grade": 5,
+      "fileName": "vi-v1-grade-5-2026-04-27-v1.zip",
+      "r2Key": "audio/tts/packs/vi-v1-grade-5-2026-04-27-v1.zip",
+      "publicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-grade-5-2026-04-27-v1.zip",
+      "httpStatus": 200,
+      "contentType": "application/zip",
+      "magic": "PK",
+      "isHtml": false,
+      "pass": true
+    }
+  ]
+}
