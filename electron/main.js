@@ -13,6 +13,15 @@ const DESKTOP_RUNTIME_AUDIT = process.env.HHK_DESKTOP_RUNTIME_TEST === '1';
 const DESKTOP_ACCEPTANCE_AUDIT = process.env.HHK_DESKTOP_ACCEPTANCE_TEST === '1';
 const DESKTOP_E2E_LICENSE_KEY = String(process.env.HHK_DESKTOP_E2E_LICENSE_KEY || '').trim().toUpperCase();
 const IS_DESKTOP_AUDIT_MODE = DESKTOP_RUNTIME_AUDIT || DESKTOP_ACCEPTANCE_AUDIT;
+const DESKTOP_USER_DATA_DIR = String(process.env.HHK_DESKTOP_USER_DATA_DIR || '').trim();
+
+if (DESKTOP_USER_DATA_DIR) {
+  try {
+    app.setPath('userData', path.resolve(DESKTOP_USER_DATA_DIR));
+  } catch {
+    // Keep default userData path when override is invalid.
+  }
+}
 
 const updaterState = {
   phase: 'idle',
@@ -574,8 +583,46 @@ async function runDesktopAcceptanceAudit(windowRef) {
   };
 
   const runReadAuditForGrade = async (grade) => {
+    await waitFor(async () => {
+      return windowRef.webContents.executeJavaScript(`
+        (async () => {
+          try {
+            const raw = localStorage.getItem('hhk_app_state');
+            if (raw) {
+              const parsed = JSON.parse(raw);
+              const lessons = Array.isArray(parsed?.lessons) ? parsed.lessons : [];
+              const cards = Array.isArray(parsed?.lessonCards) ? parsed.lessonCards : [];
+              const hasLessons = lessons.some((lesson) => Number.isFinite(Number(lesson?.id)));
+              const hasCards = cards.some((card) => Number.isFinite(Number(card?.lessonId)));
+              if (hasLessons && hasCards) {
+                return true;
+              }
+            }
+          } catch {}
+
+          try {
+            const bridge = window?.electronAPI?.db;
+            if (bridge && typeof bridge.query === 'function') {
+              const rows = await bridge.query(
+                'SELECT COUNT(*) AS c FROM lessons WHERE grade = ? AND subjectCode = ? AND isActive != 0',
+                [${grade}, 'math'],
+              );
+              const count = Array.isArray(rows) ? Number(rows?.[0]?.c || 0) : 0;
+              if (count > 0) {
+                return true;
+              }
+            }
+          } catch {}
+
+          return false;
+        })();
+      `);
+    }, 45_000, 700);
+
     const candidateLessonIds = await windowRef.webContents.executeJavaScript(`
       (async () => {
+        const uniq = (items) => Array.from(new Set(items.filter((id) => Number.isFinite(id)).map((id) => Number(id))));
+
         try {
           const raw = localStorage.getItem('hhk_app_state');
           if (raw) {
@@ -599,7 +646,23 @@ async function runDesktopAcceptanceAudit(windowRef) {
               .filter((id) => Number.isFinite(id));
 
             if (ids.length > 0) {
-              return Array.from(new Set(ids));
+              return uniq(ids);
+            }
+          }
+        } catch {}
+
+        try {
+          const bridge = window?.electronAPI?.db;
+          if (bridge && typeof bridge.query === 'function') {
+            const rows = await bridge.query(
+              'SELECT l.id FROM lessons l JOIN lesson_cards c ON c.lessonId = l.id WHERE l.grade = ? AND l.subjectCode = ? AND l.isActive != 0 AND c.isActive != 0 GROUP BY l.id ORDER BY l.id ASC',
+              [${grade}, 'math'],
+            );
+            const ids = Array.isArray(rows)
+              ? rows.map((row) => Number(row?.id)).filter((id) => Number.isFinite(id))
+              : [];
+            if (ids.length > 0) {
+              return uniq(ids);
             }
           }
         } catch {}
@@ -611,8 +674,7 @@ async function runDesktopAcceptanceAudit(windowRef) {
     await windowRef.webContents.executeJavaScript(`
       (() => {
         try {
-          const reversedSelectedGrade = ${grade} === 1 ? 2 : 1;
-          localStorage.setItem('hhk_tts_pack_selected_grade', String(reversedSelectedGrade));
+          localStorage.setItem('hhk_tts_pack_selected_grade', String(${grade}));
         } catch {}
         try {
           const raw = localStorage.getItem('hhk_app_state');
@@ -649,10 +711,13 @@ async function runDesktopAcceptanceAudit(windowRef) {
       })();
     `);
 
-    const fallbackLessonIds = grade === 2 
-      ? [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 6, 7, 8, 9, 10] // More fallbacks for grade 2
+    const fallbackLessonIds = grade === 2
+      ? []
       : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const lessonIds = Array.from(new Set([...(Array.isArray(candidateLessonIds) ? candidateLessonIds : []), ...fallbackLessonIds]));
+    if (grade === 2 && lessonIds.length === 0) {
+      throw new Error('Khong tim thay lesson lop 2 hop le trong app state/DB de chay acceptance audit.');
+    }
     let lastError = null;
 
     for (const lessonId of lessonIds) {
@@ -683,6 +748,61 @@ async function runDesktopAcceptanceAudit(windowRef) {
 
         if (!lessonReady) {
           lastError = `lesson-not-ready-${lessonId}`;
+          continue;
+        }
+
+        const gradeContext = await windowRef.webContents.executeJavaScript(`
+          (async () => {
+            try {
+              const raw = localStorage.getItem('hhk_app_state');
+              if (raw) {
+                const parsed = JSON.parse(raw);
+                const lessons = Array.isArray(parsed?.lessons) ? parsed.lessons : [];
+                const lesson = lessons.find((item) => Number(item?.id) === ${lessonId});
+                const lessonGrade = Number(lesson?.grade);
+                const studentGrade = Number(parsed?.student?.grade);
+                if (Number.isFinite(lessonGrade)) {
+                  return {
+                    ok: true,
+                    lessonGrade,
+                    studentGrade,
+                    source: 'app-state',
+                  };
+                }
+              }
+
+              const bridge = window?.electronAPI?.db;
+              if (bridge && typeof bridge.query === 'function') {
+                const rows = await bridge.query(
+                  'SELECT id, grade FROM lessons WHERE id = ? LIMIT 1',
+                  [${lessonId}],
+                );
+                const row = Array.isArray(rows) ? rows[0] : null;
+                const lessonGrade = Number(row?.grade);
+                if (Number.isFinite(lessonGrade)) {
+                  return {
+                    ok: true,
+                    lessonGrade,
+                    studentGrade: null,
+                    source: 'db',
+                  };
+                }
+              }
+
+              return { ok: false, reason: 'missing-grade-context' };
+            } catch {
+              return { ok: false, reason: 'grade-context-parse-failed' };
+            }
+          })();
+        `);
+
+        if (grade === 2) {
+          if (!gradeContext?.ok || Number(gradeContext.lessonGrade) !== 2) {
+            lastError = `grade-mismatch-lesson-${lessonId}-expected-2-actual-${String(gradeContext?.lessonGrade)}`;
+            continue;
+          }
+        } else if (gradeContext?.ok && Number(gradeContext.lessonGrade) !== Number(grade)) {
+          lastError = `grade-mismatch-lesson-${lessonId}-expected-${grade}-actual-${String(gradeContext?.lessonGrade)}`;
           continue;
         }
 
@@ -761,7 +881,12 @@ async function runDesktopAcceptanceAudit(windowRef) {
         `);
 
         if (runtimeLog) {
-          return runtimeLog;
+          return {
+            ...runtimeLog,
+            currentGrade: Number.isFinite(Number(gradeContext.lessonGrade)) ? Number(gradeContext.lessonGrade) : Number(grade),
+            studentGrade: Number(gradeContext.studentGrade),
+            lessonId: Number(lessonId),
+          };
         }
 
         lastError = `runtime-log-empty-${lessonId}`;
@@ -770,7 +895,7 @@ async function runDesktopAcceptanceAudit(windowRef) {
       }
     }
 
-    throw new Error(`Khong vao duoc bai hoc cho lop ${grade} hoac khong tim thay nut Doc. LastError=${lastError || 'n/a'}`);
+    throw new Error(`Khong vao duoc bai hoc hop le cho lop ${grade} hoac khong tim thay nut Doc. LastError=${lastError || 'n/a'}`);
   };
 
   try {
@@ -843,6 +968,8 @@ async function runDesktopAcceptanceAudit(windowRef) {
       && report.grade2.runtimeLog.status === 'completed';
     const runtime1GradeUrlOk = /\/grade-1\//i.test(String(report.grade1.runtimeLog?.assetUrl || ''));
     const runtime2GradeUrlOk = /\/grade-2\//i.test(String(report.grade2.runtimeLog?.assetUrl || ''));
+    const runtime1CurrentGradeOk = Number(report.grade1.runtimeLog?.currentGrade) === 1;
+    const runtime2CurrentGradeOk = Number(report.grade2.runtimeLog?.currentGrade) === 2;
 
     const grade1FilesOk = report.grade1.manifestExists && report.grade1.packInfoExists && report.grade1.mp3Count >= 700;
     const grade2FilesOk = report.grade2.manifestExists && report.grade2.packInfoExists && report.grade2.mp3Count >= 700;
@@ -856,6 +983,8 @@ async function runDesktopAcceptanceAudit(windowRef) {
       && runtime2Ok
       && runtime1GradeUrlOk
       && runtime2GradeUrlOk
+      && runtime1CurrentGradeOk
+      && runtime2CurrentGradeOk
       && report.noGoogleRequests
       && report.noBackendTtsRequests
       && report.noLicenseVerifyRequests
