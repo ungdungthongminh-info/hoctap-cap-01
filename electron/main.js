@@ -408,6 +408,11 @@ async function runDesktopAcceptanceAudit(windowRef) {
     startedAt: new Date().toISOString(),
     outputPath,
     rootPath: '',
+    packDownloadSource: {
+      configured: 'Drive/CDN',
+      grade1: '',
+      grade2: '',
+    },
     activation: {
       attempted: false,
       success: false,
@@ -425,12 +430,14 @@ async function runDesktopAcceptanceAudit(windowRef) {
       manifestExists: false,
       packInfoExists: false,
       mp3Count: 0,
+      packSource: null,
       runtimeLog: null,
     },
     grade2: {
       manifestExists: false,
       packInfoExists: false,
       mp3Count: 0,
+      packSource: null,
       runtimeLog: null,
     },
     gradeFoldersAfterDownload: {
@@ -444,9 +451,25 @@ async function runDesktopAcceptanceAudit(windowRef) {
     offlineLicenseVerifyRequestCount: 0,
     noBackendRequests: false,
     noNativeFallback: false,
+    checks: {
+      grade1DownloadedToAppData: false,
+      grade2DownloadedToAppData: false,
+      mp3OutsideAppGrade2: false,
+      grade1AssetUrlContainsGrade1: false,
+      grade2AssetUrlContainsGrade2: false,
+      noGoogleBackendNativeFallback: false,
+    },
     pass: false,
     reason: '',
   };
+
+  function buildPackSourceLabel(pack) {
+    const sourceType = String(pack?.source?.type || '').trim();
+    if (sourceType === 'drive-proxy') {
+      return 'Drive/CDN';
+    }
+    return sourceType || 'unknown';
+  }
 
   const runLicenseActivationAudit = async (licenseKey) => {
     if (!licenseKey) {
@@ -936,10 +959,15 @@ async function runDesktopAcceptanceAudit(windowRef) {
     report.grade1.manifestExists = fs.existsSync(grade1ManifestPath);
     report.grade1.packInfoExists = fs.existsSync(grade1PackInfoPath);
     report.grade1.mp3Count = Number(grade1Pack?.summary?.mp3Count || 0);
+    report.grade1.packSource = grade1Pack?.source || null;
 
     report.grade2.manifestExists = fs.existsSync(grade2ManifestPath);
     report.grade2.packInfoExists = fs.existsSync(grade2PackInfoPath);
     report.grade2.mp3Count = Number(grade2Pack?.summary?.mp3Count || 0);
+    report.grade2.packSource = grade2Pack?.source || null;
+
+    report.packDownloadSource.grade1 = buildPackSourceLabel(grade1Pack);
+    report.packDownloadSource.grade2 = buildPackSourceLabel(grade2Pack);
 
     report.gradeFoldersAfterDownload.hasGrade1 = fs.existsSync(grade1Dir);
     report.gradeFoldersAfterDownload.hasGrade2 = fs.existsSync(grade2Dir);
@@ -998,6 +1026,32 @@ async function runDesktopAcceptanceAudit(windowRef) {
     report.pass = false;
     report.reason = String(error?.message || error || 'Desktop acceptance audit failed.');
   }
+
+  report.checks.grade1DownloadedToAppData = Boolean(
+    report.packDownloadSource.grade1 === 'Drive/CDN'
+    && report.gradeFoldersAfterDownload.hasGrade1
+    && report.grade1.manifestExists
+    && report.grade1.packInfoExists
+    && Number(report.grade1.mp3Count) >= 700,
+  );
+  report.checks.grade2DownloadedToAppData = Boolean(
+    report.packDownloadSource.grade2 === 'Drive/CDN'
+    && report.gradeFoldersAfterDownload.hasGrade2
+    && report.grade2.manifestExists
+    && report.grade2.packInfoExists
+    && Number(report.grade2.mp3Count) >= 700,
+  );
+  report.checks.mp3OutsideAppGrade2 = Boolean(
+    report.checks.grade2DownloadedToAppData
+    && /\/grade-2\//i.test(String(report.grade2.runtimeLog?.assetUrl || '')),
+  );
+  report.checks.grade1AssetUrlContainsGrade1 = /\/grade-1\//i.test(String(report.grade1.runtimeLog?.assetUrl || ''));
+  report.checks.grade2AssetUrlContainsGrade2 = /\/grade-2\//i.test(String(report.grade2.runtimeLog?.assetUrl || ''));
+  report.checks.noGoogleBackendNativeFallback = Boolean(
+    report.noGoogleRequests
+    && report.noBackendTtsRequests
+    && report.noNativeFallback,
+  );
 
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), 'utf8');

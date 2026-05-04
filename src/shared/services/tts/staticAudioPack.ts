@@ -167,22 +167,22 @@ function buildStaticHostedPackUrl(grade: number): string {
 
 function buildPackProxyUrlCandidates(grade: number): string[] {
   const urls = [
-    buildStaticHostedPackUrl(grade),
     buildDrivePackUrl(grade),
     buildPackProxyUrl(grade, BACKEND_API_BASE),
     buildPackProxyUrl(grade, PRODUCTION_TTS_PACK_API_BASE),
+    buildStaticHostedPackUrl(grade),
   ];
   return urls.filter((url, index) => url && urls.indexOf(url) === index);
 }
 
 const GRADE_PACK_LINKS: Partial<Record<number, string>> = {
-  0: buildStaticHostedPackUrl(0),
-  1: buildStaticHostedPackUrl(1),
-  2: buildStaticHostedPackUrl(2),
-  3: buildStaticHostedPackUrl(3),
-  4: buildStaticHostedPackUrl(4),
-  5: buildStaticHostedPackUrl(5),
-  6: buildStaticHostedPackUrl(0),
+  0: buildDrivePackUrl(0) || buildStaticHostedPackUrl(0),
+  1: buildDrivePackUrl(1) || buildStaticHostedPackUrl(1),
+  2: buildDrivePackUrl(2) || buildStaticHostedPackUrl(2),
+  3: buildDrivePackUrl(3) || buildStaticHostedPackUrl(3),
+  4: buildDrivePackUrl(4) || buildStaticHostedPackUrl(4),
+  5: buildDrivePackUrl(5) || buildStaticHostedPackUrl(5),
+  6: buildDrivePackUrl(0) || buildStaticHostedPackUrl(0),
 };
 
 export const STATIC_PACK_GRADE_OPTIONS: Array<{ grade: number; label: string }> = [
@@ -264,7 +264,7 @@ function parseStudentGradeFromStoredState(): number | null {
 }
 
 function resolveDefaultPackUrlByGrade(): string {
-  return buildStaticHostedPackUrl(1);
+  return buildDrivePackUrl(1) || buildStaticHostedPackUrl(1);
 }
 
 export function getStaticPackSelectedGrade(): number {
