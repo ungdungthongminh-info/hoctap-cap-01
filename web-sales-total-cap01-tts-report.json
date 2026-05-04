@@ -1,0 +1,71 @@
+{
+  "source": "direct-source-inspection",
+  "inspectedRepoPath": "f:\\web_Sales_Total",
+  "canonicalAppId": "hoctap-cap-01",
+  "legacyStorefrontAppId": "app-study-12",
+  "isDirectTtsAssetHost": false,
+  "websiteHandoffUrl": "https://hoctap-cap-01.vercel.app/#/pricing",
+  "findings": {
+    "storefrontCatalog": {
+      "files": [
+        "src/web/product.js",
+        "src/web/main.js"
+      ],
+      "cap01Products": [
+        "cap01_standard_1year_3grades",
+        "cap01_grade_la_1year",
+        "cap01_grade_1_1year",
+        "cap01_grade_2_1year",
+        "cap01_grade_3_1year",
+        "cap01_grade_4_1year",
+        "cap01_grade_5_1year"
+      ],
+      "appIdUsedInCatalog": "app-study-12",
+      "meaning": "Web Tổng vẫn bán họ Cap 01 bằng appId legacy app-study-12 ở storefront fallback data."
+    },
+    "entitlementBridge": {
+      "file": "src/server.js",
+      "normalizeCap01AppId": {
+        "accepts": [
+          "app-study-12",
+          "hoctap-cap-01"
+        ],
+        "returns": "hoctap-cap-01"
+      },
+      "buildCap01Entitlement": {
+        "appId": "hoctap-cap-01",
+        "features": [
+          "desktopOfflineTts",
+          "downloadByGrade",
+          "downloadAllGrades",
+          "aiTutor"
+        ],
+        "licenseFields": [
+          "deviceLimit",
+          "offlineGraceDays",
+          "expiresAt"
+        ]
+      },
+      "meaning": "Web Tổng đóng vai trò bridge cấp entitlement/license cho app Cap 01, không phải nơi resolve file TTS runtime cho lesson-card web."
+    },
+    "accountDownloadFlow": {
+      "metaDeliveryType": "website",
+      "metaActionLabel": "Mở trang tải app",
+      "overviewBehavior": "Nếu appId là app-study-12 thì buildAccountDownloadableApp tạo action.type=website và note rằng sản phẩm chạy bằng website riêng, không cần file cài đặt.",
+      "downloadEndpointBehavior": "POST /api/account/downloads/:appId trả action=website cùng href tới websiteUrl thay vì manifest/download asset.",
+      "frontendBehavior": {
+        "accountPage": "src/web/account.js",
+        "websiteAction": "Nếu payload.action là website hoặc redirect thì window.open(payload.href, '_blank', 'noopener')."
+      }
+    }
+  },
+  "conclusion": {
+    "routeSource": "Web Tổng bán và cấp entitlement cho Cap 01, sau đó handoff người dùng sang website app riêng hoctap-cap-01.vercel.app/#/pricing.",
+    "ttsSourceAssessment": "Không thấy source nào trong Web Tổng cho thấy repo này host trực tiếp offline audio pack, lesson-card manifest hay Google TTS response cho runtime web của Cap 01.",
+    "practicalImplication": "Khi cần truy nguồn lỗi TTS web của Cap 01, repo cần điều tra tiếp là chính app Cap 01 và kho audio/manifest của nó; Web Tổng chỉ là lớp commerce/account bridge."
+  },
+  "sensitiveData": {
+    "envFilesInspected": true,
+    "redaction": "Không ghi lại token/secret từ file môi trường của Web Tổng vào report này."
+  }
+}

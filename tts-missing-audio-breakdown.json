@@ -1,0 +1,648 @@
+{
+  "totalMissing": 19743,
+  "byGrade": {
+    "0": {
+      "lessonCards": 0,
+      "questions": 132,
+      "feedback": 0,
+      "other": 0
+    },
+    "1": {
+      "lessonCards": 140,
+      "questions": 3278,
+      "feedback": 0,
+      "other": 0
+    },
+    "2": {
+      "lessonCards": 140,
+      "questions": 3259,
+      "feedback": 0,
+      "other": 0
+    },
+    "3": {
+      "lessonCards": 140,
+      "questions": 3786,
+      "feedback": 0,
+      "other": 0
+    },
+    "4": {
+      "lessonCards": 140,
+      "questions": 4323,
+      "feedback": 0,
+      "other": 0
+    },
+    "5": {
+      "lessonCards": 140,
+      "questions": 4265,
+      "feedback": 0,
+      "other": 0
+    }
+  },
+  "byVoice": {
+    "en-v1": 3425,
+    "vi-v1": 16321,
+    "vi-v2": 3
+  },
+  "topMissingExamples": [
+    {
+      "key": "lesson-card:801",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-801.mp3"
+    },
+    {
+      "key": "lesson-card:802",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-802.mp3"
+    },
+    {
+      "key": "lesson-card:803",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-803.mp3"
+    },
+    {
+      "key": "lesson-card:804",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-804.mp3"
+    },
+    {
+      "key": "lesson-card:805",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-805.mp3"
+    },
+    {
+      "key": "lesson-card:806",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-806.mp3"
+    },
+    {
+      "key": "lesson-card:807",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-807.mp3"
+    },
+    {
+      "key": "lesson-card:808",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-808.mp3"
+    },
+    {
+      "key": "lesson-card:809",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-809.mp3"
+    },
+    {
+      "key": "lesson-card:810",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-810.mp3"
+    },
+    {
+      "key": "lesson-card:811",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-811.mp3"
+    },
+    {
+      "key": "lesson-card:812",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-812.mp3"
+    },
+    {
+      "key": "lesson-card:813",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-813.mp3"
+    },
+    {
+      "key": "lesson-card:814",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-814.mp3"
+    },
+    {
+      "key": "lesson-card:815",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-815.mp3"
+    },
+    {
+      "key": "lesson-card:816",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-816.mp3"
+    },
+    {
+      "key": "lesson-card:817",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-817.mp3"
+    },
+    {
+      "key": "lesson-card:818",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-818.mp3"
+    },
+    {
+      "key": "lesson-card:819",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-819.mp3"
+    },
+    {
+      "key": "lesson-card:820",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-820.mp3"
+    },
+    {
+      "key": "lesson-card:821",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-821.mp3"
+    },
+    {
+      "key": "lesson-card:822",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-822.mp3"
+    },
+    {
+      "key": "lesson-card:823",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-823.mp3"
+    },
+    {
+      "key": "lesson-card:824",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-824.mp3"
+    },
+    {
+      "key": "lesson-card:825",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-825.mp3"
+    },
+    {
+      "key": "lesson-card:826",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-826.mp3"
+    },
+    {
+      "key": "lesson-card:827",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-827.mp3"
+    },
+    {
+      "key": "lesson-card:828",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-828.mp3"
+    },
+    {
+      "key": "lesson-card:829",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-829.mp3"
+    },
+    {
+      "key": "lesson-card:830",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-830.mp3"
+    },
+    {
+      "key": "lesson-card:831",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-831.mp3"
+    },
+    {
+      "key": "lesson-card:832",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-832.mp3"
+    },
+    {
+      "key": "lesson-card:833",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-833.mp3"
+    },
+    {
+      "key": "lesson-card:834",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-834.mp3"
+    },
+    {
+      "key": "lesson-card:835",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-835.mp3"
+    },
+    {
+      "key": "lesson-card:836",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-836.mp3"
+    },
+    {
+      "key": "lesson-card:837",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-837.mp3"
+    },
+    {
+      "key": "lesson-card:838",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-838.mp3"
+    },
+    {
+      "key": "lesson-card:839",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-839.mp3"
+    },
+    {
+      "key": "lesson-card:840",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-840.mp3"
+    },
+    {
+      "key": "lesson-card:841",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-841.mp3"
+    },
+    {
+      "key": "lesson-card:842",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-842.mp3"
+    },
+    {
+      "key": "lesson-card:843",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-843.mp3"
+    },
+    {
+      "key": "lesson-card:844",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-844.mp3"
+    },
+    {
+      "key": "lesson-card:845",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-845.mp3"
+    },
+    {
+      "key": "lesson-card:846",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-846.mp3"
+    },
+    {
+      "key": "lesson-card:847",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-847.mp3"
+    },
+    {
+      "key": "lesson-card:848",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-848.mp3"
+    },
+    {
+      "key": "lesson-card:849",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-849.mp3"
+    },
+    {
+      "key": "lesson-card:850",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-850.mp3"
+    },
+    {
+      "key": "lesson-card:851",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-851.mp3"
+    },
+    {
+      "key": "lesson-card:852",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-852.mp3"
+    },
+    {
+      "key": "lesson-card:853",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-853.mp3"
+    },
+    {
+      "key": "lesson-card:854",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-854.mp3"
+    },
+    {
+      "key": "lesson-card:855",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-855.mp3"
+    },
+    {
+      "key": "lesson-card:856",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-856.mp3"
+    },
+    {
+      "key": "lesson-card:857",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-857.mp3"
+    },
+    {
+      "key": "lesson-card:858",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-858.mp3"
+    },
+    {
+      "key": "lesson-card:859",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-859.mp3"
+    },
+    {
+      "key": "lesson-card:860",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-860.mp3"
+    },
+    {
+      "key": "lesson-card:861",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-861.mp3"
+    },
+    {
+      "key": "lesson-card:862",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-862.mp3"
+    },
+    {
+      "key": "lesson-card:863",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-863.mp3"
+    },
+    {
+      "key": "lesson-card:864",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-864.mp3"
+    },
+    {
+      "key": "lesson-card:865",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-865.mp3"
+    },
+    {
+      "key": "lesson-card:866",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-866.mp3"
+    },
+    {
+      "key": "lesson-card:867",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-867.mp3"
+    },
+    {
+      "key": "lesson-card:868",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-868.mp3"
+    },
+    {
+      "key": "lesson-card:869",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-869.mp3"
+    },
+    {
+      "key": "lesson-card:870",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-870.mp3"
+    },
+    {
+      "key": "lesson-card:871",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-871.mp3"
+    },
+    {
+      "key": "lesson-card:872",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-872.mp3"
+    },
+    {
+      "key": "lesson-card:873",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-873.mp3"
+    },
+    {
+      "key": "lesson-card:874",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-874.mp3"
+    },
+    {
+      "key": "lesson-card:875",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-875.mp3"
+    },
+    {
+      "key": "lesson-card:876",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-876.mp3"
+    },
+    {
+      "key": "lesson-card:877",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-877.mp3"
+    },
+    {
+      "key": "lesson-card:878",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-878.mp3"
+    },
+    {
+      "key": "lesson-card:879",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-879.mp3"
+    },
+    {
+      "key": "lesson-card:880",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-880.mp3"
+    },
+    {
+      "key": "lesson-card:1921",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1921.mp3"
+    },
+    {
+      "key": "lesson-card:1922",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1922.mp3"
+    },
+    {
+      "key": "lesson-card:1923",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1923.mp3"
+    },
+    {
+      "key": "lesson-card:1924",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1924.mp3"
+    },
+    {
+      "key": "lesson-card:1925",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1925.mp3"
+    },
+    {
+      "key": "lesson-card:1926",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1926.mp3"
+    },
+    {
+      "key": "lesson-card:1927",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1927.mp3"
+    },
+    {
+      "key": "lesson-card:1928",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1928.mp3"
+    },
+    {
+      "key": "lesson-card:1929",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1929.mp3"
+    },
+    {
+      "key": "lesson-card:1930",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1930.mp3"
+    },
+    {
+      "key": "lesson-card:1931",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1931.mp3"
+    },
+    {
+      "key": "lesson-card:1932",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1932.mp3"
+    },
+    {
+      "key": "lesson-card:1933",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1933.mp3"
+    },
+    {
+      "key": "lesson-card:1934",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1934.mp3"
+    },
+    {
+      "key": "lesson-card:1935",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1935.mp3"
+    },
+    {
+      "key": "lesson-card:1936",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1936.mp3"
+    },
+    {
+      "key": "lesson-card:1937",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1937.mp3"
+    },
+    {
+      "key": "lesson-card:1938",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1938.mp3"
+    },
+    {
+      "key": "lesson-card:1939",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1939.mp3"
+    },
+    {
+      "key": "lesson-card:1940",
+      "kind": "lesson-card",
+      "profileId": "en-v1",
+      "assetPath": "audio/tts/assets/en-v1/lesson-card-1940.mp3"
+    }
+  ]
+}

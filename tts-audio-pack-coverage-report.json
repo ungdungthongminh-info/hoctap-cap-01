@@ -1,0 +1,34 @@
+{
+  "assetDir": "F:\\1_A_Disk_D\\Tool\\Hoc_Tap\\CAp_01\\public\\audio\\tts\\assets\\vi-v1",
+  "totalMp3Files": 4302,
+  "manifestKeyCount": 4302,
+  "byGrade": {
+    "0": {
+      "manifestKeys": 102,
+      "mp3Files": 102
+    },
+    "1": {
+      "manifestKeys": 700,
+      "mp3Files": 700
+    },
+    "2": {
+      "manifestKeys": 700,
+      "mp3Files": 700
+    },
+    "3": {
+      "manifestKeys": 840,
+      "mp3Files": 840
+    },
+    "4": {
+      "manifestKeys": 980,
+      "mp3Files": 980
+    },
+    "5": {
+      "manifestKeys": 980,
+      "mp3Files": 980
+    }
+  },
+  "keysPointingToMissingFiles": [],
+  "orphanFiles": [],
+  "crossGradeKeys": []
+}
