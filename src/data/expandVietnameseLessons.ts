@@ -67,7 +67,7 @@ export const vietExpLessons = [
   L(3,'TV3C5','L35_on_cuoi_tv3','Ôn tập cuối năm TV lớp 3','Ôn toàn bộ TV lớp 3','Tổng ôn lớp 3','Sẵn sàng lên lớp 4!','medium',15,35),
 
   // ========== LỚP 4 — Bài 21-35 ==========
-  L(4,'TV4C1','L21_chu_ngu_vi_ngu','Chủ ngữ - Vị ngữ','Xác định CN-VN trong câu','Ai → CN, Làm gì → VN','CN trả lời: Ai/Cái gì?','medium',12,21),
+  L(4,'TV4C1','L21_chu_ngu_vi_ngu','Chủ ngữ - Vị ngữ','Xác định CN-Việt Nam trong câu','Ai → CN, Làm gì → Việt Nam','CN trả lời: Ai/Cái gì?','medium',12,21),
   L(4,'TV4C1','L22_trang_ngu','Trạng ngữ','Nhận biết trạng ngữ','Sáng nay, ở trường...','Trạng ngữ = khi nào, ở đâu','medium',12,22),
   L(4,'TV4C2','L23_cau_ghep','Câu ghép','Nhận biết câu ghép','Trời mưa và gió thổi mạnh','Câu ghép = 2+ vế câu','medium',12,23),
   L(4,'TV4C2','L24_tu_nhieu_nghia','Từ nhiều nghĩa','Hiểu từ có nhiều nghĩa','Chân bàn, chân người, chân núi','Cùng từ nhưng nghĩa khác!','medium',12,24),
@@ -84,7 +84,7 @@ export const vietExpLessons = [
   L(4,'TV4C5','L35_on_cuoi_tv4','Ôn tập cuối năm TV lớp 4','Ôn toàn bộ TV lớp 4','Tổng ôn lớp 4','Sẵn sàng lên lớp 5!','medium',15,35),
 
   // ========== LỚP 5 — Bài 21-35 ==========
-  L(5,'TV5C1','L21_cau_phuc','Câu phức - Câu đơn','Phân biệt câu đơn và câu phức','Câu phức có 2+ mệnh đề','Câu đơn = 1 CN-VN, câu phức = 2+','medium',12,21),
+  L(5,'TV5C1','L21_cau_phuc','Câu phức - Câu đơn','Phân biệt câu đơn và câu phức','Câu phức có 2+ mệnh đề','Câu đơn = 1 CN-Việt Nam, câu phức = 2+','medium',12,21),
   L(5,'TV5C1','L22_dai_tu','Đại từ','Nhận biết đại từ','Tôi, bạn, nó, họ, chúng ta','Đại từ thay thế danh từ','medium',12,22),
   L(5,'TV5C2','L23_quan_he_tu','Quan hệ từ','Sử dụng quan hệ từ trong câu','Vì...nên, tuy...nhưng, nếu...thì','QHT nối các vế câu ghép','medium',12,23),
   L(5,'TV5C2','L24_bien_phap_tu_tu','Biện pháp tu từ','Nhận biết ẩn dụ, hoán dụ, điệp ngữ','Thuyền = người đi, bến = người ở','Ẩn dụ = so sánh ngầm','hard',15,24),
@@ -161,7 +161,7 @@ export const vietExpQuestions = [
   Q(1,20107,'single_choice','Đọc câu nào đúng?','["Con mèo ngủ trên ghế.","con mèo ngủ trên ghế","Con mèo ngủ trên ghế"]','Con mèo ngủ trên ghế.','Câu viết hoa đầu, dấu chấm cuối','easy','doc_hieu'),
   Q(1,20107,'true_false','Đoạn văn thường có nhiều câu đúng hay sai?','["Đúng","Sai"]','Đúng','Đoạn văn = nhiều câu về 1 ý','easy','doc_hieu'),
 
-  Q(1,20108,'single_choice','Câu nào đúng cấu trúc?','["Mèo ngủ.","Ngủ mèo.","Mèo."]','Mèo ngủ.','CN + VN: Mèo (ai) + ngủ (làm gì)','easy','ngu_phap'),
+  Q(1,20108,'single_choice','Câu nào đúng cấu trúc?','["Mèo ngủ.","Ngủ mèo.","Mèo."]','Mèo ngủ.','CN + Việt Nam: Mèo (ai) + ngủ (làm gì)','easy','ngu_phap'),
   Q(1,20108,'true_false','Câu phải có chữ cái đầu viết hoa đúng hay sai?','["Đúng","Sai"]','Đúng','Chữ đầu câu luôn viết hoa','easy','ngu_phap'),
 
   Q(1,20109,'single_choice','Tranh 1: em bé cười. Tranh 2: em bé chơi. Tranh 3: em bé ngủ. Đúng thứ tự?','["1→2→3","3→1→2","2→3→1"]','1→2→3','Theo thứ tự sáng → chiều → tối','easy','ke_chuyen'),
@@ -226,7 +226,7 @@ export const vietExpQuestions = [
   Q(3,20136,'single_choice','"Mắt đen như hạt nhãn" dùng biện pháp gì?','["So sánh","Nhân hóa","Điệp ngữ"]','So sánh','Có từ "như" → so sánh','medium','bien_phap'),
   Q(3,20136,'single_choice','Từ nào dùng để so sánh?','["Như","Và","Nhưng"]','Như','Từ SS: như, giống, tựa','easy','bien_phap'),
   Q(3,20137,'single_choice','"Ông mặt trời" dùng biện pháp gì?','["Nhân hóa","So sánh","Liệt kê"]','Nhân hóa','Gọi mặt trời là "ông" = nhân hóa','medium','bien_phap'),
-  Q(3,20138,'single_choice','Thư bắt đầu bằng gì?','["Lời chào","Nội dung chính","Chữ ký"]','Lời chào','VD: Kính gửi ông/bà...','easy','tap_lam_van'),
+  Q(3,20138,'single_choice','Thư bắt đầu bằng gì?','["Lời chào","Nội dung chính","Chữ ký"]','Lời chào','Ví dụ: Kính gửi ông/bà...','easy','tap_lam_van'),
   Q(3,20139,'single_choice','Bài văn kể chuyện có mấy phần?','["3 (MB-TB-KB)","2","4"]','3 (MB-TB-KB)','Mở bài - Thân bài - Kết bài','medium','tap_lam_van'),
   Q(3,20140,'single_choice','Văn miêu tả cần?','["Quan sát kỹ","Chỉ kể","Tính toán"]','Quan sát kỹ','Tả = nhìn kỹ và viết lại','medium','tap_lam_van'),
   Q(3,20141,'single_choice','Chọn đúng: ... ời (trời/chời)?','["trời","chời"]','trời','Trời = bầu trời','medium','chinh_ta'),
@@ -237,7 +237,7 @@ export const vietExpQuestions = [
 
   // ===== LỚP 4 =====
   Q(4,20146,'single_choice','CN trong câu "Bé Lan hát rất hay"?','["Bé Lan","hát","rất hay"]','Bé Lan','Ai hát? → Bé Lan = CN','medium','ngu_phap'),
-  Q(4,20146,'single_choice','VN trong câu "Mẹ nấu cơm"?','["Mẹ","nấu cơm","cơm"]','nấu cơm','Mẹ làm gì? → nấu cơm = VN','medium','ngu_phap'),
+  Q(4,20146,'single_choice','Việt Nam trong câu "Mẹ nấu cơm"?','["Mẹ","nấu cơm","cơm"]','nấu cơm','Mẹ làm gì? → nấu cơm = Việt Nam','medium','ngu_phap'),
   Q(4,20147,'single_choice','Trạng ngữ trả lời câu hỏi?','["Khi nào? Ở đâu?","Ai?","Làm gì?"]','Khi nào? Ở đâu?','Tự nhiên = thời gian, địa điểm','medium','ngu_phap'),
   Q(4,20147,'single_choice','"Sáng nay" trong câu "Sáng nay, bé đi học" là?','["Trạng ngữ","Chủ ngữ","Vị ngữ"]','Trạng ngữ','Khi nào? → Sáng nay = Tự nhiên','medium','ngu_phap'),
   Q(4,20148,'single_choice','Câu ghép có bao nhiêu vế câu?','["Từ 2 vế trở lên","1 vế","0"]','Từ 2 vế trở lên','Câu ghép = 2+ vế câu','medium','ngu_phap'),
@@ -252,10 +252,10 @@ export const vietExpQuestions = [
   Q(4,20157,'single_choice','Từ "tuy nhiên" dùng để?','["Nối 2 câu đối lập","Liệt kê","Kết thúc"]','Nối 2 câu đối lập','Tuy nhiên = contrast','medium','ngu_phap'),
   Q(4,20158,'single_choice','Suy luận từ bài đọc nghĩa là?','["Tìm ý ẩn sau lời văn","Chỉ đọc to","Ghi chép"]','Tìm ý ẩn sau lời văn','Suy luận = hiểu ý ngầm','hard','doc_hieu'),
   Q(4,20159,'single_choice','Ôn: "Lung linh" là từ gì?','["Từ láy","Từ ghép","Từ đơn"]','Từ láy','Láy vần: l-l','easy','tu_loai'),
-  Q(4,20160,'single_choice','Ôn: VN trong "Trời rất đẹp"?','["rất đẹp","Trời","đẹp"]','rất đẹp','Trời thế nào? → rất đẹp','easy','ngu_phap'),
+  Q(4,20160,'single_choice','Ôn: Việt Nam trong "Trời rất đẹp"?','["rất đẹp","Trời","đẹp"]','rất đẹp','Trời thế nào? → rất đẹp','easy','ngu_phap'),
 
   // ===== LỚP 5 =====
-  Q(5,20161,'single_choice','Câu đơn có mấy cụm CN-VN?','["1","2","3"]','1','Câu đơn = 1 CN + 1 VN','medium','ngu_phap'),
+  Q(5,20161,'single_choice','Câu đơn có mấy cụm CN-Việt Nam?','["1","2","3"]','1','Câu đơn = 1 CN + 1 Việt Nam','medium','ngu_phap'),
   Q(5,20161,'single_choice','Câu nào là câu phức?','["Trời mưa nên em ở nhà","Em đi học","Hoa rất đẹp"]','Trời mưa nên em ở nhà','Có 2 vế: trời mưa + em ở nhà','medium','ngu_phap'),
   Q(5,20162,'single_choice','Đại từ là từ?','["Thay thế danh từ","Chỉ hành động","Chỉ đặc điểm"]','Thay thế danh từ','Tôi, bạn, nó = đại từ','medium','tu_loai'),
   Q(5,20162,'single_choice','Từ nào là đại từ?','["Họ","Bàn","Đẹp"]','Họ','Họ = đại từ nhân xưng','easy','tu_loai'),

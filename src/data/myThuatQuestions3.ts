@@ -45,7 +45,7 @@ export const artQuestions3: Question[] = [
     const titles = [
       'Màu tương phản','Bố cục tranh','Không gian','Vẽ người','Tranh sinh hoạt','Thiên nhiên','Tưởng tượng',
       'Nặn con vật','Nặn đồ vật','Tái chế','Mô hình 3D','Bưu thiếp','Áo phông','Lễ hội','Poster',
-      'Tranh lụa VN','Kiến trúc cổ','Tạo hình dân gian','Họa sĩ nhỏ',
+      'Tranh lụa Việt Nam','Kiến trúc cổ','Tạo hình dân gian','Họa sĩ nhỏ',
     ];
     const t = titles[bai] || `Bài ${lid}`;
     return [
@@ -67,7 +67,7 @@ export const artQuestions3: Question[] = [
       Q(lid,'single_choice',`Bé làm gì nếu chưa hài lòng với tác phẩm?`,['Bỏ cuộc','Sửa hoặc thử lại','Khóc','Đổ lỗi'],'Sửa hoặc thử lại',skill),
       Q(lid,'true_false',`Sáng tạo không có giới hạn.`,null,'true',skill),
       Q(lid,'fill_text',`Bé có thể ___ tranh cho bạn bè, người thân.`,null,'tặng',skill),
-      Q(lid,'single_choice',`Mỹ thuật VN có đặc điểm gì?`,['Nhàm chán','Phong phú, đặc sắc','Không có','Chỉ sao chép'],'Phong phú, đặc sắc',skill),
+      Q(lid,'single_choice',`Mỹ thuật Việt Nam có đặc điểm gì?`,['Nhàm chán','Phong phú, đặc sắc','Không có','Chỉ sao chép'],'Phong phú, đặc sắc',skill),
       Q(lid,'true_false',`Lớp 3 bé đã có thể vẽ phức tạp hơn lớp 1, 2.`,null,'true',skill),
       Q(lid,'single_choice',`"${t}" giúp bé?`,['Mệt mỏi','Phát triển toàn diện','Buồn','Không gì'],'Phát triển toàn diện',skill),
       Q(lid,'fill_text',`Nghệ thuật giúp cuộc sống thêm ___ đẹp.`,null,'tươi',skill),

@@ -119,11 +119,11 @@ export const natureQuestions2: Question[] = [
   Q(226,'true_false','KK có trọng lượng',null,'Đúng','KK nhẹ nhưng có khối lượng','hard','kk'),
 
   // === L227: Thời tiết ===
-  Q(227,'single_choice','Thời tiết là?',['Khí hậu','Trạng thái KQ tại 1 nơi, 1 thời điểm','Mùa','Năm'],'Trạng thái KQ tại 1 nơi, 1 thời điểm','TT = lúc này, nơi này','easy','tt'),
+  Q(227,'single_choice','Thời tiết là?',['Khí hậu','Trạng thái Kết quả tại 1 nơi, 1 thời điểm','Mùa','Năm'],'Trạng thái Kết quả tại 1 nơi, 1 thời điểm','TT = lúc này, nơi này','easy','tt'),
   Q(227,'true_false','Nắng, mưa, gió là hiện tượng thời tiết',null,'Đúng','Các hiện tượng TT cơ bản','easy','tt'),
   Q(227,'single_choice','Mây đen kéo tới → sắp?',['Nắng to','Mưa','Tuyết','Động đất'],'Mưa','Mây đen = đầy hơi nước → mưa','easy','tt'),
   Q(227,'fill_number','Nhiệt độ đo bằng đơn vị °?',null,'C','°C = độ Celsius','easy','tt'),
-  Q(227,'single_choice','Dự báo thời tiết xem ở?',['Sách toán','TV, radio, ứng dụng điện thoại','Từ điển','Truyện'],'TV, radio, ứng dụng điện thoại','Kênh dự báo TT','easy','tt'),
+  Q(227,'single_choice','Dự báo thời tiết xem ở?',['Sách toán','Thực vật, radio, ứng dụng điện thoại','Từ điển','Truyện'],'Thực vật, radio, ứng dụng điện thoại','Kênh dự báo TT','easy','tt'),
   Q(227,'true_false','Sấm sét thường đi kèm mưa to',null,'Đúng','Cơn dông = mưa + sấm + sét','easy','tt'),
   Q(227,'single_choice','Khi trời nóng, nên?',['Mặc áo dày','Mặc thoáng, uống nước, nghỉ mát','Chạy ngoài nắng','Không uống nước'],'Mặc thoáng, uống nước, nghỉ mát','Nóng→ giải nhiệt','easy','tt'),
   Q(227,'fill_number','Sương mù = hơi ? ngưng tụ gần mặt đất',null,'nước','Hơi nước → ngưng tụ = sương','medium','tt'),
@@ -137,9 +137,9 @@ export const natureQuestions2: Question[] = [
 
   // === L228: Các mùa ===
   Q(228,'single_choice','Mùa nào nóng nhất?',['Xuân','Hạ (mùa hè)','Thu','Đông'],'Hạ (mùa hè)','Hè = nóng nhất','easy','mua'),
-  Q(228,'true_false','Miền Bắc VN có 4 mùa rõ rệt',null,'Đúng','Bắc: Xuân-Hạ-Thu-Đông','easy','mua'),
+  Q(228,'true_false','Miền Bắc Việt Nam có 4 mùa rõ rệt',null,'Đúng','Bắc: Xuân-Hạ-Thu-Đông','easy','mua'),
   Q(228,'single_choice','Mùa đông có đặc điểm?',['Nóng','Lạnh, ít mưa (miền Bắc)','Nóng ẩm','Mát mẻ'],'Lạnh, ít mưa (miền Bắc)','Đông = lạnh','easy','mua'),
-  Q(228,'fill_number','Miền Nam VN có ? mùa chính: mưa và khô',null,'2','2 mùa: mưa (5-11) + khô (12-4)','easy','mua'),
+  Q(228,'fill_number','Miền Nam Việt Nam có ? mùa chính: mưa và khô',null,'2','2 mùa: mưa (5-11) + khô (12-4)','easy','mua'),
   Q(228,'single_choice','Mùa xuân, cây cối?',['Rụng lá','Nảy chồi, ra hoa','Héo úa','Đóng đa'],'Nảy chồi, ra hoa','Xuân = đâm chồi nảy lộc','easy','mua'),
   Q(228,'true_false','Mùa thu lá cây chuyển vàng (ở miền Bắc)',null,'Đúng','Thu = thay lá, lá vàng rơi','easy','mua'),
   Q(228,'single_choice','Vì sao có mùa?',['Ngẫu nhiên','TĐ nghiêng trục + quay quanh Mặt Trời','Mặt Trăng','Gió'],'TĐ nghiêng trục + quay quanh Mặt Trời','Trục nghiêng → mùa','medium','mua'),
@@ -150,7 +150,7 @@ export const natureQuestions2: Question[] = [
   Q(228,'true_false','Mỗi mùa kéo dài khoảng 3 tháng',null,'Đúng','4 mùa × 3 tháng = 12 tháng/năm','medium','mua'),
   Q(228,'fill_number','Một năm có ? tháng',null,'12','12 tháng/năm','easy','mua'),
   Q(228,'single_choice','Hoa đào nở vào mùa nào (miền Bắc)?',['Hè','Xuân','Thu','Đông'],'Xuân','Đào = hoa xuân miền Bắc','medium','mua'),
-  Q(228,'true_false','Miền Trung VN hay có bão mùa thu-đông',null,'Đúng','Bão VN: chủ yếu T9-T12','hard','mua'),
+  Q(228,'true_false','Miền Trung Việt Nam hay có bão mùa thu-đông',null,'Đúng','Bão Việt Nam: chủ yếu T9-T12','hard','mua'),
 
   // === L229: Thực vật quanh em ===
   Q(229,'single_choice','Thực vật là?',['Động vật','Cây cối, hoa, cỏ','Đá','Nước'],'Cây cối, hoa, cỏ','Thực vật = sinh vật có rễ-thân-lá','easy','tvqe'),
@@ -159,7 +159,7 @@ export const natureQuestions2: Question[] = [
   Q(229,'fill_number','Thực vật cần: nước + ánh sáng + đất + không ?',null,'khí','4 yếu tố: nước-AS-đất-KK','easy','tvqe'),
   Q(229,'single_choice','Cây ăn quả: xoài, cam, bưởi. Cây ? thực: lúa, ngô.',['hoa','lương','bụi','cỏ'],'lương','Lương thực = thức ăn chính','easy','tvqe'),
   Q(229,'true_false','Thực vật giúp làm sạch không khí',null,'Đúng','Quang hợp: hấp thụ CO₂, thải O₂','easy','tvqe'),
-  Q(229,'single_choice','Cây bụi có đặc điểm?',['Thân to cao','Nhiều cành, nhỏ hơn cây gỗ','Chỉ 1 thân','Không có lá'],'Nhiều cành, nhỏ hơn cây gỗ','VD: hoa hồng, chanh','medium','tvqe'),
+  Q(229,'single_choice','Cây bụi có đặc điểm?',['Thân to cao','Nhiều cành, nhỏ hơn cây gỗ','Chỉ 1 thân','Không có lá'],'Nhiều cành, nhỏ hơn cây gỗ','Ví dụ: hoa hồng, chanh','medium','tvqe'),
   Q(229,'fill_number','Cây xanh quan ? hợp: lá + AS → tinh bột + O₂',null,'g','Quang hợp = tạo thức ăn','medium','tvqe'),
   Q(229,'true_false','Cây xương rồng sống ở nơi khô, ít nước',null,'Đúng','Xương rồng = chịu hạn giỏi','easy','tvqe'),
   Q(229,'single_choice','Rừng có nhiều?',['Nhà','Cây gỗ lớn','Xe cộ','Đồ chơi'],'Cây gỗ lớn','Rừng = nhiều cây to','easy','tvqe'),
@@ -200,7 +200,7 @@ export const natureQuestions2: Question[] = [
   Q(231,'single_choice','ĐV giúp con người?',['Không giúp','Cho thức ăn, canh giữ nhà, kéo xe','Chỉ hại','Chỉ đẹp'],'Cho thức ăn, canh giữ nhà, kéo xe','ĐV hữu ích','easy','dvqe'),
   Q(231,'true_false','Cần bảo vệ ĐV hoang dã, không săn bắt',null,'Đúng','BV ĐV = giữ đa dạng sinh học','easy','dvqe'),
   Q(231,'fill_number','Thú = ĐV có ? → nuôi con bằng sữa mẹ',null,'vú','Thú = có vú, đẻ con','medium','dvqe'),
-  Q(231,'single_choice','VN có ĐV quý hiếm?',['Không','Sao la, voọc mũi hếch, voi châu Á','Chỉ gà','Chỉ chó'],'Sao la, voọc mũi hếch, voi châu Á','ĐV quý hiếm VN','hard','dvqe'),
+  Q(231,'single_choice','Việt Nam có ĐV quý hiếm?',['Không','Sao la, voọc mũi hếch, voi châu Á','Chỉ gà','Chỉ chó'],'Sao la, voọc mũi hếch, voi châu Á','ĐV quý hiếm Việt Nam','hard','dvqe'),
   Q(231,'true_false','ĐV Sách đỏ cần được bảo vệ nghiêm ngặt',null,'Đúng','Sách đỏ = nguy cấp → BV','hard','dvqe'),
 
   // === L232: Côn trùng ===
@@ -230,7 +230,7 @@ export const natureQuestions2: Question[] = [
   Q(233,'single_choice','Anh chị em trong GĐ nên?',['Cãi nhau','Yêu thương, giúp đỡ nhau','Ganh đua','Bỏ mặc'],'Yêu thương, giúp đỡ nhau','ACE = đoàn kết','easy','gd'),
   Q(233,'fill_number','GĐ là nơi em cảm thấy an ? nhất',null,'toàn','An toàn = GĐ','easy','gd'),
   Q(233,'true_false','Mỗi GĐ đều khác nhau và đặc biệt',null,'Đúng','GĐ lớn nhỏ đều đáng quý','easy','gd'),
-  Q(233,'single_choice','Ngày GĐ VN?',['1/1','28/6','14/2','30/4'],'28/6','28/6 = Ngày Gia đình VN','medium','gd'),
+  Q(233,'single_choice','Ngày GĐ Việt Nam?',['1/1','28/6','14/2','30/4'],'28/6','28/6 = Ngày Gia đình Việt Nam','medium','gd'),
   Q(233,'single_choice','GĐ có 2 thế hệ: ông bà + bố mẹ + con = ?',['2','3 thế hệ','1','4'],'3 thế hệ','Ông bà + BM + con = 3 TH','medium','gd'),
   Q(233,'true_false','Nên nói "Con yêu bố/mẹ" thường xuyên',null,'Đúng','Bày tỏ tình cảm = tốt','easy','gd'),
   Q(233,'fill_number','GĐ gồm ? người trở lên (ít nhất bố mẹ + con)',null,'2','GĐ: ít nhất 2 người','medium','gd'),
@@ -267,11 +267,11 @@ export const natureQuestions2: Question[] = [
   Q(235,'single_choice','Công viên để?',['Xây nhà','Vui chơi, tập thể dục, hít thở KK','Đổ rác','Bán hàng'],'Vui chơi, tập thể dục, hít thở KK','CV = nơi giải trí, TD','easy','cdpd'),
   Q(235,'single_choice','Khi gặp người lớn, em nên?',['Bỏ đi','Chào hỏi lễ phép','Quay lưng','Không nói gì'],'Chào hỏi lễ phép','Chào = phép lịch sự','easy','cdpd'),
   Q(235,'true_false','Mỗi người có nghề nghiệp khác nhau, đều quan trọng',null,'Đúng','Bác sĩ, thợ may, nông dân... đều cần','medium','cdpd'),
-  Q(235,'fill_number','SĐT cấp cứu: ?15',null,'1','115 = cấp cứu','medium','cdpd'),
+  Q(235,'fill_number','Số điện thoại cấp cứu: ?15',null,'1','115 = cấp cứu','medium','cdpd'),
   Q(235,'single_choice','Em có thể giúp CĐ bằng?',['Phá hoại','Nhặt rác, giúp người già, trồng cây','Ở nhà suốt','Không gì'],'Nhặt rác, giúp người già, trồng cây','Hành động nhỏ = ý nghĩa lớn','medium','cdpd'),
   Q(235,'true_false','Tuân thủ pháp luật giúp CĐ an toàn',null,'Đúng','Pháp luật = quy tắc sống chung','hard','cdpd'),
 
-  // === L236: ATGT ===
+  // === L236: an toàn giao thông ===
   Q(236,'single_choice','Đèn đỏ nghĩa là?',['Đi','Dừng lại','Chạy nhanh','Rẽ phải'],'Dừng lại','Đỏ = STOP','easy','atgt'),
   Q(236,'true_false','Đèn xanh = được đi',null,'Đúng','Xanh = đi','easy','atgt'),
   Q(236,'single_choice','Đi bộ ở?',['Giữa đường','Vỉa hè / lề đường bên phải','Lòng đường','Đường ray'],'Vỉa hè / lề đường bên phải','Vỉa hè = an toàn cho người đi bộ','easy','atgt'),
@@ -283,27 +283,27 @@ export const natureQuestions2: Question[] = [
   Q(236,'true_false','Trẻ em không nên chơi gần đường xe chạy',null,'Đúng','Nguy hiểm: xe đông','easy','atgt'),
   Q(236,'single_choice','Đi xe đạp nên?',['Lạng lách','Đi đúng làn, bật đèn tối','Đi ngược chiều','Không phanh'],'Đi đúng làn, bật đèn tối','An toàn xe đạp','medium','atgt'),
   Q(236,'single_choice','Biển tam giác vàng viền đỏ = ?',['Cấm','Cảnh báo nguy hiểm','Chỉ dẫn','Cho phép'],'Cảnh báo nguy hiểm','Tam giác = CẢNH BÁO','medium','atgt'),
-  Q(236,'true_false','Thắt dây an toàn trên ô tô rất quan trọng',null,'Đúng','Dây AT = bảo vệ khi phanh gấp','easy','atgt'),
-  Q(236,'fill_number','SĐT cảnh sát GT: ?13',null,'1','113 = CA','medium','atgt'),
+  Q(236,'true_false','Thắt dây an toàn trên ô tô rất quan trọng',null,'Đúng','Dây an toàn = bảo vệ khi phanh gấp','easy','atgt'),
+  Q(236,'fill_number','Số điện thoại cảnh sát GT: ?13',null,'1','113 = CA','medium','atgt'),
   Q(236,'single_choice','Trời tối, đi bộ nên?',['Mặc đen','Mặc áo sáng hoặc phản quang','Chạy nhanh','Đi giữa đường'],'Mặc áo sáng hoặc phản quang','Xe thấy em = an toàn','medium','atgt'),
-  Q(236,'true_false','Tuân thủ ATGT giúp bảo vệ mình và người khác',null,'Đúng','An toàn = trách nhiệm chung','easy','atgt'),
+  Q(236,'true_false','Tuân thủ an toàn giao thông giúp bảo vệ mình và người khác',null,'Đúng','An toàn = trách nhiệm chung','easy','atgt'),
 
   // === L237: An toàn nhà ===
   Q(237,'single_choice','Nguy hiểm ở nhà?',['Đọc sách','Ổ cắm điện, bếp lửa, dao kéo','Vẽ tranh','Nghe nhạc'],'Ổ cắm điện, bếp lửa, dao kéo','3 nguy hiểm phổ biến','easy','atnha'),
   Q(237,'true_false','Không chọc ngón tay vào ổ cắm điện',null,'Đúng','Điện giật nguy hiểm!','easy','atnha'),
   Q(237,'single_choice','Khi bị bỏng nhẹ?',['Bôi kem đánh răng','Dội nước lạnh 10-20 phút','Chọc bóng nước','Bỏ qua'],'Dội nước lạnh 10-20 phút','Nước lạnh = giảm đau, hạn chế bỏng','easy','atnha'),
-  Q(237,'fill_number','SĐT cứu hỏa: ?14',null,'1','114 = PCCC','easy','atnha'),
+  Q(237,'fill_number','Số điện thoại cứu hỏa: ?14',null,'1','114 = phòng cháy chữa cháy','easy','atnha'),
   Q(237,'single_choice','Không chơi gần?',['Sách vở','Đồ vật sắc nhọn: dao, kéo, kim','Đồ chơi mềm','Bút chì'],'Đồ vật sắc nhọn: dao, kéo, kim','Sắc nhọn → đứt tay','easy','atnha'),
   Q(237,'true_false','Không để đồ chơi trên cầu thang (dễ trượt)',null,'Đúng','Đồ cầu thang → ngã','easy','atnha'),
   Q(237,'single_choice','Ngửi thấy mùi gas, nên?',['Bật lửa','Mở cửa, thoát ra, gọi người lớn','Hít thêm','Bật đèn'],'Mở cửa, thoát ra, gọi người lớn','Gas rò: mở cửa, KHÔNG bật lửa/đèn','medium','atnha'),
-  Q(237,'fill_number','SĐT cấp cứu: 1?5',null,'1','115 = cấp cứu YT','easy','atnha'),
+  Q(237,'fill_number','Số điện thoại cấp cứu: 1?5',null,'1','115 = cấp cứu YT','easy','atnha'),
   Q(237,'true_false','Rửa vết thương bằng nước sạch, băng gạc',null,'Đúng','Sơ cứu cơ bản','easy','atnha'),
   Q(237,'single_choice','Uống nhầm hóa chất → cần?',['Tự chữa','Gọi 115 ngay, không gây nôn','Uống thêm','Chờ đỡ'],'Gọi 115 ngay, không gây nôn','Hóa chất → cấp cứu khẩn','medium','atnha'),
   Q(237,'single_choice','Sàn ướt dễ?',['Bay','Trượt ngã','Khô nhanh','Không sao'],'Trượt ngã','Ướt = trơn = ngã','easy','atnha'),
   Q(237,'true_false','Không trèo cao khi ở nhà 1 mình',null,'Đúng','Trèo cao + không ai giúp = nguy','easy','atnha'),
-  Q(237,'fill_number','3 SĐT khẩn cấp: 113-?-115',null,'114','113 CA, 114 PCCC, 115 YT','medium','atnha'),
+  Q(237,'fill_number','3 Số điện thoại khẩn cấp: 113-?-115',null,'114','113 CA, 114 phòng cháy chữa cháy, 115 YT','medium','atnha'),
   Q(237,'single_choice','Thuốc tây nên?',['Tự uống','Chỉ uống khi người lớn cho phép','Ăn nhiều','Cho bạn ăn'],'Chỉ uống khi người lớn cho phép','Thuốc = nguy nếu dùng sai','medium','atnha'),
-  Q(237,'true_false','Biết SĐT khẩn cấp rất quan trọng',null,'Đúng','Nhớ 113-114-115','easy','atnha'),
+  Q(237,'true_false','Biết Số điện thoại khẩn cấp rất quan trọng',null,'Đúng','Nhớ 113-114-115','easy','atnha'),
 
   // === L238: Vệ sinh cơ thể ===
   Q(238,'single_choice','Rửa tay bằng?',['Chỉ nước','Xà phòng + nước sạch','Không rửa','Nước bẩn'],'Xà phòng + nước sạch','XP diệt VK','easy','vsct'),
@@ -346,13 +346,13 @@ export const natureQuestions2: Question[] = [
   Q(240,'fill_number','? loại cơ quan: vận động, hô hấp, tiêu hóa, tuần hoàn',null,'4','4 CQ chính học lớp 2','easy','otl2'),
   Q(240,'single_choice','Cây cần gì để sống?',['Chỉ nước','Nước + AS + đất + KK','Chỉ đất','Chỉ KK'],'Nước + AS + đất + KK','4 yếu tố sống Thực vật','easy','otl2'),
   Q(240,'true_false','Nước chiếm 60-70% cơ thể người',null,'Đúng','Nước = phần lớn','easy','otl2'),
-  Q(240,'single_choice','Đèn đỏ =?',['Đi','Dừng','Chạy','Rẽ'],'Dừng','ATGT cơ bản','easy','otl2'),
+  Q(240,'single_choice','Đèn đỏ =?',['Đi','Dừng','Chạy','Rẽ'],'Dừng','an toàn giao thông cơ bản','easy','otl2'),
   Q(240,'fill_number','Côn trùng có ? chân',null,'6','6 chân = CT','easy','otl2'),
   Q(240,'true_false','Rửa tay 6 bước giúp phòng bệnh',null,'Đúng','VS = phòng bệnh','easy','otl2'),
   Q(240,'single_choice','ĐV nuôi?',['Hổ','Chó, mèo, gà','Sư tử','Voi rừng'],'Chó, mèo, gà','Nuôi = nhà','easy','otl2'),
   Q(240,'single_choice','Rễ cây giúp?',['Bay','Hút nước + giữ cây','Quang hợp','Sinh sản'],'Hút nước + giữ cây','Rễ 2 chức năng','easy','otl2'),
   Q(240,'true_false','KK không màu, không mùi',null,'Đúng','KK = trong suốt','easy','otl2'),
   Q(240,'fill_number','Tiết kiệm ? = bảo vệ môi trường',null,'nước','Nước + điện = Bảo vệ môi trường','easy','otl2'),
-  Q(240,'single_choice','SĐT cấp cứu?',['100','115','123','999'],'115','115 = YT khẩn cấp','medium','otl2'),
+  Q(240,'single_choice','Số điện thoại cấp cứu?',['100','115','123','999'],'115','115 = YT khẩn cấp','medium','otl2'),
   Q(240,'true_false','Em đã ôn tốt lớp 2, sẵn sàng lên lớp 3!',null,'Đúng','Tự tin lên lớp 3','easy','otl2'),
 ];

@@ -87,7 +87,7 @@ export const informaticsLessons5: Lesson[] = [
   L(5,'C2','TH5-07','Quay và biên tập video','Quay video ngắn và chỉnh sửa đơn giản','Quay video → cắt bỏ phần thừa → thêm tiêu đề','Giữ máy ổn định, ánh sáng đủ, âm thanh rõ','medium',15),
   L(5,'C2','TH5-08','Bài thuyết trình đa phương tiện','Kết hợp văn bản, hình, video trong trình chiếu','Slide đẹp = ít chữ + nhiều hình + video minh họa','Mỗi slide tối đa 3 ý chính','medium',15),
   // C3: Lập trình Scratch nâng cao
-  L(5,'C3','TH5-09','Biến trong Scratch','Hiểu và sử dụng biến để lưu dữ liệu','Biến = hộp chứa giá trị. VD: điểm, mạng, tốc độ','Đặt tên biến rõ ràng: "diem", "mang", "toc_do"','medium',15),
+  L(5,'C3','TH5-09','Biến trong Scratch','Hiểu và sử dụng biến để lưu dữ liệu','Biến = hộp chứa giá trị. Ví dụ: điểm, mạng, tốc độ','Đặt tên biến rõ ràng: "diem", "mang", "toc_do"','medium',15),
   L(5,'C3','TH5-10','Điều kiện if-else','Lập trình rẽ nhánh: nếu...thì...nếu không','if touching edge → bounce. if score > 10 → next level','Rẽ nhánh giúp chương trình "quyết định" theo tình huống','medium',15),
   L(5,'C3','TH5-11','Tạo game nhiều cấp độ','Lập trình trò chơi với nhiều level','Level 1 chậm → Level 2 nhanh hơn → Level 3 nhiều vật cản','Dùng biến "level" và tăng độ khó theo level','hard',18),
   L(5,'C3','TH5-12','Kể chuyện bằng Scratch','Tạo câu chuyện hoạt hình với nhiều nhân vật','Mỗi nhân vật có thoại riêng, di chuyển, đổi trang phục','Dùng "broadcast" để đồng bộ các nhân vật','hard',18),

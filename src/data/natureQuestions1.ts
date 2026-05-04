@@ -71,9 +71,9 @@ export const natureQuestions1: Question[] = [
   Q(203, 'true_false', 'Giữ vệ sinh giúp bé không bị ốm.', null, 'true'),
   Q(203, 'single_choice', 'Khi nào bé cần rửa tay?', ['Trước khi ngủ', 'Trước khi ăn', 'Trước khi xem Thực vật', 'Trước khi đọc sách'], 'Trước khi ăn'),
   Q(203, 'true_false', 'Không cần đánh răng buổi tối.', null, 'false'),
-  Q(203, 'single_choice', 'Buổi sáng bé nên làm gì đầu tiên?', ['Xem TV', 'Đánh răng, rửa mặt', 'Ăn kẹo', 'Chơi game'], 'Đánh răng, rửa mặt'),
+  Q(203, 'single_choice', 'Buổi sáng bé nên làm gì đầu tiên?', ['Xem Thực vật', 'Đánh răng, rửa mặt', 'Ăn kẹo', 'Chơi game'], 'Đánh răng, rửa mặt'),
   Q(203, 'fill_number', 'Rửa tay có ___ bước.', null, '6'),
-  Q(203, 'single_choice', 'Sau khi đi vệ sinh, bé cần?', ['Chạy đi chơi', 'Rửa tay', 'Ăn kẹo', 'Xem TV'], 'Rửa tay'),
+  Q(203, 'single_choice', 'Sau khi đi vệ sinh, bé cần?', ['Chạy đi chơi', 'Rửa tay', 'Ăn kẹo', 'Xem Thực vật'], 'Rửa tay'),
   Q(203, 'true_false', 'Bé nên tắm mỗi ngày.', null, 'true'),
   Q(203, 'single_choice', 'Bé nên thay quần áo sạch khi nào?', ['Buổi tối sau khi tắm', 'Khi nào cũng được', 'Không cần thay', 'Mỗi tuần 1 lần'], 'Buổi tối sau khi tắm'),
   Q(203, 'true_false', 'Rửa tay chỉ cần nước, không cần xà phòng.', null, 'false'),
@@ -101,7 +101,7 @@ export const natureQuestions1: Question[] = [
   Q(204, 'single_choice', 'Khi thấy người bị điện giật, bé?', ['Sờ vào người đó', 'Gọi người lớn, không chạm', 'Kéo tay người đó', 'Đứng xem'], 'Gọi người lớn, không chạm', 3),
 
   // ===== 205: Trường học của em =====
-  Q(205, 'single_choice', 'Trường học là nơi bé đến để?', ['Ngủ', 'Học và chơi', 'Nấu ăn', 'Xem TV'], 'Học và chơi'),
+  Q(205, 'single_choice', 'Trường học là nơi bé đến để?', ['Ngủ', 'Học và chơi', 'Nấu ăn', 'Xem Thực vật'], 'Học và chơi'),
   Q(205, 'true_false', 'Sân trường là nơi chơi giờ ra chơi.', null, 'true'),
   Q(205, 'single_choice', 'Nơi nào bé ngồi học bài?', ['Sân trường', 'Lớp học', 'Căn tin', 'Nhà vệ sinh'], 'Lớp học'),
   Q(205, 'true_false', 'Bé được chạy trong lớp học.', null, 'false'),

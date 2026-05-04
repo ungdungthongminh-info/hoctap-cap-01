@@ -35,7 +35,7 @@ export const englishLessons4: Lesson[] = [
   L(435,4,'EN4C4','EN4-15','Wild Animals','Động vật hoang dã và môi trường sống','Bé học về động vật hoang dã','It lives in + nơi sống','medium',12,15),
   L(436,4,'EN4C4','EN4-16','Protect the Earth','Bảo vệ môi trường bằng tiếng Anh','Bé học cách bảo vệ Trái Đất','We should / We can + V','easy',12,16),
   // Chương 5: Review & Culture
-  L(437,4,'EN4C5','EN4-17','Vietnamese Festivals','Lễ hội Việt Nam bằng tiếng Anh','Bé kể về lễ hội VN','We celebrate + festival','easy',12,17),
+  L(437,4,'EN4C5','EN4-17','Vietnamese Festivals','Lễ hội Việt Nam bằng tiếng Anh','Bé kể về lễ hội Việt Nam','We celebrate + festival','easy',12,17),
   L(438,4,'EN4C5','EN4-18','Countries & Nationalities','Các quốc gia và quốc tịch','Bé học tên nước và quốc tịch','Country → Nationality','easy',12,18),
   L(439,4,'EN4C5','EN4-19','Grammar Review 4','Ôn ngữ pháp: Present Simple, Can, There is/are','Bé ôn tập ngữ pháp lớp 4','Ôn tất cả cấu trúc đã học','medium',15,19),
   L(440,4,'EN4C5','EN4-20','Final Review Grade 4','Ôn tập tổng hợp lớp 4','Bé ôn tập toàn bộ lớp 4','Mỗi ngày nói 1 câu tiếng Anh!','medium',15,20),

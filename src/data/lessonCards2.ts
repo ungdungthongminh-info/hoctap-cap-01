@@ -11,13 +11,13 @@ const card = (lid: number, type: LessonCard['cardType'], title: string, content:
 
 export const allLessonCards2: LessonCard[] = [
   // === BÀI 21: Ôn tập cộng phạm vi 20 ===
-  card(21, 'intro', 'Nhớ lại phép cộng', 'Phép cộng là gộp hai nhóm lại. VD: 8 quả cam + 5 quả cam = 13 quả cam 🍊', 1),
-  card(21, 'explain', 'Tách số để cộng', 'Khi cộng có nhớ, ta tách số. VD: 8+5 → tách 5 = 2+3 → 8+2=10, 10+3=13', 2),
+  card(21, 'intro', 'Nhớ lại phép cộng', 'Phép cộng là gộp hai nhóm lại. Ví dụ: 8 quả cam + 5 quả cam = 13 quả cam 🍊', 1),
+  card(21, 'explain', 'Tách số để cộng', 'Khi cộng có nhớ, ta tách số. Ví dụ: 8+5 → tách 5 = 2+3 → 8+2=10, 10+3=13', 2),
   card(21, 'example', 'Ví dụ tính nhẩm', '9+4 = ? → Tách 4 = 1+3 → 9+1=10, 10+3=13 ✅', 3, '{"pheptinh":"9+4=13","cach":"9+1+3"}'),
   card(21, 'tip', 'Mẹo nhớ nhanh', 'Luôn cộng để được 10 trước! Số 9 cần thêm 1, số 8 cần thêm 2, số 7 cần thêm 3 💡', 4),
 
   // === BÀI 22: Ôn tập trừ phạm vi 20 ===
-  card(22, 'intro', 'Nhớ lại phép trừ', 'Phép trừ là bớt đi. VD: 15 cái kẹo, ăn 7 cái, còn 8 cái kẹo 🍬', 1),
+  card(22, 'intro', 'Nhớ lại phép trừ', 'Phép trừ là bớt đi. Ví dụ: 15 cái kẹo, ăn 7 cái, còn 8 cái kẹo 🍬', 1),
   card(22, 'explain', 'Tách số để trừ', 'Khi trừ có nhớ: 15-7 → tách 7=5+2 → 15-5=10, 10-2=8', 2),
   card(22, 'example', 'Ví dụ tính nhẩm', '13-6 = ? → Tách 6=3+3 → 13-3=10, 10-3=7 ✅', 3, '{"pheptinh":"13-6=7","cach":"13-3-3"}'),
   card(22, 'tip', 'Mẹo nhớ nhanh', 'Trừ xuống 10 trước rồi trừ tiếp! Luôn nhớ: cộng và trừ là phép ngược nhau 🔄', 4),
@@ -35,27 +35,27 @@ export const allLessonCards2: LessonCard[] = [
   card(24, 'tip', 'Từ khóa quan trọng', '"thêm", "cho", "tất cả" → CỘNG. "bớt", "ăn", "mất", "còn lại" → TRỪ 🔑', 4),
 
   // === BÀI 25: Cộng không nhớ (phạm vi 100) ===
-  card(25, 'intro', 'Mở rộng sang số lớn', 'Bây giờ ta cộng các số có 2 chữ số! VD: 34+25 🎯', 1),
+  card(25, 'intro', 'Mở rộng sang số lớn', 'Bây giờ ta cộng các số có 2 chữ số! Ví dụ: 34+25 🎯', 1),
   card(25, 'explain', 'Đặt tính dọc', 'Viết số hàng đơn vị thẳng cột, hàng chục thẳng cột. Cộng từ PHẢI sang TRÁI', 2),
   card(25, 'example', '34 + 25 = ?', 'Hàng đơn vị: 4+5=9. Hàng chục: 3+2=5. Kết quả: 59 ✅', 3, '{"datthinh":"34+25=59"}'),
   card(25, 'tip', 'Cẩn thận thẳng cột', 'Đặt tính ngay ngắn, số nào thẳng cột số đó. Cộng từ bên phải trước! ✏️', 4),
 
   // === BÀI 26: Cộng có nhớ (phạm vi 100) ===
   card(26, 'intro', 'Khi cộng đơn vị ≥ 10', 'Nếu hàng đơn vị cộng ra ≥10, viết số đơn vị, nhớ 1 sang hàng chục 🧮', 1),
-  card(26, 'explain', 'Cách thực hiện', '37+28: Hàng đ.vị 7+8=15 → viết 5, nhớ 1. Hàng chục: 3+2+1(nhớ)=6. KQ: 65', 2),
-  card(26, 'example', '37 + 28 = ?', 'Đ.vị: 7+8=15 → viết 5 nhớ 1. Chục: 3+2+1=6. Kết quả: 65 ✅', 3, '{"datthinh":"37+28=65"}'),
+  card(26, 'explain', 'Cách thực hiện', '37+28: Hàng đơn vị 7+8=15 → viết 5, nhớ 1. Hàng chục: 3+2+1(nhớ)=6. Kết quả: 65', 2),
+  card(26, 'example', '37 + 28 = ?', 'đơn vị: 7+8=15 → viết 5 nhớ 1. Chục: 3+2+1=6. Kết quả: 65 ✅', 3, '{"datthinh":"37+28=65"}'),
   card(26, 'tip', 'Ghi số nhớ', 'Viết số 1 nhỏ ở trên cột hàng chục để không quên cộng thêm! ✍️', 4),
 
   // === BÀI 27: Trừ không nhớ (phạm vi 100) ===
-  card(27, 'intro', 'Trừ số có 2 chữ số', 'Trừ hàng đơn vị trước, rồi trừ hàng chục. VD: 68-23 ✏️', 1),
+  card(27, 'intro', 'Trừ số có 2 chữ số', 'Trừ hàng đơn vị trước, rồi trừ hàng chục. Ví dụ: 68-23 ✏️', 1),
   card(27, 'explain', 'Đặt tính dọc', 'Viết thẳng cột. Trừ từ PHẢI sang TRÁI', 2),
-  card(27, 'example', '68 - 23 = ?', 'Đ.vị: 8-3=5. Chục: 6-2=4. Kết quả: 45 ✅', 3, '{"datthinh":"68-23=45"}'),
-  card(27, 'tip', 'Kiểm tra bằng cộng', 'Lấy kết quả + số trừ = số bị trừ. VD: 45+23=68 ✓ 🔍', 4),
+  card(27, 'example', '68 - 23 = ?', 'đơn vị: 8-3=5. Chục: 6-2=4. Kết quả: 45 ✅', 3, '{"datthinh":"68-23=45"}'),
+  card(27, 'tip', 'Kiểm tra bằng cộng', 'Lấy kết quả + số trừ = số bị trừ. Ví dụ: 45+23=68 ✓ 🔍', 4),
 
   // === BÀI 28: Trừ có nhớ (phạm vi 100) ===
-  card(28, 'intro', 'Khi đ.vị không trừ được', 'Nếu hàng đơn vị bé hơn → mượn 1 chục 🏦', 1),
-  card(28, 'explain', 'Cách mượn', '52-17: Đ.vị 2 không trừ được 7 → mượn 1 chục. 12-7=5. Chục: 5-1(trả)-1=3. KQ: 35', 2),
-  card(28, 'example', '52 - 17 = ?', 'Đ.vị: 2<7 → mượn: 12-7=5. Chục: 5-1-1=3. Kết quả: 35 ✅', 3, '{"datthinh":"52-17=35"}'),
+  card(28, 'intro', 'Khi đơn vị không trừ được', 'Nếu hàng đơn vị bé hơn → mượn 1 chục 🏦', 1),
+  card(28, 'explain', 'Cách mượn', '52-17: đơn vị 2 không trừ được 7 → mượn 1 chục. 12-7=5. Chục: 5-1(trả)-1=3. Kết quả: 35', 2),
+  card(28, 'example', '52 - 17 = ?', 'đơn vị: 2<7 → mượn: 12-7=5. Chục: 5-1-1=3. Kết quả: 35 ✅', 3, '{"datthinh":"52-17=35"}'),
   card(28, 'tip', 'Nhớ trả', 'Đã mượn thì phải trả! Hàng chục trừ thêm 1 nữa nhé 💡', 4),
 
   // === BÀI 29: Bài toán lời văn (cộng, phạm vi 100) ===
@@ -122,11 +122,11 @@ export const allLessonCards2: LessonCard[] = [
   card(39, 'intro', 'Mở rộng phép chia', 'Chia cho 4 và chia cho 5 dùng bảng nhân 4, 5 📚', 1),
   card(39, 'explain', 'Cách tìm', '20÷4 = ? → 4×?=20 → 4×5=20 → 20÷4=5. Tương tự: 35÷5=7 vì 5×7=35', 2),
   card(39, 'example', 'Bài toán', '20 cái kẹo chia đều 4 bạn, mỗi bạn mấy cái? → 20÷4=5 cái ✅', 3, '{"chia":"20÷4=5"}'),
-  card(39, 'tip', 'Chia cho 5 dễ', 'Kết quả chia 5: lấy kết quả nhân 2 rồi chia 10. VD: 35÷5=7 🔢', 4),
+  card(39, 'tip', 'Chia cho 5 dễ', 'Kết quả chia 5: lấy kết quả nhân 2 rồi chia 10. Ví dụ: 35÷5=7 🔢', 4),
 
   // === BÀI 40: Hình vuông, chữ nhật, tam giác ===
   card(40, 'intro', 'Ba hình cơ bản', 'Hình vuông (⬜), hình chữ nhật (▬), hình tam giác (△) — em biết phân biệt chưa? 🔷', 1),
   card(40, 'explain', 'Đặc điểm', 'Vuông: 4 cạnh bằng, 4 góc vuông. Chữ nhật: 2 dài=nhau, 2 ngắn=nhau, 4 góc vuông. Tam giác: 3 cạnh', 2),
-  card(40, 'example', 'Tìm hình quanh em', 'Cửa sổ → hình chữ nhật. Viên gạch → hình vuông. Mái nhà → hình tam giác ✅', 3, '{"hinhanh":"cua_so=Hình chữ nhật, gach=Hình vuông, mai=TG"}'),
+  card(40, 'example', 'Tìm hình quanh em', 'Cửa sổ → hình chữ nhật. Viên gạch → hình vuông. Mái nhà → hình tam giác ✅', 3, '{"hinhanh":"cua_so=Hình chữ nhật, gach=Hình vuông, mai=thời gian"}'),
   card(40, 'tip', 'Đếm hình', 'Khi đếm hình, cẩn thận hình nhỏ nằm trong hình lớn! Đếm từ nhỏ đến lớn 🔍', 4),
 ];

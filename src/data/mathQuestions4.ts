@@ -245,7 +245,7 @@ export const mathQuestions4: Question[] = [
   Q(74,'single_choice','Kí hiệu vuông góc?',['║','⊥','≈','='],'⊥','⊥ = vuông góc','easy','song-song'),
   Q(74,'single_choice','Hình chữ nhật có mấy cặp cạnh vuông góc?',['1','2','4','0'],'4','4 góc vuông→4 cặp cạnh ⊥','medium','song-song'),
   Q(74,'true_false','2 đường thẳng vuông góc tạo 4 góc vuông',null,'Đúng','Cắt tạo 4 góc, đều 90°','medium','song-song'),
-  Q(74,'single_choice','Cạnh AB // CD, và AB ⊥ BC. Vậy BC ⊥ CD?',['Đúng','Sai','Không xác định','Tùy trường hợp'],'Đúng','AB//CD, AB⊥BC → BC⊥CD','hard','song-song'),
+  Q(74,'single_choice','Cạnh AB // CD, và AB ⊥ báo cáo. Vậy báo cáo ⊥ CD?',['Đúng','Sai','Không xác định','Tùy trường hợp'],'Đúng','AB//CD, AB⊥báo cáo → báo cáo⊥CD','hard','song-song'),
   Q(74,'fill_number','Hình thang có ít nhất ? cặp cạnh song song',null,'1','Hình thang: 1 cặp cạnh //','hard','song-song'),
   Q(74,'true_false','Trong Hình vuông, 2 đường chéo vuông góc',null,'Đúng','Đường chéo Hình vuông ⊥ nhau','hard','song-song'),
   Q(74,'single_choice','2 đường thẳng tạo góc 90° là?',['Song song','Vuông góc','Trùng','Chéo nhau'],'Vuông góc','90° = vuông góc','easy','song-song'),

@@ -17,7 +17,7 @@ const L = (
 
 // ===== LỚP 4 =====
 
-// --- Chương 1: Bản đồ & Địa hình VN ---
+// --- Chương 1: Bản đồ & Địa hình Việt Nam ---
 const g4c1: Lesson[] = [
   L(4, 'C1', 'LS4-01', 'Bản đồ và cách đọc bản đồ',
     'Biết cách đọc bản đồ, nhận biết các ký hiệu và tỉ lệ bản đồ.',
@@ -89,7 +89,7 @@ const g4c3: Lesson[] = [
     'easy', 10),
 ];
 
-// --- Chương 4: Lịch sử VN cổ đại ---
+// --- Chương 4: Lịch sử Việt Nam cổ đại ---
 const g4c4: Lesson[] = [
   L(4, 'C4', 'LS4-13', 'Thời nguyên thủy',
     'Biết về cuộc sống của người Việt cổ thời nguyên thủy trên đất nước ta.',
@@ -113,7 +113,7 @@ const g4c4: Lesson[] = [
     'hard', 15),
 ];
 
-// --- Chương 5: Lịch sử VN trung đại ---
+// --- Chương 5: Lịch sử Việt Nam trung đại ---
 const g4c5: Lesson[] = [
   L(4, 'C5', 'LS4-17', 'Nhà Lý',
     'Tìm hiểu triều đại nhà Lý: dời đô Thăng Long, phát triển văn hóa giáo dục.',
@@ -216,7 +216,7 @@ const g5c3: Lesson[] = [
     'easy', 10),
 ];
 
-// --- Chương 4: Lịch sử VN cận đại ---
+// --- Chương 4: Lịch sử Việt Nam cận đại ---
 const g5c4: Lesson[] = [
   L(5, 'C4', 'LS5-13', 'Pháp xâm lược Việt Nam',
     'Hiểu bối cảnh thực dân Pháp xâm lược và đô hộ Việt Nam.',

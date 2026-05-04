@@ -1,6 +1,6 @@
 /**
  * LESSON CARDS — Nội dung giảng dạy cho 20 bài Toán Lớp 1
- * Mỗi bài 4 thẻ: intro → explain (phương pháp VN) → example → tip
+ * Mỗi bài 4 thẻ: intro → explain (phương pháp Việt Nam) → example → tip
  * Tổng cộng: 80 thẻ
  *
  * Phương pháp xen kẽ:

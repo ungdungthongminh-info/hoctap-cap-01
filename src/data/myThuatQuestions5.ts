@@ -68,7 +68,7 @@ export const artQuestions5: Question[] = [
       Q(lid,'single_choice',`Mỹ thuật lớp 5 có mấy bài?`,['10','15','20','25'],'20',skill),
       Q(lid,'true_false',`Bé lớp 5 có thể sáng tạo tác phẩm lớn.`,null,'true',skill),
       Q(lid,'fill_text',`Dự án cuối năm tổng hợp ___ năm kiến thức.`,null,'5',skill),
-      Q(lid,'single_choice',`Nghệ thuật VN và thế giới có điểm gì chung?`,['Không có','Đều thể hiện sáng tạo con người','Giống nhau hoàn toàn','Không liên quan'],'Đều thể hiện sáng tạo con người',skill,'medium'),
+      Q(lid,'single_choice',`Nghệ thuật Việt Nam và thế giới có điểm gì chung?`,['Không có','Đều thể hiện sáng tạo con người','Giống nhau hoàn toàn','Không liên quan'],'Đều thể hiện sáng tạo con người',skill,'medium'),
       Q(lid,'true_false',`Sáng tạo không có giới hạn tuổi tác.`,null,'true',skill),
       Q(lid,'single_choice',`Bé muốn làm gì sau 5 năm học Mỹ thuật?`,['Quên hết','Tiếp tục sáng tạo','Bỏ cuộc','Không gì'],'Tiếp tục sáng tạo',skill),
       Q(lid,'fill_text',`Nghệ thuật là ngôn ngữ ___ của nhân loại.`,null,'chung',skill),

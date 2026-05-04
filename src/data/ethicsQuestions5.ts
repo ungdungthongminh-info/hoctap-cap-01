@@ -153,7 +153,7 @@ export const ethicsQuestions5: Question[] = [
   Q(388,'single_choice','Cách thể hiện tình yêu Tổ quốc hàng ngày?',['Chỉ nói','Tuân thủ pháp luật, học tốt, bảo vệ môi trường','Không cần làm gì','Chỉ vào ngày lễ'],'Tuân thủ pháp luật, học tốt, bảo vệ môi trường','Yêu nước mỗi ngày bằng hành động.','medium','to_quoc'),
 
   // ===== Bài 389: Em tìm hiểu về Liên Hợp Quốc =====
-  Q(389,'single_choice','Liên Hợp Quốc viết tắt là gì?',['EU','UN','WHO','WTO'],'UN','United Nations = Liên Hợp Quốc.','easy','lien_hop_quoc'),
+  Q(389,'single_choice','Liên Hợp Quốc viết tắt là gì?',['EU','UN','Tổ chức Y tế Thế giới','WTO'],'UN','United Nations = Liên Hợp Quốc.','easy','lien_hop_quoc'),
   Q(389,'true_false','Liên Hợp Quốc được thành lập năm 1945.',null,'Đúng','24/10/1945 — Ngày Liên Hợp Quốc.','easy','lien_hop_quoc'),
   Q(389,'single_choice','Mục đích chính của Liên Hợp Quốc?',['Gây chiến tranh','Duy trì hòa bình và an ninh thế giới','Buôn bán','Du lịch'],'Duy trì hòa bình và an ninh thế giới','LHQ = tổ chức vì hòa bình.','easy','lien_hop_quoc'),
   Q(389,'single_choice','Trụ sở Liên Hợp Quốc ở đâu?',['Hà Nội','New York, Mỹ','London','Tokyo'],'New York, Mỹ','Trụ sở chính đặt tại New York.','medium','lien_hop_quoc'),
@@ -161,7 +161,7 @@ export const ethicsQuestions5: Question[] = [
   Q(389,'single_choice','UNICEF là tổ chức giúp đỡ ai?',['Người già','Trẻ em trên toàn thế giới','Doanh nghiệp','Quân đội'],'Trẻ em trên toàn thế giới','UNICEF bảo vệ quyền trẻ em.','easy','lien_hop_quoc'),
   Q(389,'single_choice','Quyền trẻ em được Liên Hợp Quốc công nhận gồm?',['Chỉ quyền chơi','Học tập, y tế, bảo vệ, vui chơi','Không có quyền','Chỉ quyền ăn'],'Học tập, y tế, bảo vệ, vui chơi','Công ước Quyền Trẻ em 1989.','medium','lien_hop_quoc'),
   Q(389,'true_false','Hòa bình thế giới cần sự hợp tác giữa các nước.',null,'Đúng','Không nước nào giữ hòa bình một mình.','easy','lien_hop_quoc'),
-  Q(389,'single_choice','WHO là tổ chức gì?',['Thương mại','Y tế Thế giới','Giáo dục','Du lịch'],'Y tế Thế giới','World Health Organization.','medium','lien_hop_quoc'),
+  Q(389,'single_choice','Tổ chức Y tế Thế giới là tổ chức gì?',['Thương mại','Y tế Thế giới','Giáo dục','Du lịch'],'Y tế Thế giới','World Health Organization.','medium','lien_hop_quoc'),
   Q(389,'single_choice','Ngày 24/10 hàng năm là?',['Ngày Tết','Ngày Liên Hợp Quốc','Ngày lễ Việt Nam','Ngày học sinh'],'Ngày Liên Hợp Quốc','Kỷ niệm ngày thành lập LHQ.','medium','lien_hop_quoc'),
   Q(389,'true_false','Mọi trẻ em trên thế giới đều có quyền được học.',null,'Đúng','Giáo dục là quyền cơ bản.','easy','lien_hop_quoc'),
   Q(389,'single_choice','Em có thể góp phần vào hòa bình bằng cách?',['Gây gổ','Sống hòa thuận, tôn trọng mọi người','Bắt nạt bạn','Không quan tâm'],'Sống hòa thuận, tôn trọng mọi người','Hòa bình bắt đầu từ hành động nhỏ.','easy','lien_hop_quoc'),
@@ -182,7 +182,7 @@ export const ethicsQuestions5: Question[] = [
   Q(390,'single_choice','Em lớp 5 bảo vệ tài nguyên bằng cách?',['Chặt cây','Tiết kiệm giấy, điện, nước; tái chế rác','Xả rác','Không cần'],'Tiết kiệm giấy, điện, nước; tái chế rác','Hành động nhỏ nhưng ý nghĩa lớn.','easy','tai_nguyen'),
   Q(390,'true_false','Trái Đất chỉ có một, cần bảo vệ.',null,'Đúng','Chúng ta không có hành tinh dự phòng.','easy','tai_nguyen'),
   Q(390,'single_choice','Săn bắt động vật hoang dã vi phạm gì?',['Không vi phạm','Luật bảo vệ động vật hoang dã','Luật giao thông','Luật giáo dục'],'Luật bảo vệ động vật hoang dã','Pháp luật bảo vệ động vật quý hiếm.','medium','tai_nguyen'),
-  Q(390,'single_choice','Vườn Quốc gia có vai trò?',['Khu vui chơi','Bảo tồn thiên nhiên và đa dạng sinh học','Nơi ở','Chợ'],'Bảo tồn thiên nhiên và đa dạng sinh học','VQG bảo vệ hệ sinh thái.','medium','tai_nguyen'),
+  Q(390,'single_choice','Vườn Quốc gia có vai trò?',['Khu vui chơi','Bảo tồn thiên nhiên và đa dạng sinh học','Nơi ở','Chợ'],'Bảo tồn thiên nhiên và đa dạng sinh học','Vườn quốc gia bảo vệ hệ sinh thái.','medium','tai_nguyen'),
   Q(390,'true_false','Tái chế giấy giúp giảm chặt cây.',null,'Đúng','1 tấn giấy tái chế cứu nhiều cây.','easy','tai_nguyen'),
   Q(390,'single_choice','"Phát triển bền vững" nghĩa là?',['Phát triển bất chấp','Phát triển hiện tại không ảnh hưởng tương lai','Chỉ bảo tồn','Không phát triển'],'Phát triển hiện tại không ảnh hưởng tương lai','Cân bằng giữa phát triển và bảo tồn.','hard','tai_nguyen'),
 

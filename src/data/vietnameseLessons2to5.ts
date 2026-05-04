@@ -70,9 +70,9 @@ export const vietnameseLessons3: Lesson[] = [
   L3('C2','TV3-08','Chữa lỗi viết','Nhận biết và sửa lỗi chính tả, ngữ pháp','Tìm lỗi sai về dấu câu, chính tả, câu thiếu','Đọc lại bài viết 2 lần trước khi nộp','medium',10),
   // C3: Luyện từ-câu (4 bài)
   L3('C3','TV3-09','Danh từ, Động từ, Tính từ','Phân loại danh từ, động từ, tính từ','Danh từ: người/vật | ĐT: hành động | Tính từ: tính chất','Dùng bảng phân loại từ cho bé tập','easy',10),
-  L3('C3','TV3-10','So sánh','Sử dụng biện pháp so sánh','So sánh: như, tựa như, giống như','VD: Mắt em đen như hạt nhãn','medium',10),
-  L3('C3','TV3-11','Nhân hóa','Sử dụng biện pháp nhân hóa','Gán hành động/tính cách người cho vật','VD: Ông mặt trời tỏa nắng ấm','medium',10),
-  L3('C3','TV3-12','Câu đơn mở rộng','Mở rộng câu đơn bằng trạng ngữ','Thêm thời gian, địa điểm, nguyên nhân vào câu','VD: Sáng nay, em đi học rất sớm.','medium',12),
+  L3('C3','TV3-10','So sánh','Sử dụng biện pháp so sánh','So sánh: như, tựa như, giống như','Ví dụ: Mắt em đen như hạt nhãn','medium',10),
+  L3('C3','TV3-11','Nhân hóa','Sử dụng biện pháp nhân hóa','Gán hành động/tính cách người cho vật','Ví dụ: Ông mặt trời tỏa nắng ấm','medium',10),
+  L3('C3','TV3-12','Câu đơn mở rộng','Mở rộng câu đơn bằng trạng ngữ','Thêm thời gian, địa điểm, nguyên nhân vào câu','Ví dụ: Sáng nay, em đi học rất sớm.','medium',12),
   // C4: Tập làm văn (4 bài)
   L3('C4','TV3-13','Kể về gia đình','Viết bài văn kể về gia đình','Giới thiệu thành viên, nét đặc biệt, tình cảm','Cho bé kể miệng trước, viết sau','easy',15),
   L3('C4','TV3-14','Tả con vật','Viết bài văn tả con vật yêu thích','Tả hình dáng, màu lông, hoạt động, tính cách','Quan sát con vật thật hoặc qua video','medium',15),
@@ -108,10 +108,10 @@ export const vietnameseLessons4: Lesson[] = [
   L4('C2','TV4-07','Viết thư','Viết thư gửi bạn bè, thầy cô','Mẫu thư chính thức: xưng hô, nội dung, lời chào','Cho bé viết thư thật gửi cho ai đó','medium',12),
   L4('C2','TV4-08','Viết báo cáo','Viết báo cáo ngắn về hoạt động','Tên hoạt động, thời gian, kết quả, nhận xét','Mẫu báo cáo: Mục đích, Nội dung, Kết quả','hard',15),
   // C3: Ngữ pháp (4 bài)
-  L4('C3','TV4-09','Chủ ngữ - Vị ngữ','Xác định chủ ngữ, vị ngữ trong câu','CN trả lời Ai/Cái gì, VN trả lời Làm gì/Thế nào','Gạch 1 gạch dưới CN, 2 gạch dưới VN','easy',10),
-  L4('C3','TV4-10','Câu ghép','Nhận biết và tạo câu ghép','Nối 2 vế câu bằng: và, nhưng, vì, nên','VD: Trời mưa nên em mang ô.','medium',12),
-  L4('C3','TV4-11','Trạng ngữ','Thêm trạng ngữ chỉ thời gian, nơi chốn','TN đứng đầu câu, ngăn cách bằng dấu phẩy','VD: Sáng nay, em đến trường sớm.','medium',12),
-  L4('C3','TV4-12','Dấu câu nâng cao','Sử dụng dấu hai chấm, dấu ngoặc kép','Dấu : trước lời nói. Dấu "" đánh dấu lời nói','VD: Mẹ nói: "Con giỏi lắm!"','medium',10),
+  L4('C3','TV4-09','Chủ ngữ - Vị ngữ','Xác định chủ ngữ, vị ngữ trong câu','CN trả lời Ai/Cái gì, Việt Nam trả lời Làm gì/Thế nào','Gạch 1 gạch dưới CN, 2 gạch dưới Việt Nam','easy',10),
+  L4('C3','TV4-10','Câu ghép','Nhận biết và tạo câu ghép','Nối 2 vế câu bằng: và, nhưng, vì, nên','Ví dụ: Trời mưa nên em mang ô.','medium',12),
+  L4('C3','TV4-11','Trạng ngữ','Thêm trạng ngữ chỉ thời gian, nơi chốn','TN đứng đầu câu, ngăn cách bằng dấu phẩy','Ví dụ: Sáng nay, em đến trường sớm.','medium',12),
+  L4('C3','TV4-12','Dấu câu nâng cao','Sử dụng dấu hai chấm, dấu ngoặc kép','Dấu : trước lời nói. Dấu "" đánh dấu lời nói','Ví dụ: Mẹ nói: "Con giỏi lắm!"','medium',10),
   // C4: Tập làm văn (4 bài)
   L4('C4','TV4-13','Miêu tả cây cối','Viết bài tả cây cối quen thuộc','Tả thân, lá, hoa, quả, ích lợi','Quan sát cây thật, vẽ trước khi viết','medium',15),
   L4('C4','TV4-14','Miêu tả con vật','Viết bài tả con vật chi tiết','Hình dáng, bộ lông, thói quen, tình cảm','Cho bé quan sát con vật qua video/thực tế','medium',15),
@@ -147,10 +147,10 @@ export const vietnameseLessons5: Lesson[] = [
   L5('C2','TV5-07','Văn thuyết minh','Viết bài thuyết minh về sự vật/hiện tượng','Giới thiệu, đặc điểm, ích lợi','Tra cứu thông tin trước khi viết','hard',18),
   L5('C2','TV5-08','Văn biểu cảm','Viết bài văn biểu cảm về người/vật','Thể hiện tình cảm, cảm xúc chân thực','Viết từ trái tim, dùng hình ảnh so sánh','hard',15),
   // C3: Ngữ pháp (4 bài)
-  L5('C3','TV5-09','Câu phức','Nhận biết, tạo câu phức có nhiều vế','Câu có từ liên kết: khi, nếu, tuy, mặc dù','VD: Mặc dù trời mưa nhưng em vẫn đi học','medium',12),
+  L5('C3','TV5-09','Câu phức','Nhận biết, tạo câu phức có nhiều vế','Câu có từ liên kết: khi, nếu, tuy, mặc dù','Ví dụ: Mặc dù trời mưa nhưng em vẫn đi học','medium',12),
   L5('C3','TV5-10','Liên kết câu và đoạn','Sử dụng phép liên kết trong đoạn văn','Lặp từ, thay thế, nối, liên tưởng','Đọc lại đoạn, kiểm tra sự liên kết','medium',12),
   L5('C3','TV5-11','Đại từ và Quan hệ từ','Sử dụng đại từ, quan hệ từ đúng','Đại từ: tôi, nó | QHT: và, nhưng, vì, nên','Thay thế danh từ bằng đại từ để tránh lặp','medium',12),
-  L5('C3','TV5-12','Ôn tập ngữ pháp','Ôn tập toàn bộ kiến thức ngữ pháp','Danh từ, ĐT, Tính từ, CN-VN, TN, câu ghép, câu phức','Làm bài tập tổng hợp phân loại câu','medium',15),
+  L5('C3','TV5-12','Ôn tập ngữ pháp','Ôn tập toàn bộ kiến thức ngữ pháp','Danh từ, ĐT, Tính từ, CN-Việt Nam, TN, câu ghép, câu phức','Làm bài tập tổng hợp phân loại câu','medium',15),
   // C4: Tập làm văn (4 bài)
   L5('C4','TV5-13','Tả cảnh','Viết bài văn tả cảnh thiên nhiên','Tả theo trình tự thời gian hoặc không gian','Dùng 5 giác quan, ví von sinh động','medium',18),
   L5('C4','TV5-14','Tả người','Viết bài văn tả người thật chi tiết','Ngoại hình, tính cách, lời nói, hành động','Chọn nét đặc trưng nhất của người tả','medium',18),

@@ -45,7 +45,7 @@ export const artQuestions4: Question[] = [
     const titles = [
       'Sắc độ đậm nhạt','Phối hợp màu','Ánh sáng bóng đổ','Tĩnh vật','Chân dung','Phong cảnh chiều sâu','Lễ hội',
       'Phù điêu','Dây thép','Thời trang tái chế','Sắp đặt','Logo','Bao bì','Tờ rơi','Trang web',
-      'Hội họa VN','Gốm Bát Tràng','Sơn mài','Triển lãm lớp',
+      'Hội họa Việt Nam','Gốm Bát Tràng','Sơn mài','Triển lãm lớp',
     ];
     const t = titles[bai] || `Bài ${lid}`;
     return [
@@ -65,7 +65,7 @@ export const artQuestions4: Question[] = [
       Q(lid,'true_false',`Bé lớp 4 có thể tự sáng tạo tác phẩm.`,null,'true',skill),
       Q(lid,'single_choice',`"${t}" liên quan nghề nghiệp gì?`,['Bác sĩ','Họa sĩ, nhà thiết kế','Kỹ sư xây dựng','Lái xe'],'Họa sĩ, nhà thiết kế',skill,'medium'),
       Q(lid,'single_choice',`Bé cần gì để giỏi "${t}"?`,['Chỉ tài năng','Luyện tập + sáng tạo','Chỉ may mắn','Chỉ dụng cụ đắt'],'Luyện tập + sáng tạo',skill),
-      Q(lid,'true_false',`Mỹ thuật VN rất phong phú và đáng tự hào.`,null,'true',skill),
+      Q(lid,'true_false',`Mỹ thuật Việt Nam rất phong phú và đáng tự hào.`,null,'true',skill),
       Q(lid,'fill_text',`Nghệ thuật Việt Nam có truyền thống ___  lâu đời.`,null,'lâu',skill),
       Q(lid,'single_choice',`"${t}" giúp chuẩn bị cho?`,['Quá khứ','Lớp 5 và tương lai','Không gì','Chỉ thi cử'],'Lớp 5 và tương lai',skill),
       Q(lid,'true_false',`Nghệ thuật không phân biệt giàu nghèo.`,null,'true',skill),

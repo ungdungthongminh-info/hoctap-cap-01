@@ -49,15 +49,15 @@ export const natureCards2to3: LessonCard[] = [
   C(226,'tip','Giữ KK sạch','Trồng cây, không đốt rác, dùng xe buýt ít khói.',null,4),
 
   // === G2 L227: Thời tiết ===
-  C(227,'intro','Thời tiết là gì?','Trạng thái KQ ở 1 nơi, 1 lúc: nắng/mưa/gió...',null,1),
+  C(227,'intro','Thời tiết là gì?','Trạng thái Kết quả ở 1 nơi, 1 lúc: nắng/mưa/gió...',null,1),
   C(227,'explain','Các hiện tượng','Nắng, mưa, gió, sấm sét, mây, sương mù.',null,2),
-  C(227,'example','Dự báo thời tiết','Xem TV/điện thoại: hôm nay nắng 35°C, chiều mưa.','["Mây đen = sắp mưa", "Trời nắng = trời quang"]',3),
+  C(227,'example','Dự báo thời tiết','Xem Thực vật/điện thoại: hôm nay nắng 35°C, chiều mưa.','["Mây đen = sắp mưa", "Trời nắng = trời quang"]',3),
   C(227,'tip','Ăn mặc theo thời tiết','Nóng: mỏng. Lạnh: áo ấm. Mưa: mang ô.',null,4),
 
   // === G2 L228: Các mùa ===
   C(228,'intro','4 mùa Việt Nam','Xuân: ấm. Hạ: nóng. Thu: mát. Đông: lạnh.',null,1),
   C(228,'explain','Vì sao có mùa?','Trái Đất nghiêng trục + quay quanh Mặt Trời → mùa thay đổi.',null,2),
-  C(228,'example','Đặc điểm từng mùa','Xuân: hoa nở. Hạ: ve kêu. Thu: lá vàng. Đông: rét.','["Miền Nam VN: 2 mùa mưa/khô"]',3),
+  C(228,'example','Đặc điểm từng mùa','Xuân: hoa nở. Hạ: ve kêu. Thu: lá vàng. Đông: rét.','["Miền Nam Việt Nam: 2 mùa mưa/khô"]',3),
   C(228,'tip','Yêu thiên nhiên','Mỗi mùa đều đẹp, hãy quan sát và trân trọng!',null,4),
 
   // === G2 L229: Thực vật quanh em ===
@@ -102,7 +102,7 @@ export const natureCards2to3: LessonCard[] = [
   C(235,'example','Nơi công cộng','Đường phố, chợ, bưu điện, trạm y tế.','["Đi chợ: mua rau, thịt, cá"]',3),
   C(235,'tip','Lễ phép','Chào hàng xóm, giúp người già, không ồn ào.',null,4),
 
-  // === G2 L236: ATGT ===
+  // === G2 L236: an toàn giao thông ===
   C(236,'intro','Luật giao thông','Đèn đỏ dừng, đèn xanh đi, đèn vàng chậm.',null,1),
   C(236,'explain','An toàn đi đường','Đi bên phải, sang đường ở vạch, đội mũ BH.',null,2),
   C(236,'example','Biển báo','Biển cấm, biển nguy hiểm, biển chỉ dẫn.','["Biển tròn đỏ = cấm", "Biển tam giác = cảnh báo"]',3),
@@ -111,7 +111,7 @@ export const natureCards2to3: LessonCard[] = [
   // === G2 L237: An toàn ở nhà ===
   C(237,'intro','Nguy hiểm ở nhà','Điện giật, bỏng, đứt tay, ngã cầu thang.',null,1),
   C(237,'explain','Phòng tránh','Không chọc ổ điện, không chơi gần bếp, cẩn thận dao kéo.',null,2),
-  C(237,'example','Xử lý sự cố','Bỏng: dội nước lạnh. Chảy máu: ấn gạc. Gọi 115.','["Nhớ SĐT: 113 CA, 114 PCCC, 115 cấp cứu"]',3),
+  C(237,'example','Xử lý sự cố','Bỏng: dội nước lạnh. Chảy máu: ấn gạc. Gọi 115.','["Nhớ Số điện thoại: 113 CA, 114 phòng cháy chữa cháy, 115 cấp cứu"]',3),
   C(237,'tip','Nói với người lớn','Gặp nguy hiểm → gọi bố mẹ, thầy cô ngay.',null,4),
 
   // === G2 L238: Vệ sinh cơ thể ===
@@ -129,7 +129,7 @@ export const natureCards2to3: LessonCard[] = [
   // === G2 L240: Ôn tập ===
   C(240,'intro','Ôn cuối năm lớp 2','Tổng hợp: cơ thể, Tự nhiên, XH, an toàn.',null,1),
   C(240,'explain','Kiến thức trọng tâm','Cơ quan cơ thể, nước-KK, Thực vật-ĐV, cộng đồng.',null,2),
-  C(240,'example','Bài tập ôn','Kể tên CQ cơ thể, phân loại Thực vật, biển ATGT.','["Sơ đồ tư duy: vẽ tóm tắt 1 trang"]',3),
+  C(240,'example','Bài tập ôn','Kể tên CQ cơ thể, phân loại Thực vật, biển an toàn giao thông.','["Sơ đồ tư duy: vẽ tóm tắt 1 trang"]',3),
   C(240,'tip','Học vui','Chơi đố vui, vẽ poster, làm mô hình Tự nhiên.',null,4),
 
   // === G3 L241: Các giác quan ===
@@ -195,7 +195,7 @@ export const natureCards2to3: LessonCard[] = [
   // === G3 L251: Đời sống ĐV ===
   C(251,'intro','ĐV ăn gì?','Ăn cỏ: bò, thỏ. Ăn thịt: hổ, cá mập. Ăn tạp: gấu, lợn.',null,1),
   C(251,'explain','Nơi sống','Cạn: chó, mèo. Nước: cá, tôm. Bay: chim, dơi.',null,2),
-  C(251,'example','ĐV Việt Nam','Sao la (quý hiếm), trâu, voi, cá ngừ.','["Voọc mũi hếch: chỉ có ở VN!"]',3),
+  C(251,'example','ĐV Việt Nam','Sao la (quý hiếm), trâu, voi, cá ngừ.','["Voọc mũi hếch: chỉ có ở Việt Nam!"]',3),
   C(251,'tip','Bảo vệ ĐV','Không săn bắt, không nuôi ĐV hoang dã.',null,4),
 
   // === G3 L252: Sinh sản ĐV ===
@@ -213,13 +213,13 @@ export const natureCards2to3: LessonCard[] = [
   // === G3 L254: Trái Đất ===
   C(254,'intro','TĐ hình cầu','Trái Đất tròn, 70% nước, 30% đất liền.',null,1),
   C(254,'explain','Quả địa cầu','Mô hình thu nhỏ TĐ: lục địa (xanh lá), đại dương (xanh dương).',null,2),
-  C(254,'example','7 châu lục','Á, Âu, Phi, Bắc Mỹ, Nam Mỹ, Úc, Nam Cực.','["VN ở châu Á, Đông Nam Á"]',3),
-  C(254,'tip','Khám phá','Xoay địa cầu → tìm VN, tìm châu lục.',null,4),
+  C(254,'example','7 châu lục','Á, Âu, Phi, Bắc Mỹ, Nam Mỹ, Úc, Nam Cực.','["Việt Nam ở châu Á, Đông Nam Á"]',3),
+  C(254,'tip','Khám phá','Xoay địa cầu → tìm Việt Nam, tìm châu lục.',null,4),
 
   // === G3 L255: Bề mặt TĐ ===
   C(255,'intro','Địa hình đa dạng','Núi cao, đồng bằng phẳng, sông, biển.',null,1),
   C(255,'explain','Các dạng địa hình','Núi: nhọn/tròn. ĐB: phẳng. Cao nguyên: bằng + cao. Thung lũng: trũng.',null,2),
-  C(255,'example','VN có gì?','Hoàng Liên Sơn (núi), ĐB Sông Cửu Long, Biển Đông.','["Phan-xi-păng: 3143m = nóc nhà Đông Dương"]',3),
+  C(255,'example','Việt Nam có gì?','Hoàng Liên Sơn (núi), ĐB Sông Cửu Long, Biển Đông.','["Phan-xi-păng: 3143m = nóc nhà Đông Dương"]',3),
   C(255,'tip','Mô hình','Nhào đất nặn → tạo núi, sông, ĐB mini.',null,4),
 
   // === G3 L256: Mặt Trời ===
@@ -243,7 +243,7 @@ export const natureCards2to3: LessonCard[] = [
   // === G3 L259: Thiên tai ===
   C(259,'intro','Thiên tai là gì?','Hiện tượng Tự nhiên gây hại: bão, lũ, động đất, hạn hán.',null,1),
   C(259,'explain','Phòng tránh','Bão: đóng cửa, tránh cây to. ĐĐ: nấp gầm bàn chắc. Lũ: lên cao.',null,2),
-  C(259,'example','VN hay gặp','Bão (miền Trung), lũ (ĐB SCL), sạt lở (núi).','["Gọi 113/114/115 khi khẩn cấp"]',3),
+  C(259,'example','Việt Nam hay gặp','Bão (miền Trung), lũ (ĐB SCL), sạt lở (núi).','["Gọi 113/114/115 khi khẩn cấp"]',3),
   C(259,'tip','Diễn tập','Tập ở trường: nghe còi → nấp bàn → ra sân.',null,4),
 
   // === G3 L260: Ôn tập ===

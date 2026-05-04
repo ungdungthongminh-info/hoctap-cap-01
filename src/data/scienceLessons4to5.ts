@@ -64,8 +64,8 @@ export const scienceLessons5: Lesson[] = [
   // C4: Trái Đất và Bầu trời
   L(5, 'C4', 'KH5-13', 'Hệ Mặt Trời', 'Tìm hiểu về Hệ Mặt Trời', '8 hành tinh: Thủy, Kim, Trái Đất, Hỏa, Mộc, Thổ, Thiên Vương, Hải Vương', 'Làm mô hình Hệ Mặt Trời bằng bóng xốp', 'medium', 12),
   L(5, 'C4', 'KH5-14', 'Trái Đất quay', 'Hiểu sự tự quay và quay quanh Mặt Trời', 'Tự quay → ngày đêm. Quay quanh Mặt Trời → 4 mùa', 'Dùng đèn pin + quả bóng minh họa ngày/đêm', 'medium', 12),
-  L(5, 'C4', 'KH5-15', 'Mùa và Khí hậu', 'Hiểu nguyên nhân 4 mùa', 'Trục Trái Đất nghiêng → các vùng nhận ánh sáng khác nhau', 'VN có 2 mùa chính: mùa mưa và mùa khô', 'medium', 12),
-  L(5, 'C4', 'KH5-16', 'Địa hình Việt Nam', 'Nhận biết các dạng địa hình cơ bản', 'Đồng bằng, Cao nguyên, Núi, Ven biển', 'Xem bản đồ địa hình VN cùng bé', 'easy', 10),
+  L(5, 'C4', 'KH5-15', 'Mùa và Khí hậu', 'Hiểu nguyên nhân 4 mùa', 'Trục Trái Đất nghiêng → các vùng nhận ánh sáng khác nhau', 'Việt Nam có 2 mùa chính: mùa mưa và mùa khô', 'medium', 12),
+  L(5, 'C4', 'KH5-16', 'Địa hình Việt Nam', 'Nhận biết các dạng địa hình cơ bản', 'Đồng bằng, Cao nguyên, Núi, Ven biển', 'Xem bản đồ địa hình Việt Nam cùng bé', 'easy', 10),
   // C5: Con người và Môi trường
   L(5, 'C5', 'KH5-17', 'Ô nhiễm môi trường', 'Nhận biết các dạng ô nhiễm', 'Ô nhiễm không khí, nước, đất. Nguyên nhân: rác, khói xe, nhà máy', 'Thu gom rác thải nhựa cùng bé', 'easy', 10),
   L(5, 'C5', 'KH5-18', 'Biến đổi khí hậu', 'Hiểu biến đổi khí hậu cơ bản', 'Trái Đất nóng lên do khí nhà kính, gây lũ lụt, hạn hán', 'Giải thích tại sao cần trồng cây', 'medium', 12),

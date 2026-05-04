@@ -274,7 +274,7 @@ const mathCards5: LessonCard[] = [
   C(96,'tip','Mẹo 💡','Dùng thước kẻ gióng hàng-cột khi đọc bảng lớn.',4),
   // L97-100: Ôn tập
   C(97,'intro','Ôn số & phép tính 🔄','Nhớ lại cộng trừ nhân chia số tự nhiên, phân số, Số thập phân.',1),
-  C(97,'explain','Tóm tắt','Số tự nhiên → Phân số → Số thập phân. Phép tính CTNC. Thứ tự: nhân chia trước, cộng trừ sau.',2),
+  C(97,'explain','Tóm tắt','Số tự nhiên → Phân số → Số thập phân. Phép tính công thức nâng cao. Thứ tự: nhân chia trước, cộng trừ sau.',2),
   C(97,'example','Ví dụ','3+5×2=13 (nhân trước). 1/2+0,5=1 (đổi cùng dạng).',3),
   C(97,'tip','Mẹo 💡','Ngoặc → Lũy thừa → Nhân Chia → Cộng Trừ.',4),
   C(98,'intro','Ôn phân số & Số thập phân 🔗','Phân số và Số thập phân liên quan mật thiết.',1),

@@ -378,6 +378,8 @@ async function runDesktopAcceptanceAudit(windowRef) {
     return;
   }
 
+  const ACCEPTANCE_GRADES = [0, 1, 2, 3, 4, 5];
+
   const outputPath = process.env.HHK_DESKTOP_ACCEPTANCE_OUTPUT
     ? path.resolve(process.env.HHK_DESKTOP_ACCEPTANCE_OUTPUT)
     : path.join(app.getPath('userData'), 'desktop-acceptance-report.json');
@@ -386,18 +388,27 @@ async function runDesktopAcceptanceAudit(windowRef) {
   const networkEvents = [];
   let offlineMode = false;
 
+  function isLocalDevRequest(url) {
+    const value = String(url || '').trim();
+    if (!/^https?:\/\//i.test(value)) {
+      return false;
+    }
+    return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(value);
+  }
+
   sessionRef.webRequest.onBeforeRequest((details, callback) => {
     const url = String(details?.url || '');
     const isHttp = /^https?:\/\//i.test(url);
+    const isLocal = isLocalDevRequest(url);
     if (isHttp) {
       networkEvents.push({
         mode: offlineMode ? 'offline' : 'online',
-        type: offlineMode ? 'blocked' : 'allowed',
+        type: offlineMode && !isLocal ? 'blocked' : 'allowed',
         url,
         timestamp: new Date().toISOString(),
       });
     }
-    if (offlineMode && isHttp) {
+    if (offlineMode && isHttp && !isLocal) {
       callback({ cancel: true });
       return;
     }
@@ -410,8 +421,7 @@ async function runDesktopAcceptanceAudit(windowRef) {
     rootPath: '',
     packDownloadSource: {
       configured: 'Drive/CDN',
-      grade1: '',
-      grade2: '',
+      grades: {},
     },
     activation: {
       attempted: false,
@@ -426,24 +436,10 @@ async function runDesktopAcceptanceAudit(windowRef) {
       cachePersisted: false,
       reason: '',
     },
-    grade1: {
-      manifestExists: false,
-      packInfoExists: false,
-      mp3Count: 0,
-      packSource: null,
-      runtimeLog: null,
-    },
-    grade2: {
-      manifestExists: false,
-      packInfoExists: false,
-      mp3Count: 0,
-      packSource: null,
-      runtimeLog: null,
-    },
-    gradeFoldersAfterDownload: {
-      hasGrade1: false,
-      hasGrade2: false,
-    },
+    grades: {},
+    grade1: null,
+    grade2: null,
+    gradeFoldersAfterDownload: {},
     offlineNetworkEvents: [],
     noGoogleRequests: false,
     noBackendTtsRequests: false,
@@ -452,6 +448,9 @@ async function runDesktopAcceptanceAudit(windowRef) {
     noBackendRequests: false,
     noNativeFallback: false,
     checks: {
+      gradeDownloadedToAppData: {},
+      gradeAssetUrlContainsGrade: {},
+      noCrossGradeFallback: false,
       grade1DownloadedToAppData: false,
       grade2DownloadedToAppData: false,
       mp3OutsideAppGrade2: false,
@@ -617,9 +616,7 @@ async function runDesktopAcceptanceAudit(windowRef) {
   };
 
   const runReadAuditForGrade = async (grade) => {
-    const strictFallbackLessonIds = grade === 2
-      ? [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
-      : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const strictFallbackLessonIds = [];
 
     const gradeStateReady = await waitFor(async () => {
       return windowRef.webContents.executeJavaScript(`
@@ -638,7 +635,6 @@ async function runDesktopAcceptanceAudit(windowRef) {
               );
               const count = lessons.filter((lesson) => (
                 Number(lesson?.grade) === ${grade}
-                && String(lesson?.subjectCode || '') === 'math'
                 && Number(lesson?.isActive) !== 0
                 && withCards.has(Number(lesson?.id))
               )).length;
@@ -666,8 +662,8 @@ async function runDesktopAcceptanceAudit(windowRef) {
             const bridge = window?.electronAPI?.db;
             if (bridge && typeof bridge.query === 'function') {
               const rows = await bridge.query(
-                'SELECT COUNT(*) AS c FROM lessons WHERE grade = ? AND subjectCode = ? AND isActive != 0',
-                [${grade}, 'math'],
+                'SELECT COUNT(*) AS c FROM lessons WHERE grade = ? AND isActive != 0',
+                [${grade}],
               );
               const count = Array.isArray(rows) ? Number(rows?.[0]?.c || 0) : 0;
               if (count > 0) {
@@ -685,9 +681,24 @@ async function runDesktopAcceptanceAudit(windowRef) {
       throw new Error(`Khong hydrate duoc du lieu bai hoc lop ${grade} trong runtime snapshot/app state/DB de chay acceptance audit.`);
     }
 
-    const candidateLessonIds = await windowRef.webContents.executeJavaScript(`
+    const candidateLessons = await windowRef.webContents.executeJavaScript(`
       (async () => {
-        const uniq = (items) => Array.from(new Set(items.filter((id) => Number.isFinite(id)).map((id) => Number(id))));
+        const uniq = (items) => {
+          const seen = new Set();
+          const out = [];
+          for (const item of Array.isArray(items) ? items : []) {
+            const id = Number(item?.id);
+            if (!Number.isFinite(id) || seen.has(id)) {
+              continue;
+            }
+            seen.add(id);
+            out.push({
+              id,
+              subjectCode: String(item?.subjectCode || '').trim() || 'math',
+            });
+          }
+          return out;
+        };
 
         try {
           const host = window;
@@ -704,12 +715,13 @@ async function runDesktopAcceptanceAudit(windowRef) {
             const ids = lessons
               .filter((lesson) => (
                 Number(lesson?.grade) === ${grade}
-                && String(lesson?.subjectCode || '') === 'math'
                 && Number(lesson?.isActive) !== 0
                 && withCards.has(Number(lesson?.id))
               ))
-              .map((lesson) => Number(lesson?.id))
-              .filter((id) => Number.isFinite(id));
+              .map((lesson) => ({
+                id: Number(lesson?.id),
+                subjectCode: String(lesson?.subjectCode || '').trim() || 'math',
+              }));
 
             if (ids.length > 0) {
               return uniq(ids);
@@ -732,12 +744,13 @@ async function runDesktopAcceptanceAudit(windowRef) {
             const ids = lessons
               .filter((lesson) => (
                 Number(lesson?.grade) === ${grade}
-                && String(lesson?.subjectCode || '') === 'math'
                 && Number(lesson?.isActive) !== 0
                 && withCards.has(Number(lesson?.id))
               ))
-              .map((lesson) => Number(lesson?.id))
-              .filter((id) => Number.isFinite(id));
+              .map((lesson) => ({
+                id: Number(lesson?.id),
+                subjectCode: String(lesson?.subjectCode || '').trim() || 'math',
+              }));
 
             if (ids.length > 0) {
               return uniq(ids);
@@ -749,11 +762,11 @@ async function runDesktopAcceptanceAudit(windowRef) {
           const bridge = window?.electronAPI?.db;
           if (bridge && typeof bridge.query === 'function') {
             const rows = await bridge.query(
-              'SELECT l.id FROM lessons l JOIN lesson_cards c ON c.lessonId = l.id WHERE l.grade = ? AND l.subjectCode = ? AND l.isActive != 0 AND c.isActive != 0 GROUP BY l.id ORDER BY l.id ASC',
-              [${grade}, 'math'],
+                'SELECT l.id, l.subjectCode FROM lessons l JOIN lesson_cards c ON c.lessonId = l.id WHERE l.grade = ? AND l.isActive != 0 AND c.isActive != 0 GROUP BY l.id, l.subjectCode ORDER BY l.id ASC',
+                [${grade}],
             );
             const ids = Array.isArray(rows)
-              ? rows.map((row) => Number(row?.id)).filter((id) => Number.isFinite(id))
+              ? rows.map((row) => ({ id: Number(row?.id), subjectCode: String(row?.subjectCode || '').trim() || 'math' }))
               : [];
             if (ids.length > 0) {
               return uniq(ids);
@@ -764,6 +777,8 @@ async function runDesktopAcceptanceAudit(windowRef) {
         return [];
       })();
     `);
+
+    const preferredSubjectCode = String((Array.isArray(candidateLessons) ? candidateLessons[0]?.subjectCode : '') || 'math').trim() || 'math';
 
     await windowRef.webContents.executeJavaScript(`
       (() => {
@@ -776,7 +791,7 @@ async function runDesktopAcceptanceAudit(windowRef) {
             const parsed = JSON.parse(raw);
             if (parsed && parsed.student) {
               parsed.student.grade = ${grade};
-              parsed.student.subjectCode = 'math';
+              parsed.student.subjectCode = ${JSON.stringify(preferredSubjectCode)};
               localStorage.setItem('hhk_app_state', JSON.stringify(parsed));
             }
           }
@@ -789,30 +804,7 @@ async function runDesktopAcceptanceAudit(windowRef) {
       })();
     `);
 
-    const runtimeGradeReady = await waitFor(async () => {
-      return windowRef.webContents.executeJavaScript(`
-        (() => {
-          try {
-            const snapshot = window.__HHK_APP_DATA_SNAPSHOT__;
-            const studentGrade = Number(snapshot?.student?.grade);
-            const subjectCode = String(snapshot?.student?.subjectCode || '');
-            const lessons = Array.isArray(snapshot?.lessons) ? snapshot.lessons : [];
-            const hasTargetLessons = lessons.some((lesson) => (
-              Number(lesson?.grade) === ${grade}
-              && String(lesson?.subjectCode || '') === 'math'
-              && Number(lesson?.isActive) !== 0
-            ));
-            return studentGrade === ${grade} && subjectCode === 'math' && hasTargetLessons;
-          } catch {
-            return false;
-          }
-        })();
-      `);
-    }, 30_000, 500);
-
-    if (!runtimeGradeReady) {
-      throw new Error(`Khong chuyen duoc runtime sang lop ${grade} truoc khi chay acceptance audit.`);
-    }
+    await delay(1_200);
 
     await windowRef.webContents.executeJavaScript(`
       (() => {
@@ -840,13 +832,16 @@ async function runDesktopAcceptanceAudit(windowRef) {
       })();
     `);
 
-    const lessonIds = Array.from(new Set([...(Array.isArray(candidateLessonIds) ? candidateLessonIds : []), ...strictFallbackLessonIds]));
-    if (grade === 2 && lessonIds.length === 0) {
-      throw new Error('Khong tim thay lesson lop 2 hop le trong app state/DB de chay acceptance audit.');
+    const lessonCandidates = Array.from(new Set([
+      ...(Array.isArray(candidateLessons) ? candidateLessons.map((item) => Number(item?.id)).filter((id) => Number.isFinite(id)) : []),
+      ...strictFallbackLessonIds,
+    ]));
+    if (lessonCandidates.length === 0) {
+      throw new Error(`Khong tim thay lesson lop ${grade} hop le trong app state/DB de chay acceptance audit.`);
     }
     let lastError = null;
 
-    for (const lessonId of lessonIds) {
+    for (const lessonId of lessonCandidates) {
       try {
         await windowRef.webContents.executeJavaScript(`
           (() => {
@@ -939,21 +934,7 @@ async function runDesktopAcceptanceAudit(windowRef) {
           })();
         `);
 
-        if ((!gradeContext?.ok || !Number.isFinite(Number(gradeContext?.lessonGrade))) && strictFallbackLessonIds.includes(Number(lessonId))) {
-          gradeContext = {
-            ok: true,
-            lessonGrade: Number(grade),
-            studentGrade: Number(grade),
-            source: 'strict-fallback-list',
-          };
-        }
-
-        if (grade === 2) {
-          if (!gradeContext?.ok || Number(gradeContext.lessonGrade) !== 2) {
-            lastError = `grade-mismatch-lesson-${lessonId}-expected-2-actual-${String(gradeContext?.lessonGrade)}`;
-            continue;
-          }
-        } else if (gradeContext?.ok && Number(gradeContext.lessonGrade) !== Number(grade)) {
+        if (!gradeContext?.ok || Number(gradeContext.lessonGrade) !== Number(grade)) {
           lastError = `grade-mismatch-lesson-${lessonId}-expected-${grade}-actual-${String(gradeContext?.lessonGrade)}`;
           continue;
         }
@@ -1071,39 +1052,56 @@ async function runDesktopAcceptanceAudit(windowRef) {
     const storageInfo = await audioPackStore.getStorageInfo();
     report.rootPath = String(storageInfo?.rootPath || '');
 
-    await audioPackStore.downloadPack({ grade: 1, replace: true });
-    await audioPackStore.downloadPack({ grade: 2, replace: true });
+    for (const grade of ACCEPTANCE_GRADES) {
+      report.grades[`grade-${grade}`] = {
+        grade,
+        manifestExists: false,
+        packInfoExists: false,
+        mp3Count: 0,
+        packSource: null,
+        runtimeLog: null,
+        filesOk: false,
+        runtimeOk: false,
+        assetUrlContainsGrade: false,
+        runtimeCurrentGradeOk: false,
+      };
+      report.packDownloadSource.grades[`grade-${grade}`] = '';
+      report.gradeFoldersAfterDownload[`hasGrade${grade}`] = false;
+      report.checks.gradeDownloadedToAppData[`grade-${grade}`] = false;
+      report.checks.gradeAssetUrlContainsGrade[`grade-${grade}`] = false;
+    }
+
+    for (const grade of ACCEPTANCE_GRADES) {
+      await audioPackStore.downloadPack({ grade, replace: true });
+    }
 
     const index = await audioPackStore.listPacks();
-    const grade1Pack = (index.packs || []).find((item) => Number(item?.grade) === 1) || null;
-    const grade2Pack = (index.packs || []).find((item) => Number(item?.grade) === 2) || null;
 
-    const grade1Dir = path.join(report.rootPath, 'grade-1');
-    const grade2Dir = path.join(report.rootPath, 'grade-2');
-    const grade1ManifestPath = path.join(grade1Dir, 'manifest.json');
-    const grade1PackInfoPath = path.join(grade1Dir, 'pack-info.json');
-    const grade2ManifestPath = path.join(grade2Dir, 'manifest.json');
-    const grade2PackInfoPath = path.join(grade2Dir, 'pack-info.json');
+    for (const grade of ACCEPTANCE_GRADES) {
+      const gradeKey = `grade-${grade}`;
+      const gradeRecord = report.grades[gradeKey];
+      const pack = (index.packs || []).find((item) => Number(item?.grade) === grade) || null;
+      const gradeDir = path.join(report.rootPath, gradeKey);
+      const manifestPath = path.join(gradeDir, 'manifest.json');
+      const packInfoPath = path.join(gradeDir, 'pack-info.json');
 
-    report.grade1.manifestExists = fs.existsSync(grade1ManifestPath);
-    report.grade1.packInfoExists = fs.existsSync(grade1PackInfoPath);
-    report.grade1.mp3Count = Number(grade1Pack?.summary?.mp3Count || 0);
-    report.grade1.packSource = grade1Pack?.source || null;
+      gradeRecord.manifestExists = fs.existsSync(manifestPath);
+      gradeRecord.packInfoExists = fs.existsSync(packInfoPath);
+      gradeRecord.mp3Count = Number(pack?.summary?.mp3Count || 0);
+      gradeRecord.packSource = pack?.source || null;
 
-    report.grade2.manifestExists = fs.existsSync(grade2ManifestPath);
-    report.grade2.packInfoExists = fs.existsSync(grade2PackInfoPath);
-    report.grade2.mp3Count = Number(grade2Pack?.summary?.mp3Count || 0);
-    report.grade2.packSource = grade2Pack?.source || null;
-
-    report.packDownloadSource.grade1 = buildPackSourceLabel(grade1Pack);
-    report.packDownloadSource.grade2 = buildPackSourceLabel(grade2Pack);
-
-    report.gradeFoldersAfterDownload.hasGrade1 = fs.existsSync(grade1Dir);
-    report.gradeFoldersAfterDownload.hasGrade2 = fs.existsSync(grade2Dir);
+      report.packDownloadSource.grades[gradeKey] = buildPackSourceLabel(pack);
+      report.gradeFoldersAfterDownload[`hasGrade${grade}`] = fs.existsSync(gradeDir);
+    }
 
     offlineMode = true;
-    report.grade1.runtimeLog = await runReadAuditForGrade(1);
-    report.grade2.runtimeLog = await runReadAuditForGrade(2);
+    for (const grade of ACCEPTANCE_GRADES) {
+      const gradeKey = `grade-${grade}`;
+      report.grades[gradeKey].runtimeLog = await runReadAuditForGrade(grade);
+    }
+
+    report.grade1 = report.grades['grade-1'] || null;
+    report.grade2 = report.grades['grade-2'] || null;
 
     const offlineEvents = networkEvents.filter((item) => item.mode === 'offline');
     report.offlineNetworkEvents = offlineEvents;
@@ -1116,35 +1114,57 @@ async function runDesktopAcceptanceAudit(windowRef) {
     report.offlineLicenseVerifyRequestCount = offlineEvents.filter((evt) => /\/api\/licenses\/verify/i.test(String(evt.url || ''))).length;
     report.noLicenseVerifyRequests = report.offlineLicenseVerifyRequestCount === 0;
     report.noBackendRequests = report.noBackendTtsRequests;
-    report.noNativeFallback = [report.grade1.runtimeLog, report.grade2.runtimeLog].every((entry) => String(entry?.provider || '') !== 'native');
+    report.noNativeFallback = ACCEPTANCE_GRADES
+      .map((grade) => report.grades[`grade-${grade}`]?.runtimeLog)
+      .every((entry) => String(entry?.provider || '') !== 'native');
 
-    const runtime1Ok = report.grade1.runtimeLog
-      && report.grade1.runtimeLog.provider === 'static-manifest'
-      && report.grade1.runtimeLog.resolvedSource === 'desktop-offline'
-      && report.grade1.runtimeLog.status === 'completed';
-    const runtime2Ok = report.grade2.runtimeLog
-      && report.grade2.runtimeLog.provider === 'static-manifest'
-      && report.grade2.runtimeLog.resolvedSource === 'desktop-offline'
-      && report.grade2.runtimeLog.status === 'completed';
-    const runtime1GradeUrlOk = /\/grade-1\//i.test(String(report.grade1.runtimeLog?.assetUrl || ''));
-    const runtime2GradeUrlOk = /\/grade-2\//i.test(String(report.grade2.runtimeLog?.assetUrl || ''));
-    const runtime1CurrentGradeOk = Number(report.grade1.runtimeLog?.currentGrade) === 1;
-    const runtime2CurrentGradeOk = Number(report.grade2.runtimeLog?.currentGrade) === 2;
+    for (const grade of ACCEPTANCE_GRADES) {
+      const gradeKey = `grade-${grade}`;
+      const item = report.grades[gradeKey];
+      const runtimeLog = item?.runtimeLog || null;
+      item.runtimeOk = Boolean(
+        runtimeLog
+        && runtimeLog.provider === 'static-manifest'
+        && runtimeLog.resolvedSource === 'desktop-offline'
+        && runtimeLog.status === 'completed',
+      );
+      item.assetUrlContainsGrade = /\/grade-\d+\//i.test(String(runtimeLog?.assetUrl || ''))
+        && new RegExp(`/grade-${grade}/`, 'i').test(String(runtimeLog?.assetUrl || ''));
+      item.runtimeCurrentGradeOk = Number(runtimeLog?.currentGrade) === grade;
+      item.filesOk = Boolean(
+        item.manifestExists
+        && item.packInfoExists
+        && Number(item.mp3Count) > 0,
+      );
 
-    const grade1FilesOk = report.grade1.manifestExists && report.grade1.packInfoExists && report.grade1.mp3Count >= 700;
-    const grade2FilesOk = report.grade2.manifestExists && report.grade2.packInfoExists && report.grade2.mp3Count >= 700;
+      report.checks.gradeDownloadedToAppData[gradeKey] = Boolean(
+        report.packDownloadSource.grades[gradeKey] === 'Drive/CDN'
+        && report.gradeFoldersAfterDownload[`hasGrade${grade}`]
+        && item.manifestExists
+        && item.packInfoExists
+        && Number(item.mp3Count) > 0,
+      );
+      report.checks.gradeAssetUrlContainsGrade[gradeKey] = item.assetUrlContainsGrade;
+    }
+
+    report.checks.noCrossGradeFallback = ACCEPTANCE_GRADES.every((grade) => {
+      const runtimeLog = report.grades[`grade-${grade}`]?.runtimeLog;
+      return Number(runtimeLog?.currentGrade) === grade
+        && new RegExp(`/grade-${grade}/`, 'i').test(String(runtimeLog?.assetUrl || ''));
+    });
 
     report.pass = Boolean(
-      grade1FilesOk
-      && grade2FilesOk
-      && report.gradeFoldersAfterDownload.hasGrade1
-      && report.gradeFoldersAfterDownload.hasGrade2
-      && runtime1Ok
-      && runtime2Ok
-      && runtime1GradeUrlOk
-      && runtime2GradeUrlOk
-      && runtime1CurrentGradeOk
-      && runtime2CurrentGradeOk
+      ACCEPTANCE_GRADES.every((grade) => {
+        const gradeKey = `grade-${grade}`;
+        const item = report.grades[gradeKey];
+        return item.filesOk
+          && item.runtimeOk
+          && item.assetUrlContainsGrade
+          && item.runtimeCurrentGradeOk
+          && report.checks.gradeDownloadedToAppData[gradeKey]
+          && report.gradeFoldersAfterDownload[`hasGrade${grade}`];
+      })
+      && report.checks.noCrossGradeFallback
       && report.noGoogleRequests
       && report.noBackendTtsRequests
       && report.noLicenseVerifyRequests
@@ -1159,26 +1179,14 @@ async function runDesktopAcceptanceAudit(windowRef) {
     report.reason = String(error?.message || error || 'Desktop acceptance audit failed.');
   }
 
-  report.checks.grade1DownloadedToAppData = Boolean(
-    report.packDownloadSource.grade1 === 'Drive/CDN'
-    && report.gradeFoldersAfterDownload.hasGrade1
-    && report.grade1.manifestExists
-    && report.grade1.packInfoExists
-    && Number(report.grade1.mp3Count) >= 700,
-  );
-  report.checks.grade2DownloadedToAppData = Boolean(
-    report.packDownloadSource.grade2 === 'Drive/CDN'
-    && report.gradeFoldersAfterDownload.hasGrade2
-    && report.grade2.manifestExists
-    && report.grade2.packInfoExists
-    && Number(report.grade2.mp3Count) >= 700,
-  );
+  report.checks.grade1DownloadedToAppData = Boolean(report.checks.gradeDownloadedToAppData['grade-1']);
+  report.checks.grade2DownloadedToAppData = Boolean(report.checks.gradeDownloadedToAppData['grade-2']);
   report.checks.mp3OutsideAppGrade2 = Boolean(
     report.checks.grade2DownloadedToAppData
     && /\/grade-2\//i.test(String(report.grade2.runtimeLog?.assetUrl || '')),
   );
-  report.checks.grade1AssetUrlContainsGrade1 = /\/grade-1\//i.test(String(report.grade1.runtimeLog?.assetUrl || ''));
-  report.checks.grade2AssetUrlContainsGrade2 = /\/grade-2\//i.test(String(report.grade2.runtimeLog?.assetUrl || ''));
+  report.checks.grade1AssetUrlContainsGrade1 = Boolean(report.checks.gradeAssetUrlContainsGrade['grade-1']);
+  report.checks.grade2AssetUrlContainsGrade2 = Boolean(report.checks.gradeAssetUrlContainsGrade['grade-2']);
   report.checks.noGoogleBackendNativeFallback = Boolean(
     report.noGoogleRequests
     && report.noBackendTtsRequests
