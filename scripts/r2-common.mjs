@@ -182,6 +182,7 @@ export async function uploadFileToR2({ client, bucket, key, filePath, contentTyp
     Body: body,
     ContentType: contentType,
     Metadata: metadata,
+    ACL: 'public-read',
   }));
 }
 
