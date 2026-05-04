@@ -1,0 +1,69 @@
+{
+  "generatedAt": "2026-05-04T08:20:00.000Z",
+  "requiredNow": {
+    "profiles": ["vi-v1"],
+    "contentTypes": ["lesson-card"],
+    "grades": [0, 1, 2, 3, 4, 5]
+  },
+  "optionalLater": {
+    "contentTypes": ["question"],
+    "note": "Luyen tap/cau hoi se bo sung TTS sau"
+  },
+  "specialLater": {
+    "grade": 0,
+    "contentTypes": ["question"],
+    "note": "Lop La/lop 0 luyen tap neu can se tach scope rieng"
+  },
+  "inputs": {
+    "contentAudioAuditReport": {
+      "file": "content-audio-audit-report.json",
+      "pass": true
+    },
+    "webSequentialReport": {
+      "file": "web-tts-sequential-report.json",
+      "pass": true,
+      "scope": "lesson-card vi-v1 grade 0->5"
+    },
+    "desktopAllGradesReport": {
+      "file": "desktop-tts-all-grades-report.json",
+      "pass": true,
+      "scope": "lesson-card vi-v1 grade 0->5"
+    },
+    "missingBreakdown": {
+      "file": "tts-missing-audio-by-content-type.json",
+      "questionMissing": 19043,
+      "viV1QuestionMissing": 16318,
+      "enV1QuestionMissing": 2725,
+      "enV1LessonCardMissing": 700,
+      "viV1LessonCardMissing": 0
+    },
+    "fullCatalogIntegrity": {
+      "file": "tts-catalog-integrity-report.json",
+      "note": "Full catalog co the fail vi question thieu, khong dung lam release gate hien tai"
+    }
+  },
+  "releaseGate": {
+    "useFullCatalogIntegrityAsBlockingGate": false,
+    "requiredFiles": {
+      "content-audio-audit-report.json": true,
+      "web-tts-sequential-report.json": true,
+      "desktop-tts-all-grades-report.json": true,
+      "tts-release-scope-audit-report.json": true
+    }
+  },
+  "result": {
+    "requiredNowPass": true,
+    "requiredNowReason": "vi-v1 lesson-card da du scope va web/desktop sequential deu pass",
+    "viV1LessonCardMissing": 0,
+    "questionMissing": {
+      "total": 19043,
+      "releaseBlocking": false,
+      "reason": "Question/luyen tap khong thuoc release scope hien tai"
+    },
+    "enV1LessonCardMissing": {
+      "count": 700,
+      "releaseBlocking": false,
+      "reason": "Tieng Anh chua bat trong scope hien tai"
+    }
+  }
+}
