@@ -1,0 +1,89 @@
+{
+  "pass": false,
+  "environment": {
+    "mode": "web-preview",
+    "url": "http://127.0.0.1:4173/",
+    "note": "Preview build without local pre-generated mp3 assets under public/audio/tts/assets/vi-v1"
+  },
+  "results": [
+    {
+      "grade": 0,
+      "status": "failed",
+      "provider": null,
+      "resolvedSource": null,
+      "assetKey": null,
+      "assetUrl": null,
+      "noCrossGradeFallback": false,
+      "noUnexpectedGoogleRequest": false,
+      "noUnexpectedBackendRequest": true,
+      "reason": "lesson-page-not-ready"
+    },
+    {
+      "grade": 1,
+      "status": "error",
+      "provider": "static-manifest",
+      "resolvedSource": "web-offline-manifest",
+      "assetKey": "lesson-card:1",
+      "assetUrl": null,
+      "noCrossGradeFallback": true,
+      "noUnexpectedGoogleRequest": false,
+      "noUnexpectedBackendRequest": true,
+      "reason": "Chưa có file giọng đọc offline cho lớp 1"
+    },
+    {
+      "grade": 2,
+      "status": "error",
+      "provider": "static-manifest",
+      "resolvedSource": "web-offline-manifest",
+      "assetKey": "lesson-card:1",
+      "assetUrl": null,
+      "noCrossGradeFallback": false,
+      "noUnexpectedGoogleRequest": false,
+      "noUnexpectedBackendRequest": true,
+      "reason": "Chưa có file giọng đọc offline cho lớp 1 (cross-grade symptom)"
+    },
+    {
+      "grade": 3,
+      "status": "failed",
+      "provider": null,
+      "resolvedSource": null,
+      "assetKey": null,
+      "assetUrl": null,
+      "noCrossGradeFallback": false,
+      "noUnexpectedGoogleRequest": false,
+      "noUnexpectedBackendRequest": true,
+      "reason": "lesson-page-not-ready"
+    },
+    {
+      "grade": 4,
+      "status": "failed",
+      "provider": null,
+      "resolvedSource": null,
+      "assetKey": null,
+      "assetUrl": null,
+      "noCrossGradeFallback": false,
+      "noUnexpectedGoogleRequest": false,
+      "noUnexpectedBackendRequest": true,
+      "reason": "lesson-page-not-ready"
+    },
+    {
+      "grade": 5,
+      "status": "failed",
+      "provider": null,
+      "resolvedSource": null,
+      "assetKey": null,
+      "assetUrl": null,
+      "noCrossGradeFallback": false,
+      "noUnexpectedGoogleRequest": false,
+      "noUnexpectedBackendRequest": true,
+      "reason": "lesson-page-not-ready"
+    }
+  ],
+  "failures": [
+    "UI free-plan lock prevents full sequential lessons across grade 0..5",
+    "Runtime logs not completed for grades 0,3,4,5",
+    "Cross-grade symptom observed at grade 2 (assetKey remained lesson-card:1)",
+    "Unexpected Google request attempt observed to drive.usercontent.google.com (CORS blocked)",
+    "Missing local static mp3 files in public/audio/tts/assets/vi-v1 for test cards"
+  ]
+}

@@ -1,0 +1,488 @@
+{
+  "startedAt": "2026-05-04T06:29:20.639Z",
+  "outputPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\cap01-desktop-tts-all-grades-20260504132912.json",
+  "rootPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\cap01-desktop-tts-userdata-20260504132912\\audio-packs",
+  "packDownloadSource": {
+    "configured": "Drive/CDN",
+    "grades": {
+      "grade-0": "Drive/CDN",
+      "grade-1": "Drive/CDN",
+      "grade-2": "Drive/CDN",
+      "grade-3": "Drive/CDN",
+      "grade-4": "Drive/CDN",
+      "grade-5": "Drive/CDN"
+    }
+  },
+  "activation": {
+    "attempted": true,
+    "success": true,
+    "keyUsed": "WSTL-MOPSVT3L-B08995",
+    "statusView": {
+      "plan": "premium",
+      "allowedGrades": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "desktopOfflineTts": true,
+      "offlineValidUntil": "2027-05-04T06:29:22.645Z"
+    },
+    "cachePersisted": true,
+    "reason": "UI activation PASS (cache-reuse)."
+  },
+  "grades": {
+    "grade-0": {
+      "grade": 0,
+      "manifestExists": true,
+      "packInfoExists": true,
+      "mp3Count": 102,
+      "packSource": {
+        "type": "drive-proxy",
+        "fileId": "1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN"
+      },
+      "runtimeLog": {
+        "cardId": 99001,
+        "assetKey": "lesson-card:99001",
+        "provider": "static-manifest",
+        "resolvedSource": "desktop-offline",
+        "assetUrl": "file:///C:/Users/PC/AppData/Local/Temp/cap01-desktop-tts-userdata-20260504132912/audio-packs/grade-0/audio/tts/assets/vi-v1/lesson-card-99001.mp3",
+        "status": "completed",
+        "timestamp": "2026-05-04T06:30:01.517Z",
+        "currentGrade": 0,
+        "studentGrade": 1,
+        "lessonId": 9001
+      },
+      "filesOk": true,
+      "runtimeOk": true,
+      "assetUrlContainsGrade": true,
+      "runtimeCurrentGradeOk": true
+    },
+    "grade-1": {
+      "grade": 1,
+      "manifestExists": true,
+      "packInfoExists": true,
+      "mp3Count": 703,
+      "packSource": {
+        "type": "drive-proxy",
+        "fileId": "1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq"
+      },
+      "runtimeLog": {
+        "cardId": 1,
+        "assetKey": "lesson-card:1",
+        "provider": "static-manifest",
+        "resolvedSource": "desktop-offline",
+        "assetUrl": "file:///C:/Users/PC/AppData/Local/Temp/cap01-desktop-tts-userdata-20260504132912/audio-packs/grade-1/audio/tts/assets/vi-v1/lesson-card-1.mp3",
+        "status": "completed",
+        "timestamp": "2026-05-04T06:30:22.714Z",
+        "currentGrade": 1,
+        "studentGrade": 1,
+        "lessonId": 1
+      },
+      "filesOk": true,
+      "runtimeOk": true,
+      "assetUrlContainsGrade": true,
+      "runtimeCurrentGradeOk": true
+    },
+    "grade-2": {
+      "grade": 2,
+      "manifestExists": true,
+      "packInfoExists": true,
+      "mp3Count": 703,
+      "packSource": {
+        "type": "drive-proxy",
+        "fileId": "1VY-VkQ9Wtunydd10rCCp_Xs9cTZRucyh"
+      },
+      "runtimeLog": {
+        "cardId": 81,
+        "assetKey": "lesson-card:81",
+        "provider": "static-manifest",
+        "resolvedSource": "desktop-offline",
+        "assetUrl": "file:///C:/Users/PC/AppData/Local/Temp/cap01-desktop-tts-userdata-20260504132912/audio-packs/grade-2/audio/tts/assets/vi-v1/lesson-card-81.mp3",
+        "status": "completed",
+        "timestamp": "2026-05-04T06:30:35.480Z",
+        "currentGrade": 2,
+        "studentGrade": 2,
+        "lessonId": 21
+      },
+      "filesOk": true,
+      "runtimeOk": true,
+      "assetUrlContainsGrade": true,
+      "runtimeCurrentGradeOk": true
+    },
+    "grade-3": {
+      "grade": 3,
+      "manifestExists": true,
+      "packInfoExists": true,
+      "mp3Count": 843,
+      "packSource": {
+        "type": "drive-proxy",
+        "fileId": "1LKgjUtADcVkbDpvCkfzSNCdNoJG94YQv"
+      },
+      "runtimeLog": {
+        "status": "completed",
+        "provider": "static-manifest",
+        "resolvedSource": "desktop-offline",
+        "assetUrl": "file:///C:/Users/PC/AppData/Local/Temp/cap01-desktop-tts-userdata-20260504132912/audio-packs/grade-3/audio/tts/assets/vi-v1/lesson-card-881.mp3",
+        "currentGrade": 3,
+        "studentGrade": 3,
+        "lessonId": 41,
+        "assetKey": "lesson-card:881",
+        "source": "resolver-fallback"
+      },
+      "filesOk": true,
+      "runtimeOk": true,
+      "assetUrlContainsGrade": true,
+      "runtimeCurrentGradeOk": true
+    },
+    "grade-4": {
+      "grade": 4,
+      "manifestExists": true,
+      "packInfoExists": true,
+      "mp3Count": 983,
+      "packSource": {
+        "type": "drive-proxy",
+        "fileId": "164Xxc7vlATmrBqSHd9EWSXnvk9Q37rFk"
+      },
+      "runtimeLog": {
+        "cardId": 961,
+        "assetKey": "lesson-card:961",
+        "provider": "static-manifest",
+        "resolvedSource": "desktop-offline",
+        "assetUrl": "file:///C:/Users/PC/AppData/Local/Temp/cap01-desktop-tts-userdata-20260504132912/audio-packs/grade-4/audio/tts/assets/vi-v1/lesson-card-961.mp3",
+        "status": "completed",
+        "timestamp": "2026-05-04T06:30:55.250Z",
+        "currentGrade": 4,
+        "studentGrade": 4,
+        "lessonId": 61
+      },
+      "filesOk": true,
+      "runtimeOk": true,
+      "assetUrlContainsGrade": true,
+      "runtimeCurrentGradeOk": true
+    },
+    "grade-5": {
+      "grade": 5,
+      "manifestExists": true,
+      "packInfoExists": true,
+      "mp3Count": 983,
+      "packSource": {
+        "type": "drive-proxy",
+        "fileId": "1PinMxVGHSl-GkekhSvTYp5rLgmcUFOQV"
+      },
+      "runtimeLog": {
+        "cardId": 1041,
+        "assetKey": "lesson-card:1041",
+        "provider": "static-manifest",
+        "resolvedSource": "desktop-offline",
+        "assetUrl": "file:///C:/Users/PC/AppData/Local/Temp/cap01-desktop-tts-userdata-20260504132912/audio-packs/grade-5/audio/tts/assets/vi-v1/lesson-card-1041.mp3",
+        "status": "completed",
+        "timestamp": "2026-05-04T06:31:07.373Z",
+        "currentGrade": 5,
+        "studentGrade": 5,
+        "lessonId": 81
+      },
+      "filesOk": true,
+      "runtimeOk": true,
+      "assetUrlContainsGrade": true,
+      "runtimeCurrentGradeOk": true
+    }
+  },
+  "grade1": {
+    "grade": 1,
+    "manifestExists": true,
+    "packInfoExists": true,
+    "mp3Count": 703,
+    "packSource": {
+      "type": "drive-proxy",
+      "fileId": "1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq"
+    },
+    "runtimeLog": {
+      "cardId": 1,
+      "assetKey": "lesson-card:1",
+      "provider": "static-manifest",
+      "resolvedSource": "desktop-offline",
+      "assetUrl": "file:///C:/Users/PC/AppData/Local/Temp/cap01-desktop-tts-userdata-20260504132912/audio-packs/grade-1/audio/tts/assets/vi-v1/lesson-card-1.mp3",
+      "status": "completed",
+      "timestamp": "2026-05-04T06:30:22.714Z",
+      "currentGrade": 1,
+      "studentGrade": 1,
+      "lessonId": 1
+    },
+    "filesOk": true,
+    "runtimeOk": true,
+    "assetUrlContainsGrade": true,
+    "runtimeCurrentGradeOk": true
+  },
+  "grade2": {
+    "grade": 2,
+    "manifestExists": true,
+    "packInfoExists": true,
+    "mp3Count": 703,
+    "packSource": {
+      "type": "drive-proxy",
+      "fileId": "1VY-VkQ9Wtunydd10rCCp_Xs9cTZRucyh"
+    },
+    "runtimeLog": {
+      "cardId": 81,
+      "assetKey": "lesson-card:81",
+      "provider": "static-manifest",
+      "resolvedSource": "desktop-offline",
+      "assetUrl": "file:///C:/Users/PC/AppData/Local/Temp/cap01-desktop-tts-userdata-20260504132912/audio-packs/grade-2/audio/tts/assets/vi-v1/lesson-card-81.mp3",
+      "status": "completed",
+      "timestamp": "2026-05-04T06:30:35.480Z",
+      "currentGrade": 2,
+      "studentGrade": 2,
+      "lessonId": 21
+    },
+    "filesOk": true,
+    "runtimeOk": true,
+    "assetUrlContainsGrade": true,
+    "runtimeCurrentGradeOk": true
+  },
+  "gradeFoldersAfterDownload": {
+    "hasGrade0": true,
+    "hasGrade1": true,
+    "hasGrade2": true,
+    "hasGrade3": true,
+    "hasGrade4": true,
+    "hasGrade5": true
+  },
+  "offlineNetworkEvents": [
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap",
+      "timestamp": "2026-05-04T06:29:23.677Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:29:23.690Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://drive.usercontent.google.com/download?id=1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq&export=download&confirm=t",
+      "timestamp": "2026-05-04T06:29:23.699Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap",
+      "timestamp": "2026-05-04T06:29:52.580Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:29:52.597Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://drive.usercontent.google.com/download?id=1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq&export=download&confirm=t",
+      "timestamp": "2026-05-04T06:29:52.611Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:29:53.343Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:29:53.343Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap",
+      "timestamp": "2026-05-04T06:30:03.428Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:03.450Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://drive.usercontent.google.com/download?id=1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq&export=download&confirm=t",
+      "timestamp": "2026-05-04T06:30:03.465Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:04.331Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:04.331Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap",
+      "timestamp": "2026-05-04T06:30:23.991Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:24.014Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://drive.usercontent.google.com/download?id=1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq&export=download&confirm=t",
+      "timestamp": "2026-05-04T06:30:24.031Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:25.201Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:25.201Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap",
+      "timestamp": "2026-05-04T06:30:37.267Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:37.292Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://drive.usercontent.google.com/download?id=1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq&export=download&confirm=t",
+      "timestamp": "2026-05-04T06:30:37.306Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:38.343Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:38.343Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap",
+      "timestamp": "2026-05-04T06:30:48.620Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:48.649Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://drive.usercontent.google.com/download?id=1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq&export=download&confirm=t",
+      "timestamp": "2026-05-04T06:30:48.663Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:49.339Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:49.339Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap",
+      "timestamp": "2026-05-04T06:30:57.043Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:57.061Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://drive.usercontent.google.com/download?id=1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq&export=download&confirm=t",
+      "timestamp": "2026-05-04T06:30:57.070Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:58.254Z"
+    },
+    {
+      "mode": "offline",
+      "type": "blocked",
+      "url": "https://hoctap-cap-01-livid.vercel.app/app-update.json",
+      "timestamp": "2026-05-04T06:30:58.254Z"
+    }
+  ],
+  "noGoogleRequests": true,
+  "noBackendTtsRequests": true,
+  "noLicenseVerifyRequests": true,
+  "offlineLicenseVerifyRequestCount": 0,
+  "noBackendRequests": true,
+  "noNativeFallback": true,
+  "downloadErrors": {},
+  "checks": {
+    "gradeDownloadedToAppData": {
+      "grade-0": true,
+      "grade-1": true,
+      "grade-2": true,
+      "grade-3": true,
+      "grade-4": true,
+      "grade-5": true
+    },
+    "gradeAssetUrlContainsGrade": {
+      "grade-0": true,
+      "grade-1": true,
+      "grade-2": true,
+      "grade-3": true,
+      "grade-4": true,
+      "grade-5": true
+    },
+    "noCrossGradeFallback": true,
+    "grade1DownloadedToAppData": true,
+    "grade2DownloadedToAppData": true,
+    "mp3OutsideAppGrade2": true,
+    "grade1AssetUrlContainsGrade1": true,
+    "grade2AssetUrlContainsGrade2": true,
+    "noGoogleBackendNativeFallback": true
+  },
+  "pass": true,
+  "reason": "Desktop acceptance PASS.",
+  "finishedAt": "2026-05-04T06:31:08.680Z"
+}
