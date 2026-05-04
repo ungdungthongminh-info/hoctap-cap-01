@@ -1,0 +1,232 @@
+{
+  "generatedAt": "2026-05-04T07:52:39.703Z",
+  "source": "backend/data/tts/catalog.json + tts-catalog-integrity-report.json",
+  "totalMissing": 19743,
+  "note": "19749 catalog-missing (incl. 6 audit samples); 19743 = app content missing",
+  "byContentType": {
+    "lesson-card": {
+      "missing": 700,
+      "note": "flashcard bài học (en-v1 only)"
+    },
+    "question": {
+      "missing": 19043,
+      "note": "câu hỏi luyện tập (vi-v1 + en-v1)"
+    },
+    "pregrade-prompt": {
+      "missing": 0,
+      "note": "tất cả 11 entries đã available"
+    },
+    "feedback": {
+      "missing": 0,
+      "note": "tất cả 3 entries đã available"
+    },
+    "audit": {
+      "missing": 6,
+      "note": "voice quality samples - không phải app content"
+    }
+  },
+  "byGrade": {
+    "0": {
+      "total": 132,
+      "lessonCard": 0,
+      "question": 132
+    },
+    "1": {
+      "total": 3418,
+      "lessonCard": 140,
+      "question": 3278
+    },
+    "2": {
+      "total": 3399,
+      "lessonCard": 140,
+      "question": 3259
+    },
+    "3": {
+      "total": 3926,
+      "lessonCard": 140,
+      "question": 3786
+    },
+    "4": {
+      "total": 4463,
+      "lessonCard": 140,
+      "question": 4323
+    },
+    "5": {
+      "total": 4405,
+      "lessonCard": 140,
+      "question": 4265
+    },
+    "other": {
+      "total": 6,
+      "lessonCard": 0,
+      "question": 0,
+      "audit": 6
+    }
+  },
+  "bySubject": {
+    "math": {
+      "total": 1500,
+      "byVoice": {
+        "vi-v1": 1500
+      }
+    },
+    "vietnamese": {
+      "total": 1500,
+      "byVoice": {
+        "vi-v1": 1500
+      }
+    },
+    "nature": {
+      "total": 900,
+      "byVoice": {
+        "vi-v1": 900
+      }
+    },
+    "ethics": {
+      "total": 1443,
+      "byVoice": {
+        "vi-v1": 1443
+      }
+    },
+    "english": {
+      "total": 1500,
+      "byVoice": {
+        "en-v1": 1500
+      }
+    },
+    "science": {
+      "total": 600,
+      "byVoice": {
+        "vi-v1": 600
+      }
+    },
+    "history_geo": {
+      "total": 598,
+      "byVoice": {
+        "vi-v1": 598
+      }
+    },
+    "informatics": {
+      "total": 1498,
+      "byVoice": {
+        "vi-v1": 1498
+      }
+    },
+    "art": {
+      "total": 2499,
+      "byVoice": {
+        "vi-v1": 2499
+      }
+    },
+    "pre-grade": {
+      "total": 132,
+      "byVoice": {
+        "vi-v1": 132
+      }
+    },
+    "extra_multi": {
+      "total": 5400,
+      "byVoice": {
+        "vi-v1": 4400,
+        "en-v1": 1000
+      }
+    },
+    "math_expand": {
+      "total": 233,
+      "byVoice": {
+        "vi-v1": 233
+      }
+    },
+    "vietnamese_expand": {
+      "total": 115,
+      "byVoice": {
+        "vi-v1": 115
+      }
+    },
+    "expand_other": {
+      "total": 1125,
+      "byVoice": {
+        "vi-v1": 900,
+        "en-v1": 225
+      }
+    }
+  },
+  "byVoiceProfile": {
+    "en-v1": {
+      "total": 3425,
+      "byKind": {
+        "lesson-card": 700,
+        "question": 2725
+      }
+    },
+    "vi-v1": {
+      "total": 16321,
+      "byKind": {
+        "question": 16318,
+        "audit": 3
+      }
+    },
+    "vi-v2": {
+      "total": 3,
+      "byKind": {
+        "audit": 3
+      }
+    }
+  },
+  "topExamplesByType": {
+    "lesson-card": [
+      {
+        "key": "lesson-card:801",
+        "profileId": "en-v1",
+        "text": "Let's say Hello!. Khi gặp ai, chúng ta nói \"Hello!\" hoặc \"Hi"
+      },
+      {
+        "key": "lesson-card:802",
+        "profileId": "en-v1",
+        "text": "Cách chào hỏi. \"Hello!\" bằng Xin chào! \"Hi!\" bằng Chào! \"My "
+      },
+      {
+        "key": "lesson-card:803",
+        "profileId": "en-v1",
+        "text": "Hội thoại mẫu. - Hello! My name is Lan. What's your name?\n- "
+      },
+      {
+        "key": "lesson-card:804",
+        "profileId": "en-v1",
+        "text": "Mẹo nhớ. Tập nói \"Hello, my name is...\" trước gương mỗi ngày"
+      },
+      {
+        "key": "lesson-card:805",
+        "profileId": "en-v1",
+        "text": "How are you?. Sau khi chào, người ta hay hỏi \"How are you?\" "
+      }
+    ],
+    "question": [
+      {
+        "key": "question:1",
+        "profileId": "vi-v1",
+        "text": "Có mấy bông hoa? Phương án A. 1. Phương án B. 2. Phương án C"
+      },
+      {
+        "key": "question:2",
+        "profileId": "vi-v1",
+        "text": "Có mấy ngôi sao? Phương án A. 3. Phương án B. 4. Phương án C"
+      },
+      {
+        "key": "question:3",
+        "profileId": "vi-v1",
+        "text": "Số nào đứng ngay sau số 3? Phương án A. 1. Phương án B. 2. P"
+      },
+      {
+        "key": "question:4",
+        "profileId": "vi-v1",
+        "text": "Số nào đứng ngay trước số 5? Phương án A. 2. Phương án B. 3."
+      },
+      {
+        "key": "question:5",
+        "profileId": "vi-v1",
+        "text": "Số nào bé nhất trong các số: 5, 3, 1, 4? Phương án A. 5. Phư"
+      }
+    ]
+  }
+}
