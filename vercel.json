@@ -17,9 +17,9 @@
       "framework": "vite"
     },
     "backend": {
-      "entrypoint": "backend",
+      "entrypoint": "backend/dist/index.js",
       "routePrefix": "/_/backend",
-      "framework": "nodejs"
+      "framework": "express"
     }
   }
 }
