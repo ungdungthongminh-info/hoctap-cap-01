@@ -123,6 +123,8 @@ const MAX_MANIFEST_SOURCE_FAILURES_BEFORE_ABORT = 25;
 const FALLBACK_UPDATE_FEED_URL = 'https://hoctap-cap-01-livid.vercel.app/app-update.json';
 const REMOTE_TTS_POLICY_TTL_MS = 5 * 60 * 1000;
 
+const SUPPORTED_PACK_GRADES = [0, 1, 2, 3, 4, 5] as const;
+
 interface RemoteTtsPolicy {
   offlineSyncEnabled: boolean;
   offlineSyncReason: string;
@@ -130,16 +132,6 @@ interface RemoteTtsPolicy {
 }
 
 let remoteTtsPolicyCache: { expiresAt: number; policy: RemoteTtsPolicy } | null = null;
-
-const GRADE_PACK_FILE_IDS: Partial<Record<number, string>> = {
-  0: '1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
-  1: '1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq',
-  2: '1VY-VkQ9Wtunydd10rCCp_Xs9cTZRucyh',
-  3: '1LKgjUtADcVkbDpvCkfzSNCdNoJG94YQv',
-  4: '164Xxc7vlATmrBqSHd9EWSXnvk9Q37rFk',
-  5: '1PinMxVGHSl-GkekhSvTYp5rLgmcUFOQV',
-  6: '1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN',
-};
 
 function buildAppAssetUrl(pathname: string): string {
   const base = import.meta.env.BASE_URL || '/';
@@ -154,20 +146,12 @@ function buildPackProxyUrl(grade: number, apiBase = BACKEND_API_BASE): string {
   return `${normalizeApiBase(apiBase)}/tts/static-pack/by-grade/${grade}`;
 }
 
-function buildDrivePackUrl(grade: number): string {
-  const fileId = GRADE_PACK_FILE_IDS[grade];
-  return fileId
-    ? `https://drive.usercontent.google.com/download?id=${encodeURIComponent(fileId)}&export=download&confirm=t`
-    : '';
-}
-
 function buildStaticHostedPackUrl(grade: number): string {
-  return buildAppAssetUrl(`tts-static-pack/by-grade/${grade}.zip`);
+  return buildAppAssetUrl(`audio/tts/packs/tts-vi-v1-grade-${grade}-lesson-card.zip`);
 }
 
 function buildPackProxyUrlCandidates(grade: number): string[] {
   const urls = [
-    buildDrivePackUrl(grade),
     buildPackProxyUrl(grade, BACKEND_API_BASE),
     buildPackProxyUrl(grade, PRODUCTION_TTS_PACK_API_BASE),
     buildStaticHostedPackUrl(grade),
@@ -176,13 +160,12 @@ function buildPackProxyUrlCandidates(grade: number): string[] {
 }
 
 const GRADE_PACK_LINKS: Partial<Record<number, string>> = {
-  0: buildDrivePackUrl(0) || buildStaticHostedPackUrl(0),
-  1: buildDrivePackUrl(1) || buildStaticHostedPackUrl(1),
-  2: buildDrivePackUrl(2) || buildStaticHostedPackUrl(2),
-  3: buildDrivePackUrl(3) || buildStaticHostedPackUrl(3),
-  4: buildDrivePackUrl(4) || buildStaticHostedPackUrl(4),
-  5: buildDrivePackUrl(5) || buildStaticHostedPackUrl(5),
-  6: buildDrivePackUrl(0) || buildStaticHostedPackUrl(0),
+  0: buildPackProxyUrl(0, BACKEND_API_BASE),
+  1: buildPackProxyUrl(1, BACKEND_API_BASE),
+  2: buildPackProxyUrl(2, BACKEND_API_BASE),
+  3: buildPackProxyUrl(3, BACKEND_API_BASE),
+  4: buildPackProxyUrl(4, BACKEND_API_BASE),
+  5: buildPackProxyUrl(5, BACKEND_API_BASE),
 };
 
 export const STATIC_PACK_GRADE_OPTIONS: Array<{ grade: number; label: string }> = [
@@ -196,7 +179,7 @@ export const STATIC_PACK_GRADE_OPTIONS: Array<{ grade: number; label: string }> 
 
 function normalizePackGrade(value: unknown): number {
   const grade = Number(value);
-  if (Number.isFinite(grade) && GRADE_PACK_LINKS[grade] !== undefined) {
+  if (Number.isFinite(grade) && SUPPORTED_PACK_GRADES.includes(grade as (typeof SUPPORTED_PACK_GRADES)[number])) {
     return grade;
   }
   return 1;

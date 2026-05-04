@@ -24,6 +24,7 @@ import {
 } from '../../../shared/utils/sounds';
 import { MascotCharacter } from '../../../shared/components';
 import { DesktopAudioPackPanel } from '../../../shared/components/DesktopAudioPackPanel';
+import { useAppData } from '../../../shared/providers/AppDataProvider';
 import { buildVoiceAuditAssetKey } from '../../../shared/services/tts/ttsAssetKeys';
 import { VOICE_AUDIT_LINES } from '../../../shared/services/tts/ttsNarration';
 import { invalidateStaticTtsManifestCache } from '../../../shared/services/tts/staticTtsManifest';
@@ -67,7 +68,7 @@ const modeOptions: Array<{ value: TtsModeOption; label: string; desc: string }> 
   {
     value: 'static',
     label: 'Mặc định - Audio tĩnh',
-    desc: 'Dùng audio pre-generate trong manifest. Nếu thiếu hoặc lỗi file sẽ thử audio mạng trước khi về giọng hệ thống.',
+    desc: 'Dùng gói audio tĩnh theo lớp (Drive pack). Nếu thiếu pack sẽ báo tải gói, không fallback sang Google/backend/native.',
   },
   {
     value: 'advanced',
@@ -122,13 +123,14 @@ function toRuntimeSourceLabel(provider: string | null, hasDesktopAudioStore: boo
 function parsePackGradeFromManifestUrl(manifestUrl?: string | null): number | null {
   const raw = String(manifestUrl || '').trim();
   if (!raw) return null;
-  const hit = raw.match(/\/by-grade\/(\d+)\.zip/i);
+  const hit = raw.match(/\/by-grade\/(\d+)/i) || raw.match(/tts-vi-v1-grade-(\d+)-lesson-card\.zip/i);
   if (!hit) return null;
   const grade = Number(hit[1]);
   return Number.isFinite(grade) ? grade : null;
 }
 
 export function TtsSettingsPage() {
+  const { state } = useAppData();
   const [ttsInfo, setTtsInfo] = useState<TtsInfo | null>(null);
   const [mode, setModeState] = useState(getTtsMode());
   const [speed, setSpeedState] = useState(getTtsSpeed());
@@ -309,6 +311,19 @@ export function TtsSettingsPage() {
       setTtsMode('static');
     }
   }, [mode, showAdmin]);
+
+  useEffect(() => {
+    const studentGrade = Number(state.student?.grade);
+    if (!Number.isFinite(studentGrade)) return;
+    if (studentGrade === selectedPackGrade) return;
+
+    const normalizedGrade = setStaticPackSelectedGrade(studentGrade);
+    setSelectedPackGradeState(normalizedGrade);
+    const nextUrl = getStaticPackUrlByGrade(normalizedGrade);
+    setPackManifestUrl(nextUrl);
+    setStaticPackManifestUrl(nextUrl);
+    setPackError('');
+  }, [selectedPackGrade, state.student?.grade]);
 
   const handleModeChange = (value: TtsModeOption) => {
     const nextMode: TtsModeOption = !showAdmin ? 'static' : value;

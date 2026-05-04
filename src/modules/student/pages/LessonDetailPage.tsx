@@ -3,6 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Download, HelpCircle, Lightbulb, Play, Star, Volume2, VolumeX } from 'lucide-react';
 import { useAppData } from '../../../shared/providers/AppDataProvider';
 import { getTtsCacheMode, prefetchText, speakTextAsync, stopSpeaking } from '../../../shared/utils/sounds';
+import {
+  getStaticPackAudioBlob,
+  getStaticPackUrlByGrade,
+  setStaticPackManifestUrl,
+  setStaticPackSelectedGrade,
+  syncStaticAudioPack,
+} from '../../../shared/services/tts/staticAudioPack';
 import { MascotCharacter } from '../../../shared/components';
 import { canAccessLesson, getAccessPlan } from '../../../shared/services/accessControl';
 import { buildLessonCardAssetKey } from '../../../shared/services/tts/ttsAssetKeys';
@@ -95,6 +102,8 @@ export function LessonDetailPage() {
   const [cardSources, setCardSources] = useState<Record<number, LessonCardSourceState>>({});
   const [isReadingAll, setIsReadingAll] = useState(false);
   const [isPrefetching, setIsPrefetching] = useState(false);
+  const [packSyncing, setPackSyncing] = useState(false);
+  const [packNotice, setPackNotice] = useState('');
   const runRef = useRef(0);
 
   const id = Number(lessonId);
@@ -112,6 +121,37 @@ export function LessonDetailPage() {
   const setCardStatus = useCallback((cardId: number, status: LessonCardAudioState) => {
     setCardStatuses((prev) => (prev[cardId] === status ? prev : { ...prev, [cardId]: status }));
   }, []);
+
+  const ensureCurrentGradePackReady = useCallback(async () => {
+    if (!lesson || cards.length === 0) {
+      return false;
+    }
+    const probeAssetKey = buildLessonCardAssetKey(cards[0].id);
+    const probeBlob = await getStaticPackAudioBlob(probeAssetKey);
+    if (probeBlob) {
+      setPackNotice('');
+      return true;
+    }
+    setPackNotice(`Chưa tải gói giọng đọc lớp ${lesson.grade}. Vui lòng bấm "Tải gói giọng đọc lớp hiện tại".`);
+    return false;
+  }, [cards, lesson]);
+
+  const downloadCurrentGradePack = useCallback(async () => {
+    if (!lesson) return;
+    setPackSyncing(true);
+    try {
+      const normalizedGrade = setStaticPackSelectedGrade(lesson.grade);
+      const syncUrl = getStaticPackUrlByGrade(normalizedGrade);
+      setStaticPackManifestUrl(syncUrl);
+      await syncStaticAudioPack({ manifestUrl: syncUrl });
+      setPackNotice(`Đã tải xong gói giọng đọc lớp ${normalizedGrade}.`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Không tải được gói giọng đọc.';
+      setPackNotice(message);
+    } finally {
+      setPackSyncing(false);
+    }
+  }, [lesson]);
 
   const resetPlaybackState = useCallback(() => {
     runRef.current += 1;
@@ -230,6 +270,13 @@ export function LessonDetailPage() {
     setSpeakingCardId(card.id);
 
     const assetKey = buildLessonCardAssetKey(card.id);
+    const hasPack = await ensureCurrentGradePackReady();
+    if (!hasPack) {
+      setSpeakingCardId(null);
+      setCardStatus(card.id, 'idle');
+      return;
+    }
+
     const result = await speakTextAsync(buildLessonCardNarrationText(card), lang, {
       policy: 'lesson-read-all',
       mode: 'static',
@@ -274,6 +321,10 @@ export function LessonDetailPage() {
     if (cards.length === 0) return;
 
     resetPlaybackState();
+    const hasPack = await ensureCurrentGradePackReady();
+    if (!hasPack) {
+      return;
+    }
     runRef.current += 1;
     const currentRun = runRef.current;
     setIsReadingAll(true);
@@ -325,7 +376,7 @@ export function LessonDetailPage() {
       setIsReadingAll(false);
       setSpeakingCardId(null);
     }
-  }, [cards, hasDesktopAudioStore, isReadingAll, lang, lesson?.grade, resetPlaybackState, setCardStatus]);
+  }, [cards, ensureCurrentGradePackReady, hasDesktopAudioStore, isReadingAll, lang, lesson?.grade, resetPlaybackState, setCardStatus]);
 
   if (isHydrating) {
     return (
@@ -411,7 +462,24 @@ export function LessonDetailPage() {
                 <Download size={16} />
                 {isPrefetching ? 'Đang tạo audio...' : 'Tạo sẵn audio'}
               </button>
+              <button
+                className="btn flex items-center gap-2"
+                style={{ background: 'var(--color-surface)', color: 'var(--color-primary-dark)', border: '1px solid var(--color-primary)' }}
+                onClick={() => void downloadCurrentGradePack()}
+                disabled={!lesson || packSyncing}
+              >
+                <Download size={16} />
+                {packSyncing ? 'Đang tải gói...' : 'Tải gói giọng đọc lớp hiện tại'}
+              </button>
             </div>
+            {packNotice && (
+              <div
+                className="mt-3 text-sm rounded-xl px-3 py-2"
+                style={{ background: '#FEF3C7', color: '#92400E' }}
+              >
+                {packNotice}
+              </div>
+            )}
           </div>
         </div>
       </div>

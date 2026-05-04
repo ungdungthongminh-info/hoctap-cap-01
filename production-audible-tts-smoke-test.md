@@ -11,13 +11,14 @@
 - Screen recording path/link: N/A (chưa có clip audible thật)
 - Result: FAIL
 - Notes:
-  - Root cause confirmed: production path trả HTML fallback thay vì MP3 thật.
-  - Asset endpoint check hiện tại:
-    - HTTP status: 200
-    - Content-Type: text/html; charset=utf-8 (không phải audio/*)
-    - Content-Length: khoảng 6.3KB (HTML shell), không phải MP3 thực.
-    - Response chứa <!DOCTYPE html>.
-  - Theo rule chống false positive: không được kết luận "audio heard" nếu chưa có bằng chứng nghe thật/volume mixer.
+  - Root cause cu van ton tai tren production hien hanh: duong dan MP3 tra ve HTML fallback thay vi audio payload.
+  - Da cap nhat `public/audio/tts/drive-packs.json` voi 6 fileId va URL Drive.
+  - Kiem tra direct URL tu Drive:
+    - PASS (zip that): grade `0, 2, 3`.
+    - FAIL (html): grade `1, 4, 5` (status 200 nhung content-type text/html, dau noi dung `<!DOCTYPE html>`). HTML nay co the la Google Drive confirm/interstitial, khong duoc tinh la PASS.
+  - Backend da bo sung luong retry confirm-token + cookie carry cho static-pack proxy, va se fail ro `reason=google-drive-html-confirm-page` neu van nhan HTML.
+  - Deploy production chua thanh cong (Vercel CLI loi project settings), nen domain that chua nhan ban build moi co nut tai pack theo lop.
+  - Theo rule chong false positive: khong duoc ket luan "audio heard" neu chua co bang chung nghe that/volume mixer/video.
 
 ## Desktop app
 - App version: 0.1.2 (expected)
@@ -46,3 +47,8 @@ Một asset audio chỉ PASS khi đồng thời đạt:
 - Audio heard: NO
 - Volume mixer signal: NO
 - Production audible: FAIL
+
+## Blockers Before Audible Retest
+- Deploy backend moi de su dung confirm-token logic khi Drive tra interstitial HTML.
+- Deploy lai production thanh cong de domain that dung ban code Drive-pack moi.
+- Test lai quy trinh: vao lop 1 -> tai pack -> doc -> reload -> doc lai khong tai lai -> ghi nhan bang chung audible that.
