@@ -1,17 +1,17 @@
 {
   "meta": {
     "contentVersion": "2026-04-27-v1",
-    "generatedAt": "2026-04-28T08:44:26.136Z",
+    "generatedAt": "2026-05-04T07:00:29.634Z",
     "defaultProfileId": "vi-v1",
     "audioBasePath": "audio/tts/assets"
   },
   "summary": {
     "totalEntries": 24051,
-    "availableEntries": 4308,
-    "missingEntries": 19743,
+    "availableEntries": 4302,
+    "missingEntries": 19749,
     "defaultProfileId": "vi-v1",
     "contentVersion": "2026-04-27-v1",
-    "generatedAt": "2026-04-28T08:44:26.137Z",
+    "generatedAt": "2026-05-04T07:00:29.636Z",
     "audioBasePath": "audio/tts/assets",
     "voiceProfiles": [
       {
@@ -49,42 +49,42 @@
         "label": "Tập đọc - ngắt nhịp",
         "profileId": "vi-v1",
         "sampleId": "reading-rhythm",
-        "available": true
+        "available": false
       },
       {
         "key": "audit:vi-v1:story-flow",
         "label": "Kể chuyện - tự nhiên",
         "profileId": "vi-v1",
         "sampleId": "story-flow",
-        "available": true
+        "available": false
       },
       {
         "key": "audit:vi-v1:math-prompt",
         "label": "Toán - đọc phép tính",
         "profileId": "vi-v1",
         "sampleId": "math-prompt",
-        "available": true
+        "available": false
       },
       {
         "key": "audit:vi-v2:reading-rhythm",
         "label": "Tập đọc - ngắt nhịp",
         "profileId": "vi-v2",
         "sampleId": "reading-rhythm",
-        "available": true
+        "available": false
       },
       {
         "key": "audit:vi-v2:story-flow",
         "label": "Kể chuyện - tự nhiên",
         "profileId": "vi-v2",
         "sampleId": "story-flow",
-        "available": true
+        "available": false
       },
       {
         "key": "audit:vi-v2:math-prompt",
         "label": "Toán - đọc phép tính",
         "profileId": "vi-v2",
         "sampleId": "math-prompt",
-        "available": true
+        "available": false
       }
     ],
     "byUsage": [
@@ -111,7 +111,7 @@
       {
         "usage": "voice-audit",
         "total": 6,
-        "available": 6
+        "available": 0
       }
     ]
   },
@@ -124,7 +124,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6342f04ab0c9acb8fc20d4f2c0ca29cc7711d035f89c74adea4bfb2a63c3454d"
+      "textHash": "fb6c98c5286f73725df6f7ed0ada65665d981e15f3186b89484f798768ca279b"
     },
     "lesson-card:2": {
       "key": "lesson-card:2",
@@ -184,7 +184,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "fd3cff3a19bacfd5333e47d8c4ea11405f36231f0f3088121ae928ad06699a2e"
+      "textHash": "b3fe30037101e41c67ec55d25e7a5b617359f9060dfeaecb55c28ef90e117c5f"
     },
     "lesson-card:8": {
       "key": "lesson-card:8",
@@ -204,7 +204,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "501db3985245435adac4309e559ee58025bdf6c7ecf6ee1386be470a4f3796ae"
+      "textHash": "bca36b3cb75bdfe9816089c2e4d59475ab036309bd67d1bae47b639caa474cab"
     },
     "lesson-card:10": {
       "key": "lesson-card:10",
@@ -214,7 +214,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5235bfc1da4eb9ecd52a23bbb2e8dffac60982cc000d51ad1a7b7d6add325fe5"
+      "textHash": "009bd1b79f91907a2561a784a3426b7e6df2a88947cff52675ba9f1946329c8a"
     },
     "lesson-card:11": {
       "key": "lesson-card:11",
@@ -224,7 +224,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d932c2b27e296dd3536830bfaf1f4f7a995d9f6bf20c0f93a4e9b4a517778ca1"
+      "textHash": "f19b1b2fb84ac477532bc72da34b6343e559e667a006aa90bf242a9d16ea333c"
     },
     "lesson-card:12": {
       "key": "lesson-card:12",
@@ -264,7 +264,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "dbf990966dd46b7145906c1f46598f6dccbf8055a36656ddafcd8bb6376a0b2e"
+      "textHash": "792a0383337344d28b9fd6979c814cef9468cfff88ceab7324efc8b01b6681df"
     },
     "lesson-card:16": {
       "key": "lesson-card:16",
@@ -274,7 +274,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0a056ac2512ac18b1a4358ecc5c46831f893cead186cebc293b6f608823c53cb"
+      "textHash": "b16d9d7537dcc58290da8fe275f2ecb8b696b66fb27e5c60448ff0987985392d"
     },
     "lesson-card:17": {
       "key": "lesson-card:17",
@@ -284,7 +284,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0b5c751cfb3b3ae1e991981e1c3f25295bd01b46a7f593983ada7b85a3e301c5"
+      "textHash": "86f5685e3787f3960efa30cf6b981ead240b3021876f6267cd69b7e26ac31c3b"
     },
     "lesson-card:18": {
       "key": "lesson-card:18",
@@ -304,7 +304,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6381ffc8c7116717d674f6019521974f746c12202cf6e067c6f6958b62d22ec4"
+      "textHash": "9db19978933799d96a511234631ffebe06bf5560217f840d1e7fcfeef489224c"
     },
     "lesson-card:20": {
       "key": "lesson-card:20",
@@ -344,7 +344,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ac5ec65e615f3f44f1d43b3acb713051406aed2e788b0998d286894e405b6dbf"
+      "textHash": "f6a21d33eda15b840f19dcc509ea4c43c79931a9e12f2c10ab7624cbea327e87"
     },
     "lesson-card:24": {
       "key": "lesson-card:24",
@@ -384,7 +384,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3cf851acd21a208e63f0f7ea08de21f9f3dc5953b6e753b2504e2d561e23af85"
+      "textHash": "b01e2981cea2152922e521926b6c5af0cf4ab5829efd9bf36fbf9e2a5c647c31"
     },
     "lesson-card:28": {
       "key": "lesson-card:28",
@@ -414,7 +414,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d4f211d2365fe44dd10a778b5c242b77b4a9e6ccb746e6cd5f3039ddfc7b4885"
+      "textHash": "c96ce211795ff5ef3d0b40218f4fe2eb0c58d0b6b26a4f35b9930ac3f373bf9b"
     },
     "lesson-card:31": {
       "key": "lesson-card:31",
@@ -434,7 +434,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7732c95eb7c7dee783fea5e9ec59ad59039710e636fd22eea34efd41080ea0e9"
+      "textHash": "655b6b594b7e5d2fbb375ea010f0ab8eceaafd816b487925f02d70cddd8c0685"
     },
     "lesson-card:33": {
       "key": "lesson-card:33",
@@ -444,7 +444,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0b4a89986005650b645423ad41239b0e65ff8cf1a883bc1048bed28a64ac5a3a"
+      "textHash": "c208368fa495d718ef1d4b40ec7fa6f91df839cb68c96a0ea4092b2eb6e5825f"
     },
     "lesson-card:34": {
       "key": "lesson-card:34",
@@ -454,7 +454,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "03118585fdb268f1d0177587830b613afb41e6db9ca10a304cb063604123da4c"
+      "textHash": "226fd928f8b407ed139ddd9ce956189644f295706337b9133630074ccf938002"
     },
     "lesson-card:35": {
       "key": "lesson-card:35",
@@ -474,7 +474,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7301dc6283a70a5357d7f743153c25ed7418050b4e8382c478d1712786e6b88f"
+      "textHash": "f8c8e2f6ed3e6609ab3c9b78f4c557191ff0796642e4ca9dce19d01a097aef2a"
     },
     "lesson-card:37": {
       "key": "lesson-card:37",
@@ -494,7 +494,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "eee757865284e2718ac1bfcb6301b05840b986aa1e7b6f05d8d563429cfc849f"
+      "textHash": "765e369ef832f298e326d75490ecc20d71a60b75147fa9b971bc963e2492f783"
     },
     "lesson-card:39": {
       "key": "lesson-card:39",
@@ -504,7 +504,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "36ac6afe2074a51a10651cb4f07fe4344a20b0b00acd4e134536def302183634"
+      "textHash": "509a91dfbb109ec66fe8247c82833d211fcbf0cf8a69bbd397f94bf87479a8c1"
     },
     "lesson-card:40": {
       "key": "lesson-card:40",
@@ -524,7 +524,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "446b3764ce63b60b53fa391130f8621dc20d352fdf79f4fe396600d470c2ab97"
+      "textHash": "2cd7211f055d551a9500e37e0073b166dc6471fb2d4cd7fdcfa14d2655be887e"
     },
     "lesson-card:42": {
       "key": "lesson-card:42",
@@ -534,7 +534,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "010dbbc9678c49eb5ef04b2ef07965e26370832a273e85f2d3e0783a0aa3049f"
+      "textHash": "ddbad2d8c9592d8843ac0ba9a163517a7f8b6caaf0b1a5e679218692e4d5aedc"
     },
     "lesson-card:43": {
       "key": "lesson-card:43",
@@ -544,7 +544,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "508caa7c7f0932a1f129113c716163d7966774aede0865a66b5d0bf95fc3ef5f"
+      "textHash": "ed28314f50aec9f44798543209a15564225355631cf13965d10288571d03dd6b"
     },
     "lesson-card:44": {
       "key": "lesson-card:44",
@@ -564,7 +564,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "15c2e5ca01c5db7ce244deaeae88b9a7582dde42835819309832861f8e37931a"
+      "textHash": "7f886872b47840ba517ff77617b6648b700a789ed54676f7077fbf2115b8c0e8"
     },
     "lesson-card:46": {
       "key": "lesson-card:46",
@@ -574,7 +574,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6c6592df31b63eaeae3c62ef0398b014aae07f5948bf3d0923fb1a472cd3b577"
+      "textHash": "58ddca2419d82746475da1b0681e90d6ec1ac7d768b857a02b0ee113288540a2"
     },
     "lesson-card:47": {
       "key": "lesson-card:47",
@@ -604,7 +604,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "470fd1cae2407291abc843a0b0b837aefa5957c838f8defbcf7431544c99df81"
+      "textHash": "e6a1ff7ae5e6fd46a32064cebbe5bc2bb14290156844370fd39c0662afc0ea37"
     },
     "lesson-card:50": {
       "key": "lesson-card:50",
@@ -624,7 +624,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c6549195fa1925aaadaa477dd1859d240c4a49e174414d5f3b83c260f6f112a5"
+      "textHash": "1c0fc03e50564abbc77b1602bfd87fb476eed52a8604955abaa1086b6dc2998d"
     },
     "lesson-card:52": {
       "key": "lesson-card:52",
@@ -644,7 +644,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c3fef0ed395e3edafbc54a2f1220c318b2cb3195f4c2833028a3856d499212fa"
+      "textHash": "fc6d63a259445894ceecf0b7b92271cc96bf77c99fd9105edb0d1b19676ce9c1"
     },
     "lesson-card:54": {
       "key": "lesson-card:54",
@@ -664,7 +664,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "1ceb0cc252f5ddb32b384ce107d0654af1d2ffec5046de9c38a3e8105bc0abcb"
+      "textHash": "7159a25579f6a8b392a8abb45365c3f481d7525b64a9cce7408d118c5c4c106e"
     },
     "lesson-card:56": {
       "key": "lesson-card:56",
@@ -674,7 +674,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "474cee5144dadf7f1429d19a8d08a93b77337f8ebba846fcd6b4106dfe6ee69f"
+      "textHash": "c16ea498f171cc96e4ba628aa62507e11fc5d60c06b48104ab8aeb6b22f2857b"
     },
     "lesson-card:57": {
       "key": "lesson-card:57",
@@ -684,7 +684,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e33f6cd378ec7c7fe556eb2221c5ce34f6b24f08db98fca0c59d03321725d9cd"
+      "textHash": "49d21a2f6a23fb7cff51936cd5664fe5cd2a841ca433730c7c5cb21a0ce82769"
     },
     "lesson-card:58": {
       "key": "lesson-card:58",
@@ -694,7 +694,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7b1ebd90dc404c8246427ce903afff17d6c058c859a59a339381e88881999e84"
+      "textHash": "d70156f43872673e0e0be241bae8f693d38664ba847217ced0c75908a5d3e061"
     },
     "lesson-card:59": {
       "key": "lesson-card:59",
@@ -704,7 +704,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d0269a53151ddb0011ab279026d39c18263817c10173e5e6b10cee1c3ae457fd"
+      "textHash": "08a47a54513964f1b49fadd0b9130519c653cfccd7bd169a105057a79fc7c533"
     },
     "lesson-card:60": {
       "key": "lesson-card:60",
@@ -734,7 +734,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "40f239a7dbc907c4d2f9566f932016eca1ddd8705a9a0dc1fc57d7af21c507d6"
+      "textHash": "558a13f91ceb0e948581e70823e42d0542222b1278f681219b19371699a6b2c3"
     },
     "lesson-card:63": {
       "key": "lesson-card:63",
@@ -784,7 +784,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "025e2ae964c072ab58562487ea356641696cf44ff104e5c50555d7a9d4ba96c9"
+      "textHash": "9bf4b82b0deb84e5175fdd772e1dad748d2647ede7b854fefd4b21d38892f878"
     },
     "lesson-card:68": {
       "key": "lesson-card:68",
@@ -794,7 +794,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7a5d1114144d56b3631105ba53a6004d134fe33f840b25c4dbcaf863f7cad7b6"
+      "textHash": "a1d5b58522f30b58a18f826bb9da7897835b72790b8cbaf23a3252ac442274de"
     },
     "lesson-card:69": {
       "key": "lesson-card:69",
@@ -804,7 +804,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ac3d1e50243876e87a69723ddafa43fe07d09682563da1b44b337f8434c34ac1"
+      "textHash": "de59ff9e1b4175cfb9abb9920abec8058f9f2a364a328712ccfed9229cc76be0"
     },
     "lesson-card:70": {
       "key": "lesson-card:70",
@@ -914,7 +914,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3bf0cae443f2d2bd434a1f72e8767c492ef7bbca9230313c21e1c2ecdd374722"
+      "textHash": "9c09f3ce582cddc7f79f42a29e00d8b5b0c33f6d18f77d81615a616bcda8c52c"
     },
     "lesson-card:81": {
       "key": "lesson-card:81",
@@ -924,7 +924,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "351ec6237208a60e1cb7892b6e75b77bf4fd7bc166a5b02508a962bb5c9a6663"
+      "textHash": "3990f74327cf1580f96cd4771f561371af0efaf96aaaca8de13ccedcbe99e7df"
     },
     "lesson-card:82": {
       "key": "lesson-card:82",
@@ -934,7 +934,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "bd953d0c097914539067d588fd55427b09a207e5eb11be481b1780525d28936d"
+      "textHash": "fd9ee7a03c80e8b930eeee3f870acdf03085d4237f23297ef677a906cef9e21e"
     },
     "lesson-card:83": {
       "key": "lesson-card:83",
@@ -964,7 +964,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "880a73f018243edb7d2f068713223fd8f41190fec2dee50747545e913f6b1895"
+      "textHash": "3e4938bcc6f1ceecdb22ae3bb58a10f97b21828670943f8c309f8287059a449f"
     },
     "lesson-card:86": {
       "key": "lesson-card:86",
@@ -1084,7 +1084,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "32b41d0884cb98b4109490ea7380694225bbb6c3830d47845b504fa579f7396c"
+      "textHash": "c8fc075baff9cc44ffb5825621366f61d7e1080fdb94f92a38ff5a34af56f8be"
     },
     "lesson-card:98": {
       "key": "lesson-card:98",
@@ -1134,7 +1134,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "605d25a6c1de51958a8a362d440c3451a81fb01766a1493f4997d71aeb16a6b7"
+      "textHash": "42fae3905467be7ca1181380bfa4e2c9f399801dfb2dcb9b3447e53ac36252d6"
     },
     "lesson-card:103": {
       "key": "lesson-card:103",
@@ -1144,7 +1144,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b3d53800066db81d5c5cbc08d69fe9b3456add10b202b15213d1c5434ecd4986"
+      "textHash": "c7af34e0b17c4c9dd6cb39a6a146ad99e43ccb129cb423c9ea042c808bba05ea"
     },
     "lesson-card:104": {
       "key": "lesson-card:104",
@@ -1164,7 +1164,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9407d925d1779514abd95275dc97457350b67332d8e0d2ea0730e47bea06cc89"
+      "textHash": "e285b7d0410f207e18b1a5a154d56d8d045a25fba58f31f8e4f917c28eb1d58b"
     },
     "lesson-card:106": {
       "key": "lesson-card:106",
@@ -1184,7 +1184,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9addf990fa857c8715bd0bc697c5d7e7c184aede3b143e236865ab63c6516b96"
+      "textHash": "3266c565d513b9cbf6ab59ec4229bea004afcf9a9ed97d4d8d0d4152c334ea8c"
     },
     "lesson-card:108": {
       "key": "lesson-card:108",
@@ -1194,7 +1194,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "91f62cb61305beb9d828132eb4d0dd854ecbbf928b74cf7260c2b920bc026726"
+      "textHash": "6b3b685963a29c2ae255f7f94c94fb2da3cc0742208ffb00476c9113591fcded"
     },
     "lesson-card:109": {
       "key": "lesson-card:109",
@@ -1204,7 +1204,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d67a2dc06353b34f331d4e5f583c1497ec1bc5cf8aedb1a99d87cc4e02f39696"
+      "textHash": "6252c3a5897f591432674cad87a426213954ac3b597995e6a9f726b7ed4ffab7"
     },
     "lesson-card:110": {
       "key": "lesson-card:110",
@@ -1214,7 +1214,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5578f9951bd78fbdde7b8939babdd372e820879981106b189fcdd13e04800821"
+      "textHash": "9083f6771195615150b7eee5b5aeb39e584d6abd51f06ff4d4f287c9d2c1b58f"
     },
     "lesson-card:111": {
       "key": "lesson-card:111",
@@ -1224,7 +1224,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "54ae3e969b4e3909639a8229d33a32f6003b7c62a893f709d8d165abc8fa362e"
+      "textHash": "9cffdc0043ee2f0792ad24e18bae6fd8fd697436cd7c672866162b889365d27d"
     },
     "lesson-card:112": {
       "key": "lesson-card:112",
@@ -1484,7 +1484,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9016c8867c7a6dd8b8a17ee2e5ee4e6db821e876222817c42db472e792814af0"
+      "textHash": "f2c5259495a09a6f64a6cf237d14184e76af99001a4c33abd0afc597b533a85c"
     },
     "lesson-card:138": {
       "key": "lesson-card:138",
@@ -1544,7 +1544,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "23b5d2ff5bb96c7ffb722ce157ba796076b98b48738cfd6d1a19a30f484d8014"
+      "textHash": "2e738fbea6b1d4d873675540c732428b221fd879413b3fc99b0636bdc397c54c"
     },
     "lesson-card:144": {
       "key": "lesson-card:144",
@@ -1574,7 +1574,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "bc2dd90c573c55d5b10bed07f6045ba19f8c1d5763409332c16cf9cf56621973"
+      "textHash": "a6c6402d894762aa47cb01bd7b3ace45c8fabfd5f5ed964eb18da26c8e134a92"
     },
     "lesson-card:147": {
       "key": "lesson-card:147",
@@ -1604,7 +1604,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5bfbcf7b93d2c7a89d29bd5b0f4f3e41d0f858f6c8040d1c87eb94d3379f7cd7"
+      "textHash": "d109836712c0608cb9ed967c0fc24494f697afa3d59df94c5f634d4226d575a7"
     },
     "lesson-card:150": {
       "key": "lesson-card:150",
@@ -1614,7 +1614,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a0ba1729450fa48f73254cd6de2d54a9b893929b24c9b2b36d0f800b7d7605fc"
+      "textHash": "3421dfd97b96a7431089d8891cc2d7b902b68bb47dbf638efb0697702ca7e890"
     },
     "lesson-card:151": {
       "key": "lesson-card:151",
@@ -1624,7 +1624,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "99539dcc7baf8a2f024c9852a37ca917c0dc9f97ffaea49f44d783ed164a45b8"
+      "textHash": "f51865ad06294abe54be1291a5d363e48161a8840191c7d9e33d74a40631c1eb"
     },
     "lesson-card:152": {
       "key": "lesson-card:152",
@@ -1654,7 +1654,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3ea78b7c151cfc3c1f85ee9f603ecf84e36744e1d31ef86d7e108e81215493b6"
+      "textHash": "0e8b4dc2b3d28810e387260016ffa7a99e708d756c2b328d1a30f7f6cd96d204"
     },
     "lesson-card:155": {
       "key": "lesson-card:155",
@@ -1664,7 +1664,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b29d118e70c341cabb2e91c6d980e47826f9cd0d1bc0328fd4ce526977438f6a"
+      "textHash": "70e4fc4e872837197f6535315be5678bcbfa35eea2aafbc1bb037d4127e3af61"
     },
     "lesson-card:156": {
       "key": "lesson-card:156",
@@ -1674,7 +1674,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a9fab3fc5c33554fd15308766aba2d4873fcb014c0057399f204860555d84f46"
+      "textHash": "88dfec861c1e319543be96408e6f4d7e741dc82cd7a7459c74b836629f0cad0d"
     },
     "lesson-card:157": {
       "key": "lesson-card:157",
@@ -1684,7 +1684,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d9e9a12d6d178fdf7ce3ab544c22b26a208ab89e721c21c2dd224c22f7945501"
+      "textHash": "d19388771a916d3c07d68f01285b9a00ab3f8e55d6814ec1ef6f8cf8f24661df"
     },
     "lesson-card:158": {
       "key": "lesson-card:158",
@@ -1734,7 +1734,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3807621aa62a7e4509a5870c7d0e22bc931bf4e04fcc7e03e23df9316ae797d3"
+      "textHash": "312d1488875f2742b73c2aba59128f19871904f2e8632fa6e02cb312bb706bde"
     },
     "lesson-card:503": {
       "key": "lesson-card:503",
@@ -1754,7 +1754,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "37378cae7c784a6094dacd00d9c4933d6c4e5722158725c384b1845620a0d9fc"
+      "textHash": "73c8bf2b630c31ea09ea76b04375328cece72157a952840b66c7faa8fbae9e21"
     },
     "lesson-card:505": {
       "key": "lesson-card:505",
@@ -1774,7 +1774,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "213e58b6a6c1f45da778e25bcb80446b86c20652c7bbf1269dd51e3e8b4d01d2"
+      "textHash": "54e54cb92fb155984b3aa0329eb8d83b334081e7d23cbba30871414be3cd4bbf"
     },
     "lesson-card:507": {
       "key": "lesson-card:507",
@@ -1794,7 +1794,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "14b114d34a9bc3d4b674e22f270a6493498db65cc5f73fdaa494c5cf4bf8fb28"
+      "textHash": "6f013638bc6a1b08f67f72534dd37f5f2d0cf1c9d49d9d9b35767e8c090fc5ab"
     },
     "lesson-card:509": {
       "key": "lesson-card:509",
@@ -1814,7 +1814,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9873a1399d74e9369825824a1d883a1340941545d8f9e6790dda0a3292c3c7d2"
+      "textHash": "b2f9392524a3a9a5e053a17b113a6653a792e5bfb7c7a57c3fcad58b7e10f658"
     },
     "lesson-card:511": {
       "key": "lesson-card:511",
@@ -1834,7 +1834,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4e9dec587f18fa585d56f72208ba93ece98752661ba8b776e39e8863d52f2c04"
+      "textHash": "96afe42647ee8340e378dc18fc7a64764b8d92e0c2ef88ae0e14e9d2e005f2d4"
     },
     "lesson-card:513": {
       "key": "lesson-card:513",
@@ -1844,7 +1844,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9fc7d1f8bd3ccbe7d5b30cd09d2fdd645fb523a6dd09cf96df2209af95a4beaa"
+      "textHash": "155bc06fbf2da735030ec65d1286243fb280ab80dacedf05b82e815179dc335f"
     },
     "lesson-card:514": {
       "key": "lesson-card:514",
@@ -1854,7 +1854,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "175abafbac9d03159aefbb0f11278e07fc7b15a6f1f592888728fbe071ab5d8c"
+      "textHash": "4337cfef51bd4dadb04e4ae1a3c08963b04ca4bedfa60e220a0d8f91fd5a7a37"
     },
     "lesson-card:515": {
       "key": "lesson-card:515",
@@ -1864,7 +1864,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "86f64a5055a40e25e1e0d8ba39641b80f26c364e9d95b3ad06006a5df3bde84a"
+      "textHash": "c2d27c7d33738ee9fefd3d8fbf60026ba129603afaf06a39cb994db9714f4a58"
     },
     "lesson-card:516": {
       "key": "lesson-card:516",
@@ -1904,7 +1904,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "738713e3c4efeb16400067ede0be350fa3ccc5c6e14bf427097a30b3a6a3636b"
+      "textHash": "01500966051fa1d4ae13c9dd6b1009deb708f171fd0c66a7954f64ff1288c951"
     },
     "lesson-card:520": {
       "key": "lesson-card:520",
@@ -1924,7 +1924,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "74fa1d893f8acd2b50b7f921b86100545d337be4a129cf5099c53c81098b1515"
+      "textHash": "db0a7dd9a14a5f8a3014af6f76b933d5f55f319c06b093e22c3eae3146dc825b"
     },
     "lesson-card:522": {
       "key": "lesson-card:522",
@@ -1944,7 +1944,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "8263649ca1bbc0ed68c59c14d73f2a65f52d8a0668ba875c0348f9c2b7111a16"
+      "textHash": "b3304594fdd5b62b41b1edc0ded6b9de5a8d06d625a849eac2784dc4078b6ef4"
     },
     "lesson-card:524": {
       "key": "lesson-card:524",
@@ -1954,7 +1954,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9366e820cf477ccc38dfc5c691c647132687d55770c9924c0979c6c135a83618"
+      "textHash": "c71e0f437ffdef92747642216be30f3340f871d97e535c2f85b6d09c11e8d535"
     },
     "lesson-card:525": {
       "key": "lesson-card:525",
@@ -1974,7 +1974,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e42cabf0527e4ad1b682b90c038c604c0af7c8defdab2d4b5af5337abb9f0728"
+      "textHash": "faaecf82af66a39825a3c90e935ed9b1800aead9c9a72c34178e5f407b6a1aed"
     },
     "lesson-card:527": {
       "key": "lesson-card:527",
@@ -2054,7 +2054,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3b08f3b3a07c054437e6995ddf457905e19681d8ce3598a12f08917b016798a1"
+      "textHash": "a7caa524bf2909c93327b22c6ff2d2646b1c5ac7d2192f055859531a3d5a3878"
     },
     "lesson-card:535": {
       "key": "lesson-card:535",
@@ -2254,7 +2254,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4b90c239783bc100c1b29ea74c573ec4ea2ddcae5c72eaecf77c78d8d4afc025"
+      "textHash": "cf9959ea63ff8b4a4f69dcf2a87865c4a6a8e64c0b66ad675ee0a83a795f0204"
     },
     "lesson-card:555": {
       "key": "lesson-card:555",
@@ -2334,7 +2334,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "05d3c19fbd4f36b3c3fe034d936132d4264820bd75edabd24e43e0a33d063421"
+      "textHash": "e6cd77c72fc6a721428bed9ea8a481b051061120b612c8d60b24755c8fddbaf1"
     },
     "lesson-card:563": {
       "key": "lesson-card:563",
@@ -2584,7 +2584,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "040cf5507cc655112bcb522f91f3e9e04b63322e11ed70ae5b146ffdcf7cc8f1"
+      "textHash": "3d42b03563154ac4976ae4a5adde054f2c7c47b6aeea96ee189aeee33b1f3b59"
     },
     "lesson-card:608": {
       "key": "lesson-card:608",
@@ -2704,7 +2704,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "fb7f00823b1a65268a72c56b166e24a11a36910267743b97685ffb070b2b6f72"
+      "textHash": "5ee9a917f5ed5829f25b6482dd39a7949f161dd33d2987fb3afc5d455391a6f6"
     },
     "lesson-card:620": {
       "key": "lesson-card:620",
@@ -3354,7 +3354,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "af425ed160bc887b8f8b9fac5555cc2549e011d37c329b0643ebf5ccb4fcad4c"
+      "textHash": "5683c3076e1abb180f2e283a9ba0d24a37e8eca9bed301e076b251a0645409c9"
     },
     "lesson-card:705": {
       "key": "lesson-card:705",
@@ -3614,7 +3614,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "fb540abe575b698c9c68dfeb5dd0e29377efb5c84493e15aee05ce4a559e2e05"
+      "textHash": "9f849b960d3ed42fc61a92218ca1f9b1e1cbea4f739586985e508be7f403820a"
     },
     "lesson-card:731": {
       "key": "lesson-card:731",
@@ -3634,7 +3634,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "8e7ef5a446e94f9548efbda657b8b8c7d0f55b573140f9f722c82c7b951a0509"
+      "textHash": "bd6ff892175869c5278ae219299d0f6350468f7538d3f8bf96d13a2b3a3eb277"
     },
     "lesson-card:733": {
       "key": "lesson-card:733",
@@ -3674,7 +3674,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6aca5463682f9130306e716c8beafe22a8b8ec422f6ac795cbc6b0a10950001f"
+      "textHash": "0e50b2bb6dde1849b4f39dab1314ad9c8c6cecf5b7e2ee87d84d98e2040996da"
     },
     "lesson-card:737": {
       "key": "lesson-card:737",
@@ -3824,7 +3824,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "18baab47ccb7bb513faf076951c04d3f42fcb851c92daa2a732f1914105b8246"
+      "textHash": "327866e441a5e0c9820ad6bdb24719318f02c229d88f41428177f106c84cdb8e"
     },
     "lesson-card:752": {
       "key": "lesson-card:752",
@@ -3974,7 +3974,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "46d2a1583ad5b50cfbf2183df488e1e86ed12f52930ce8f611e3a6a993d6d478"
+      "textHash": "a082707b715b2feaeb553ff26be6a4db9df59a81224507161df81abcff844c6d"
     },
     "lesson-card:767": {
       "key": "lesson-card:767",
@@ -4114,7 +4114,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "44b64fe8e22c1a06ea9a793fe487ff53ba92425b0729f77b331a9d5cef175280"
+      "textHash": "aabb6e0237037a295b986aaa08692f8c6014bff4160e87b426b612e2b7d67428"
     },
     "lesson-card:881": {
       "key": "lesson-card:881",
@@ -4194,7 +4194,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a014c5ba67debce74322e6d650f4c75d68b56f47ba55fca03dc4e80991431250"
+      "textHash": "2c5ea9d7327bccbd1bd4d93503a6d177be8da04ddfb2e171a51fef818023d60c"
     },
     "lesson-card:889": {
       "key": "lesson-card:889",
@@ -4204,7 +4204,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "678cb35498808b8371d4074a73e4a1362d92e90ddb95e1e434a5074e7955ca7a"
+      "textHash": "b82cbbda18773ac393c7c68f2907e29e1ebd7d6e0548484cfa13b496a21c4eb8"
     },
     "lesson-card:890": {
       "key": "lesson-card:890",
@@ -4214,7 +4214,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3c2e14b0485e0898ef4738b625d72d7f40135238023d8fa3d217834a3d76b910"
+      "textHash": "93255fdfc258fdc14a39b294f52e19b641ae93bbef9d0ff5ab3ea13b726c1546"
     },
     "lesson-card:891": {
       "key": "lesson-card:891",
@@ -4224,7 +4224,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "54d50c82ee8485acf375037dddeb30c2b78342c43abbca1fadc61cde5f5bc737"
+      "textHash": "79de7adedc04f5d8614c734e8154030d6f5fd30d7106977ecb1359a4862b1d63"
     },
     "lesson-card:892": {
       "key": "lesson-card:892",
@@ -4264,7 +4264,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "65a9ac38b57ad686b3226f50cfa76c8acc1b7b4d6ff5fc177e78d91b7855ece0"
+      "textHash": "3936bb7c9913f61c107c8f996b1c07bebb1b7b47e49a78ba23d39b68984783b6"
     },
     "lesson-card:896": {
       "key": "lesson-card:896",
@@ -4294,7 +4294,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9a9f7f476b7de7e5ef5d154d6baaeea0501c3d8e4394ca5f5a2fae2da97a37b3"
+      "textHash": "aa2ac1e1d9d99463e5f325a8b53396fad531e51a9b668c58db974949afc0feff"
     },
     "lesson-card:899": {
       "key": "lesson-card:899",
@@ -4454,7 +4454,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6e782d6abebb73cc9ada9907241a6508486da75200bb87ac9da3485a50de8b8f"
+      "textHash": "927d33fea1c8b153d09f2f502225a61f70c53bfeb345dbd503ecbffebaf34d21"
     },
     "lesson-card:915": {
       "key": "lesson-card:915",
@@ -4464,7 +4464,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d7a5382144a55b9a9073e960c49d28ad2a0aaf0db6f7d99de114b53161ce8d58"
+      "textHash": "745686d421e4c8ff122e413cf91c40b75a5c2ffa55f9895646634cfaeed95df4"
     },
     "lesson-card:916": {
       "key": "lesson-card:916",
@@ -4484,7 +4484,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7694773ac1dfa416325df1daa44f0e6ef515724923803cca077e8b1a216076e9"
+      "textHash": "2a783f2fb82df729bbcc5d638d9518ef8e4e1649b9765fd85bba7b623812eb2c"
     },
     "lesson-card:918": {
       "key": "lesson-card:918",
@@ -4494,7 +4494,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "253b306e716d0a55683411b908774be0a91fcfd60f8ee349e3667fd9b3a8f3f5"
+      "textHash": "1ccd8e60f16aa69c0a0cf01ed5a51478024f1d574268a3c7090428e60355050d"
     },
     "lesson-card:919": {
       "key": "lesson-card:919",
@@ -4504,7 +4504,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "45aff8229a396556d6be142de1dc1edbe5ed2ff8dd4206b109331599457535b2"
+      "textHash": "c15c61b8448d0630a32aa2b67acf588565057b37d558a8ebadccbf72bbc55be8"
     },
     "lesson-card:920": {
       "key": "lesson-card:920",
@@ -4514,7 +4514,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a7061b4ba2a29e576b773ffb842faf4a211954ea07a31aca17cf4dc2d36e3f78"
+      "textHash": "f29ac806940a8f314eda4425623026ae999e74c8cb65aa91246e7f6e89ea434a"
     },
     "lesson-card:921": {
       "key": "lesson-card:921",
@@ -4534,7 +4534,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "fb8479492d2df18beff39e8a7e0cf969b7604b9868273a68001f17dc8b9a60c0"
+      "textHash": "d81f6a6fc7ab6c58159e2cb793bad788a682a50ff6687721f62111af1f847b31"
     },
     "lesson-card:923": {
       "key": "lesson-card:923",
@@ -4544,7 +4544,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a02ca5759e02ed104b12f211256c8193d951c8483170c3defc30d10f42091857"
+      "textHash": "59b54936ac9717cdfb7c89829e7c3a7627a8b2cb94db252af101818cbc3d8e67"
     },
     "lesson-card:924": {
       "key": "lesson-card:924",
@@ -4574,7 +4574,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "cf1e33ce7bdc0ea848b16e21f60ce0849cea6c899a9484c797f9d0f969501520"
+      "textHash": "9fe4c067301a857c3287eccaab2260cc54d4b8c46221b93e1d8b1f75d236a200"
     },
     "lesson-card:927": {
       "key": "lesson-card:927",
@@ -4584,7 +4584,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "dd17f1691898f99aa7659b6ee7b539a3fd31bfa57a99332600c5fd70376feac4"
+      "textHash": "13c66c4270fd76905a7b6c52182b9f70ab13c6bf10cf61cf1ed5feeb125ead5c"
     },
     "lesson-card:928": {
       "key": "lesson-card:928",
@@ -4704,7 +4704,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c9cb546c66c320a92e3b7498480bc5bb47ec1f63030d9b99323e10b8f5604b7d"
+      "textHash": "66fe3aa73058d446922083e1ee16d9f6ec157e550d4e620e56502790bbcf904f"
     },
     "lesson-card:940": {
       "key": "lesson-card:940",
@@ -4794,7 +4794,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a2716359be2076f4bbcb2a8c428f120ac4cacf307e0107efa8db7fefcf55b1cc"
+      "textHash": "f746f9671d11c886a67e1079fd877eae99fbad234cd5c1e2e6492e6788161ef7"
     },
     "lesson-card:949": {
       "key": "lesson-card:949",
@@ -4834,7 +4834,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6cd9ede40387f252f545564fab93e30a06bd795f895a70a67f8ea4c29f45089c"
+      "textHash": "4cf67854c33bbba2244d6a7da6a158bb78c2d01e69f3d28349256f16ec5af470"
     },
     "lesson-card:953": {
       "key": "lesson-card:953",
@@ -4924,7 +4924,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "bace0bd2eac5864bb091fc3343533c11fe0fbccd29b070d8c7cca436ca8603d7"
+      "textHash": "32eabeb9491d8046c36ad30eb5b89689390ef06ba3a9aa3657edd086f3334cbc"
     },
     "lesson-card:962": {
       "key": "lesson-card:962",
@@ -5114,7 +5114,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "df5fa5a86a4a744c4107d7fd3a8c6cbe3444f24d5f8fc00dbbfacb4a8db04008"
+      "textHash": "26a5bd75814cc52445ed8cc1e6d191ed58205db246128c7c8aa48bd05f90cc11"
     },
     "lesson-card:981": {
       "key": "lesson-card:981",
@@ -5174,7 +5174,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d5d7b0ef514c968c3e916b5127972908333f7547e2df61f99ed4f7d56ea46f09"
+      "textHash": "9beb906aab9ad093c68cda2ed2890143cd729631d0f5c745ae343c0de4521585"
     },
     "lesson-card:987": {
       "key": "lesson-card:987",
@@ -5194,7 +5194,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "76c8b02b6fd19c20dc78f07e1c9fb923e13d2d9a70b79af6f9bfb489cc1cdbbe"
+      "textHash": "41cdcb4226aa891839c83436f8b7eb046eee6173ffa0479bfd0a14e2f5485d6a"
     },
     "lesson-card:989": {
       "key": "lesson-card:989",
@@ -5334,7 +5334,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ea7c46168170e14d26673c74011e565a14c97b16ef6c12a821bccc9db640a9c3"
+      "textHash": "c3280b6628dfc022c8bc2fc9a390fe0a67daf944084f2afb8794fb99392de2b2"
     },
     "lesson-card:1003": {
       "key": "lesson-card:1003",
@@ -5344,7 +5344,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "212830dfd2c683a6def62a10b08f98ea903d13db3be3c6735c52c514b63f84e4"
+      "textHash": "fb4fc59f0215939af9083a6eecf2d9bde9de01a2a01b7dd07f2feafd80b68413"
     },
     "lesson-card:1004": {
       "key": "lesson-card:1004",
@@ -5374,7 +5374,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "bf8acbea311bdc5ab1b90f8fac277ddd428762b9a2688d9d51044d95fa829ba2"
+      "textHash": "d00e4c04911b0100180feec2923eaa4c3e8a289bc2e96fa83f27519dd43effa3"
     },
     "lesson-card:1007": {
       "key": "lesson-card:1007",
@@ -5394,7 +5394,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "1be8124c4da522be60741ade436292930dc37b76f9e7ece3122433b66b866bd5"
+      "textHash": "2244792e19332a118184f4cf0f6a478d008661bb325052d6d7fbebd812d50042"
     },
     "lesson-card:1009": {
       "key": "lesson-card:1009",
@@ -5474,7 +5474,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0b6b29adc83234f0d1d5b802587d57445e9dac8340ee7e81721eb42bcb1a0bf7"
+      "textHash": "c52b10c15628cf4e32176e77c5c6e70852be6ec0af47070f109e38d5eeb685b0"
     },
     "lesson-card:1017": {
       "key": "lesson-card:1017",
@@ -5844,7 +5844,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d03dfbc64bbbf8ea11bc0195ee6066026ebf605abd36071b08ffe073226b46b1"
+      "textHash": "df31b88890a00a17b02a21d5f8414b7c8522bc36fb9a3cee4e4d6f50e697b0a9"
     },
     "lesson-card:1054": {
       "key": "lesson-card:1054",
@@ -5864,7 +5864,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "493d528e28814c5c0efb9933edab8e606c2f4fec25a4665ba9ee5823eed56e49"
+      "textHash": "18d0aad1ceb03af5248257d00119ba13087e8cc06761f5d0298aa8eef011ec24"
     },
     "lesson-card:1056": {
       "key": "lesson-card:1056",
@@ -5874,7 +5874,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "cff9f926740500c75a86c11ed5cd17867dd2ea1a6ccaafe549ae9fe5f8a7b7d7"
+      "textHash": "9c2e188981f4adb1e85a53dbbff84d39a38d05138136aa3be99319e33f27ba0a"
     },
     "lesson-card:1057": {
       "key": "lesson-card:1057",
@@ -5894,7 +5894,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4771b78da0c35fe5647c148689d90bb4f1de96c512a10477a64a87901a1c838c"
+      "textHash": "a84bbcd90f2c9edefbb34477eaad01b71db558b21f8353a8dccb535fcb515133"
     },
     "lesson-card:1059": {
       "key": "lesson-card:1059",
@@ -5904,7 +5904,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f25808b5b1f74ff9d58ec3510f59742380c237d35c053a6427d1d6aa01f588cf"
+      "textHash": "7d8eb13b02dbdc043fdaf0df5699513d6e78530c8fb4254bb6fc4fe5446ba2d9"
     },
     "lesson-card:1060": {
       "key": "lesson-card:1060",
@@ -5924,7 +5924,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3348cbddf6a5718dce85ad2885309fd719fe37fc4facb4906c6adb7b8aa0acce"
+      "textHash": "d13b95feab9e8c801cd7c918c72e8fbe520faeabe9cbce5c33c1f7ff8c667fee"
     },
     "lesson-card:1062": {
       "key": "lesson-card:1062",
@@ -5934,7 +5934,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6fdc8fc7e89c734b8a7f99b66b50a3859495852612820ef5ea097a7161b233c1"
+      "textHash": "795f93de7a7f845044b6134bd1b3d80a161a7532b0a55bf1f36564f26d979e53"
     },
     "lesson-card:1063": {
       "key": "lesson-card:1063",
@@ -5944,7 +5944,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5f40033d780bb26de55385106d08277d4a1fdd5f6b92ecab3b22f6b4b652357b"
+      "textHash": "e957f5c2e54bb8db8a3d06f90b559de1cbb818d4d3b628e2718a7409c9054902"
     },
     "lesson-card:1064": {
       "key": "lesson-card:1064",
@@ -5994,7 +5994,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7ca47d821d690ed07d2562b98009b62627423200310ffccd70f64f38ce6b5bd1"
+      "textHash": "3e207ce5131e7c5ce110308701072fa5b2ee3883a29eef709f99ddf3e5b406b9"
     },
     "lesson-card:1069": {
       "key": "lesson-card:1069",
@@ -6014,7 +6014,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "27b67c48ec0b2a0bea83057db5f393394ce97b56a5f8a14be650c71f96efa1dc"
+      "textHash": "0724edb27f42d108735b145ebf468c3383df4febe4f3e5a2d958e17ed83c2ce6"
     },
     "lesson-card:1071": {
       "key": "lesson-card:1071",
@@ -6024,7 +6024,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c077c6293228d32f3bbbcf109a254bab5e58e9593f227fc98d9e1320769c23b6"
+      "textHash": "7d9b18837bd46d17bf522739885eb871b6df47a66566d4b952864ef7cf6fc613"
     },
     "lesson-card:1072": {
       "key": "lesson-card:1072",
@@ -6064,7 +6064,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "78f649a34fe0120ce382539d62b41cb039a4bfc97cf25fd10f4928d08fd64b29"
+      "textHash": "0ae88b448f1f5b9d3b68c7f55331d71083e31b1fbeb32fbfde69a3a3ae0843c2"
     },
     "lesson-card:1076": {
       "key": "lesson-card:1076",
@@ -6084,7 +6084,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0c737693a3ce4c7a80b9e3957125e57ed126da8262a2dbe2fa2e9abd05ac77b1"
+      "textHash": "505011cfb9d244e8f579802f01aba05dc599ebe17aa2563141d0420af0d53c8a"
     },
     "lesson-card:1078": {
       "key": "lesson-card:1078",
@@ -6144,7 +6144,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "810357743c8b459ce5c6ae81f1706cdd22b9bb9c36791c2ef07795ff7fec9b67"
+      "textHash": "02215d71f1c5ee972531b3dcf568b19d5b0f6e0dd79929cfd6d4e8fd75da872f"
     },
     "lesson-card:1084": {
       "key": "lesson-card:1084",
@@ -6164,7 +6164,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "df333880f532176a52b63ed21dcc7d9cbb602a1d6bf08c03d05d7d8036746d5b"
+      "textHash": "f24cbccd60643078c5f46b27aa80725b30a386ec425a9920484db491657f5094"
     },
     "lesson-card:1086": {
       "key": "lesson-card:1086",
@@ -6244,7 +6244,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f210fcb32fa1b21108c65c69c86593f9e5c5bbf205f621a821cacbe8b66f9336"
+      "textHash": "b94678a675db190358368456041e32ac1a8262e3e102b7afe57853f3d07eeeab"
     },
     "lesson-card:1094": {
       "key": "lesson-card:1094",
@@ -6284,7 +6284,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "fb629b01bab0798a288e29bc117da74919036c1f2acff180a0ad5a6e993d2e5d"
+      "textHash": "899415755b5293ab9699341abc9718df4e79285188fa989415c0346bedfcf356"
     },
     "lesson-card:1098": {
       "key": "lesson-card:1098",
@@ -6294,7 +6294,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3d502c8d2883844c0f382f58ebc7a22910b63742646eb317e6735677e1d427de"
+      "textHash": "9d823fda0772e25e1887637209a1a044a70b9187bbdf5303ce7c5a0d7e5eed77"
     },
     "lesson-card:1099": {
       "key": "lesson-card:1099",
@@ -6304,7 +6304,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "dafd67793bae13b8d9a1d90a2642b4e261de8137bb3c476995a8bd130028f18c"
+      "textHash": "4959fa420bd81f30d271e6b05707b8830f446f96ecbe7b85f778074d75ff73c1"
     },
     "lesson-card:1100": {
       "key": "lesson-card:1100",
@@ -6374,7 +6374,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "71bb83b5e8db67dff4b5a3d3936e975948b42b32c7561943edf2968b97e3aaf8"
+      "textHash": "ce36dedc1c2b5b0be3a61e3d43c94b38e37fedaf947cfcdd0315518092c2c28b"
     },
     "lesson-card:1107": {
       "key": "lesson-card:1107",
@@ -6414,7 +6414,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "59ddff2a819dcd6ccb3992c29f4a170e7fd50aacafa14a4b3bdf27893ec40ae2"
+      "textHash": "8f244f678adf79f3a094088296e0067bb968c30ec4e5386a17faa603c2580d72"
     },
     "lesson-card:1111": {
       "key": "lesson-card:1111",
@@ -6514,7 +6514,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "44eac9245eddda1bbaf2d1fb4c9dbcea7b30d9aa4a71a43f48b57434c4625c21"
+      "textHash": "3c4886bdd23d00fe8b7407ca0fa234597a450a6b74c8cc2f8b29443c6b2b3979"
     },
     "lesson-card:1121": {
       "key": "lesson-card:1121",
@@ -7344,7 +7344,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a839f212a0614656caf4c0b9525bb3ad4fbef3cf105f845ff6bffd4209ff77ea"
+      "textHash": "d558680759a00b5b6c9b2af1f774ffece2160c34b037df0b00ef76894e4f1050"
     },
     "lesson-card:1204": {
       "key": "lesson-card:1204",
@@ -8424,7 +8424,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "11cb68212f193a9d819fea304eebb44656e78eb1750a10dce4ee821df5886d0f"
+      "textHash": "e3a29e10c2ec39584e31010fa235c4a8c7f2ded9d87af730e537bc9b1860473b"
     },
     "lesson-card:1312": {
       "key": "lesson-card:1312",
@@ -8444,7 +8444,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a81162b9ad4607e866b4aef30697ca32aae78d8326e61cea081ae70885e378bb"
+      "textHash": "041f74bfc1c516516cce038f0ff6528ce0fcd40f19d142ecc8fb3df37a68b0a3"
     },
     "lesson-card:1314": {
       "key": "lesson-card:1314",
@@ -8454,7 +8454,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3260edd8ddd6e1b005dcbdce840cc0e20c2947f48edcec206d25c50c3c76dc4b"
+      "textHash": "4dde6d0052d937422eaed03d4616ce850ade2cfd2eeded241777e881be62f432"
     },
     "lesson-card:1315": {
       "key": "lesson-card:1315",
@@ -8464,7 +8464,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3a0fb2da52f0989f14310bb4cf521d821321527725fbc4aaabd0011d152fa803"
+      "textHash": "050a6c6f8fd76ae49b400c87859e7e0dcb26bcd712b9ddf8e5cca7dfc4020924"
     },
     "lesson-card:1316": {
       "key": "lesson-card:1316",
@@ -8474,7 +8474,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e38cd6868132af1533b82301ec6a4445889c6159b3083e5e71070804a3b62b58"
+      "textHash": "97beeec20ac9c7bc11a6ab8f68f25ab8fc3d65a31cddae2ab616ae02afb9f95f"
     },
     "lesson-card:1317": {
       "key": "lesson-card:1317",
@@ -8494,7 +8494,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9ab18e51a87e4a9455204da85f50af86813785017a2f1db03de8d3434d204d43"
+      "textHash": "d3bf8d32f5726a6c51619b803d57be6e8a5e870b0549184c1f75bce2a985b110"
     },
     "lesson-card:1319": {
       "key": "lesson-card:1319",
@@ -8784,7 +8784,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e911b84f03f55d26bf2c5abe2f2d3e9ae6fbc8f9e8dfafca0c521d1b6bfc78d6"
+      "textHash": "9a1ae183dd4a83010dbaa2184d82461927c4a6ff8d95512814aa13e7c26293de"
     },
     "lesson-card:1348": {
       "key": "lesson-card:1348",
@@ -8904,7 +8904,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ba47c0658249a3b3daf7fa897c6f48c7cbcbeb1e2b09f04bf1757b092d99c44a"
+      "textHash": "60bccb2f9b6b51554cfc3cb8d334b0bf04cbb96a22ae7b27a0a3089e885388ff"
     },
     "lesson-card:1360": {
       "key": "lesson-card:1360",
@@ -9184,7 +9184,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9d7755c354f8a1e84ada99d03924b7854e8b0b086e412949ae6b44d7448ad20a"
+      "textHash": "ac8280ba3ecbf6de67b0c91059f20f7b16e7b9f13ec3c67a3a0d34d0a0ec8726"
     },
     "lesson-card:1388": {
       "key": "lesson-card:1388",
@@ -9254,7 +9254,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "1e2fbcd5dae7f836d6e12c5a2d1545bc19715378230ccc9c451bae7edaf31334"
+      "textHash": "bec064739b1bdddff91b9d0fdd816f50b70884d211633a50dcc91083560414e7"
     },
     "lesson-card:1395": {
       "key": "lesson-card:1395",
@@ -9374,7 +9374,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f4dc585922a8f5a0c5c3411bec6d32cd5e43f513d0dd4a586fc61aa1bed5c799"
+      "textHash": "cab0ac33d2e9b6692638c75343f196d49bcd8d7b0904c5d215acbb5dbecbe7e3"
     },
     "lesson-card:1407": {
       "key": "lesson-card:1407",
@@ -9384,7 +9384,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "92160fb7c57ae7fbcd84ccd45e06d5aac601c916ead8157c555889f4aa0f560e"
+      "textHash": "8cfe58df4fa94bf3f4f8e3767d9d26dd34f5188b26d0b57adbb0ca7a1325cba8"
     },
     "lesson-card:1408": {
       "key": "lesson-card:1408",
@@ -9664,7 +9664,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "18c312166651dcd8d5b2f8adda9fcfdc1366f10b5b47573c5c03829f2c89be0c"
+      "textHash": "f220b17b0642525011933b479b8a330caf05025470e4b540193b6c7d7e0e8d3c"
     },
     "lesson-card:1436": {
       "key": "lesson-card:1436",
@@ -9964,7 +9964,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "20bd7c7f643f17e5b0873a64e34ecfb8b9e852147673913d621a9a72828b5e31"
+      "textHash": "f4e9c13339d0c21bfde4187a97d5f6149b7070ceb13a3fc1c06907ee983580eb"
     },
     "lesson-card:1466": {
       "key": "lesson-card:1466",
@@ -9984,7 +9984,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "da155796bc47f884941c9d2016dc557c42a1db9f8ea621c7ed96184d1d617edd"
+      "textHash": "606f674c0b141f0c6d1a85e8ae87e531a30ee43d3d0f0d5106444ab588cf34a3"
     },
     "lesson-card:1468": {
       "key": "lesson-card:1468",
@@ -10504,7 +10504,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "411a011b7f3d0951cd72386e7339b17531e469ac6d3f186c86492a0dedf0b9be"
+      "textHash": "3ebd7a20696f2aa9e02bdf3bcc5aa758d06b9be1ef352a48f0d53f005ce70f62"
     },
     "lesson-card:1520": {
       "key": "lesson-card:1520",
@@ -11074,7 +11074,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3c37ed1fd20b43b1c685370557a5e5d3baa7d9cff9b8b2c43b7793d2e19f3bdb"
+      "textHash": "144503d4b9b841b1130f9a986b4df04cf9e6f0b6e68607f81002a2272966ad7b"
     },
     "lesson-card:1577": {
       "key": "lesson-card:1577",
@@ -11104,7 +11104,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7a020969a77a7ed5c54735c42d16e509600d11bcbd1392d1e637fe8a6d13c6e9"
+      "textHash": "6f3cc99328c74714dd70ae0597ddeda399741882b6d3d5b27230b3693ff3dfaa"
     },
     "lesson-card:1580": {
       "key": "lesson-card:1580",
@@ -11264,7 +11264,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3de2815ffe29ae0aa72d3f56f6d207141e65d1b6abc2ef61be2d009773745efc"
+      "textHash": "8853efeba75f2ff48bcdeb78cef0fc91ceee538786cb8ac3a58eb060800645ee"
     },
     "lesson-card:1596": {
       "key": "lesson-card:1596",
@@ -11324,7 +11324,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "72fe84c8f7b62e535c386fba33976afcb3577b8e94493668b5a225f6dad5df0b"
+      "textHash": "92df3760c68163d35f1440a38efaca433514ff209ac1ad5d330d4128c761e8e4"
     },
     "lesson-card:1602": {
       "key": "lesson-card:1602",
@@ -11394,7 +11394,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "17663d1aa684d9f50e58b4d7fff49d08e84a458ec52a0bd8d088a823c61dd47b"
+      "textHash": "abe624981d452da27849cd6509fc860efae967179a3c3a2e3d172a70aa7b60c3"
     },
     "lesson-card:1609": {
       "key": "lesson-card:1609",
@@ -11534,7 +11534,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "fa739faece729da1ea9e37bd7e5ffcd935b7ddb9fd5f978920585eef70fd918e"
+      "textHash": "378f821f5f80876001fde838620b169cc0f4aea982c20d77294886036bd2df40"
     },
     "lesson-card:1623": {
       "key": "lesson-card:1623",
@@ -11604,7 +11604,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5936b1eb9069a4a47c854af7c89c8a21923752f535d375b6e1b0722b00ef3ec4"
+      "textHash": "fbabdbe1fa77522cef5ee86c65886fb2f7aef9936b8eb39c50914e411cf4b76d"
     },
     "lesson-card:1630": {
       "key": "lesson-card:1630",
@@ -11674,7 +11674,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f33e565d8defc7921d1fbfdaa8e12c698e691e9ded36f4ad4388902e49e9d6b9"
+      "textHash": "28d54b6ee86f9f7aed755b819297aae88c6c326291260eb69e9a46471b63fd89"
     },
     "lesson-card:1637": {
       "key": "lesson-card:1637",
@@ -11864,7 +11864,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0bb000daa39a7f8fbc66af670449abaa017e90f957dc228ab91f069024718a9b"
+      "textHash": "ed2d8745f910cd1f34bc65323a45d16a3e4cd7abc271edf9eaed87971199e940"
     },
     "lesson-card:1656": {
       "key": "lesson-card:1656",
@@ -11994,7 +11994,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d82f0fefed3ac17f5dc2d5af9297a3b69425efb650024675a80211baa1838025"
+      "textHash": "daafcba9861984032a5de2344f075b4f36c16679f8faa12fe659dca883c0b78e"
     },
     "lesson-card:1669": {
       "key": "lesson-card:1669",
@@ -12094,7 +12094,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6355a496637156f78bfb3861254b31e5c79a4cd2ead3902ee9ff3de55d083a2f"
+      "textHash": "732a8a4e35ab7de6afe19db9eb5d38e612bba514b8d7834bd74ddd64ccac3de0"
     },
     "lesson-card:1679": {
       "key": "lesson-card:1679",
@@ -12184,7 +12184,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e75ffa47500c20dffbf223a5e9b9c57359a98cc64338fe5026e8a9d98ac0afed"
+      "textHash": "84aaaf1da3a4dee00eea60f2f156e5662fef4b438d1161639c2515b237f02e38"
     },
     "lesson-card:1688": {
       "key": "lesson-card:1688",
@@ -12204,7 +12204,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "084587c46cfa8311fe8dacddfa83f91eca74ccc0078c918d941a897a80188bdb"
+      "textHash": "e1882208cf8564d067f5adfde9cf70a2fe6ac6ecb1cfa077a6a58715964cd581"
     },
     "lesson-card:1690": {
       "key": "lesson-card:1690",
@@ -12214,7 +12214,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "aafd6a789c2f4a605d56abd400508ae198269bad3c1b797149d8171ac8ae80dc"
+      "textHash": "2e9103aaf5556f70bb0c5932d0b439e168003319a5bcfade21cbd463c8b2b61c"
     },
     "lesson-card:1691": {
       "key": "lesson-card:1691",
@@ -12254,7 +12254,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7fd4b549f3e1dcff6c64af9f5d2a0f703e083f2644b1f02c0c96255a4e9dd599"
+      "textHash": "297d55eacbe2b55686cd3a25d360b6198a64cc2f4403936fabdd4d2da18946ee"
     },
     "lesson-card:1695": {
       "key": "lesson-card:1695",
@@ -12294,7 +12294,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "974e11cc424e0f5ee07cf733300397750634d5db76c5da9ec992e57af70a1845"
+      "textHash": "a25222060d7f07629395bfa0c4611b7f3f4f8e401adf1c78f2fd10dc6fd427dd"
     },
     "lesson-card:1699": {
       "key": "lesson-card:1699",
@@ -12634,7 +12634,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2645e6f5beb327d6b652a8919dd721eb9ae30c23ffdbce0be356d4baf6142b3a"
+      "textHash": "45e1462bdc7f9c3a9431c7f1102da0b14551d0394fa438ee1eb318ceab91abcc"
     },
     "lesson-card:1733": {
       "key": "lesson-card:1733",
@@ -12684,7 +12684,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "89fd93b7dcd3027fc19f13f89a36ec883f77e6f076b812d6682ac106f88202f9"
+      "textHash": "65f17aa48ca74a8dc6b246fd3dc859c5866b88f3daca490e51101ce36c3dc837"
     },
     "lesson-card:1738": {
       "key": "lesson-card:1738",
@@ -12844,7 +12844,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a1715b6666307b32ed396729711c87660f935bbfc8ef8e3ef79d9e7b341610d7"
+      "textHash": "a0e1569aef0babd53a1a91905e841e09621b04c57aadb9c3d5e123b01152dc0a"
     },
     "lesson-card:1754": {
       "key": "lesson-card:1754",
@@ -12854,7 +12854,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c000f960b54d2ffd1d5e06cdaa74429c180544d1bb05203847a63a89a12f80e0"
+      "textHash": "14c2c19a43f84c6f4db4e7c5c8df0f7517e3c8a2d3d9d3bd05cedc6e9cf468bd"
     },
     "lesson-card:1755": {
       "key": "lesson-card:1755",
@@ -12894,7 +12894,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "bb769a1bb17aa3717b5a41718ef65bb67679017675133799ec26f414363f16c6"
+      "textHash": "c397bdcf1e8de01cce76e2003b685a20c46fa32a7d1c9954ac4a315d86ab13f6"
     },
     "lesson-card:1759": {
       "key": "lesson-card:1759",
@@ -12914,7 +12914,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4ea733875022b7937c83d2eaa534cc74ecc9656707699f1528f43241e73c29de"
+      "textHash": "0a492022ff6f96d1f5c0955b6bd07c312940552e170f7b0cb999d2928306ce4e"
     },
     "lesson-card:1761": {
       "key": "lesson-card:1761",
@@ -13214,7 +13214,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a842dd15fcb00654a0e29bd69af2ec518ccb19ac91a3a0a9e65af1db9a112c8e"
+      "textHash": "5b22772375ac474c2ea8cebdaaf33176a5b1ccc80d2001f133e29654ac9e9c1d"
     },
     "lesson-card:1791": {
       "key": "lesson-card:1791",
@@ -13224,7 +13224,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ee219c90829bec8a37e005253cfd00e0ac7d2cf227df654de4c423d3ea0dd574"
+      "textHash": "09ed9e35a96a58c67ad99b528e91592225a630baad8da54b2b2d80f627a0d906"
     },
     "lesson-card:1792": {
       "key": "lesson-card:1792",
@@ -13234,7 +13234,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d66459a6da47c37d5e614b63ed4ec5133ac905dd15b373625dad64e61d9ee91c"
+      "textHash": "2e5be5dbbe4a4aec10fba87726075ce3f5ffe24f6144362c0590a926fea087e5"
     },
     "lesson-card:1793": {
       "key": "lesson-card:1793",
@@ -13284,7 +13284,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "14529588c008a07f8599dcae1e8e5a23bca61ca3128e3fd570d6130a6fa967ff"
+      "textHash": "6afcb1662ab3247751403ab01958894d6a7fd6411211949afbb74676d9c697b0"
     },
     "lesson-card:1798": {
       "key": "lesson-card:1798",
@@ -13294,7 +13294,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0da703ca3fe82df15463be6053346da089b4dc3f64d3d65d2023c5470c713a6d"
+      "textHash": "e155ed7751b7034930f38b7157b8edf06dd0056f3fc53a172293a8087b7598a6"
     },
     "lesson-card:1799": {
       "key": "lesson-card:1799",
@@ -13434,7 +13434,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7a1feddf7a625b4cd554e57b47d9ba5de36f83a781ee91a9dfdb561944986379"
+      "textHash": "381a5ac2b04c34efec8bea2571c43fdba4d2a34e8ad71a15f7888346382f49c4"
     },
     "lesson-card:1813": {
       "key": "lesson-card:1813",
@@ -13644,7 +13644,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e6b65500acfe9bd54ac63cf69934058cb8a230865b85f460a492c26215092ffd"
+      "textHash": "4b86ddeafe9ebf5f45b54bc4c0866f2ed5f5fe86dc0106f4c3f8aaf970b49f00"
     },
     "lesson-card:1834": {
       "key": "lesson-card:1834",
@@ -13654,7 +13654,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e455612f0f5787f51cccbfbd5f5722cec7965c624beca4044c0f3b329a68008a"
+      "textHash": "faefb7a08a1631361f3ccf0efdb59341331e495c8b6c61e8441f52e2f81ad433"
     },
     "lesson-card:1835": {
       "key": "lesson-card:1835",
@@ -13714,7 +13714,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "44b36764ecdb89dab5d2ad1d8c08750302027d97a9be918978b046174399323b"
+      "textHash": "b2d6a07eed636fc1833b4ff293d4a1c2c6962752e23ea7dbad66aa2bed9f6d60"
     },
     "lesson-card:1841": {
       "key": "lesson-card:1841",
@@ -13724,7 +13724,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "13bc2612dd1cf9f7206ae12134a687ac87e27fd22beed5bea77ec4ceaefdae60"
+      "textHash": "86471a08ce049e06d583150215abbba9c8ab8d1d69c3a251d2c10277d1c35cbe"
     },
     "lesson-card:1842": {
       "key": "lesson-card:1842",
@@ -13784,7 +13784,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "df9475d938c91ecb62b4248df2d7177b3fbab0b0a9abff0d0933f3f14fb6e52d"
+      "textHash": "2ea8dffcd3c599ec67cae02049d92311c95a4ac5b85333d9003f88f1a3c67632"
     },
     "lesson-card:1848": {
       "key": "lesson-card:1848",
@@ -13874,7 +13874,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "defdc23ea8991e5f5afb00be213216e55f59147945ac4555225041100190c0af"
+      "textHash": "44a1eb92758bc244047737f82a0dfa225bde02698a44eb4118d9467ccf9b36b3"
     },
     "lesson-card:1857": {
       "key": "lesson-card:1857",
@@ -13884,7 +13884,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3cff3d3dbd52f8233201f5c657f6c0321ffeaa112f1b631d59f876837b7fb423"
+      "textHash": "1ba08ad775004d0e36aa76133f43218c0358051b3c05d31d944204382e9f84d2"
     },
     "lesson-card:1858": {
       "key": "lesson-card:1858",
@@ -13914,7 +13914,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7c5898af12d31c055474798b778ef93b9b55e25b78255bc9ad5da526d1ffac8c"
+      "textHash": "c21819261f1e7ecab29e8335e47d1f4012555c78ebe2dd48127c6b31f58396c8"
     },
     "lesson-card:1861": {
       "key": "lesson-card:1861",
@@ -13924,7 +13924,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a2cfa6c888e0ac16f76d49313234b2f82b3142e0780fdbafa7101712469834da"
+      "textHash": "8c447470895e69d74d4787428da90ef46393dcf85003fe6ee1de8c33c0d8754e"
     },
     "lesson-card:1862": {
       "key": "lesson-card:1862",
@@ -13934,7 +13934,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "af30563b8c853d4edbb2d4f74b8752bfdb161a1591eda900b2da637f1b128aa6"
+      "textHash": "c9eb1bf471561e0fc3e0f166371fb379a1f3e4d40bb758b7066f138b2b25c924"
     },
     "lesson-card:1863": {
       "key": "lesson-card:1863",
@@ -13954,7 +13954,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "062bf72f3096fc201d41e93874523602f51b75d2abb75c71742813a2f03ce54c"
+      "textHash": "6f9e0d0232bb05d7ce39f6c86548752ac6036847562ae2c3318ac2a17fb24d66"
     },
     "lesson-card:1865": {
       "key": "lesson-card:1865",
@@ -14024,7 +14024,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "185da1d4f8f5e7e824eae5d3b48a27a128ad620ae68d18ecbfc821296ed9ac12"
+      "textHash": "3df0f0508045de9750941cda3954a2e1588b691bc8ec147e14d221d8e3d07aeb"
     },
     "lesson-card:1872": {
       "key": "lesson-card:1872",
@@ -14054,7 +14054,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5daf31dce957199d10d7d622dfa8bbf4205584049a3fc85ed1bb4bcdefa1d4a6"
+      "textHash": "8e2c7e2d0f92fad40631bfdba3598001179e3828f378bebbd3b1e9a815f88cf2"
     },
     "lesson-card:1875": {
       "key": "lesson-card:1875",
@@ -14104,7 +14104,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "96f8e37aeff38645837f40cb191f3a076e23b765f2d033baa87a4afaa249f16d"
+      "textHash": "25762270af85a22b12893197954f0d9b69f6aadfd2e7851baf557ec591c8d269"
     },
     "lesson-card:1880": {
       "key": "lesson-card:1880",
@@ -14114,7 +14114,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c51eb9547ab95366699f5a8c2ea658d75dc4ded3d9e20e931a08d9e04d5bccad"
+      "textHash": "686887416377678dfe2d996a3b9c015136a91c8d0d7aca6504463dd8d8de3e32"
     },
     "lesson-card:1881": {
       "key": "lesson-card:1881",
@@ -14434,7 +14434,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "df34877a24c60ed12e04da69865ff257d42645bfa6d504dd7c031b29c21e8db0"
+      "textHash": "e522e39bbf29f10a151f57f782265071fed2270641fea56f63f9507e9915366a"
     },
     "lesson-card:1913": {
       "key": "lesson-card:1913",
@@ -14444,7 +14444,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "cfeedb430b4fa8dd53d98dc814255fdd01d03087d7d12562afad95bb43dcc0c1"
+      "textHash": "97f430e49aba3d55c72dc72c617034f262acddbaf75e5e26629c71f46f2db3ed"
     },
     "lesson-card:1914": {
       "key": "lesson-card:1914",
@@ -14484,7 +14484,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6c1be351f38aefdafbffe825d336c9095563404dd61bb5b9e8c972c39e8f25c6"
+      "textHash": "b9c4b0688a281eb1c9145ab7863cec4e14bfde51380bfdb0f492832b8fcb5bf0"
     },
     "lesson-card:1918": {
       "key": "lesson-card:1918",
@@ -14494,7 +14494,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "436a35d64293d1c86f6f04c4ebc59e55b6191dc9c3a2f28c9e35166e4523e3f0"
+      "textHash": "fee72c6cddb9a45f4ae1bbdd239b8ca7a4942dabb4eec2294ad22be704c9b43f"
     },
     "lesson-card:1919": {
       "key": "lesson-card:1919",
@@ -15034,7 +15034,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2560d88a35575aff11d721745d463629bbf5525625160682493f4582bf0c4cc5"
+      "textHash": "94d4382fbe129411fcda3f6ba2e7b9513562e59918a510dc20a03f06892f319b"
     },
     "lesson-card:2293": {
       "key": "lesson-card:2293",
@@ -15134,7 +15134,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f91a70f9e29ffdb9f7179a3f4000198f4811676ed9eb3742465cd783ac5f9cb6"
+      "textHash": "fe7aeb74a3e0f6ae0c02599ec43c3c93383f345c96104fa754cfc1a6d7861e6c"
     },
     "lesson-card:2303": {
       "key": "lesson-card:2303",
@@ -15144,7 +15144,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "cc3dd6cc688779ebec8a1abe07963095c78dd96c2e9940e94c3328512b8de8d9"
+      "textHash": "ecf4e257b6a10926bfb4cda9e23c8f467606c5fe35e7c0dcad15b7cf8fb3ca63"
     },
     "lesson-card:2304": {
       "key": "lesson-card:2304",
@@ -15314,7 +15314,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ec77c9d4083f2c0ca18409273510296bee5fd36271d9c692ff0e8113696db957"
+      "textHash": "1b13a0b6620953d77835aeddcd75830684cff5c4551a1e829150d0eb7a15998f"
     },
     "lesson-card:2321": {
       "key": "lesson-card:2321",
@@ -15544,7 +15544,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ae2ecab0e675a2e40c9e71df2c1e57536591e752a816470ab16da9e6fe1cd0f7"
+      "textHash": "8ac697abdd2ebb6164e435ceea9d03ce9bb148c00b90eab703717f6c8be597d7"
     },
     "lesson-card:2344": {
       "key": "lesson-card:2344",
@@ -15574,7 +15574,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "09cbd0cc814448d1c689c143e0245617241c95a50d015c00444eec3f60ec905b"
+      "textHash": "0ffe732c0d7e1444a7b85657c916bf330758d8b9136d4ad4b44cc01c81b4ea75"
     },
     "lesson-card:2347": {
       "key": "lesson-card:2347",
@@ -15634,7 +15634,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "91f059341eb65905a14e4cf8911f0cdd9ca6330f624250e1e24222ad23bb7c8a"
+      "textHash": "92ce73206be078542afd38c172d0734a13afbdfee0317d39375450789b3f7a36"
     },
     "lesson-card:2353": {
       "key": "lesson-card:2353",
@@ -15774,7 +15774,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "32d2527117b774a90447da692b0f60360cb5ab6f2cdc0f3691bc859f2474ee94"
+      "textHash": "9b32dd98504008855ef5795d8dd147685e40758e466370eb151333c222bd6792"
     },
     "lesson-card:2367": {
       "key": "lesson-card:2367",
@@ -15784,7 +15784,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e64d84b337e4d10cadcac7212c5b2df93c6ef9e99d2f377de4374fe7bdb380c6"
+      "textHash": "ca146e89bba237293e632efe22a361c01a2ee2808d762ad0e4710916c81084f2"
     },
     "lesson-card:2368": {
       "key": "lesson-card:2368",
@@ -15914,7 +15914,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "196bdc07aa0f8e1e6d1685694d4df53cc5f0f4623024b90595fe41014ff681c6"
+      "textHash": "cd6c2a841c837f6d4fdde3a849330cfa54b243486b6fff26899470bf62fea666"
     },
     "lesson-card:2381": {
       "key": "lesson-card:2381",
@@ -15924,7 +15924,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f45bbc72b3e0dd8f857b764bc681de92ef657fbb61614eabdff7ef0a0d157d10"
+      "textHash": "a3bd1d97784fe195b23edf71c460981b2726a99ec7ab6b488f9d74425f257108"
     },
     "lesson-card:2382": {
       "key": "lesson-card:2382",
@@ -15944,7 +15944,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d6cac82e5dec75ad64fb526c14bd38df4d4ca0eb3d9163c304e72e6d6addd542"
+      "textHash": "88b490100d26375c344dfc6f8ae09df975da689116c4d8d29d92d96bcb05b2bb"
     },
     "lesson-card:2384": {
       "key": "lesson-card:2384",
@@ -15954,7 +15954,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4694775e71b98e84a5f62f48b16af2db0c6f18452e1ff437b9b7fa2143b5a8e9"
+      "textHash": "0bc46b67c38bfaac8e272d49f0ef20cd61fc98afce66cf796653afd65ba72153"
     },
     "lesson-card:2385": {
       "key": "lesson-card:2385",
@@ -15974,7 +15974,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5932e4e50268254c803c5a09140aba0fac2066c8112652199255d09cf1b45eea"
+      "textHash": "00634854d3fd146bbd2bde8490096c6906303d7323e0aae035f75b65753b2455"
     },
     "lesson-card:2387": {
       "key": "lesson-card:2387",
@@ -15984,7 +15984,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3659fc859122613ecbabc8ecc572488a2d4c2ad17c0b928d2f98fbeff1738fb6"
+      "textHash": "b9a988d94ade76d04f6c7d516f1533d413b25f60138e654ea07b6602ff374967"
     },
     "lesson-card:2388": {
       "key": "lesson-card:2388",
@@ -16024,7 +16024,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2f98132ba914f21dd69429fd6e10adf40fc055e49ee47c0de722a3ef9aba06d9"
+      "textHash": "c5e35e3640ab93312919d74c4b22c18baa9dcfa40adcf5d738915126a4dfe4bb"
     },
     "lesson-card:2392": {
       "key": "lesson-card:2392",
@@ -16064,7 +16064,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7126e9f64e3b21d5b325aef0afb1b4255f68fa828d9692b3a372d1bf06bcb7fb"
+      "textHash": "883cd8611d8d512fe6d01ab73dbb053da59ecd9c33bbf42978415bc7b7b8c799"
     },
     "lesson-card:2396": {
       "key": "lesson-card:2396",
@@ -16094,7 +16094,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "36dfca06fc152c06b693c3a201db54211057fe19ef8f9fa2fd4d069787402f34"
+      "textHash": "32cd4950edf43dbff7b5909c01e005f1e511cea57025a33211761b1133efb96e"
     },
     "lesson-card:2399": {
       "key": "lesson-card:2399",
@@ -16114,7 +16114,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b8839f117fa36115cb92701ff38eadccea2b76cf9044520073742bb7662a22ca"
+      "textHash": "38d4349114a6a8e459a2ac0ef80ab5ef571da420a25da1814043767cf76fbc6a"
     },
     "lesson-card:2401": {
       "key": "lesson-card:2401",
@@ -16144,7 +16144,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b2d892eac9e1be225fa6493f2b34bb2c092bef5bc16e4f5056f858b6c0a63f03"
+      "textHash": "c0da61ef45bea6b20f04c90078d087d5632ac6a1ba4d68927381826571d2da05"
     },
     "lesson-card:2404": {
       "key": "lesson-card:2404",
@@ -16154,7 +16154,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "95a5e9fdaf61e377175e1b7e1ce3b478ea7d749921f7bf5016b1a6347a6e53ba"
+      "textHash": "1d0452da88b730d4169072ab1302799017a14959209f762f7efb2f49818c4b98"
     },
     "lesson-card:2405": {
       "key": "lesson-card:2405",
@@ -16164,7 +16164,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "8c176b0a4fb86130924bfeed5e041f12d03a1883cc9db083055a6eb1c8abc559"
+      "textHash": "d4b5e77962968ce48bc981247643d017e55fcf51dac2016cf024e8c81a4d1996"
     },
     "lesson-card:2406": {
       "key": "lesson-card:2406",
@@ -16174,7 +16174,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "47fd60fad4604975719f0b792cebb382fb414cdfbb715982909f40093ce6c589"
+      "textHash": "33789ed13b6ec0dc0a326205cbe54d0bfcb406954f4398831fefc42dfa3e20c8"
     },
     "lesson-card:2407": {
       "key": "lesson-card:2407",
@@ -16194,7 +16194,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0bf3eae7ac2d9cf0bb76fdff4f92e92f9251882cb60384bb66a271cd571ae804"
+      "textHash": "ea27ebbbb91e0d594686def6f1f8d3143bbd9c77a28676ba5927e75dc0bc7b14"
     },
     "lesson-card:2409": {
       "key": "lesson-card:2409",
@@ -16204,7 +16204,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "83de299b315969656694604b1992764862b10b7e8f34b6c5976e9d4d188c43be"
+      "textHash": "6f0d4f758421aea685529e958168464a94c2f028840d37069e19ca4c5547a2e9"
     },
     "lesson-card:2410": {
       "key": "lesson-card:2410",
@@ -16214,7 +16214,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ea1203c80fd7f2775ac501e70dbb40e5277143981f2a527d5336f4f710f2bbce"
+      "textHash": "600122ef0fda62ae7e768bfacc87f3237fc418be7de4e3a79d9654a87fc04bb5"
     },
     "lesson-card:2411": {
       "key": "lesson-card:2411",
@@ -16234,7 +16234,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "58c246ad0e9a415a1bcb7423ea88f56f2d2ade83597b339ebdfbf381b6bdddf2"
+      "textHash": "cf8f180522909bedf80d41590bf84a823a2b2d46038f7e10b5e32662cad8da6b"
     },
     "lesson-card:2413": {
       "key": "lesson-card:2413",
@@ -16254,7 +16254,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "bc630a887aac397b54ddfe2579f313041df1364896aafcc80ca0400a0cb55a66"
+      "textHash": "a02db874ebcdd75c386e2076e55a44a754d166c88fb8b6d902eae75140425e7c"
     },
     "lesson-card:2415": {
       "key": "lesson-card:2415",
@@ -16284,7 +16284,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "975d55468795fe4b73b5675d4bfb64aa434e237af13172c796e2eb37e29890fb"
+      "textHash": "a2105f815d2ebf43b2124e20dd1f52e2a2607d8e2d227d21fcd042801d13004e"
     },
     "lesson-card:2418": {
       "key": "lesson-card:2418",
@@ -16314,7 +16314,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "90fc058eb5e1e83810488c25305ad8d81eb290afbf44d2e122929edd0f5095cb"
+      "textHash": "8de24ba374b136da3282b4ba25ad33d705bf6f16580831635dccfa4ff26b24d7"
     },
     "lesson-card:2421": {
       "key": "lesson-card:2421",
@@ -16334,7 +16334,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b696db2d94381b5fdd3831b091e95d9eba8f34548d8931fcd656bb212d907c00"
+      "textHash": "5e4777412e99127faf6e1bc8e4a5a75e892d23356dd4d2c0c899633eeb81e62f"
     },
     "lesson-card:2423": {
       "key": "lesson-card:2423",
@@ -16344,7 +16344,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b488f6118f7589d4d054db0a3eddf8811d1cf5c195ee70b81019dd4c157b0934"
+      "textHash": "a00004b04f6864ce925da18d31f541f33815532023508936383936f4f9f1b4aa"
     },
     "lesson-card:2424": {
       "key": "lesson-card:2424",
@@ -16354,7 +16354,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0dbcc0e018035e4af82a7ee13fa460c6e795d55a64801668209011b64db271e6"
+      "textHash": "b88517f2d4d4076f8e28f14bf6bd9c1286d7e45c02fb92464c588fc79ad278ae"
     },
     "lesson-card:2425": {
       "key": "lesson-card:2425",
@@ -16384,7 +16384,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "40368b64344570c6def856adf1f2508977e58c8c370d4f42f1ffa57ef77d0983"
+      "textHash": "a975a8e21b794f6f654ce57dab223af32187b91738d7a3bba0e01ea7c8200efd"
     },
     "lesson-card:2428": {
       "key": "lesson-card:2428",
@@ -16394,7 +16394,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d56d80e03fe5736d4c7b4cf0e551f3686d8e247c80783baaa54a7d955d2ded1e"
+      "textHash": "db9d3c7e4ae63b2ee8205d2076c40f2857c79efb02e7ba85e18d1078712fce00"
     },
     "lesson-card:2429": {
       "key": "lesson-card:2429",
@@ -16404,7 +16404,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "66fd29725d25ccc4ccaefcd3d597b20e794cb0cd3a2efe7fcce56325a6bcfa11"
+      "textHash": "2b67e3fa204f6a3d46fe2f3469082cd1458e67c68bb8b38b645176078f5a491a"
     },
     "lesson-card:2430": {
       "key": "lesson-card:2430",
@@ -16414,7 +16414,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2f22a4b50272e537e3ec11397d6c386a3ae72baeef78be44171b010e2854318b"
+      "textHash": "3c66295277c949526462b58b56e023efec7b4c2c89ae179e619ffcce4e2c9709"
     },
     "lesson-card:2431": {
       "key": "lesson-card:2431",
@@ -16434,7 +16434,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "261292e49bf258b09e271e4d013897c2764789daa8b69986f799fd1d55b1b850"
+      "textHash": "60482d3934d2eb6135d06b8238642cea4559fd6371cb129d2f702b5955758aa0"
     },
     "lesson-card:2433": {
       "key": "lesson-card:2433",
@@ -16474,7 +16474,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d73220ebb970d18c8b2a79a4451a5d2d0822b976615a7c809475e6fb37bceb0b"
+      "textHash": "32fdd4008d8bf7698c915b54656775f9a7c54db6819b32f855fac7f2b9db5144"
     },
     "lesson-card:2437": {
       "key": "lesson-card:2437",
@@ -16484,7 +16484,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b98953d5310edf4446abfe2b073d71df01522914d8321380ba39176124a78d5f"
+      "textHash": "fe92f8cbaf7353fe6c356ae3053daf2bec149b54e95d8f3e22b32672c8c3eb63"
     },
     "lesson-card:2438": {
       "key": "lesson-card:2438",
@@ -16494,7 +16494,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4c92190d5814bbaed80bb1b140eb88990b7c7f0855ffbb6cdeac23eba1ef52bf"
+      "textHash": "350ea6ad0800a99121d1ca5b33253b479cd851905f547181b379420bf4f59dc9"
     },
     "lesson-card:2439": {
       "key": "lesson-card:2439",
@@ -16504,7 +16504,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "55147048ec32d47b0da7615e37cf59c88b4c8c15d30e54414d4b5db232f0135e"
+      "textHash": "16858581619f36e851fbb0c24cefe9cdc6f763dd5785d149a5e398a2eb1d14eb"
     },
     "lesson-card:2440": {
       "key": "lesson-card:2440",
@@ -16514,7 +16514,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "61d920575f8b28d6e2bf2b1f77e4f6bf8fc3d1400577fdb833fd7067ba12fc19"
+      "textHash": "fd7683c3680d6d175fc8c970a8db1a937141b63602ebe2bb45ff099ce13f28da"
     },
     "lesson-card:2441": {
       "key": "lesson-card:2441",
@@ -16534,7 +16534,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c5d59230ed91fa4413b372d283d3eb6df070f76ef82d4327c8e690bb82179657"
+      "textHash": "80f19d6e444626353b24c8efa7eacdde62bf0d95bc4bf1577e3f218bf6835167"
     },
     "lesson-card:2443": {
       "key": "lesson-card:2443",
@@ -16544,7 +16544,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d0b59a8b037b50876ac620a33b591b93d23550fbe6e167c58c74a35a15b4c3ae"
+      "textHash": "2a4268ac3d07bf5ee97fff1106ac9ab666bf8447873c5ae2b60c0d5c4cd37656"
     },
     "lesson-card:2444": {
       "key": "lesson-card:2444",
@@ -16554,7 +16554,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d1e18e0c65a40bfd1657ddf58f94d584707e177016d5c5d687a776bb3516dfaa"
+      "textHash": "78d284763a178650b0c2900de317bee2e53022b0e35526e9792459d2e05b41ef"
     },
     "lesson-card:2445": {
       "key": "lesson-card:2445",
@@ -16574,7 +16574,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "cd53a26b63ceb3c787059c3db168a28203c93de59c8151ef5e307c1d7d254a99"
+      "textHash": "e5f7d9976816fb8b2798d3e35729cf6662822770cec9318446cb361991284b86"
     },
     "lesson-card:2447": {
       "key": "lesson-card:2447",
@@ -16584,7 +16584,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3a1b759e13cf3b96d0b11d9650663f374443e269dd6021f7e5645ecfd2995d25"
+      "textHash": "dcbbb31f74c2d40b26771ee48f6d4ae17d8b06dea79df295ded4d94c7aa4f278"
     },
     "lesson-card:2448": {
       "key": "lesson-card:2448",
@@ -16594,7 +16594,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b2fb6f5b1c85e66a37755e439a081093eb9cc5906b4b4ee9f17591fbae529e42"
+      "textHash": "dae1f249523a7ef66abadc3e62350f536b1c53895b1db8a9fef19ef98bec7559"
     },
     "lesson-card:2449": {
       "key": "lesson-card:2449",
@@ -16614,7 +16614,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c7eee60255d80296ce6a5a24a5d4c530a3fffdf40a3e8eb098dc33abcf94f828"
+      "textHash": "49c2db1a4ea1a6bc02ab7e9039ba05de98030998345e012a532bc84bb36ef49f"
     },
     "lesson-card:2451": {
       "key": "lesson-card:2451",
@@ -16634,7 +16634,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4919b9a718a0db9e2b40c59a4db850d371f59790f685172d5b235246c715c7b5"
+      "textHash": "074ac7df587cf66b60d107f792c825079b5063b756c6feae2cdcb2d1bf8fb2fd"
     },
     "lesson-card:2453": {
       "key": "lesson-card:2453",
@@ -16644,7 +16644,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "00c14c1791c8a90df63caa4308fd9151662934402ab9ce3dfdc6f740124a332d"
+      "textHash": "acef410bbe2b9fa3cfc2334ea455a9d174c3dbd5293f3635b7e239e1a2c75e8b"
     },
     "lesson-card:2454": {
       "key": "lesson-card:2454",
@@ -16664,7 +16664,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6426fb36fa6a63bd161d40f4811b9865c2899bcf27e9bd1115429f34e58c3104"
+      "textHash": "3d1ddb63796c82f3ad075b48701f5151792adff908c5f816dd7c6db70e0a4736"
     },
     "lesson-card:2456": {
       "key": "lesson-card:2456",
@@ -16674,7 +16674,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3ff5b4691d26ea8bfeeb4ae9a9512356ce1810006279f271c9393a2672e6e2ee"
+      "textHash": "ecba14fe7825db3108abf5438b539681c261793591942734761cc3e8cb466876"
     },
     "lesson-card:2457": {
       "key": "lesson-card:2457",
@@ -16684,7 +16684,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4883330919cef05063538d89ce587743335af6ff49c1e4741828f7d52db86354"
+      "textHash": "fa1ab84ee3e39d15f3cd860c6cb88e03413a58e2e6f9eb996be72478fb71f1dd"
     },
     "lesson-card:2458": {
       "key": "lesson-card:2458",
@@ -16714,7 +16714,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6007e9363ff78c78df3e7428a03ff38a70438f78b4544d4b5c2466026aa02cf6"
+      "textHash": "7bf13271eb2483c7a20b2cf9f6d0438633d502a7f70b2395a60e713105d1d375"
     },
     "lesson-card:2461": {
       "key": "lesson-card:2461",
@@ -16724,7 +16724,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "18ee57b4c8a2cb770257a7b2219e6bc86ebd3c5c24404d39d5706055454e99b3"
+      "textHash": "19a38d828ef6ebdb3c8543a20c5f0d441993f42a90740f179b1b66e5ab8f34ec"
     },
     "lesson-card:2462": {
       "key": "lesson-card:2462",
@@ -16734,7 +16734,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f0b5d884a033a4658fa738fe7ab0a707b428751a3ca644d54e9fec5b98960ff7"
+      "textHash": "ee30506165f50b6900a46a3cd36df5d85771fc749dba2f8a0c8b48a58d4694b7"
     },
     "lesson-card:2463": {
       "key": "lesson-card:2463",
@@ -16744,7 +16744,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "619df14380292a3a78129e08696291b18fdf7161e273c3b4a95cdbdfb893f3ad"
+      "textHash": "96b94811ce9f49afe1da7cc238bfa03db46ee703533158b333058958a496b8b9"
     },
     "lesson-card:2464": {
       "key": "lesson-card:2464",
@@ -16764,7 +16764,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f021fc78bbbf6f1750ed9e2861c6b6a91119b3679c6e31182ae63d6ae3820efe"
+      "textHash": "d9f8cb874c17593a1ceea9bd79bdf676485a0243fe896a2dd499a8c05a227437"
     },
     "lesson-card:2466": {
       "key": "lesson-card:2466",
@@ -16784,7 +16784,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "09d73e844d56c6c34477e19698df45c1609e1fef01f9b2ddde17a60e049db59d"
+      "textHash": "d6cd821f0cdd8d084b3da4c17195f704c7b986067d5d05d090aa9f7eebf6c878"
     },
     "lesson-card:2468": {
       "key": "lesson-card:2468",
@@ -16794,7 +16794,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e945cfedb784db6b2ad2a42fcaffc31438eaf57e8bd314344554058376411233"
+      "textHash": "51af488d36c6fa25e9b4d5bdb9af96514b1658daae7a3536b1e8c3b64d45b6ca"
     },
     "lesson-card:2469": {
       "key": "lesson-card:2469",
@@ -16814,7 +16814,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a793c7a6b7ea54e455c0da5a4bc90e83cc235a9ead766b6ce47b4a01abd1ba9a"
+      "textHash": "a254032211ab5b6f8eedc95b73d3bb683ea27b3dc78a5b815701aa12a10887e7"
     },
     "lesson-card:2471": {
       "key": "lesson-card:2471",
@@ -16824,7 +16824,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "8559c5cbdb7a3f67f7afcbd3b4f809b10281efedbe7dfb83e462c9c4223be9f8"
+      "textHash": "9ead05d9b37c423d7bd55611e2c1ad085579989c3cb1a5da7469345bb58d2a2c"
     },
     "lesson-card:2472": {
       "key": "lesson-card:2472",
@@ -16834,7 +16834,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "58d4cce99f3ee169e2ccfbbd0e95532b9f39ab374976ef5eecc049c352698d86"
+      "textHash": "c2ecb3b182d213a3e42a01566c89fd3a60df285bb20144e4dd76baa781e9f1bd"
     },
     "lesson-card:2473": {
       "key": "lesson-card:2473",
@@ -16854,7 +16854,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5de9ef251f3e46588fa48683b6f06b4d5969892aaa8c95381fefd3e2ff55808f"
+      "textHash": "5338d0befec43b44005a5e73b3fc74a947262648b825b3dc3483550a63122ad3"
     },
     "lesson-card:2475": {
       "key": "lesson-card:2475",
@@ -16864,7 +16864,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6e805613c35b85cff4681c73d760b3b64edf09305e4ff72bf6daea3a1e0a505d"
+      "textHash": "cb7ffc82c2afc443e082c588c9553334256cb9274fd3c5725c88fb55e0a15bfb"
     },
     "lesson-card:2476": {
       "key": "lesson-card:2476",
@@ -16874,7 +16874,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9c118911fdb87a52b0078382c52b7d121782d84e33416a380deb0431bc36b2d5"
+      "textHash": "f7fa59a80ed82395cfadb22da5ecd0767d59f01a739a6e7d547cd0ee3d7e2430"
     },
     "lesson-card:2477": {
       "key": "lesson-card:2477",
@@ -16884,7 +16884,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "932f1c38cc871f1c4c10e239fa1a96838e33ee3b924739b786664c857f475faf"
+      "textHash": "19e3486e91a6a1e4d738e3ab85cd2bdc9cde88a911ca84c4168fa9512d160c23"
     },
     "lesson-card:2478": {
       "key": "lesson-card:2478",
@@ -16894,7 +16894,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7c5a40499dca9bb05dc5c7ab16d7bfb25f434c543196ac60edf346167fa01f3a"
+      "textHash": "379abb6ce1b80d6127cb18b3675932368c3726ef650d83d2dcb3d5afa65a7243"
     },
     "lesson-card:2479": {
       "key": "lesson-card:2479",
@@ -16904,7 +16904,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "228044e9518982937e8b2461828ae62b2fabe0d0becaccd995fa7a247f3d0bac"
+      "textHash": "57e9f1656969a44c9376ce6a07a44adc177721241e90aacfd69b1fabbb69aa59"
     },
     "lesson-card:2480": {
       "key": "lesson-card:2480",
@@ -16914,7 +16914,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "555d2e729528d7a491ebaa2e65fedc45cfce3a46477b33b9285121655fdac75b"
+      "textHash": "ad7180c46882046f5fa59e0a58f84dd7b4840f1f401a2a17accb3e7a1e0d6db9"
     },
     "lesson-card:2481": {
       "key": "lesson-card:2481",
@@ -16924,7 +16924,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f302298520f5ca87644081c7818278098a4f6a2d3a591503edea45a846dfb266"
+      "textHash": "bb6c4b5c68e703bf9bd553ad503f91c5215252854b5c162ddcd251fde2aeb7e9"
     },
     "lesson-card:2482": {
       "key": "lesson-card:2482",
@@ -16934,7 +16934,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "441c71dfeb41bed3048264efc279c734b52df15d21d4e6d2d3cd2fad7de80606"
+      "textHash": "91eb4f98e5e03544b8ccb24119abfd030146e19cabf817caab0948377ce90686"
     },
     "lesson-card:2483": {
       "key": "lesson-card:2483",
@@ -16944,7 +16944,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2fd6ceb49c2908638880106e638915b61a73366791751ddbf3f3526cf46b5aaa"
+      "textHash": "39f5660ef155bfe2801da92cc5137511e1bed2fd64f8f1119e9626e558977a22"
     },
     "lesson-card:2484": {
       "key": "lesson-card:2484",
@@ -16964,7 +16964,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b6a7bc11bf3b140b587a10a36ae0b79cf04a0d31f819ffd686f0231e69470d28"
+      "textHash": "dc3b494587bc45e9133bef3f0556968003bebeb15b157301b731931946d10fb3"
     },
     "lesson-card:2486": {
       "key": "lesson-card:2486",
@@ -16974,7 +16974,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "447e4a4ecfc3f7900741a7e59b1c50ef207593cc9657482cee42e4e75765b2f5"
+      "textHash": "e8d2e81f42c7976c5800a3d363068938ea92f26b81cabd4b68bec54b6fae1503"
     },
     "lesson-card:2487": {
       "key": "lesson-card:2487",
@@ -16984,7 +16984,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a6b447f09aee7e89b881ca2a9403ad109f61e9b8c6a7ed63df9ef3325f6e9804"
+      "textHash": "c54c018451950cae31858f0ba9772e085bc80bf2d5de1f3743718cda5999fec1"
     },
     "lesson-card:2488": {
       "key": "lesson-card:2488",
@@ -16994,7 +16994,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3e5b9879296c00c47d1c3f159af5af58e09b19bd64beda0b9ed32d073534c902"
+      "textHash": "5b624565fe96096f372499feaf1346dacc9dd67478f9ddea1a4e4a975728af5e"
     },
     "lesson-card:2489": {
       "key": "lesson-card:2489",
@@ -17004,7 +17004,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "86080060ddeb29caaa3ecaa4fa131fec50e84dba2df0306bc1e50a963b8c3368"
+      "textHash": "fde6def61d95df50ff95d76497260fab11fc5446d11aa73e276aec9aca2ffb49"
     },
     "lesson-card:2490": {
       "key": "lesson-card:2490",
@@ -17014,7 +17014,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ace78b8f2a92365eef37c94ac3a9216004af6ce2d0a48b27549b1372283e1080"
+      "textHash": "90b20cbd803e8663db82fbf49bf62f273cc1a5ccee586e7a54efd98efd27b939"
     },
     "lesson-card:2491": {
       "key": "lesson-card:2491",
@@ -17024,7 +17024,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9cb47d1bfbb30a48cc125fea5945f73d97d0434963ac83847d06ffa45e38eb80"
+      "textHash": "a3f33ef4a682e489fc8d4f34053eaf8b7c19dbeeb7a0a8e35f3029a886ceeb1b"
     },
     "lesson-card:2492": {
       "key": "lesson-card:2492",
@@ -17034,7 +17034,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4457138e0d102f2fd0b047f0651997eae9dea735ae7e79d5ca7034905eb326f8"
+      "textHash": "f0b167f152c106ea54af372c203dc423afedb97293e452784cbb8f35face801a"
     },
     "lesson-card:2493": {
       "key": "lesson-card:2493",
@@ -17044,7 +17044,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "28229e8480279cd287e090e4c6bdcfd39579c286bf7ffe23577178816165cd2b"
+      "textHash": "2eff8a4d4368193feb097d75a1c4069965923d45f7026bc77783915f87ca3029"
     },
     "lesson-card:2494": {
       "key": "lesson-card:2494",
@@ -17054,7 +17054,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c1e883e1184170ba99566efae4dc347a9b904cda7e01c93045a1be8f86e2c0bc"
+      "textHash": "b48dc51237453aef6612448e376c01402306c45d435fa041b7aa9dc722d9de82"
     },
     "lesson-card:2495": {
       "key": "lesson-card:2495",
@@ -17064,7 +17064,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "49c599d4f5e0d520ecdab1c9a6994b44caa83424b8fe609f12cd414638acc8dd"
+      "textHash": "9b56bb2694a245c8972d4ec242fbc86161d2dd1115ba3c29f1b25fd8f2d65c10"
     },
     "lesson-card:2496": {
       "key": "lesson-card:2496",
@@ -17104,7 +17104,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "35551d2d7e3075ddea24449d58bf2e3f55ea24bf6267c3c79876c72cf6290ee2"
+      "textHash": "f81a09efd64d0b1d71895b80b4451704b9fe577b6dfda229f838535df825464e"
     },
     "lesson-card:2500": {
       "key": "lesson-card:2500",
@@ -17124,7 +17124,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "baec88af7aa639b7ee116be335038d46c4f10b9c3dff74dca148396c78f75e45"
+      "textHash": "fed2472a1f79cf49bc09a93479fa5c6d55b08af1a90ae5a237d32a8b5506fca8"
     },
     "lesson-card:2502": {
       "key": "lesson-card:2502",
@@ -17134,7 +17134,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3eedbfe8a07cd77f265bc0f39d5120ad38c5c14a328adaba0d83eb16b1408ddc"
+      "textHash": "03c79954adce72d70948ad993cecb8346fcb98b1a75a8f43267a567d6d499d48"
     },
     "lesson-card:2503": {
       "key": "lesson-card:2503",
@@ -17144,7 +17144,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ada7568c5175bcbc5c7e9fa41cdff7189623de3f0b1a24ca86ce9ab1dedc076d"
+      "textHash": "4391eee43b73eb7c6d14a54c8ca71b8860ef1297d7bbf80faf547ec5930f10e6"
     },
     "lesson-card:2504": {
       "key": "lesson-card:2504",
@@ -17154,7 +17154,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2dcfa1e43e08f41271c64a50b8240d5c4ae0ef525633548c957481dc9ae2d481"
+      "textHash": "09af92673a930ec3572a65e8e28c47c20f03d7b1880620b346e2e9cbdc70435b"
     },
     "lesson-card:2505": {
       "key": "lesson-card:2505",
@@ -17174,7 +17174,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "bad66da984a8fb23d8378b2356f2b474503c2d94dbc91715ed3dfb9fed02be94"
+      "textHash": "9bdd5bff1e8d2ea2443afd44f16d7d613c70480c90e87e978812cd60daeedc96"
     },
     "lesson-card:2507": {
       "key": "lesson-card:2507",
@@ -17184,7 +17184,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b7fb4486bbd346189cc059b7ac3ddf22d9b1e805c780063aa8d620a66eb2a43c"
+      "textHash": "b8ee98ef6bafa0c32af4ec0d0edc2ac0bac65fbb9479a73930bcac0a0588f80e"
     },
     "lesson-card:2508": {
       "key": "lesson-card:2508",
@@ -17204,7 +17204,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "79f1a8a3ef2c4f1ff88a9b00cd5f2d6529cf3927f1a144ecb39ed4da333a57de"
+      "textHash": "276103e474cefe1deaba0da0830041beb9eee7f5f8976f64cbdfe1188a9fe4f8"
     },
     "lesson-card:2510": {
       "key": "lesson-card:2510",
@@ -17214,7 +17214,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "8a310f753de9178bc608036d79adbb9c148ef1071434d1dd69b0ead7df53d57a"
+      "textHash": "dae98cd08215201153f67a912f87c37ebd58f716d5ff759de7e8c0523bb6bd8e"
     },
     "lesson-card:2511": {
       "key": "lesson-card:2511",
@@ -17224,7 +17224,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "153bbafeb02aaa819402372eb642269bd85f6da497584712cd250362443a76c5"
+      "textHash": "17996dedca8c5983b15e26a029db7d1299cc39f67c3f811c15b0861603f612f4"
     },
     "lesson-card:2512": {
       "key": "lesson-card:2512",
@@ -17244,7 +17244,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "dbd74580ca4b7493bef69fc246e32d7392ed63855a3b5dd2d8187155f2593e37"
+      "textHash": "b056df6c1614ad88c3eb0de74454fbb5caff74fe8c089985eea36f914b5ae971"
     },
     "lesson-card:2514": {
       "key": "lesson-card:2514",
@@ -17264,7 +17264,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "eb3612737e03bdf843d7cfe3a78ca6c66b5cc7893b8f8d198f1cc14a9495306c"
+      "textHash": "d42da004ab74d896f6333819f0014578fe683f7a8d35e99e87ac4ccb65e7ac0b"
     },
     "lesson-card:2516": {
       "key": "lesson-card:2516",
@@ -17284,7 +17284,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c0a49838885db565d8d8540d2e7b72e5a7843711a02172c7119eb6053cc243b9"
+      "textHash": "371d4f0873249d4fb878d6a3213397676f42b0f2ff1aad24049a9d11aaae9346"
     },
     "lesson-card:2518": {
       "key": "lesson-card:2518",
@@ -17294,7 +17294,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "36278753caba3c856ffc9eb94f45b99039361030b4f6a5f5883113f4202c2c58"
+      "textHash": "aa2d4987f0d88ed96175116aca24f8c2e1925fc2b3d8d3f8f11426e49e1a4c30"
     },
     "lesson-card:2519": {
       "key": "lesson-card:2519",
@@ -17324,7 +17324,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0355d9c12832cb8c134f9e3ca1bc98219c031e5cab263e3a1b9473c16fd6a230"
+      "textHash": "cc0d973b751e07daf2b827e166b7cd8411a01f7740bd1a61fa930066a55c2047"
     },
     "lesson-card:2522": {
       "key": "lesson-card:2522",
@@ -17334,7 +17334,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "527a8043f466af26eb7ff3cbd58269366551eeccbd3fb830bc2ec1000ed16126"
+      "textHash": "f63a36da86ce45f501a455ab0c33de5348c6ab6c0c0b5ec7fbaf3cb06c959c6c"
     },
     "lesson-card:2523": {
       "key": "lesson-card:2523",
@@ -17344,7 +17344,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ce98f1171d185d83ced1f5662bde7fab8492203cd69f8953a2aec2edb351f2a3"
+      "textHash": "1de8e24766493749bb250159956d44b2ef14d9f420f12ef2aa58361bae7918a2"
     },
     "lesson-card:2524": {
       "key": "lesson-card:2524",
@@ -17364,7 +17364,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "825f714b93a74bc3878b22be342bc34348d566d1e0a8062472597c02f1e95927"
+      "textHash": "57ad40ddff028eb76e75e3da6f13d2d12142fd7554423175001f18a486da7467"
     },
     "lesson-card:2526": {
       "key": "lesson-card:2526",
@@ -17374,7 +17374,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "63e6144c95be42db3b21750ae2d9a74a16cc465a3566426a0c5ae14dd75fd12d"
+      "textHash": "00985270803e7447101353d1a361335d708edd620d8002ff59e1fea979c4360c"
     },
     "lesson-card:2527": {
       "key": "lesson-card:2527",
@@ -17384,7 +17384,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "acda205604126649694f75a2780fe42e29993cacc27db5da1cbf9857d169ad1b"
+      "textHash": "a9e4a54ecbdcc996732eb83089c4d7864870aa157b528bd4710bb418456a70a2"
     },
     "lesson-card:2528": {
       "key": "lesson-card:2528",
@@ -17394,7 +17394,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6dc81acdd7cd33b517e33c37e3ce02d4bc449fcbeb5f7b908e1763faccc5f21f"
+      "textHash": "d36f336ae2deeb277ad5c755164a6b624743b70be5c670fb37321ed8e375bcfe"
     },
     "lesson-card:2529": {
       "key": "lesson-card:2529",
@@ -17404,7 +17404,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e0ea78cbbf8a442725672dc4f02ebd00ae9e915c349b673424cb252efff46b83"
+      "textHash": "7f892ffda9dbe04e464c04056463d0d234956ff7baba97f0838af3f2bed3a2e8"
     },
     "lesson-card:2530": {
       "key": "lesson-card:2530",
@@ -17414,7 +17414,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "cac051b04fd9f983166597afebb76a4a2c2c142a421a30e0195af9ce46ada2f5"
+      "textHash": "4ded5101ecdd1870a095c887718e344310e1d7e2b0fd16a6f4aaaeff579714d3"
     },
     "lesson-card:2531": {
       "key": "lesson-card:2531",
@@ -17434,7 +17434,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "415f5f974000193fa3285df188737c200ab064d74611343f3ac56ab308128521"
+      "textHash": "1c47e104ec12ee012de605cd33701172d81dde67c3950410679e164636fa1385"
     },
     "lesson-card:2533": {
       "key": "lesson-card:2533",
@@ -17444,7 +17444,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5438d0aa1033ddde41d80c204b0e5618a97ed5f94df2e8ced0d9d8f9efde296f"
+      "textHash": "45ae7c7acebb6f24a2482b575de59938b7e0fd1987cdec7482969c85b8a2b7ce"
     },
     "lesson-card:2534": {
       "key": "lesson-card:2534",
@@ -17454,7 +17454,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c6ea1aba26fce558f02ce3538a1e597a18c32e103a86cea691b54001ba83029a"
+      "textHash": "3e90a0e3ee228bdedcf8d2a9998fe80cd4c2bd3d57a3c7b8084ed4d20a683974"
     },
     "lesson-card:2535": {
       "key": "lesson-card:2535",
@@ -17464,7 +17464,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "07134a7194f624417582ed164c3448cb85c84d071030f6036cbe56316e59582e"
+      "textHash": "3ccce39a4aee23fa2476a152e51642f42fc6156b44d070a660554baa29306288"
     },
     "lesson-card:2536": {
       "key": "lesson-card:2536",
@@ -17474,7 +17474,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9483f82d9651a82775b6747c6c2692550f68bcbfa2931930667a15a84b8316da"
+      "textHash": "171760a47c1c5d09fb1dad03f8a57eb34a54510e2ade15876bf7672c5b28c487"
     },
     "lesson-card:2537": {
       "key": "lesson-card:2537",
@@ -17484,7 +17484,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d7d0f50820560d43b82563e38d4f8c85ca47762136528853bd6df200ca8de014"
+      "textHash": "606c46b87e9d73e02e9dede28d6f5a975aee7dee90cde9542a9711d3ef71c952"
     },
     "lesson-card:2538": {
       "key": "lesson-card:2538",
@@ -17494,7 +17494,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0792879c78a60a98c03467ff1a77405e89101868b041e225e29a3462bc7bc0cc"
+      "textHash": "7636ac47d72f152eeb92db3bd1ff827d02611a5b635437b8d4ff56e968f44c2b"
     },
     "lesson-card:2539": {
       "key": "lesson-card:2539",
@@ -17504,7 +17504,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c6d9b42903286bf4f574531fe22aa1e88b26f94bc76da42ced718a3a56092407"
+      "textHash": "5ad50bf34d896186033076d0cbe1cf721ca1acdbde3032cc16f4d0b284407270"
     },
     "lesson-card:2540": {
       "key": "lesson-card:2540",
@@ -17514,7 +17514,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "75d9ae6218eddf26a52a024e1b1ae53d94aad341b56e29d53fed3d8c10530435"
+      "textHash": "45ec8645cd32eb7181d03577471110f47234b323bbaf533690ce3d4ba5cc173f"
     },
     "lesson-card:2541": {
       "key": "lesson-card:2541",
@@ -17524,7 +17524,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d62f00934ea133cf85bd118e693669b6e6a60273c02a16651a9f004a276a7fde"
+      "textHash": "f8cc4711d4c097ede2adb494c0a74d006c885e0c4f6f3b51791038028f385838"
     },
     "lesson-card:2542": {
       "key": "lesson-card:2542",
@@ -17534,7 +17534,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "716bbae15e4f6df732bc3cabdac5b5db02419f074a14a77703f58554925f0e3f"
+      "textHash": "1fd6825f182af944ba68c4ad939da5d2a87db215b5ae07abe23b93a366d4a6d0"
     },
     "lesson-card:2543": {
       "key": "lesson-card:2543",
@@ -17544,7 +17544,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "854b1e9c0ff451891cff2a9bab4d3958ec2ba0d1161edc4350f3fadd4ba69112"
+      "textHash": "27ba83a7b2a3c0b8e429f102c5fbe7ddcaecb3863106580a37d8b5f10cd8c840"
     },
     "lesson-card:2544": {
       "key": "lesson-card:2544",
@@ -17554,7 +17554,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "475de51b1bd5a7d11c44437a1f10dda77b985443b184262701befc5d3babc0b5"
+      "textHash": "f64a782f0fa91141c14fab18d026c7869819d6a552c1f2a44a34b8ab93e6fc84"
     },
     "lesson-card:2545": {
       "key": "lesson-card:2545",
@@ -17574,7 +17574,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7b445ad75e615521c20cf03842e90744bcf04a100d759a192a4f4e1dd0a5865d"
+      "textHash": "fbcdec9c08be44f070dd74185ba9d78bce92cf51afb27c98b2aa34146bc37642"
     },
     "lesson-card:2547": {
       "key": "lesson-card:2547",
@@ -17584,7 +17584,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b5d7221ebb9d0efa972633a89a06cb268eb43d2944d786a7d81119fd9a62ba21"
+      "textHash": "58a9c97b1231ce0b03d2763504fad4f17d1f50950a19ea9fe480f0402104953e"
     },
     "lesson-card:2548": {
       "key": "lesson-card:2548",
@@ -17594,7 +17594,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "39e0ead7839b8e3c17b6e03c1e71bf217c891f98418b9fe28d1745604dcc5b60"
+      "textHash": "57db552331b68caae0201b83835349b35752b94fc65b456744583d1f779d7fe1"
     },
     "lesson-card:2549": {
       "key": "lesson-card:2549",
@@ -17604,7 +17604,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b518b1e76ee0e988440749cf32482e2744ebb7b5bd630565ecf681e1b5e1e17c"
+      "textHash": "a838552aed2d187c0cc2b62efca26c5a6790ee23422a48ca079aa89b8e60f7a7"
     },
     "lesson-card:2550": {
       "key": "lesson-card:2550",
@@ -17624,7 +17624,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "426ed14c06654d1707cbae5dea9944e5a1c693a2b79c210b591b47589f12290f"
+      "textHash": "49a38b0850188d70cd7c17c58c06523bebc2252a8015e7396237b1411a8e6418"
     },
     "lesson-card:2552": {
       "key": "lesson-card:2552",
@@ -17634,7 +17634,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e0fb774d395abf25bfadf052cb46cbbcbfce2dff98d2ded0f1141283ad96f556"
+      "textHash": "be292a85c28e1b8ea95c4714e990d60215aa9c68c598b97761b7fcefcbcb7b37"
     },
     "lesson-card:2553": {
       "key": "lesson-card:2553",
@@ -17644,7 +17644,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0d31c50e42aec7d55883aa0dfcff932be650458e02afaa45b1fd55166d25c5f6"
+      "textHash": "bb1836910356f2d2db85903272d9b27690c685425e94528da0c3e66c35a92d68"
     },
     "lesson-card:2554": {
       "key": "lesson-card:2554",
@@ -17654,7 +17654,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "977a9352cfc1ebb7034056cc73d566a8225792c701d6cbc9728d6cfaaae181ff"
+      "textHash": "3887a13df8123e1cca3ac55b7a8f5a1f8986ffa3059c354281c2be2ef44daffa"
     },
     "lesson-card:2555": {
       "key": "lesson-card:2555",
@@ -17704,7 +17704,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3fb79bc22e10d66952da620501dffe2ad4479e0d4c20467c6f4a2b8b800eb2eb"
+      "textHash": "a91c512cc51aa19989a45081fba0d061218511d1ab52b3757a96d89c48e8dd3b"
     },
     "lesson-card:2560": {
       "key": "lesson-card:2560",
@@ -17714,7 +17714,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "27319f7466f603c04b880a82b7ba37f6632c29956073c8cfdafdb45e6880b805"
+      "textHash": "98f50013c67ecd7ec8840901385e097a66b16c576b12ffa50eb431e0ba1a0b88"
     },
     "lesson-card:3001": {
       "key": "lesson-card:3001",
@@ -17754,7 +17754,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "eb7141d9318743313106496bf21343165e431a39fa14c50916fda6776e0effdc"
+      "textHash": "c95e3816931a726f9a410b8545f9871510b5880f2023f69cdc149ad40ae98432"
     },
     "lesson-card:3005": {
       "key": "lesson-card:3005",
@@ -17874,7 +17874,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "18ce29ad4f0e86101f7121766394a9f6358a6265c5f289b4e616b8e87ea6a6b9"
+      "textHash": "ac4710068d2283be8e06862d8a01ac45ddd51dd841bf471c17ff3a4db3fbbf04"
     },
     "lesson-card:3017": {
       "key": "lesson-card:3017",
@@ -18034,7 +18034,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "88a4e994a1c00aea1dec216db6acf0bb24eb7210e56c725a6220572648ddb50f"
+      "textHash": "6c10f8b87f776ded6d6b8a58dcd9c61864de4acd99624d13252fe99901b9bbe5"
     },
     "lesson-card:3033": {
       "key": "lesson-card:3033",
@@ -18044,7 +18044,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "785513e6bbadd225761a4f55383f90a460702c8f0970db2ec935a7a94bdec78e"
+      "textHash": "4c4abe36f63741c6dd7a9e20666039788b65459ac97e0b18aeac47ef06d3c92d"
     },
     "lesson-card:3034": {
       "key": "lesson-card:3034",
@@ -18084,7 +18084,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "31d6054f00685438fbd1a4bcb19038321d586b6c61e3703cb5a74ccfcfcf65de"
+      "textHash": "123f39ceb40a9690a671f50f380c32691ca7ddd6ba3dc013e645774c85892162"
     },
     "lesson-card:3038": {
       "key": "lesson-card:3038",
@@ -18124,7 +18124,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "91276d135e01fcf035fae4fa0b1afdda17bf056cd359e245c59bf45a4100d7da"
+      "textHash": "d36e525e271f7247d06f04dc6f4d5899af1dd2deda179746941b869104c1150f"
     },
     "lesson-card:3042": {
       "key": "lesson-card:3042",
@@ -18164,7 +18164,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4366a434c1464681c2a8837888a169c4d9f3853963ceec8ac9c26de1b75bd422"
+      "textHash": "8819e374b59e52398c02a079624e11734604ac53fbd74c6ab0e1f47be533de61"
     },
     "lesson-card:3046": {
       "key": "lesson-card:3046",
@@ -18204,7 +18204,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "8c255b5338ee793aaadd98263466126cb7cfa6efa3ca2a34b12a6188c0775ba6"
+      "textHash": "61a8be85b2683f52d2ee76dbb0dd459eedf56609f1f1987769d9048a36a9fc8b"
     },
     "lesson-card:3050": {
       "key": "lesson-card:3050",
@@ -18244,7 +18244,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6262c7a29a693543ac79b5c514795982b92850e00341d03aebad603c22e4c04a"
+      "textHash": "6bf87ac37275368bcc50b739916e9a1161c10760ef00da10c97c21d7acce200a"
     },
     "lesson-card:3054": {
       "key": "lesson-card:3054",
@@ -18274,7 +18274,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9ed63cb41c17f5b7657de56ace453bea25e0813041999a15b3ae2345b43f6151"
+      "textHash": "4ec88acf3d824a9cd17a836d062952ffa15ed1d53eb5abb9aa76814a4b27168c"
     },
     "lesson-card:3057": {
       "key": "lesson-card:3057",
@@ -18284,7 +18284,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "84657b6169bf31fdcad61e15e9ac90ff2f37f98ba83035dc92d044a0008edf3e"
+      "textHash": "3070984aa81cd377596feaddc421b064be3a8ce9961b995ba15fe7cb5a000786"
     },
     "lesson-card:3058": {
       "key": "lesson-card:3058",
@@ -18314,7 +18314,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "50793b595b044375ee10a0d44ed4aa2ef462c029bcd05ddcd08841713ef4d8b0"
+      "textHash": "69c93ee02bf4975262d2587c7f485d403f6384dd88f81166bb5c8bab4e83ea82"
     },
     "lesson-card:3061": {
       "key": "lesson-card:3061",
@@ -18324,7 +18324,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "15b263b8c102fa76ea6e60abc9c10ef3f1a2c7ee6b0b3fb3a266036a73d4cd31"
+      "textHash": "c456d52979b35da839a7e1568b6c649d3f0a734a704ee6c7687867405014256b"
     },
     "lesson-card:3062": {
       "key": "lesson-card:3062",
@@ -18354,7 +18354,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "69f87abe786ce98c8cef57ddf4bf3d4bfc8468ce3f45b2b14aa0eceadac8780c"
+      "textHash": "74f506b1d72753378c92b205b28b6ceecdc68845ebbd8f8f2317ca843c7e1357"
     },
     "lesson-card:3065": {
       "key": "lesson-card:3065",
@@ -18364,7 +18364,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7e60b2213f0eec95e23b7497f5ca2063eb2b303de03c7bb91ab599ce2231add6"
+      "textHash": "415288d543a5a32219f11a48fb3242e2b19f696a55a7a31df4fc6265e7921461"
     },
     "lesson-card:3066": {
       "key": "lesson-card:3066",
@@ -18404,7 +18404,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a8b8f981772e39b8e73d968b4eb16e87741d251e55891b785364e8997535da51"
+      "textHash": "f99f4cc7add0ab5e0c4465b660a628685a6acf3932c9701c4d4496ae4fd21daa"
     },
     "lesson-card:3070": {
       "key": "lesson-card:3070",
@@ -18464,7 +18464,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e8c6f63163fec271e4cf82df68997ad0cd7bac8e71e4feee920afb9db97288c9"
+      "textHash": "793b4f9eb2ec8202c226362240d76be3ac6b915b03c567f7f1431ea5a3b4c953"
     },
     "lesson-card:3076": {
       "key": "lesson-card:3076",
@@ -18474,7 +18474,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c0dd269d506bf3973dc5adc18d36ba886938914ae445bca7766aedc961de1999"
+      "textHash": "b2cb12430e02f03f2b9d3e6df38dc19abce1862e651a7f9bab58edd68bb70c09"
     },
     "lesson-card:3077": {
       "key": "lesson-card:3077",
@@ -18524,7 +18524,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6b035feadd1736b5b99f1865d8bd715e53b0d1e7287b88ba4800d64b76f353fa"
+      "textHash": "0222525868eeaf0b5b12a4b5688b37872135e10d3305e58ab46a5e6c99b9f9e4"
     },
     "lesson-card:3082": {
       "key": "lesson-card:3082",
@@ -18564,7 +18564,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "16bf781017590a6e266fca3278a1204435b344cb7586d93744c3ddbd2140ec48"
+      "textHash": "cdde0673d42fab64c439c313a393098b14f560d85ed75d866cbfe08332335842"
     },
     "lesson-card:3086": {
       "key": "lesson-card:3086",
@@ -18684,7 +18684,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "dae758f2c763dfc804030caf9c83e66e08d1b14feef89715db9ed55a5c14821d"
+      "textHash": "e008684f8506500dbbaa573ba1c9e326a61fdf209e40b698052ff0a211f7fb0f"
     },
     "lesson-card:3098": {
       "key": "lesson-card:3098",
@@ -18724,7 +18724,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "dbf5a6a1826def5a7f2441a1bf95fedcb96e7573e9e98e7b88115a671a9a0771"
+      "textHash": "625669d09ef137f59d2b563f434ccc54b6ce8512351a685f22f2d6541339e435"
     },
     "lesson-card:3102": {
       "key": "lesson-card:3102",
@@ -18754,7 +18754,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5e398e2328cb502306269a7b0583a6bc0a31815fb327879832e2d00801e56263"
+      "textHash": "131c29afec46ac502ea5d134229ecd2783197fcaf9db0a1dd79ef1e96b17c0ee"
     },
     "lesson-card:3105": {
       "key": "lesson-card:3105",
@@ -18764,7 +18764,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f20073c947a1100801b1d91dffde3d5672592e38837bc57d4d15822811f93217"
+      "textHash": "d57ae8c52a3600b639c0846a022e53189e6fb1cc10fce495e0ca9d0038e6dc25"
     },
     "lesson-card:3106": {
       "key": "lesson-card:3106",
@@ -18804,7 +18804,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "05fe8b3dacb4a8eb38fdd3af585b79b475e0f6255ea0de0cdd6961a5989d3ee1"
+      "textHash": "f60918a91b21437ed07b545189e31b5da17256e01d785b9ff586cdda6b278bd9"
     },
     "lesson-card:3110": {
       "key": "lesson-card:3110",
@@ -18844,7 +18844,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "dfe30ad6046271cc35ee343cd11b27ac0a2a7a8c158a68479a44a3134b4ab48d"
+      "textHash": "2b82945d61bfdf660eca58d5601e375a45ed690794e6702fd76b24c7765c6258"
     },
     "lesson-card:3114": {
       "key": "lesson-card:3114",
@@ -18924,7 +18924,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "8d09c0d3aef4a08a869db705a73d246c02cdece48d94c0126f57c5122b35d49e"
+      "textHash": "81b51eb4e586158dee5f20351d2ee8020c8cde6d8dedb9c3fbfadeed35a4868c"
     },
     "lesson-card:3122": {
       "key": "lesson-card:3122",
@@ -19004,7 +19004,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "339500355047960e2d615a81901a970266de89a10df1ebf3e652ef7ef5a8b65b"
+      "textHash": "1ef876c320fedfdcad96a73efe27ab59338ecb3ba25e8c31cfed33c7ab5b8fb5"
     },
     "lesson-card:3130": {
       "key": "lesson-card:3130",
@@ -19084,7 +19084,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b27f019afec73634233e490d2ed7331dfe96b7e4731c033cf35acd5783e159b9"
+      "textHash": "cb34b79a55a62be7376311aaaca5ac815287bdbe85dfbe06fe8ecc7d685b49b3"
     },
     "lesson-card:3138": {
       "key": "lesson-card:3138",
@@ -19174,7 +19174,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "11e6c6c2cae0eadc3251c00bc5ef737fe6e26d052d0a545a6fa491b017614227"
+      "textHash": "9153d2d00b66bf235408d9379c12871ab52aa9a37ebf617656b6c88cbbc235bc"
     },
     "lesson-card:3147": {
       "key": "lesson-card:3147",
@@ -19194,7 +19194,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "34e415dedc77bfd4c0ed2dff4bc4582f018bdaa4873d929d3bec743893d4082f"
+      "textHash": "8e401503897053c32c64265b3828803da612f8430866d2e59a709763586c8bb8"
     },
     "lesson-card:3149": {
       "key": "lesson-card:3149",
@@ -19274,7 +19274,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a592f5bfe199c62976fde907905eb2b07b1fdc010b9f5d0e30dfd058f9a9fd1e"
+      "textHash": "44ab48f228d84a0bfb5dc34e77d6b93371f800139c9ee7496760dc4a85ea6a00"
     },
     "lesson-card:3157": {
       "key": "lesson-card:3157",
@@ -19314,7 +19314,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "61d4228b79457edc96d8d9d774f944a1df879771c92c032830f57d732e16f75d"
+      "textHash": "19025256ef44d6a5b73c1c33177d69ec203123b57354d17928687602742f6ee2"
     },
     "lesson-card:3161": {
       "key": "lesson-card:3161",
@@ -19324,7 +19324,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "59cf04a9ae123cb3384d6d4fe0594998e5b68f3e6fca71c0eb2d1dd4b638f931"
+      "textHash": "e8be13c9701d604802b0c16ed006907f56d32f55b76a214fe803486e209ea356"
     },
     "lesson-card:3162": {
       "key": "lesson-card:3162",
@@ -19374,7 +19374,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "cf773a5c82416b834c7091ca72352601be94b84755535a34fa8a7214722be985"
+      "textHash": "c3777c0ad6f7e02f52301af5520dc68d6d80955fb56301896efb32f0aa04df08"
     },
     "lesson-card:3167": {
       "key": "lesson-card:3167",
@@ -19404,7 +19404,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "892149148c75f59326580f3b7e149973a857f58f0301269e5e62d67194274cae"
+      "textHash": "be8106075edeb154eede3054589fbb4c91a393290969aa2bcef0f57d2c850d62"
     },
     "lesson-card:3170": {
       "key": "lesson-card:3170",
@@ -19444,7 +19444,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "69d579fb7f49cc458b2546a254d0a2efb39937eb8de255000231753e5a59a0fa"
+      "textHash": "620b3666a72873fcb881f37ea5ff04ea472e5bfadd92e649f56b6494366f6114"
     },
     "lesson-card:3174": {
       "key": "lesson-card:3174",
@@ -19484,7 +19484,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d22a1294f390edd349e5a231eb1ff04306b57003e8a207c1c38982b0785de0d4"
+      "textHash": "f9fdd6bfaf4b7d083abc77bfddbb185b7a9fef7ce8d404b9e70d3375b284cad0"
     },
     "lesson-card:3178": {
       "key": "lesson-card:3178",
@@ -19524,7 +19524,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3b4b1ec1c9b1aa7de4242ffe3e5fd65f95b0f32d1e9560a9c1450d808f7ef027"
+      "textHash": "74a9c1bd1f09bb458ecc8011385db4f6a518e42e6451a3649bf47da365c5cdf5"
     },
     "lesson-card:3182": {
       "key": "lesson-card:3182",
@@ -19564,7 +19564,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d30ef194a44e7695cc25c4a75d70f6e48fd6802a24a4c25e2c39622fff5b5604"
+      "textHash": "9312f4d3e7f131138c2d0e03ba928f98f721eb5c0e0dc030d326a5ae43c6ea5a"
     },
     "lesson-card:3186": {
       "key": "lesson-card:3186",
@@ -19644,7 +19644,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e466a8585e89feffc3cf01bace06f9112bf4bcf04f534d8f67ad35a62867b037"
+      "textHash": "ed8ce2f2cf0a0b8929758cc22505a8e43af0633dc93a57e2532698dcbf0bd43f"
     },
     "lesson-card:3194": {
       "key": "lesson-card:3194",
@@ -19674,7 +19674,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "af291af71e2c51ad7d0d6d6666d090137792d1fe8552153e0c68a1bdb404f790"
+      "textHash": "955ba3f52ba64fbd3c5517b2d3f9092b93bde0b906add91887061a84d8c41dce"
     },
     "lesson-card:3197": {
       "key": "lesson-card:3197",
@@ -19684,7 +19684,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9f75855d8d111d97d553a460dbdffdba50ca258ab2e41be0db5fb415990dccf5"
+      "textHash": "f3b14cfd72c117eb87265be93e629b846617f979f22042c36b9c5b872f9c22aa"
     },
     "lesson-card:3198": {
       "key": "lesson-card:3198",
@@ -19914,7 +19914,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4dc5a5019a00763fcd3757fd486419d2f0b4b7534213d7a746c5e3be583c913d"
+      "textHash": "0391997704d29cd004e18ce761c66bab767e6f2b1d8b2560a29cdf51485a16d8"
     },
     "lesson-card:3221": {
       "key": "lesson-card:3221",
@@ -19924,7 +19924,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "98dd9c59a35e443f0098370581522e8d72bb1d7da3442c9911f10b50fd03b1be"
+      "textHash": "0f2ef3ff192ca7353cb1946fe71c56d4c6d2ccab5c707e4f3c7ead6e05c01f9d"
     },
     "lesson-card:3222": {
       "key": "lesson-card:3222",
@@ -19964,7 +19964,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "daed8fe9d56d2120933913c60c0a52a3761fd34e2b762369a1193ce07055ca6c"
+      "textHash": "6d11798917c28b35d453722acff7016237633193de9c10f010e522e5a39f5a13"
     },
     "lesson-card:3226": {
       "key": "lesson-card:3226",
@@ -19974,7 +19974,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2df080ca7ea5d2943f48ae69b289ab18503a2d298f4e442149433f88b5478568"
+      "textHash": "98efda4e86329e661176707451c3e18628356310cb31cb7b609ae472c52ada54"
     },
     "lesson-card:3227": {
       "key": "lesson-card:3227",
@@ -20004,7 +20004,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a2218d5beb59b5834ddc21e238fdc8ee6f154bd7009b5e211c86047411e5dde2"
+      "textHash": "c61ac80e5ab10732d9c7a912d40f6d286553de6bf90483feb64342526c7ab968"
     },
     "lesson-card:3230": {
       "key": "lesson-card:3230",
@@ -20034,7 +20034,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2ee2843e2dff511daa7379a25a98f96843b1f66713b618eba448974e98ac6058"
+      "textHash": "7d2e560befbaaf07c052b0a8cbcc7051c43e68cb39b3d820efea0307e7e3ece9"
     },
     "lesson-card:3233": {
       "key": "lesson-card:3233",
@@ -20114,7 +20114,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "93cf000bbccab2f3e9a3dc98445ef4e69b3153a620456916f526f60985b74287"
+      "textHash": "c2778603fb2fb193dce3aac35c03340c9871833ede58496e443c3fbc24f07c66"
     },
     "lesson-card:4001": {
       "key": "lesson-card:4001",
@@ -20124,7 +20124,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a7633bf87194fc51055c4eda867f3866ead030ab434b02502fa25d51c1f304ee"
+      "textHash": "cfde416f9ffe1fbc9cdc137126061e0a4d278e519fc9b6a11506c7930f3c6624"
     },
     "lesson-card:4002": {
       "key": "lesson-card:4002",
@@ -20794,7 +20794,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "dff3f7772d321149747be0f222b316f91848ab723715ce9bd2973ec20f083b57"
+      "textHash": "7730957a750a4aa4c7a5d547b2e5656b3fea9d7df95357d8fceb03033fcb38e7"
     },
     "lesson-card:4069": {
       "key": "lesson-card:4069",
@@ -20834,7 +20834,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3e71d8c18f3d68ff1442e88276c7a19c4c1a383bfd77fc7ff05396e360a3bbfa"
+      "textHash": "468c6dd2bb79e22226e8e2d17d2e036dae9d9252122dd6a8cbcca4588d383e22"
     },
     "lesson-card:4073": {
       "key": "lesson-card:4073",
@@ -20914,7 +20914,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5c4ba511133cb025a46a68b7dc63c395014f6919cf9e5701cd3daaf4e1183ca0"
+      "textHash": "7a35f62a539f7d9aff347b62214053202478097d7403e4a43cb11a1cdc52bb81"
     },
     "lesson-card:4081": {
       "key": "lesson-card:4081",
@@ -20994,7 +20994,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5175a980100ed01f8202f51523082d4875986d8e1c221377647f71cce4c16dca"
+      "textHash": "edbc7314e73cf6f73d966ceaa4d0230a56eab7a894536afc5748400a7d4234aa"
     },
     "lesson-card:4089": {
       "key": "lesson-card:4089",
@@ -21234,7 +21234,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "aaaeb57aaa38b301ac435f332d0092ca897570a0f7aaf036e4af83355d8c564c"
+      "textHash": "7dd2af18259682b467dd33377309becc1d2af8972cfa7154a35df8bf3d1850d4"
     },
     "lesson-card:4113": {
       "key": "lesson-card:4113",
@@ -21644,7 +21644,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e65bcb8ab082dcb6491230939923e39165fc31e4b3fe75a85e73a4d2e2cc351b"
+      "textHash": "efab1b4f721fdb5a02e67cb61111941851aaef68b84245ac637cb6462e75d509"
     },
     "lesson-card:4154": {
       "key": "lesson-card:4154",
@@ -21714,7 +21714,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c1bcf5c2d8cca31e1a8baedda2e8464b2f3e89c4b191f035f8fd77ec0e53ead5"
+      "textHash": "9bc398af0752298e41f1469a20240e2ff4df2e90dd5d0b0a4aeacfe425a843d6"
     },
     "lesson-card:4161": {
       "key": "lesson-card:4161",
@@ -21744,7 +21744,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0a3e57df7875e41769218a5f4d1c072f5b2784d5c5ad78d76b01983682cb98bd"
+      "textHash": "475004dff42d227a712a5609706f00aab4ef1cdf4c4e12a22fe09ced25732c1b"
     },
     "lesson-card:4164": {
       "key": "lesson-card:4164",
@@ -21774,7 +21774,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2e8de0290fe58b2535525617b2b751ae457aa1ce68f97dd076f1f0c26cb1200a"
+      "textHash": "54c533a0bb76beacb4e1e93d9b2d9060c4d7b2ef68a95989fab2fc939d44535d"
     },
     "lesson-card:4167": {
       "key": "lesson-card:4167",
@@ -21784,7 +21784,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f74493d40f181558fda7482218ae389949ef942d85a680591f6d51b2891ab169"
+      "textHash": "0c6d09e631423a7e3559e0c261766bb39caa4953f63b03c3c5fbebafb1c4a6a6"
     },
     "lesson-card:4168": {
       "key": "lesson-card:4168",
@@ -21844,7 +21844,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "88f057c5488d16d076ecc329c12c07ca13482b8359436710104001d45ff0faa1"
+      "textHash": "2edf7fb11c7dd914c1041870fc41b1a9ae8f36144dc0c7dc4b60d48fc0f60752"
     },
     "lesson-card:4174": {
       "key": "lesson-card:4174",
@@ -21874,7 +21874,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d9abc710c4da4f72003cd5ef20e8b957bf297778106e3154d0a5aed8e0c0df76"
+      "textHash": "bd2cf0e9b7f301c68f87d243bdbc6e295092525ed552c3887e8294d72c1ed757"
     },
     "lesson-card:4177": {
       "key": "lesson-card:4177",
@@ -21924,7 +21924,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "78330ead23018b0a4500367783377480375be18ae177de0a5e3c498f899711a2"
+      "textHash": "95c2c2da17bbe69a1d687ee842fc32f6ce9fcfdb97733fe3a15a78e89e2a4499"
     },
     "lesson-card:4182": {
       "key": "lesson-card:4182",
@@ -22004,7 +22004,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7dd93b6d64582cf7f9ec589483602ef2f0b4d1ebfae41bec23892f3adb1462db"
+      "textHash": "1ca87ce8cd0ddd2142400fabc9666496d62d98f543fa07bea4fb50e4109e5022"
     },
     "lesson-card:4190": {
       "key": "lesson-card:4190",
@@ -22034,7 +22034,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "8dfd5b2a9f6b72890f23b57210accc89477a54dd4b93c681a7cc0132a449e8ca"
+      "textHash": "99f0cf55714e78d12d5ddfd2d878053ca3586f3a0e7ed43fe5b8e262d5900098"
     },
     "lesson-card:4193": {
       "key": "lesson-card:4193",
@@ -22084,7 +22084,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "1639950d25384cf26e5107d82190d4fd4ced12ac390bacaaa7a3ffa3df78076b"
+      "textHash": "36a0fd33c1a2f9a38c2f2917cfeefe5c4a1bfb8dc65a24ee0152cff710a71939"
     },
     "lesson-card:4198": {
       "key": "lesson-card:4198",
@@ -22124,7 +22124,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9bfa9d931b15c5cbd9885a7ee540ebef69d1ab9fa1354c1490ee273f8ae6bd52"
+      "textHash": "520c5d6056e597d5cf268c69239d8c9fcc2a1c3f07de0258f14135b28210697f"
     },
     "lesson-card:4202": {
       "key": "lesson-card:4202",
@@ -22314,7 +22314,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a58ba62adcbde5e51604d4906404ad7ac53d1066c48fa0ee672bf4c977ff6dbf"
+      "textHash": "092f8bad2cfe006479b4b9a8462df036d47141458694d7b0f8c201145b6c205d"
     },
     "lesson-card:4221": {
       "key": "lesson-card:4221",
@@ -22384,7 +22384,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "8d8ef5f09ba7b0a47a297bc215ddf8dbb2d56aaddf91b0ec88765be9c697043d"
+      "textHash": "e484f57e39a63d64200692f808529aad69115fc28d67982a9da4dae536940dc7"
     },
     "lesson-card:4228": {
       "key": "lesson-card:4228",
@@ -22424,7 +22424,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b1616c7996d3849d5ddbed557c288e2c8f95c524d6f476736f9bf3de968c28d7"
+      "textHash": "12337a9fbcda4089ea1537474e0201c8654c6a50eda9ac94a796ae2d447004ed"
     },
     "lesson-card:4232": {
       "key": "lesson-card:4232",
@@ -22474,7 +22474,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6e871b95b8d49710fc124965a01eb1cf73b79aae4b504f93255bf6b26d6b0ac8"
+      "textHash": "3deb72f6a3f9f76653d1f3cd6a4d7c5ef40d6af9c28a7e96c45e00d9edae98e0"
     },
     "lesson-card:4237": {
       "key": "lesson-card:4237",
@@ -22514,7 +22514,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "74be8f4359d262415ffa75e3e4e09f9b08c204f071ddea584a5567097bdd1702"
+      "textHash": "805aa3a30530731ec1da3c7fa4a3765dc8aade8cb2048169b3e928693b1065da"
     },
     "lesson-card:4241": {
       "key": "lesson-card:4241",
@@ -22684,7 +22684,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4cdcf38c27c76e4a5757e0220965006aa8e3b6e9d2bab6a73cf1d79c44ba2453"
+      "textHash": "143c80c25705339dfb02a035950d1b1ae92ce83365203a0b6b0ab932801e1153"
     },
     "lesson-card:4258": {
       "key": "lesson-card:4258",
@@ -22804,7 +22804,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "90e10a1c89606ba09792938346bb1730cd27da6aec2ad66267057ad8b4ddad64"
+      "textHash": "ca300628a1de829c9147ecb46b230292b12afba25efd6c37da6646a75cf409fb"
     },
     "lesson-card:4270": {
       "key": "lesson-card:4270",
@@ -22884,7 +22884,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7f262a858167f98059a71102e8bc3589801a5fd76a321299d52045077b7c412c"
+      "textHash": "855b6e65413774f887c5532e24a4fdb0e310ff10ec2248473723ac8ea2c5549e"
     },
     "lesson-card:4278": {
       "key": "lesson-card:4278",
@@ -23184,7 +23184,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ab8772e6989530abb63a86a601a58e9462b873208b80d1718d93aec0ccacc79f"
+      "textHash": "6f8532f1c328a0e902882928f74b8892b6d1c058adeccb23932faaa207e6e906"
     },
     "lesson-card:4308": {
       "key": "lesson-card:4308",
@@ -23224,7 +23224,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "53539a0b689d7e71012b6a11e9a494c070e140a74ae1017bfc467e12ac180e38"
+      "textHash": "082837bc9d5d02cfa6e1fff3b92d92f8f36665fff5be68fdb5e7f79e4bc8fb24"
     },
     "lesson-card:4312": {
       "key": "lesson-card:4312",
@@ -23264,7 +23264,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "94a38b36d60210ece708c59949f6aec41a1a008eb784d6322d2d4e19c991ede0"
+      "textHash": "0b3cce4b0a5d8dcdfa1060c702d615ae709a8a8a776fd78828c3202c587023a2"
     },
     "lesson-card:4316": {
       "key": "lesson-card:4316",
@@ -23304,7 +23304,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "79c19662619ee2b2f4e801d89320b48a5db1cb73b5cfd3b95bde01d2fc613f79"
+      "textHash": "20b45196d42ce63a95688e688315d756680c579e8972010f53716dee564d1829"
     },
     "lesson-card:4320": {
       "key": "lesson-card:4320",
@@ -23324,7 +23324,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ea720774a1f455784c1e0e5bef59590fcf05c74910f9ebf5407c3ca495b1c529"
+      "textHash": "80a1523b968c5bae56023bfd463d3cf938bda8dca0d0230e3799619b28e3b40f"
     },
     "lesson-card:4322": {
       "key": "lesson-card:4322",
@@ -23364,7 +23364,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9b5b6a0fb345f029576101d240b3bce49ba10955b400c9c36490d44b76caec44"
+      "textHash": "8ccea1ce6802161efe6252fb373cec61eababaa55303da9a1ac6f64d7ed425b6"
     },
     "lesson-card:4326": {
       "key": "lesson-card:4326",
@@ -23484,7 +23484,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "652dd57bec91141a31def895a050dd5b5b2bc65afb5e5feb180e847eaacdf794"
+      "textHash": "e419db0680474c0a01a8c4847a09d06dc047d63252ffa8999631556d60e91765"
     },
     "lesson-card:4338": {
       "key": "lesson-card:4338",
@@ -23544,7 +23544,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "90684c99be08273e0e022078edc54845e2c8128463259188b5316cb56c116348"
+      "textHash": "c9cc13b38ae76ba9fb0312a5ae65f58e04b8a9715261abb0afc3b1bae31fa8ea"
     },
     "lesson-card:4344": {
       "key": "lesson-card:4344",
@@ -23564,7 +23564,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7c52dbfc3abddc40d0d2bb3ec78f6746ba0cf927d45dd6c82b89cc5c3341ab86"
+      "textHash": "25aef42b50549da851eeb7d4d54d90e38c93f1efb1fbb97093aecdb1dccf5991"
     },
     "lesson-card:4346": {
       "key": "lesson-card:4346",
@@ -23574,7 +23574,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "bbe8608ec6d76e8cf0e949a7d1ec7e4d7d94fcd664d28b5f649508e6db9e7487"
+      "textHash": "566636efe1d9c1a6b29c088b83a7117ec7209b8a37e6bba32efe1a69da8bb9cf"
     },
     "lesson-card:4347": {
       "key": "lesson-card:4347",
@@ -23634,7 +23634,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7ddb468714ec2d783b761819d8db77978c35ff82f769fc67c03f74edd9ede993"
+      "textHash": "22c072ddf0538f426d9af0e2a7f41ff2ef13e3a042678367f1c910263fdb9065"
     },
     "lesson-card:4353": {
       "key": "lesson-card:4353",
@@ -23994,7 +23994,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ccd8bae37d6af09b951832d3ffe0cbb75040bc71b08012da61e0293a21414fec"
+      "textHash": "93706f3b2a68e2c6dc02a5597c5f2e0107d679023f3f2fc60136af800b02d770"
     },
     "lesson-card:4389": {
       "key": "lesson-card:4389",
@@ -24014,7 +24014,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ab18e5769fb7fb49e22ecbd88ac63a840ef8b08910c070204e2df22356d59c71"
+      "textHash": "0f9c55cdcaf45517da4a992f87a0de4c211049ac9790f80af0d329015989c621"
     },
     "lesson-card:4391": {
       "key": "lesson-card:4391",
@@ -24044,7 +24044,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0a3ab55d8b9d27955b1fb311e4939e7c488075d53371a180e83464c0a3159362"
+      "textHash": "c2ffb4dadeb3b7b0e259fdac3c909f05aaf0267ae49b046098b93c7aea32f35d"
     },
     "lesson-card:4394": {
       "key": "lesson-card:4394",
@@ -24054,7 +24054,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d9dcc914ef1d584c31d15286fdd4559b88c6400006f11aad96f5054b709d793b"
+      "textHash": "553a82ee7e6aeb4c0314d667a2e65aea141f9370c320da7d07d2ab13a3611057"
     },
     "lesson-card:4395": {
       "key": "lesson-card:4395",
@@ -24064,7 +24064,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a479f1e4cef03110b64e2decb84f41d1bd2bac6bff4b909356a32522322d4f98"
+      "textHash": "977b5348fafbb0f4ec53130a0692d42aefb56c6f78348eef5a14d4ee08981e90"
     },
     "lesson-card:4396": {
       "key": "lesson-card:4396",
@@ -24074,7 +24074,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0a9875ff87af5e59dc5003f506fd56fc93b21ce9aeccba53e959ea6e4d7b64a3"
+      "textHash": "f7992ead4ec090a6ce9bb6930b6cac9d4fbcd91ecbcf25f0c717f13d5e238c62"
     },
     "lesson-card:4397": {
       "key": "lesson-card:4397",
@@ -24104,7 +24104,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "db516c4c75c8ce3dbc1266f255353d7635a186c8928b5f057cfd83fb09e1ff1e"
+      "textHash": "0dbbfceee8fdb951eb914d58699e24201370a4c20a9c69f04c1706a05c2cd7c9"
     },
     "lesson-card:4400": {
       "key": "lesson-card:4400",
@@ -24114,7 +24114,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "835dc9fb7f5b4ed6f634b6092bfcc31832ee9520d58d1848edcec89b6a8a8e4a"
+      "textHash": "56d85cd89dfe4ca10b5736b33fb50efb6f1d3ee8b0433c0d066c7214609c3178"
     },
     "lesson-card:99001": {
       "key": "lesson-card:99001",
@@ -25044,7 +25044,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9822cec4cf512b57c1dc01b6b4ff5ff5539daee43a447bc64aed032aa9965304"
+      "textHash": "f88cd2a7b4a191e051f367794eba7a8b9bcd594afb8e5673e55f1387c4ce76ef"
     },
     "lesson-card:50006": {
       "key": "lesson-card:50006",
@@ -25054,7 +25054,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ccee27c37231dd885420bd781c2f7522469db87b36c81801be08c99bfed86e67"
+      "textHash": "02bbe694df8f4591516ab8cefbfa1ae1811c3dccbe8394d4a367f201f343a3b8"
     },
     "lesson-card:50007": {
       "key": "lesson-card:50007",
@@ -25064,7 +25064,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e2c01dcbc20e55e5ea0c56bbb5f8cc0f9d04f0c5d7864af152a18ea78f56637f"
+      "textHash": "8b79fc1fcd7f78049d27cd50bf22086882923f844f83ec39df0e5aa2232b5922"
     },
     "lesson-card:50008": {
       "key": "lesson-card:50008",
@@ -25074,7 +25074,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "1c67c33b546bc4df4fecc49f1dfe210c3a17762f0a2de5a0f9fa03f230e222d1"
+      "textHash": "39032fa42d521ee1514194412579b7d94dec4532abfd735a1d775d721013b251"
     },
     "lesson-card:50009": {
       "key": "lesson-card:50009",
@@ -25184,7 +25184,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "bcd20db208f21433ed9058a0555119110f23aeebe6e6f45e3c6ab646b1fc11ef"
+      "textHash": "f3f5048eb81b63cdf8e52f37323b2d67d993793446df0257f95351e325724617"
     },
     "lesson-card:50020": {
       "key": "lesson-card:50020",
@@ -25194,7 +25194,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "1b0fcc2727a49c62bae1be4e6e09b1c868f70a2be7fb636c5f7bf847d4f546c9"
+      "textHash": "0b935591f462becc7f518c956e7878e16fd87428d9a319ebb63e8d9eb736fe9c"
     },
     "lesson-card:50021": {
       "key": "lesson-card:50021",
@@ -25844,7 +25844,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "215593ae37096e467bb32ab1f5d89dddaafbe50302c96b91d5546b59d91502a0"
+      "textHash": "eb0b0eeb10a8139f6da82cefb510a194cc6457a721d13c9e2c81e97765ed200b"
     },
     "lesson-card:50086": {
       "key": "lesson-card:50086",
@@ -25854,7 +25854,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c6537259895de2446d821e26421d6cceaf2d2f43a2e513f8ca2cf21b1cd746b1"
+      "textHash": "745c0eff98f3c3038a2f454e50cf888fa81058480ac5958e97b21e5569eff292"
     },
     "lesson-card:50087": {
       "key": "lesson-card:50087",
@@ -25864,7 +25864,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c0724481e334f38018989a203d70f13d9202d938ee5d91332fcd73dc607827cd"
+      "textHash": "f6cb6826f1c43ddd33a6a32d6b8bf2fdc22b313b950ba1d3046ff2a986ce6722"
     },
     "lesson-card:50088": {
       "key": "lesson-card:50088",
@@ -25874,7 +25874,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "1b9545034a6efb507e9a4c959ff22e46089cad2877a186bb37eda384fb68d212"
+      "textHash": "c18c92882c5a5ba6b8e3ee03a2b109d045720d67d22510017fc49de4b428638b"
     },
     "lesson-card:50089": {
       "key": "lesson-card:50089",
@@ -25884,7 +25884,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "670eb8693fa1d02a8c9b53e5de431f5dc0374c612a9016dba330eee470f3e5bd"
+      "textHash": "3e214b0648a0cd5a501c64a51261d46332275cf57848b9f9efe7694939395b05"
     },
     "lesson-card:50090": {
       "key": "lesson-card:50090",
@@ -25894,7 +25894,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d39a7fc868e9dc1feefca3372825602101d5601a296c8aaab5cf37d2ca6c8ff4"
+      "textHash": "0ea0e49624ad9e7de59c886b9052dec63f750c37251fa9c0c772f9887ce5bd2c"
     },
     "lesson-card:50091": {
       "key": "lesson-card:50091",
@@ -25904,7 +25904,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a51a19771cde5cd635c0d4f0306091f42af0bb6402e3c4d139ecffc386463ec8"
+      "textHash": "6956e4079f5b51c791ac6ba026223e1165bd5f682096fa40932a7d5d766c1771"
     },
     "lesson-card:50092": {
       "key": "lesson-card:50092",
@@ -25914,7 +25914,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f101c36c97a7ca8a9857cf7966a38656a3bdf4704b86e14b05b89776d2dc16fc"
+      "textHash": "3feca1b2943d1523dc7240c46a1ac4fd7f261c96d38149c40abe7ec217e52ce9"
     },
     "lesson-card:50093": {
       "key": "lesson-card:50093",
@@ -26044,7 +26044,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "72f917a19c9bbd11bf03d86dc01b7cecdfa842240e9edf5a52db9f33dc5c7a43"
+      "textHash": "ffc17f1ef219ea88aa51ca7ef3141c1bb3b58ea7a90abd94fdc06662c1fe09b1"
     },
     "lesson-card:50106": {
       "key": "lesson-card:50106",
@@ -26054,7 +26054,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "28df76f71806aa0110eb91c19ea729b643b2bc4368a518e42efc2767d0358091"
+      "textHash": "e3dc03c388342d64dcecebd68fe23a0b9fa0c04eb68f2ed640a288c5333ece6e"
     },
     "lesson-card:50107": {
       "key": "lesson-card:50107",
@@ -26064,7 +26064,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "775963b9cfa9fddcf62a34660e66786e7976b4425e46c513754b86bb5cf75432"
+      "textHash": "03c9ff4e19b770c35660d395dbabe3d6daeb60d909062b7d74f0d9fb2fd99676"
     },
     "lesson-card:50108": {
       "key": "lesson-card:50108",
@@ -26074,7 +26074,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "81b014db0a88c6cc9b4d716a99a881fd62e885d831fe7b7b4987ac7342c094d5"
+      "textHash": "d29da27e741dc875001428881ab103e9c67bc6426e0483cb2f2ddc2ebd5bdd56"
     },
     "lesson-card:50109": {
       "key": "lesson-card:50109",
@@ -26244,7 +26244,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6926fe6abaa768633aaf733ac4a858eeb126c80e4cdc80a0cfeb6e2db86ca17f"
+      "textHash": "53854d493f46267c640f11fa487f193331bfe72e09782d786121eb1245e667bd"
     },
     "lesson-card:50126": {
       "key": "lesson-card:50126",
@@ -26324,7 +26324,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "468bead0b1dab994a5aaf735f8e7e3540864c3414ded1d7ff402c3146515dafd"
+      "textHash": "b331043051766d9bb4d5d42f533d35d30198eb4b9ecb321c3fd5fcc337e72721"
     },
     "lesson-card:50134": {
       "key": "lesson-card:50134",
@@ -26444,7 +26444,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "63a91830baa46432135c1b45f9cff5b158ffdd0bb84cfd620c82eafbecd9f04f"
+      "textHash": "59ea04beceebc088a80849db28327e1dc0955bdc300954b1c3cffe58665143e2"
     },
     "lesson-card:50146": {
       "key": "lesson-card:50146",
@@ -26454,7 +26454,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "881db6071eedd0fda20c01f051b2be4cbddb3a0e62a90e71cfba3d4113a157b7"
+      "textHash": "bfe2e8b7a463f6b792a2360b58ea4ca0b30e3a28f0acfbcd4a147866f55d1411"
     },
     "lesson-card:50147": {
       "key": "lesson-card:50147",
@@ -26464,7 +26464,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "454a040dbae39a54f1b97004415c0f8a758e7cd2a775e8982f0ce654f514b858"
+      "textHash": "99955a80000aea4c29529f190bb55fd3e554a355f300ec4b0eb65b5e495dc6ed"
     },
     "lesson-card:50148": {
       "key": "lesson-card:50148",
@@ -26474,7 +26474,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "1cba6ac301b3bab98d1b2240a924f90ef24247b4c065a780ec96a876ce7c7ccb"
+      "textHash": "7e5fd36c06b7a509961abe6b2f36f63581ab845f52ca056e67b2353588bd27be"
     },
     "lesson-card:50149": {
       "key": "lesson-card:50149",
@@ -26524,7 +26524,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "1da2d187720e8c37e49c42fe5274b52f49138c744b42ea09cbaf5fa1284e3cbc"
+      "textHash": "74681b84eae222b697a45db0a9a37003f4a721fe6a79079622871e455110ded1"
     },
     "lesson-card:50154": {
       "key": "lesson-card:50154",
@@ -26534,7 +26534,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "8fc1a71a2aac3b78392099a0a2a482ddc033dc4de99e15f752b33b7921f85439"
+      "textHash": "ccb1c5df523b1f74d10180941c0dfd9857e3218461135d2077f277a00b14c22c"
     },
     "lesson-card:50155": {
       "key": "lesson-card:50155",
@@ -26544,7 +26544,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d63df2a64ba5e31c36fd04cb08268b96a9dd908f76bfea4a427807cf104d545c"
+      "textHash": "768186580df1f4fc1e86e7d0602f124f8b149809fa6ea75a445ec65d59f56229"
     },
     "lesson-card:50156": {
       "key": "lesson-card:50156",
@@ -26554,7 +26554,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d38b3f378f49a701a08729af90dba0035e6e6cffd36f33cd75de227b61822629"
+      "textHash": "a653fd084e2115abb33b28620c40088e235362e058ec9e85fd286c289ad7c5df"
     },
     "lesson-card:50157": {
       "key": "lesson-card:50157",
@@ -26684,7 +26684,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5c84fd667b24a033e10e8e8a275377a23f5c78f7d30ab7114fc169ab2f41ec18"
+      "textHash": "54b9786e6da6a27d06fc2b56eab468567f5780686bac40a0a2f5300d9a24c306"
     },
     "lesson-card:50170": {
       "key": "lesson-card:50170",
@@ -26694,7 +26694,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b3bf9b5b99b95b404abe60d57f5505bd044b79e0c34f0fab6e8358413e72f721"
+      "textHash": "4f0e1355722c227c22e0380db7d746c79aff3c2ca29c55ec704b81546ff417b3"
     },
     "lesson-card:50171": {
       "key": "lesson-card:50171",
@@ -26704,7 +26704,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3a7c6e3830582a6e91f3c688ce85e45f464b5d4946a4da61a76222e4fd4d7e54"
+      "textHash": "1a16807c642e95093801cad0fc50799850c86e10d240baa6a16c6680674ddea4"
     },
     "lesson-card:50172": {
       "key": "lesson-card:50172",
@@ -26714,7 +26714,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7839be73b7fecb3c3657893b1c5682e07d4161d65aaa8cb1d0ae7184dbf7cec8"
+      "textHash": "53441a910f9a96d24603d9ee6980815b6c589abc47201e7ce49af85c59edb496"
     },
     "lesson-card:50173": {
       "key": "lesson-card:50173",
@@ -27044,7 +27044,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "25936920188700809006d8abe822652c5ec4b3b2803261fdd1913974d3fb68c2"
+      "textHash": "d21e6c96b62d260bee7af39fc7741af86ae9803988b6697279564e0128478c61"
     },
     "lesson-card:50206": {
       "key": "lesson-card:50206",
@@ -27124,7 +27124,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "71a107ca0916051b15f56e33813be0262d2100a260e25f05524c2a5192e2f168"
+      "textHash": "36f191e7d8c19654d476332284f3e27889c6c47d04660399f14a1e73239c0cd3"
     },
     "lesson-card:50214": {
       "key": "lesson-card:50214",
@@ -27164,7 +27164,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d61080b890538b437fa0dd3945fd76396073dc1331d929890345760d50ab8f4e"
+      "textHash": "fc50c0b1d029fc12e0a4e75dd17ddd289311b633910fa4c4b80cc1b55149814f"
     },
     "lesson-card:50218": {
       "key": "lesson-card:50218",
@@ -27244,7 +27244,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4e0e35bd2d62f9e38af6ae4764dc47a76a86f818063dce79dea604885ff94c26"
+      "textHash": "f7d9e9c78e4c6903b1dcde03f527ce9793c75ef47ca5a3aaddfe82df86272436"
     },
     "lesson-card:50226": {
       "key": "lesson-card:50226",
@@ -27564,7 +27564,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9f442c5d9052472f88a51db49862de948c319f616283a04660667ba36e1543fa"
+      "textHash": "b582dbb941e54f140b23c5b0cd33a5ef51e3484d6285aa273065b691aba7af1a"
     },
     "lesson-card:50258": {
       "key": "lesson-card:50258",
@@ -29804,7 +29804,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "48ff92a3234c7aa74ce962a8f00976656c52eb5bfea91ea80de6b1c8d20b149b"
+      "textHash": "55483523d89f808a176c57e3609934667e43b9ee6ff4c7d8ff80a2ab61da7a91"
     },
     "lesson-card:51182": {
       "key": "lesson-card:51182",
@@ -29814,7 +29814,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "30138278325fcd638ea750abc6a4a7b089edf9db9a7360b95004ad43ade70462"
+      "textHash": "7d05cf7da068ec4a125805665424123a2885c12c9f99dc513fee235028b92e66"
     },
     "lesson-card:51183": {
       "key": "lesson-card:51183",
@@ -30424,7 +30424,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d164a5fbac99f1532bf22e59f029da0f4262a7472d442d1040dbbfad3c649879"
+      "textHash": "e74e4b730e8e1665f9c20a5d3aaabe00e0bfc19e5972cfe60a080240c599f64c"
     },
     "lesson-card:51244": {
       "key": "lesson-card:51244",
@@ -30434,7 +30434,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f3db11d2aaf4f1d541fecd2792bac5cdc318c6662c01dfc257e3bf8cf9c7f88d"
+      "textHash": "3d4c4722324b8215b8aba9a89e2f41a800e482d346613c631087ce4bc2d93133"
     },
     "lesson-card:51245": {
       "key": "lesson-card:51245",
@@ -32404,7 +32404,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "85bcc272fc72221e5af52e1ff0273747d86b65d4c705cc0d43565b9c7ef2224d"
+      "textHash": "0800651066da6ed2f52d48c73ec50145ba104885fb18145f326d34e3e581afa7"
     },
     "lesson-card:52142": {
       "key": "lesson-card:52142",
@@ -32414,7 +32414,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "47bd1c958da136d0320b1d4a06166b285a0f848ccefdb448efc8d42cf52a8c25"
+      "textHash": "c6e32fcc80dbcfa8d77a60e0b91587ea2b3cd0b34efc8a5bdce8edf993df02ac"
     },
     "lesson-card:52143": {
       "key": "lesson-card:52143",
@@ -32424,7 +32424,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2e86da24b5b9c9b2cc879d0e87c2fbc03808380e5549734b042dd14ca74ceeaf"
+      "textHash": "acfa2189f84f9ac4a7ab8ffeb2ebb5cb92c0993c40313f12aec64ebb4303e623"
     },
     "lesson-card:52144": {
       "key": "lesson-card:52144",
@@ -32434,7 +32434,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3478278c0d3c93f058181208c4cd341dcd789c1dac14c66aa82f241c8eefc598"
+      "textHash": "3c9de3b0c5d3d97bc617288a3e4ec190e10745dbf91b87e97749c7467f7be1ec"
     },
     "lesson-card:52145": {
       "key": "lesson-card:52145",
@@ -34374,7 +34374,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b00f3e1edfe6327a439d7f184cbb2808a6d0a2e1c1d1933101f9aaee3447e730"
+      "textHash": "3e927f5bebd9cb61e8331a6095e9288c37069eb2b7b91b2cabf96a389aaa2bc3"
     },
     "lesson-card:52339": {
       "key": "lesson-card:52339",
@@ -34844,7 +34844,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "abb59816e010450f7a92864098b3ae1f4da86509b5360632e2203063bfb18a86"
+      "textHash": "0df95535890ad1c8b020266a89e1fa1f571e3844a7ea042d227491ed1010db3f"
     },
     "lesson-card:52386": {
       "key": "lesson-card:52386",
@@ -34854,7 +34854,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0a42d11e06e4fb468d606989adc7b69c47cbfce23c3ea1401ec9a1f0885107db"
+      "textHash": "aae6430398983bf8f2e04529ac6a79d084359c47056eb000ae504839fff7a703"
     },
     "lesson-card:52387": {
       "key": "lesson-card:52387",
@@ -34864,7 +34864,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "1ef976b9ed081936e881563cdea941c4b994f95cc9dad6a3e44a830f0b227a5e"
+      "textHash": "da6a14b58163aad09d865c5d7c7be3b50015279b490eae8f4983d120f73e0f59"
     },
     "lesson-card:52388": {
       "key": "lesson-card:52388",
@@ -34874,7 +34874,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4af9ff4f92fa3c0d8a158325cb0941185661926098e9bd1d2a1ad7c2b030fc28"
+      "textHash": "b8e61e06afb1982d5a350c77c07a2dfa2dab170811ad565523c5acbb9735c8bb"
     },
     "lesson-card:52389": {
       "key": "lesson-card:52389",
@@ -36084,7 +36084,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2fa4cc04bd714f6005fb08343b68d474dd0fee5a1383f84d4531ce0e75a96664"
+      "textHash": "aeccf4499d102f8c80b4b9f59fc867a82d5ce95ec97be43090b81f1651be6b45"
     },
     "lesson-card:52810": {
       "key": "lesson-card:52810",
@@ -36094,7 +36094,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a6f17087cf643255f66a1f26d77d85420298b38f356d981399e6f000c4b87058"
+      "textHash": "0adc7e8dda1f4ea9863a2a211bcd73417101b8acb57cc5658758253826a5c6b1"
     },
     "lesson-card:52811": {
       "key": "lesson-card:52811",
@@ -36104,7 +36104,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "e5cfa2be485efa7e6bb97d859a252909790251f3c05055ab9f7898e296dfd800"
+      "textHash": "0b3048226a028ffebff5007e3001791f513c48be34247d44ed8741664dbf0032"
     },
     "lesson-card:52812": {
       "key": "lesson-card:52812",
@@ -36114,7 +36114,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "10db26869e0ce2455c11d8d93b73a7f133eb479d95d3f545f58b2345ca144dd0"
+      "textHash": "5c4a08c592ac5891599ae71af5b764108597ed35e840cb98a533b02c7401105d"
     },
     "lesson-card:52813": {
       "key": "lesson-card:52813",
@@ -36404,7 +36404,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6f8ee6935fdc2849bffad012d5d81d35b5643b1f341ddc632735d5fc63edeb9e"
+      "textHash": "6dc27b886d4bb8003ef2cdd454f40021e0fb70ab0b7920844a0518a893bce81b"
     },
     "lesson-card:52842": {
       "key": "lesson-card:52842",
@@ -36414,7 +36414,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6796c30dab47b79bfae115ef9fcfc684905a79e44d52c2ed5b2555564328ba54"
+      "textHash": "0e5256bded20e7f96f842dc45112862472b355a59afcfa035a6e5ebacaf7e8db"
     },
     "lesson-card:52843": {
       "key": "lesson-card:52843",
@@ -36424,7 +36424,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "8bdcd8e00c96472a915ee0ed3d4cecdb58c67af6d2ed7dd2e087e6ac94d438e9"
+      "textHash": "e4bb1e7738059b857bbb781835d72b17875d27a7dea4d794247bd61fe51325b4"
     },
     "lesson-card:52844": {
       "key": "lesson-card:52844",
@@ -36434,7 +36434,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "83daa4a680c6c4eaea3d2f8157fac0271f8616b8c545f51052c83370e3edb6eb"
+      "textHash": "918860496a97bfc7fe71b248d35b73f133b64c11ee3717ca7e63aec7609018d1"
     },
     "lesson-card:52845": {
       "key": "lesson-card:52845",
@@ -37084,7 +37084,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "fe2f7be643502f12209a89f45b2db769b859e78fb2a2f7da425bda793d393d65"
+      "textHash": "a443d8baf1248c1524a1ad402b513c610ce34cb9097d40758a67e7b8328c8803"
     },
     "lesson-card:52910": {
       "key": "lesson-card:52910",
@@ -37094,7 +37094,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "1b60ec7561d6c6784ca0057cca1f8b5d0ef6d9f6db3c4866ea46bf92555d2be5"
+      "textHash": "de3dc84c072d82220015c8262b188ff75be0eb3b2ce734d5d07e312b46692d09"
     },
     "lesson-card:52911": {
       "key": "lesson-card:52911",
@@ -37104,7 +37104,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a700ce0cfcd4adaddc5eaaf4017db582f966701cd447d4696e84d361a6a613b3"
+      "textHash": "a617b25fa24ec644c504394294833234198d043738925d03bef2015464f84667"
     },
     "lesson-card:52912": {
       "key": "lesson-card:52912",
@@ -37114,7 +37114,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "62b9914bbe22fc793812f98f4bb67ba0a6e72ab5dcfc4347de345a6cc9803c8e"
+      "textHash": "82f1d0b31b6d4e4a65254d1a17206c029ed2ed06893f38372ce276c061a89b3b"
     },
     "lesson-card:52913": {
       "key": "lesson-card:52913",
@@ -37124,7 +37124,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "bf259fabdb1c3061deccb158a9b7ec93324b6b6da4303cda6f75953134b9002d"
+      "textHash": "0c6c43d032a5e730fa1cc09e5b0465b2af542177d77c08c6a4d46a46f80a236e"
     },
     "lesson-card:52914": {
       "key": "lesson-card:52914",
@@ -37134,7 +37134,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "b8dba62583629b3b65c1560915047718a111a473111c9d94cf1433986ba1c22e"
+      "textHash": "8d5ca3c842745138d018abf17d2f29c5e8bdd9411a475ffbbafb8bda43acde46"
     },
     "lesson-card:52915": {
       "key": "lesson-card:52915",
@@ -37144,7 +37144,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "ae4a931133c14739e825c0c1b7c9fd720b8719dbb971cb57c8500ab95dfd7682"
+      "textHash": "6c1516761d8810672a3595030bb08753378322a79be4de7f477e88ff9428e585"
     },
     "lesson-card:52916": {
       "key": "lesson-card:52916",
@@ -37154,7 +37154,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "27428dfd127efe67d3259d529d1f97bd2f42f7d8ffb45f4f1b5db09747bcbae6"
+      "textHash": "4535a592263e9fb391e4d7a42f449f3d333abd3aca0c19af08012f2780a2af5c"
     },
     "lesson-card:52917": {
       "key": "lesson-card:52917",
@@ -37184,7 +37184,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "47702d5df7afceec9353c21e78ce749810f004288b88eab2bab7756ea4a4e734"
+      "textHash": "939512e0efb7b5a07af6da26ee9c342bc5c512c6a9cb8e145c1c5897bd52ec60"
     },
     "lesson-card:52920": {
       "key": "lesson-card:52920",
@@ -37194,7 +37194,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2d07d6bd3fca51a6b95d1f40abc45cb6dfb11ced8def16f5b8ea496633c22c93"
+      "textHash": "0e83e8c81b4885d678aa0f4eca5c3891cd9f06f14844ca6911e05d22f1e4b98b"
     },
     "lesson-card:52921": {
       "key": "lesson-card:52921",
@@ -37324,7 +37324,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "005cd4f0505049d1f7f3ac01e3153165809e7fc7e4266d130f48beab0de2dda8"
+      "textHash": "947d4de0fce1f8d614aadf86e8fa66292fd7f6d2d14c946917c9ceb9b3ed8a0f"
     },
     "lesson-card:52934": {
       "key": "lesson-card:52934",
@@ -37334,7 +37334,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6ab944683d460a4f94dcdfea5a62223d2d36b59902d584f0fd97d636915b322a"
+      "textHash": "b00719bf9aa349c843fd2cfe6525bc88796e08aaa92812287fd37fe7a114242b"
     },
     "lesson-card:52935": {
       "key": "lesson-card:52935",
@@ -37344,7 +37344,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "5b54051e784319276dba67dd7c4866be3ab1cbb37dd73eb501cb1e8b5e8fd507"
+      "textHash": "fc36d5af6c1510c5842cba4443c62bd70588735ac048212a520c5a6a91c3a14d"
     },
     "lesson-card:52936": {
       "key": "lesson-card:52936",
@@ -37354,7 +37354,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "70e24f628e09c5a305f31aa86d4f317f9008709fc5ce31d3e619ebe77c68ed57"
+      "textHash": "0838cc01a33f6a0b14b8255909f30c3261b27a18a9e3a44e761f81945abaed9b"
     },
     "lesson-card:52937": {
       "key": "lesson-card:52937",
@@ -37384,7 +37384,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "f0a23d873818082ac384f9b471c8d2665e95cdc3b771e07523dfe44baebc8f8d"
+      "textHash": "444ee7ab7b0b89318e53c7e58f767175318aadbf1465aef3c15bb92d82ee0475"
     },
     "lesson-card:52940": {
       "key": "lesson-card:52940",
@@ -37394,7 +37394,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "908bd667bf864523dcc41b4302179a917bd67916dcc768d09b7350c4c50ca7d1"
+      "textHash": "50d119aed7ab9763e257620aa919a47ba59a9f218a40072cb05daa0c35c8cc8c"
     },
     "lesson-card:52941": {
       "key": "lesson-card:52941",
@@ -37444,7 +37444,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "830173e358499094423e44e2e294f13bd3bde78e9e18d0fdc13ffbf511ee2ba9"
+      "textHash": "890ac52737f64ce8115442c095ba9ada2e5aa15e5f0470209855e5593e966af9"
     },
     "lesson-card:52946": {
       "key": "lesson-card:52946",
@@ -37454,7 +37454,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "7fa6279704a3c79627115057fe571550f533c30ddf189f980da78a7a1adb47ed"
+      "textHash": "71395a954f671d15f8284612a442060e23673fd25b1894fbe72fb58295c545a0"
     },
     "lesson-card:52947": {
       "key": "lesson-card:52947",
@@ -37464,7 +37464,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2ef6d1d8cef3067877db86b3e139c08fed4f57513bad602af2aa7fa6aca17d1f"
+      "textHash": "e4402e1d3d7288ef8affcef8463ae435b66607e6d4d3a3010debf9e7d2deae9a"
     },
     "lesson-card:52948": {
       "key": "lesson-card:52948",
@@ -37474,7 +37474,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "fd031a55bb662369af6715ab5f546919dc9fb240e8cefc35b28bc0b1a8809615"
+      "textHash": "0f4aca81e9e02a8b9bda52c816292ba8b9a88057ed108f0fddf70b33cb378f11"
     },
     "lesson-card:52949": {
       "key": "lesson-card:52949",
@@ -37484,7 +37484,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a349aebcbc43c9784fd9bba491332a15e3ef9d239998257e612276d5935580f4"
+      "textHash": "900dc962ea1d9e39d9d95661d23bfcc81d58b0dfe3f1148a50b72b85973f7f89"
     },
     "lesson-card:52950": {
       "key": "lesson-card:52950",
@@ -37604,7 +37604,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "52f1ffcc2f235aff09e3fefdc596d83b49c199bb9e1d04393471b68cc7f55d8b"
+      "textHash": "55f4652c12d8656789758201ac96132a7c12dc7c5ae0d219f5c49eb8d369945a"
     },
     "lesson-card:52962": {
       "key": "lesson-card:52962",
@@ -37614,7 +37614,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3790b5c431b96d89adf80062d478bf66249c61cad1dacd3186008e4a779058a0"
+      "textHash": "8eda5c8e6341544a07c7bd3cff3de5472259e475f741ddc6861d02eb0dc6fd2e"
     },
     "lesson-card:52963": {
       "key": "lesson-card:52963",
@@ -37624,7 +37624,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "53e94ae5afc7ebec498199bab463c20a792fbb6b3de55d66e9fd7d882c240aa0"
+      "textHash": "ecdd27144e803df5eea65b5d0b514def3eefbf03468ca15e650b086d0a704570"
     },
     "lesson-card:52964": {
       "key": "lesson-card:52964",
@@ -37634,7 +37634,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9ae84cdd4ab756b2bd7d005629868ee6358e0914b284e055e441ccd88fd8474b"
+      "textHash": "9d027cfe62f8be6bd8270b9ee41d60dd8b08773d994607f2b0eed468f225a2ed"
     },
     "lesson-card:52965": {
       "key": "lesson-card:52965",
@@ -37644,7 +37644,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "51fb2056277c9ba4dde2a1e67c470f26c3e79836272fa82d03a68d64146886d2"
+      "textHash": "d92e34a3086ddead41b81f10abb1569d1f122546ff6ebd4705295faa224e57b4"
     },
     "lesson-card:52966": {
       "key": "lesson-card:52966",
@@ -37654,7 +37654,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "aedefb301247462a285a5798718a5e997a91f2e27131bd4e9f4b741c5fef464b"
+      "textHash": "9c0e98fb99fa3d511091ef72828b823ae025621ad9cf0359abcb273044dd85a1"
     },
     "lesson-card:52967": {
       "key": "lesson-card:52967",
@@ -37664,7 +37664,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "39c716267c64e52caf5c331b040c667e91f4914817b428c90d71ffee6ab8dda8"
+      "textHash": "554265c708de4625f2380ce86ef9fd156184cc15f546bf0e8fa6badc0345dcad"
     },
     "lesson-card:52968": {
       "key": "lesson-card:52968",
@@ -37674,7 +37674,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "21f7cbc01863027334b952b99fb422f1c69d88b86369494c631410b466bd7a04"
+      "textHash": "859849f22436b835630405d661f06a423fa72012d2dd397ce8b07c9d82f7cece"
     },
     "lesson-card:52969": {
       "key": "lesson-card:52969",
@@ -37724,7 +37724,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "217ca322d67c94028b7b84563f5db4d7f2ec1abca6972925df981af36ef45de6"
+      "textHash": "8d9f4e225a441396843630a80c2ede47fe2efa936b4c121f59438d1696726223"
     },
     "lesson-card:52974": {
       "key": "lesson-card:52974",
@@ -37764,7 +37764,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c78cf8205469860798a5121a6fb3dac429b3c23478476f4945310f94f86238e3"
+      "textHash": "0c09158dd561021342866973c4f166d0fe6db89d5fb3f5dd6c1496ef44766f81"
     },
     "lesson-card:52978": {
       "key": "lesson-card:52978",
@@ -37774,7 +37774,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0ba071ab8d04d4265b46def33905f97cd0c5beb95b72a3e1de3e7689a7a0eba0"
+      "textHash": "18d0be5774e8adca5495f4c4c6b13268bd71a379d30078616d25693cae5a47a6"
     },
     "lesson-card:52979": {
       "key": "lesson-card:52979",
@@ -37784,7 +37784,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2ff92e1947623afbc3bfeb3e0f300ad17e3985e06ae3651033fde45539bec677"
+      "textHash": "4ef36c7d8ce2cb8ecd7f070837861ea8ed1e9a3eb6aa2725eae800b5384e77bf"
     },
     "lesson-card:52980": {
       "key": "lesson-card:52980",
@@ -37794,7 +37794,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "a55f5457692f087b071581bc2dc0f9d0825fbe0bdbced9302c13b6abd60655fe"
+      "textHash": "0fb9ce78d13981fe610cb84db1305b951bb373f201ddddd926749a7ddefad9e3"
     },
     "lesson-card:52981": {
       "key": "lesson-card:52981",
@@ -37944,7 +37944,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "70fb91c1b1836c3b62f998135d5a2cfbb0da34a0aa5a9891dc116b932466cb0e"
+      "textHash": "e9fa22d46e60e7dd9ba4e5e4185fd5243945ec1b635764436ab8330bdd016583"
     },
     "lesson-card:52996": {
       "key": "lesson-card:52996",
@@ -37954,7 +37954,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3247a7ab69fc2a2fe189af45ca2589cb4f6c280cdec53d7abb65587a6b79b730"
+      "textHash": "9c7fd61caee8f03a04c024f54dfd10abd1a3eda1533afb86900b26e9c4359785"
     },
     "lesson-card:52997": {
       "key": "lesson-card:52997",
@@ -37974,7 +37974,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "93ccb24a902e40ae2d56a7226923bf2d19c099365212d7f435a05e39f7deced1"
+      "textHash": "573c212bbeef0bc47db969042e23ccdad10fc76afcd0b40f50b95a7599f4011e"
     },
     "lesson-card:52999": {
       "key": "lesson-card:52999",
@@ -37984,7 +37984,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d42e272ccfc10abf0a604219f5624da46252d4c4375746436886fc09b9a58b15"
+      "textHash": "20ae0a53e0bbf0a4242d1b1a143006d287b4f52730228a3e4bc7991cb9d9c3a8"
     },
     "lesson-card:53000": {
       "key": "lesson-card:53000",
@@ -37994,7 +37994,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "0e23424701833cb5f48ea51af023f31ad43b32d74031057c7031674a372f256e"
+      "textHash": "679c80072ddaf5f5130256e9238fcd518bdb7aba3ca9375c22857e779583e047"
     },
     "lesson-card:53001": {
       "key": "lesson-card:53001",
@@ -39054,7 +39054,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "318082faa05ccb764af7135b8b45c1405b47c1b52ccf2cb72f13767783f0dd43"
+      "textHash": "cae7f063b66e82f5ef2a0daef39335676fd91d88ba9616929b66e3b3bb4f652d"
     },
     "lesson-card:53107": {
       "key": "lesson-card:53107",
@@ -39204,7 +39204,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2f9dc0be9cd94b7b7c8a171c98c3aaaa8b2b9509d189ecacd90626bd8d634b08"
+      "textHash": "0922d47c2502921d3432972390901467053e990f3644f3728e616b234c205664"
     },
     "lesson-card:53122": {
       "key": "lesson-card:53122",
@@ -39214,7 +39214,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "9d8f0c336cb4db794d4498b0b4c645e389a48330552afcda22c14ace1787bfa4"
+      "textHash": "5fb2565a0c7af25dda53dc2b4ba6eb255bd2fa2409dd9ce4771995e4ebeeb415"
     },
     "lesson-card:53123": {
       "key": "lesson-card:53123",
@@ -39224,7 +39224,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "3a5f4287e1cc2c242b55cde3fd693a484bfcf0d5b4fda2cd2bfb4a286707f883"
+      "textHash": "5f735147724b1555bdb3e3e26e13055a5d8f336b968cdd22488df4ee8a1d8de3"
     },
     "lesson-card:53124": {
       "key": "lesson-card:53124",
@@ -39234,7 +39234,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "42f64fd330a0bf697ba5d061131b39f4251ad0e1f8f5c78f298f2497f77dace3"
+      "textHash": "c05adc1216dfd3463325d3309669fbee3d2fd516c4e04e83b5731ad0360af751"
     },
     "lesson-card:53125": {
       "key": "lesson-card:53125",
@@ -39684,7 +39684,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "c5a85c6d5d44417b95918294bb0f083e917bbba7d8d2bdf3abe617d7f0139037"
+      "textHash": "f2bf62588fa75bc304b66f027d750ab295367ee08b76270a932ef4cb4ec9bfbb"
     },
     "lesson-card:53170": {
       "key": "lesson-card:53170",
@@ -39694,7 +39694,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "2fb7086bad651baf4a460cbb9ed19c49a8f73a85f51ece1d8c23c2bba8257ec9"
+      "textHash": "905045aea411a2acd0d365fd3a2389c2f30be3ec9fd269b61cad50d8d321de1d"
     },
     "lesson-card:53171": {
       "key": "lesson-card:53171",
@@ -39704,7 +39704,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "01a5ed2c803e864f934da58b968a9ef61f0cebc197029e57628fa111969666e9"
+      "textHash": "1161863a7c1b4b296b1a2255b6b0be9a4740f99d8669ca3aafba03b5181e06ee"
     },
     "lesson-card:53172": {
       "key": "lesson-card:53172",
@@ -39714,7 +39714,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "4a6c2d7032a3f2bb5ad17fe6ddbfa39e550f05fa2356275d0381373eec071b3e"
+      "textHash": "e589a664013f8c3cfdf3ec49e105587c33f856a555b6eed5acfea3a369a94646"
     },
     "lesson-card:53173": {
       "key": "lesson-card:53173",
@@ -41544,7 +41544,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "6a5621d7b3d560bd0804a0e52332b20a683c4ebb8fa6c7c337c0262bee860901"
+      "textHash": "1e02ac781e3bd3086e66b08c52209399400a79c64c3c7aeed675e7b0d4d3cd03"
     },
     "lesson-card:53356": {
       "key": "lesson-card:53356",
@@ -41554,7 +41554,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d210e4856d8a3084ca58bced8df2e1da80f91f29f96c9b9dcac5d9e48a44d217"
+      "textHash": "23e07ff9f9d454276e41eaf3b3a0f434cbd5ecb743203804ab14869906c19601"
     },
     "lesson-card:53357": {
       "key": "lesson-card:53357",
@@ -42814,7 +42814,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d0e0b85c4972fb20d827b448e6da6d39c5c2210a40bf126a1b7447298e3dfe5b"
+      "textHash": "daa21bc902beebd9c2230c14319e6d0a8e167f39e1db7209fd7ffa84b97f0b49"
     },
     "lesson-card:53483": {
       "key": "lesson-card:53483",
@@ -42844,7 +42844,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "8c635a9ff20f8fa369ad1b098da87c8b8c735ddbcfd8f3e48f1732f97668320f"
+      "textHash": "691313c9cef48c9a2564d6d3d6d71282cd2eb5e65dcadc9b223a734b6375900e"
     },
     "lesson-card:53486": {
       "key": "lesson-card:53486",
@@ -42854,7 +42854,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "d0eef7d8843555e9705845a5f17d4c7706a88770bdb42580158cfafc25ef0e4a"
+      "textHash": "f7966ff4486a1faa427b1ba15542f5d92f8e7cca45187f2d186f2333f35d7b7c"
     },
     "lesson-card:53487": {
       "key": "lesson-card:53487",
@@ -42864,7 +42864,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "dedc7b0184d15eaa7c6bb789ebf5a55733f5e4b132a7c7406b9cf06e44c093c6"
+      "textHash": "299670dedbb6d416b472ce8f6a3c8d692161a366a3f515596a4d9a09d7e666fd"
     },
     "lesson-card:53488": {
       "key": "lesson-card:53488",
@@ -42874,7 +42874,7 @@
       "profileId": "vi-v1",
       "contentVersion": "2026-04-27-v1",
       "available": true,
-      "textHash": "eca3d58ef0ed4f7441f138838a2ec9387fd637f70c729f744493ab577f467e2e"
+      "textHash": "2a2d049735e889dd6f80dd80b1d893c2c214763a8397251372a691ba009c7993"
     },
     "lesson-card:53489": {
       "key": "lesson-card:53489",
@@ -43135,66 +43135,6 @@
       "contentVersion": "2026-04-27-v1",
       "available": true,
       "textHash": "0c7f17092fd85a79d97c7a68fd3d61613b336f426df375e0e5710a0c4dbc9fb5"
-    },
-    "audit:vi-v1:reading-rhythm": {
-      "key": "audit:vi-v1:reading-rhythm",
-      "assetPath": "audio/tts/assets/vi-v1/audit-vi-v1-reading-rhythm.mp3",
-      "lang": "vi-VN",
-      "usage": "voice-audit",
-      "profileId": "vi-v1",
-      "contentVersion": "2026-04-27-v1",
-      "available": true,
-      "textHash": "133f2f63a281b4bf60d91c5805d52b9e3a45bdf162ad85f5c8affe383e77220f"
-    },
-    "audit:vi-v1:story-flow": {
-      "key": "audit:vi-v1:story-flow",
-      "assetPath": "audio/tts/assets/vi-v1/audit-vi-v1-story-flow.mp3",
-      "lang": "vi-VN",
-      "usage": "voice-audit",
-      "profileId": "vi-v1",
-      "contentVersion": "2026-04-27-v1",
-      "available": true,
-      "textHash": "0b3f9234e35a79dde63a96d6e206fc9b7312943f3e699969859ef2eded9f09b3"
-    },
-    "audit:vi-v1:math-prompt": {
-      "key": "audit:vi-v1:math-prompt",
-      "assetPath": "audio/tts/assets/vi-v1/audit-vi-v1-math-prompt.mp3",
-      "lang": "vi-VN",
-      "usage": "voice-audit",
-      "profileId": "vi-v1",
-      "contentVersion": "2026-04-27-v1",
-      "available": true,
-      "textHash": "ee68145008fa1e7f5aa4f53e4ee26f6bf030c04c158dccc4b14d0927e48b253a"
-    },
-    "audit:vi-v2:reading-rhythm": {
-      "key": "audit:vi-v2:reading-rhythm",
-      "assetPath": "audio/tts/assets/vi-v2/audit-vi-v2-reading-rhythm.mp3",
-      "lang": "vi-VN",
-      "usage": "voice-audit",
-      "profileId": "vi-v2",
-      "contentVersion": "2026-04-27-v1",
-      "available": true,
-      "textHash": "133f2f63a281b4bf60d91c5805d52b9e3a45bdf162ad85f5c8affe383e77220f"
-    },
-    "audit:vi-v2:story-flow": {
-      "key": "audit:vi-v2:story-flow",
-      "assetPath": "audio/tts/assets/vi-v2/audit-vi-v2-story-flow.mp3",
-      "lang": "vi-VN",
-      "usage": "voice-audit",
-      "profileId": "vi-v2",
-      "contentVersion": "2026-04-27-v1",
-      "available": true,
-      "textHash": "0b3f9234e35a79dde63a96d6e206fc9b7312943f3e699969859ef2eded9f09b3"
-    },
-    "audit:vi-v2:math-prompt": {
-      "key": "audit:vi-v2:math-prompt",
-      "assetPath": "audio/tts/assets/vi-v2/audit-vi-v2-math-prompt.mp3",
-      "lang": "vi-VN",
-      "usage": "voice-audit",
-      "profileId": "vi-v2",
-      "contentVersion": "2026-04-27-v1",
-      "available": true,
-      "textHash": "ee68145008fa1e7f5aa4f53e4ee26f6bf030c04c158dccc4b14d0927e48b253a"
     }
   }
 }

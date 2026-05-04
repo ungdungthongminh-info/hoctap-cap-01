@@ -65,6 +65,17 @@ export const VOICE_AUDIT_LINES: VoiceAuditLine[] = [
 const MOJIBAKE_TOKEN_RE = /(?:\u00C3.|\u00C2.|\u00C4.|\u00E1\u00BB|\u00E2\u20AC|\u00E2\u20A2|\u00EF\u00B8\u008F)/g;
 const CONTROL_CHAR_RE = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F]/g;
 const REPLACEMENT_CHAR_RE = /\uFFFD/g;
+const DEV_TEXT_RE = /(todo|fixme|debug|test-only|lorem ipsum)/gi;
+
+const ABBREVIATION_REPLACEMENTS: Array<[RegExp, string]> = [
+  [/\bvd\b/gi, 'ví dụ'],
+  [/\bbt\b/gi, 'bài tập'],
+  [/\bsgk\b/gi, 'sách giáo khoa'],
+  [/\bhs\b/gi, 'học sinh'],
+  [/\bgv\b/gi, 'giáo viên'],
+  [/\btp\b/gi, 'thành phố'],
+  [/\bq\./gi, 'quận'],
+];
 
 function scoreMojibake(value: string): number {
   return (String(value || '').match(MOJIBAKE_TOKEN_RE) || []).length;
@@ -120,7 +131,13 @@ function normalizeWhitespace(value: string): string {
 }
 
 function replaceSpeechSymbols(value: string): string {
-  return value
+  const normalizedOperators = value
+    .replace(/[﹢＋]/g, '+')
+    .replace(/[﹣－–—]/g, '-')
+    .replace(/[＊✕✖]/g, '×')
+    .replace(/[／÷]/g, '/');
+
+  return normalizedOperators
     .replace(/>=/g, ' lớn hơn hoặc bằng ')
     .replace(/<=/g, ' bé hơn hoặc bằng ')
     .replace(/=>/g, ' dẫn đến ')
@@ -130,13 +147,37 @@ function replaceSpeechSymbols(value: string): string {
     .replace(/(\S)\s*\+\s*(\S)/g, '$1 cộng $2')
     .replace(/(\S)\s*[×*]\s*(\S)/g, '$1 nhân $2')
     .replace(/(\d)\s*[xX]\s*(\d)/g, '$1 nhân $2')
+    .replace(/(\d)\s*:\s*(\d)/g, '$1 chia $2')
     .replace(/(\S)\s*\/\s*(\S)/g, '$1 chia $2')
     .replace(/\b(lớp|cấp|khối)\s*(\d)\s*-\s*(\d)/gi, '$1 $2 đến $3')
     .replace(/(\d)\s*-\s*(\d)/g, '$1 trừ $2')
+    .replace(/(\d+)\s*\+\s*(\d+)(?=[^\d]|$)/g, '$1 cộng $2')
+    .replace(/(\d+)\s*-\s*(\d+)(?=[^\d]|$)/g, '$1 trừ $2')
+    .replace(/(\d+)\s*[xX×*]\s*(\d+)(?=[^\d]|$)/g, '$1 nhân $2')
+    .replace(/(\d+)\s*[:\/]\s*(\d+)(?=[^\d]|$)/g, '$1 chia $2')
     .replace(/\?\s*(cm|mm|dm|m|km|g|kg|ml|l|%)/gi, ' bao nhiêu $1')
     .replace(/…/g, '. ')
     .replace(/[“”]/g, '"')
     .replace(/[‘’]/g, "'");
+}
+
+function expandCommonAbbreviations(value: string): string {
+  let output = String(value || '');
+  for (const [regex, replacement] of ABBREVIATION_REPLACEMENTS) {
+    output = output.replace(regex, replacement);
+  }
+  return output;
+}
+
+function stripDevText(value: string): string {
+  return String(value || '').replace(DEV_TEXT_RE, ' ');
+}
+
+function ensureQuestionMark(value: string): string {
+  const normalized = String(value || '').trim();
+  if (!normalized) return normalized;
+  if (/\?$/.test(normalized)) return normalized;
+  return `${normalized}?`;
 }
 
 function cleanNarrationText(value: string): string {
@@ -151,7 +192,13 @@ function cleanNarrationText(value: string): string {
     return fallback;
   }
 
-  const normalized = normalizeWhitespace(replaceSpeechSymbols(stripDecorativeEmoji(stripUnsafeControlChars(repaired))))
+  const normalized = normalizeWhitespace(
+    replaceSpeechSymbols(
+      expandCommonAbbreviations(
+        stripDevText(stripDecorativeEmoji(stripUnsafeControlChars(repaired))),
+      ),
+    ),
+  )
     .replace(/\s+([,.!?])/g, '$1');
   if (scoreCorruption(normalized) > 0 || normalized.includes('\uFFFD')) {
     return fallback;
@@ -205,22 +252,22 @@ export function buildQuestionNarrationText(question: Pick<Question, 'questionTex
   const prompt = String(question.questionText || '');
 
   if (question.questionType === 'true_false') {
-    return joinPromptAndSuffix(prompt, 'Đúng. Sai.');
+    return ensureQuestionMark(joinPromptAndSuffix(prompt, 'Đúng hay sai?'));
   }
 
   if (question.questionType === 'single_choice' || question.questionType === 'multi_choice') {
     const options = safeParseOptions(question as Question);
     if (options.length === 0) {
-      return cleanNarrationText(prompt);
+      return ensureQuestionMark(cleanNarrationText(prompt));
     }
 
     const optionText = options
       .map((option, index) => `Phương án ${String.fromCharCode(65 + index)}. ${cleanNarrationText(option)}`)
       .join('. ');
-    return joinPromptAndSuffix(prompt, optionText.endsWith('.') ? optionText : `${optionText}.`);
+    return ensureQuestionMark(joinPromptAndSuffix(prompt, optionText.endsWith('.') ? optionText : `${optionText}.`));
   }
 
-  return cleanNarrationText(prompt);
+  return ensureQuestionMark(cleanNarrationText(prompt));
 }
 
 export function buildVietnameseSsml(text: string, styleId: TtsSsmlStyleId): string {

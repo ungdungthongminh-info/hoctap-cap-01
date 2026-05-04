@@ -6989,15 +6989,7 @@
         ]
       },
       "wrongGradeAssets": [],
-      "abbreviations": [
-        "grade-2:lesson-card:81: VD",
-        "grade-2:lesson-card:82: VD",
-        "grade-2:lesson-card:85: VD",
-        "grade-2:lesson-card:97: VD",
-        "grade-2:lesson-card:105: VD",
-        "grade-2:lesson-card:108: VD",
-        "grade-2:lesson-card:156: VD"
-      ]
+      "abbreviations": []
     },
     "3": {
       "lessonCards": {
@@ -10937,15 +10929,7 @@
         ]
       },
       "wrongGradeAssets": [],
-      "abbreviations": [
-        "grade-3:lesson-card:1698: VD",
-        "grade-3:lesson-card:3032: VD",
-        "grade-3:lesson-card:3060: VD",
-        "grade-3:lesson-card:3075: TP",
-        "grade-3:question:3432: VD",
-        "grade-3:question:3619: VD",
-        "grade-3:question:4671: VD"
-      ]
+      "abbreviations": []
     },
     "4": {
       "lessonCards": {
@@ -15422,24 +15406,7 @@
         ]
       },
       "wrongGradeAssets": [],
-      "abbreviations": [
-        "grade-4:lesson-card:1359: VD",
-        "grade-4:lesson-card:2442: TP",
-        "grade-4:lesson-card:2447: TP",
-        "grade-4:lesson-card:52933: TP",
-        "grade-4:lesson-card:52934: TP",
-        "grade-4:lesson-card:52935: TP",
-        "grade-4:lesson-card:52936: TP",
-        "grade-4:lesson-card:52949: TP",
-        "grade-4:question:8011: TP",
-        "grade-4:question:8049: TP",
-        "grade-4:question:8055: TP",
-        "grade-4:question:8073: TP,TP",
-        "grade-4:question:8076: TP",
-        "grade-4:question:32700: TP",
-        "grade-4:question:32701: TP",
-        "grade-4:question:32712: TP"
-      ]
+      "abbreviations": []
     },
     "5": {
       "lessonCards": {
@@ -19858,29 +19825,15 @@
         ]
       },
       "wrongGradeAssets": [],
-      "abbreviations": [
-        "grade-5:lesson-card:1053: TP",
-        "grade-5:lesson-card:1110: TP",
-        "grade-5:lesson-card:1871: Q.",
-        "grade-5:lesson-card:1874: VD",
-        "grade-5:lesson-card:3166: VD,VD",
-        "grade-5:lesson-card:4390: TP",
-        "grade-5:lesson-card:53482: TP",
-        "grade-5:question:2813: TP",
-        "grade-5:question:4080: VD",
-        "grade-5:question:5909: TP",
-        "grade-5:question:8305: TP",
-        "grade-5:question:8340: TP",
-        "grade-5:question:8410: TP,TP"
-      ]
+      "abbreviations": []
     }
   },
   "summary": {
     "totalTextItems": 24045,
-    "totalAudioAssets": 4308,
+    "totalAudioAssets": 4302,
     "missingCount": 19743,
     "wrongGradeCount": 0,
-    "abbreviationCount": 43,
+    "abbreviationCount": 0,
     "noCrossGradeFallback": true,
     "noNativeFallback": true
   }
