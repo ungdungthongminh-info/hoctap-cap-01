@@ -23,5 +23,10 @@ desktop-acceptance-report-latest.json
 release2/
 release3/
 public/tts-static-pack/by-grade/*.zip
+desktop-acceptance-report*.json
+acceptance-audit-report*.json
+runtime-audit*.json
+audio-packs/
+*.mp3
 
 .vercel
