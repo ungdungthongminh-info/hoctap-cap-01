@@ -42,6 +42,7 @@
     },
     "files": [
       "dist/**/*",
+      "!dist/audio/**/*",
       "electron/**/*",
       "public/icon.png",
       "package.json"
