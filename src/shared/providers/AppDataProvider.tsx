@@ -233,6 +233,25 @@ export function AppDataProvider({ children }: { children: React.ReactNode }) {
     return () => { if (saveTimer.current) clearTimeout(saveTimer.current); };
   }, [state.student, state.progress, state.practiceSets, state.answers]);
 
+  useEffect(() => {
+    try {
+      const host = window as unknown as {
+        __HHK_APP_DATA_SNAPSHOT__?: {
+          student: AppState['student'];
+          lessons: AppState['lessons'];
+          lessonCards: AppState['lessonCards'];
+        };
+      };
+      host.__HHK_APP_DATA_SNAPSHOT__ = {
+        student: state.student,
+        lessons: state.lessons,
+        lessonCards: state.lessonCards,
+      };
+    } catch {
+      // Ignore snapshot publish errors in constrained runtimes.
+    }
+  }, [state.student, state.lessons, state.lessonCards]);
+
   // --- Student ---
   const updateStudent = useCallback((updates: Partial<Pick<Student, 'fullName' | 'grade' | 'subjectCode' | 'avatar'>>) => {
     const currentPlan = getAccessPlan();

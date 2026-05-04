@@ -21,6 +21,7 @@ public/audio/tts/**/*.wav
 desktop-acceptance-report-latest.json
 .audit-userdata-*/
 release2/
+release3/
 public/tts-static-pack/by-grade/*.zip
 
 .vercel
