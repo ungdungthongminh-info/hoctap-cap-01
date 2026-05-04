@@ -96,7 +96,7 @@ const WEB_TOTAL_PRODUCT_URLS = {
 export const PRICING_PLANS: PricingPlan[] = [
   {
     id: 'free',
-    name: 'Miễn phí',
+    name: 'Gói Free',
     emoji: '🌱',
     monthlyPrice: 0,
     yearlyPrice: 0,
@@ -104,12 +104,10 @@ export const PRICING_PLANS: PricingPlan[] = [
     color: '#6B7280',
     bgColor: '#F3F4F6',
     features: [
-      '1 môn học (Toán)',
-      '1 lớp',
-      '1 hồ sơ học sinh',
-      'Bài học + Luyện tập cơ bản',
-      'Mini-Game ghép cặp',
-      '6 giao diện miễn phí',
+      'Xem thử bài học mẫu',
+      'Một số bài luyện tập giới hạn',
+      'Không tải giọng đọc offline đầy đủ',
+      'Không mở toàn bộ lớp',
     ],
     limits: {
       subjects: 1, grades: 1, profiles: 1,
@@ -121,7 +119,7 @@ export const PRICING_PLANS: PricingPlan[] = [
   },
   {
     id: 'standard',
-    name: 'Tiêu chuẩn',
+    name: 'Gói Standard 3 lớp',
     emoji: '⭐',
     monthlyPrice: 89000,
     yearlyPrice: 599000,
@@ -130,16 +128,10 @@ export const PRICING_PLANS: PricingPlan[] = [
     bgColor: '#FEF3C7',
     popular: true,
     features: [
-      'Tất cả 5 môn học',
-      'Mở 3 lớp tùy chọn khi kích hoạt key',
+      'Chọn đúng 3 lớp bất kỳ',
       '3 hồ sơ học sinh',
-      'Ôn tập thông minh AI',
-      'Thi đấu Bot & PvP',
-      'Cửa hàng Avatar',
-      'Bảng điều khiển phụ huynh',
-      'Chế độ ngoại tuyến',
-      'Xuất dữ liệu backup',
-      'Không quảng cáo',
+      'Tải giọng đọc offline cho các lớp đã mua',
+      'Dùng trên 1 thiết bị theo key',
     ],
     limits: {
       subjects: 'all', grades: 3, profiles: 3,
@@ -151,7 +143,7 @@ export const PRICING_PLANS: PricingPlan[] = [
   },
   {
     id: 'standard_1year_1grade',
-    name: 'Gói 1 khóa (01 năm - 01 lớp)',
+    name: 'Gói theo lớp',
     emoji: '📘',
     monthlyPrice: 0,
     yearlyPrice: 299000,
@@ -159,16 +151,14 @@ export const PRICING_PLANS: PricingPlan[] = [
     color: '#2F6CB2',
     bgColor: '#E9F2FF',
     features: [
-      'Tất cả 5 môn học',
-      'Mở 01 lớp khi kích hoạt key',
+      'Mua đúng lớp cần học trong năm',
+      'Lớp Lá / Tiền tiểu học: 299.000đ/năm',
+      'Lớp 01: 299.000đ/năm',
+      'Lớp 02: 299.000đ/năm',
+      'Lớp 03: 349.000đ/năm',
+      'Lớp 04: 349.000đ/năm',
+      'Lớp 05: 349.000đ/năm',
       '2 hồ sơ học sinh',
-      'Ôn tập thông minh AI',
-      'Thi đấu Bot & PvP',
-      'Cửa hàng Avatar',
-      'Bảng điều khiển phụ huynh',
-      'Chế độ ngoại tuyến',
-      'Xuất dữ liệu backup',
-      'Không quảng cáo',
     ],
     limits: {
       subjects: 'all', grades: 1, profiles: 2,
@@ -680,7 +670,7 @@ async function dbGet(sql: string, params: any[] = []): Promise<any> {
 export function PricingPage() {
   const navigate = useNavigate();
   const { state, updateStudent } = useAppData();
-  const [billing, setBilling] = useState<'monthly' | 'yearly' | 'lifetime'>('yearly');
+  const billing: 'monthly' | 'yearly' | 'lifetime' = 'yearly';
   const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>(PRICING_PLANS);
   const [pricingSynced, setPricingSynced] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(getCurrentPlan());
@@ -730,15 +720,22 @@ export function PricingPage() {
   const isPendingOneGrade = pendingStandardActivation?.storagePlanId === 'standard_1year_1grade';
   const isPendingThreeGrade = pendingStandardActivation?.storagePlanId === 'standard_1year_3grade';
   const canSelectGradesNow = !isPremiumKeyFlow && !isStandardSelectionLocked && hasPendingStandardActivation;
-  const visiblePlans = pricingPlans.filter((plan) => plan.id !== 'basic' && plan.id !== 'standard_1year_1grade' && plan.id !== 'standard_1year_3grade');
-  const visibleComparisonPlans = PRICING_PLANS.filter((plan) => plan.id !== 'basic' && plan.id !== 'standard_1year_1grade' && plan.id !== 'standard_1year_3grade');
+  const resolveVisiblePlan = (planId: string): PricingPlan | null => {
+    return pricingPlans.find((plan) => plan.id === planId)
+      || PRICING_PLANS.find((plan) => plan.id === planId)
+      || null;
+  };
+  const visiblePlans = ['free', 'standard_1year_1grade', 'standard']
+    .map((planId) => resolveVisiblePlan(planId))
+    .filter((plan): plan is PricingPlan => Boolean(plan));
+  const visibleComparisonPlans = PRICING_PLANS.filter((plan) => ['free', 'standard_1year_1grade', 'standard'].includes(plan.id));
   const currentPlanStorageId = String(activeSub?.planId || localStorage.getItem(PLAN_KEY) || '').trim().toLowerCase();
   const currentPlanMeta = visiblePlans.find((plan) => plan.id === currentPlanStorageId) || visiblePlans.find((plan) => plan.id === normalizePlanId(currentPlan)) || visiblePlans[0];
   const activeSubPlanMeta = activeSub ? (visiblePlans.find((plan) => plan.id === String(activeSub.planId || '').trim().toLowerCase()) || visiblePlans.find((plan) => plan.id === normalizePlanId(activeSub.planId))) : null;
   const heroHighlights = [
-    'Dùng Free ngay, không cần tài khoản',
-    'Mua trên web, nhận key và quay lại app để học',
-    clientProfile === 'web' ? 'Web app dùng email + key để mở đúng gói' : 'Desktop app chỉ cần đúng key để mở đúng gói',
+    'Free: dùng thử nhanh',
+    'Gói theo lớp: mua đúng lớp cần học',
+    'Standard 3 lớp: tiết kiệm hơn cho nhiều lớp hoặc nhiều hồ sơ',
   ];
   useEffect(() => {
     const bridgeEmail = String(getBridgeCustomer()?.email || '').trim().toLowerCase();
@@ -769,20 +766,20 @@ export function PricingPage() {
   }, [syncFloatingLearnCta]);
   const activationShortcutPlans = [
     {
-      id: 'standard',
-      title: 'Gói Standard',
-      badge: 'Phù hợp nhất cho đa số gia đình',
-      description: 'Mở 3 lớp tùy chọn, đủ các tính năng học tập và theo dõi tiến bộ.',
-      billingCycle: billing,
-      productUrl: WEB_TOTAL_PRODUCT_URLS.standard[billing],
+      id: 'standard_1year_1grade',
+      title: 'Gói theo lớp',
+      badge: 'Từ 299.000đ/năm',
+      description: 'Mua đúng 1 lớp bé cần học trong năm.',
+      billingCycle: 'yearly' as const,
+      productUrl: WEB_TOTAL_PRODUCT_URLS.standard_1year_1grade.yearly,
     },
     {
-      id: 'premium',
-      title: 'Gói Premium',
-      badge: 'Đầy đủ quyền lợi nhất',
-      description: 'Mở toàn bộ lớp, thêm báo cáo chi tiết, nội dung sớm và hỗ trợ ưu tiên.',
-      billingCycle: billing,
-      productUrl: WEB_TOTAL_PRODUCT_URLS.premium[billing],
+      id: 'standard',
+      title: 'Gói Standard 3 lớp',
+      badge: 'Tiết kiệm nhất',
+      description: 'Chọn đúng 3 lớp, dùng cho nhiều lớp hoặc nhiều bé.',
+      billingCycle: 'yearly' as const,
+      productUrl: WEB_TOTAL_PRODUCT_URLS.standard.yearly,
     },
   ].map((item) => {
     const plan = pricingPlans.find((entry) => entry.id === item.id) || PRICING_PLANS.find((entry) => entry.id === item.id);
@@ -790,7 +787,7 @@ export function PricingPage() {
       ...item,
       plan,
       priceLabel: plan ? formatVND(getPriceForCycle(plan, item.billingCycle)) : '',
-      cycleLabel: item.billingCycle === 'monthly' ? '/ tháng' : item.billingCycle === 'yearly' ? '/ năm' : '/ trọn đời',
+      cycleLabel: '/ năm',
     };
   });
   const detectedKeyBadgeStyle = detectedPlanFromInput === 'premium'
@@ -799,7 +796,7 @@ export function PricingPage() {
       ? { background: '#DBEAFE', color: '#1D4ED8' }
       : { background: '#DCFCE7', color: '#15803D' };
   const detectedKeyBadgeText = detectedPlanFromInput === 'premium'
-    ? '👑 Phát hiện key Premium'
+    ? '🧾 Phát hiện key hệ cũ'
     : detectedPlanFromInput === 'standard_1year_3grade'
       ? '📗 Phát hiện key Standard 01 năm - 03 lớp'
       : detectedPlanFromInput === 'standard_1year_1grade'
@@ -816,7 +813,7 @@ export function PricingPage() {
           ? '✅ Key thuộc gói Standard 01 năm - 03 lớp.'
           : '✅ Key thuộc gói Standard.')
     : isPremiumKeyFlow
-      ? '✅ Key thuộc gói Premium.'
+      ? '✅ Key thuộc hệ gói cũ. Quyền sử dụng thực tế sẽ theo license từ backend.'
       : hasPendingStandardActivation
         ? (isPendingOneGrade
             ? '✅ Key đã xác thực là gói 1 khóa (01 năm - 01 lớp). Vui lòng chọn đúng 1 lớp.'
@@ -1477,18 +1474,25 @@ export function PricingPage() {
       boxShadow: '0 12px 20px rgba(10,31,67,0.22), inset 0 1px 0 rgba(255,255,255,0.34), inset 0 -2px 0 rgba(11,35,72,0.4)',
     };
   };
-  const gradeButtonStyle = (selected: boolean) => selected
+  const gradeButtonStyle = (selected: boolean, disabled: boolean) => selected
     ? {
-        background: '#FFFFFF',
-        color: '#1D4ED8',
-        border: '2px solid #60A5FA',
-        boxShadow: '0 8px 16px rgba(37,99,235,0.16)',
+        background: '#15803D',
+        color: '#FFFFFF',
+        border: '2px solid #166534',
+        boxShadow: '0 8px 16px rgba(21,128,61,0.28)',
       }
+    : disabled
+      ? {
+          background: '#F1F5F9',
+          color: '#94A3B8',
+          border: '1px solid #CBD5E1',
+          boxShadow: 'none',
+        }
     : {
-        background: '#FFFFFF',
-        color: '#475569',
-        border: '1px solid #CBD5E1',
-        boxShadow: '0 4px 10px rgba(15,23,42,0.08)',
+        background: '#DCFCE7',
+        color: '#166534',
+        border: '2px solid #86EFAC',
+        boxShadow: '0 4px 10px rgba(21,128,61,0.12)',
       };
   const floatingLearnCtaTitle = currentPlan === 'free' ? 'Bắt đầu học ngay với Free' : `${currentPlanMeta?.name || 'Gói hiện tại'} đã sẵn sàng`;
   const floatingLearnCtaCopy = currentPlan === 'free'
@@ -1513,7 +1517,7 @@ export function PricingPage() {
           <div>
             <div className="pricing-section-kicker pricing-section-kicker--hero">Mua trên web, học trong app</div>
             <h1>Chọn gói phù hợp, kích hoạt trong 1 phút</h1>
-            <p>Free để bắt đầu ngay. Standard và Premium mở bằng key, không cần tạo tài khoản hay đăng nhập rườm rà.</p>
+            <p>Chỉ còn 3 nhóm gói rõ ràng: Free dùng thử, Gói theo lớp và Standard 3 lớp.</p>
             <div className="pricing-hero-pills">
               {heroHighlights.map((item) => (
                 <span key={item} className="pricing-hero-pill">{item}</span>
@@ -1556,19 +1560,11 @@ export function PricingPage() {
       <section className="pricing-pro-heading pricing-block-plan-heading w-full">
         <div>
           <div className="pricing-section-kicker">Gói sử dụng</div>
-          <h2>Free mặc định. <span>Paid</span> mở bằng key.</h2>
+          <h2>3 nhóm gói chính cho phụ huynh dễ chọn.</h2>
         </div>
 
-        <div className="pricing-pro-toggle">
-          {(['monthly', 'yearly', 'lifetime'] as const).map(b => (
-            <button
-              key={b}
-              className={billing === b ? 'active' : ''}
-              onClick={() => setBilling(b)}
-            >
-              {b === 'monthly' ? 'Tháng' : b === 'yearly' ? 'Năm' : 'Trọn đời'}
-            </button>
-          ))}
+        <div className="text-sm font-semibold" style={{ color: '#475569' }}>
+          Gói theo lớp từ 299.000đ/năm, Standard 3 lớp 599.000đ/năm.
         </div>
       </section>
 
@@ -1592,7 +1588,7 @@ export function PricingPage() {
             >
               {plan.popular && (
                 <div className="pricing-popular-badge">
-                  Phổ biến nhất
+                  {plan.id === 'standard' ? 'Tiết kiệm nhất' : 'Phổ biến nhất'}
                 </div>
               )}
               {isActive && (
@@ -1603,18 +1599,20 @@ export function PricingPage() {
 
               <div className="pricing-pro-card-head">
                 <div className="pricing-plan-icon">{plan.emoji}</div>
-                <div className="pricing-plan-name" style={{ color: plan.color }}>{plan.name}</div>
+                <div className="pricing-plan-name" style={{ color: plan.color }}>
+                  {plan.id === 'standard_1year_1grade' ? 'Gói theo lớp' : plan.name}
+                </div>
                 <div className="pricing-plan-price" style={{ color: plan.id === 'premium' ? '#8b5cf6' : plan.id === 'standard' ? '#f3c05b' : '#ffffff' }}>
-                  {formatVND(price)}
+                  {plan.id === 'standard_1year_1grade' ? 'Từ 299.000đ' : formatVND(price)}
                 </div>
                 <div className="pricing-plan-cycle">
-                  {price === 0 ? 'dùng ngay' : billing === 'monthly' ? '/ tháng' : billing === 'yearly' ? '/ năm' : '/ trọn đời'}
+                  {price === 0 ? 'dùng ngay' : '/ năm'}
                 </div>
                 {savings > 0 && <div className="pricing-savings">Tiết kiệm {savings}%</div>}
               </div>
 
               <ul className="pricing-feature-list flex-1">
-                {highlightedFeatures.map((f, i) => (
+                {(plan.id === 'standard_1year_1grade' ? plan.features : highlightedFeatures).map((f, i) => (
                   <li key={i}>
                     <span className="feature-check" style={{ background: plan.color }}>
                       <Check size={12} />
@@ -1643,7 +1641,7 @@ export function PricingPage() {
                       style={getPlanPrimaryButtonStyle(plan)}
                       onClick={() => openQRPayment(plan)}
                     >
-                      <ExternalLink size={14} /> Chọn gói này
+                      <ExternalLink size={14} /> {plan.id === 'standard_1year_1grade' ? 'Chọn lớp muốn mua' : 'Chọn gói 3 lớp'}
                     </button>
                   ) : (
                     <div
@@ -1670,11 +1668,11 @@ export function PricingPage() {
                     navigate('/home');
                   }}
                 >
-                  Chọn gói này
+                  Dùng thử miễn phí
                 </button>
               ) : (
                 <button className={`${premiumButtonPrimaryClass} w-full pricing-card-main-btn`} style={topPrimaryButtonStyle} onClick={() => navigate('/home')}>
-                  Chọn gói này
+                  Đang dùng
                 </button>
               )}
             </div>
@@ -1693,15 +1691,15 @@ export function PricingPage() {
         <div className="proof-item">
           <div className="proof-icon proof-icon-gold">🎯</div>
           <div>
-            <strong>Chọn gói theo đúng nhu cầu</strong>
-            <p>Free cho khởi đầu nhanh. Khi cần thêm tính năng, chỉ việc mua key và kích hoạt.</p>
+            <strong>Gói theo lớp: mua đúng lớp cần học</strong>
+            <p>Hiển thị đủ 6 lớp với giá theo từng lớp để phụ huynh chọn nhanh.</p>
           </div>
         </div>
         <div className="proof-item">
           <div className="proof-icon proof-icon-green">🔑</div>
           <div>
-            <strong>Mua trên web, mở bằng key</strong>
-            <p>Web Tổng dùng để xem gói, mua key và tra cứu đơn hàng. App tập trung vào việc học.</p>
+            <strong>Standard 3 lớp: tiết kiệm nhất</strong>
+            <p>Chọn đúng 3 lớp, hỗ trợ 3 hồ sơ học sinh và tải offline cho lớp đã mua.</p>
           </div>
         </div>
       </section>
@@ -1888,7 +1886,7 @@ export function PricingPage() {
             <div className="pricing-activation-meta-card">
               <div className="pricing-activation-meta-label">Đăng nhập web app</div>
               <div className="pricing-activation-meta-value">Email mua hàng + license key</div>
-              <p>Phiên Web Tổng để mua hàng không tính vào quota. Chỉ web app mới giới hạn 1 phiên hoạt động đồng thời.</p>
+              <p>Đã mua gói? Mở app desktop, vào Kích hoạt bản quyền và nhập license key.</p>
             </div>
           )}
           <div className="pricing-activation-meta-card">
@@ -1897,7 +1895,6 @@ export function PricingPage() {
               <span>Standard: HHK-STANDARD-XXXXXXXX</span>
               <span>1 khóa: HHK-STANDARD-1Y1G-XXXXXXXX</span>
               <span>Standard 01 năm - 03 lớp: WSTL-XXXXXXXX-XXXXXX</span>
-              <span>Premium: HHK-PREMIUM-XXXXXXXX</span>
             </div>
             {shouldShowRecognizedKeyHint && (
               <div className="pricing-activation-recognized-badge" style={detectedKeyBadgeStyle}>
@@ -1995,15 +1992,15 @@ export function PricingPage() {
               <div className="text-base font-extrabold" style={{ color: '#0F172A' }}>Chọn lớp muốn mở</div>
             </div>
             <div className={`activation-grade-counter ${isPremiumKeyFlow || activationGrades.length === requiredGradeCountForInput ? 'is-ready' : ''}`}>
-              {isPremiumKeyFlow ? 'Mở toàn bộ lớp' : `${activationGrades.length}/${requiredGradeCountForInput} lớp`}
+              {isPremiumKeyFlow ? 'Theo quyền key' : `${activationGrades.length}/${requiredGradeCountForInput} lớp`}
             </div>
           </div>
           <div className="text-sm mt-1" style={{ color: '#334155' }}>
             {requiredGradeCountForInput === 1
-              ? 'Key gói 1 khóa (01 năm - 01 lớp): chọn đúng 1 lớp. Key Premium: tự mở tất cả lớp.'
+              ? 'Gói theo lớp: chọn đúng 1 lớp đã mua.'
               : (isPendingThreeGrade || isStandardYearThreeGradeKeyFlow)
-                ? 'Key Standard 01 năm - 03 lớp: chọn đúng 3 lớp. Key Premium: tự mở tất cả lớp.'
-              : 'Key Standard: chọn đúng 3 lớp. Key Premium: tự mở tất cả lớp.'}
+                ? 'Gói Standard 3 lớp: chọn đúng 3 lớp đã chọn khi mua.'
+              : 'Gói Standard sẽ mở đúng 3 lớp đã chọn khi mua.'}
           </div>
           <div className="mt-2 rounded-xl px-3 py-2 text-sm font-bold" style={{ background: '#FEF3C7', color: '#92400E', border: '1px solid #FCD34D' }}>
             ⚠️ Lưu ý quan trọng: Với key Standard, lựa chọn {requiredGradeCountForInput} lớp chỉ áp dụng 1 lần đầu theo ID máy này và không thể thay đổi.
@@ -2016,8 +2013,8 @@ export function PricingPage() {
                   key={grade}
                   className={`${premiumButtonBaseClass} px-4 py-3 text-sm md:text-base min-w-[96px]`}
                   style={{
-                    ...gradeButtonStyle(selected),
-                    opacity: isPremiumKeyFlow ? 0.45 : 1,
+                    ...gradeButtonStyle(selected, isPremiumKeyFlow || isStandardSelectionLocked),
+                    opacity: 1,
                     cursor: isPremiumKeyFlow || isStandardSelectionLocked ? 'not-allowed' : 'pointer',
                   }}
                   onClick={() => toggleActivationGrade(grade)}
@@ -2030,7 +2027,7 @@ export function PricingPage() {
           </div>
           <div className="text-sm mt-2 font-extrabold" style={{ color: activationGrades.length === requiredGradeCountForInput ? '#059669' : '#1D4ED8' }}>
             {isPremiumKeyFlow
-              ? 'Premium: tự mở toàn bộ lớp, không cần chọn thủ công.'
+              ? 'Gói Standard sẽ mở đúng 3 lớp đã chọn khi mua.'
               : isStandardSelectionLocked
                 ? `Đã khóa lựa chọn cho key này: ${activationGrades.map((grade) => getGradeLabel(grade)).join(', ')}.`
                 : !hasPendingStandardActivation
@@ -2075,7 +2072,7 @@ export function PricingPage() {
           )}
           <div className="text-sm mt-1" style={{ color: '#475569' }}>
             {isPremiumKeyFlow
-              ? 'Bạn có thể bấm Kích hoạt ngay.'
+              ? 'Gói Standard sẽ mở đúng 3 lớp đã chọn khi mua.'
               : isStandardSelectionLocked
                 ? `Hệ thống sẽ dùng đúng ${requiredGradeCountForInput} lớp đã khóa khi kích hoạt.`
                 : isGradeSelectionConfirmed
