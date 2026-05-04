@@ -69,7 +69,12 @@ function logPlaybackRuntime(payload: {
 
 function toCardSourceState(result: { resolvedSource?: string | null; provider: string }, hasDesktopAudioStore: boolean): LessonCardSourceState {
   if (result.resolvedSource === 'desktop-offline') return 'desktop-offline';
-  if (result.resolvedSource === 'web-offline-pack' || result.resolvedSource === 'web-offline-manifest') return 'web-offline';
+  if (
+    result.resolvedSource === 'web-offline-pack'
+    || result.resolvedSource === 'web-offline-manifest'
+    || result.resolvedSource === 'web-static-manifest'
+    || result.resolvedSource === 'web-public-static-manifest'
+  ) return 'web-offline';
   if (result.resolvedSource === 'online-audio') return 'online';
   if (result.resolvedSource === 'device-voice' || result.resolvedSource === 'fallback-device-voice') return 'device';
 
@@ -128,6 +133,7 @@ export function LessonDetailPage() {
     setCardStatus(card.id, 'loading');
     const result = await prefetchText(buildLessonCardNarrationText(card), lang, {
       policy: 'lesson-prefetch',
+      mode: 'static',
       assetKey: buildLessonCardAssetKey(card.id),
       currentGrade: lesson?.grade,
     });
@@ -186,6 +192,7 @@ export function LessonDetailPage() {
         setCardStatus(card.id, 'loading');
         const result = await prefetchText(buildLessonCardNarrationText(card), lang, {
           policy: 'lesson-prefetch',
+          mode: 'static',
           assetKey: buildLessonCardAssetKey(card.id),
           currentGrade: lesson?.grade,
         });
@@ -225,8 +232,10 @@ export function LessonDetailPage() {
     const assetKey = buildLessonCardAssetKey(card.id);
     const result = await speakTextAsync(buildLessonCardNarrationText(card), lang, {
       policy: 'lesson-read-all',
+      mode: 'static',
       assetKey,
       currentGrade: lesson?.grade,
+      allowNativeFallback: false,
       onStatusChange: (status) => {
         if (currentRun !== runRef.current) return;
         if (status === 'loading' || status === 'fallback-native') {
@@ -276,8 +285,10 @@ export function LessonDetailPage() {
       const assetKey = buildLessonCardAssetKey(card.id);
       const result = await speakTextAsync(buildLessonCardNarrationText(card), lang, {
         policy: 'lesson-read-all',
+        mode: 'static',
         assetKey,
         currentGrade: lesson?.grade,
+        allowNativeFallback: false,
         onStatusChange: (status) => {
           if (currentRun !== runRef.current) return;
           if (status === 'loading' || status === 'fallback-native') {

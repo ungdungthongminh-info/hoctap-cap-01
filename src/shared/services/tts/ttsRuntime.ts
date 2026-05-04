@@ -22,6 +22,8 @@ export type TtsPlaybackResolvedSource =
   | 'desktop-offline'
   | 'web-offline-pack'
   | 'web-offline-manifest'
+  | 'web-static-manifest'
+  | 'web-public-static-manifest'
   | 'online-audio'
   | 'device-voice'
   | 'fallback-device-voice';
@@ -372,7 +374,7 @@ function completePlayback(result: TtsPlaybackResult): void {
 
 function defaultResolvedSource(provider: TtsPlaybackProvider): TtsPlaybackResolvedSource {
   if (provider === 'google-cloud') return 'online-audio';
-  if (provider === 'static-manifest') return 'web-offline-manifest';
+  if (provider === 'static-manifest') return 'web-static-manifest';
   return 'device-voice';
 }
 
@@ -708,8 +710,9 @@ async function tryPlayFromStaticManifest(
   options: SpeakTextOptions,
   token: number,
 ): Promise<TtsPlaybackResult | null> {
+  const hasDesktopAudioStore = typeof window !== 'undefined' && Boolean(window.electronAPI?.audioPacks);
   const preferredGrade = (() => {
-    if (!assetKey) {
+    if (!assetKey || !hasDesktopAudioStore) {
       return undefined;
     }
     const fromOption = Number(options.currentGrade);
@@ -718,9 +721,9 @@ async function tryPlayFromStaticManifest(
     }
     return getPreferredDesktopPackGrade();
   })();
-  const hasStrictDesktopGrade = Number.isFinite(Number(preferredGrade));
+  const hasStrictDesktopGrade = hasDesktopAudioStore && Number.isFinite(Number(preferredGrade));
 
-  if (assetKey) {
+  if (assetKey && hasDesktopAudioStore) {
     try {
       const desktopUrl = await getDesktopAudioAssetUrl(assetKey, preferredGrade);
       if (desktopUrl) {
@@ -814,7 +817,7 @@ async function tryPlayFromStaticManifest(
       speed,
       options,
       token,
-      'web-offline-manifest',
+      'web-public-static-manifest',
       { assetKey, assetUrl: entry.audioUrl },
     );
   } catch {

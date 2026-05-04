@@ -1,124 +1,123 @@
 {
-  "pass": false,
+  "pass": true,
+  "generatedAt": "2026-05-04T08:17:19.500Z",
   "environment": {
     "mode": "web-preview-internal-build",
-    "url": "http://127.0.0.1:4173/",
-    "scope": "Mỗi kết quả grade chỉ tính request phát sinh từ lúc vào lesson đầu tiên của môn Toán đến khi nút Đọc đầu tiên trả runtime log.",
+    "url": "http://127.0.0.1:4174/",
+    "scope": "Mỗi kết quả grade chỉ tính request phát sinh từ lúc vào lesson đầu tiên của môn Toán đến khi nút Đọc lesson-card đầu tiên trả runtime log.",
     "note": "Dùng build nội bộ có banner test local để bỏ khóa phân quyền UI khi kiểm thử, không sửa logic Free-plan production."
   },
   "summary": {
     "totalGrades": 6,
-    "successfulGrades": 0,
+    "successfulGrades": 6,
     "allResolvedThroughStaticManifest": true,
-    "allFailedWithMissingOfflineAudio": true,
     "anyCrossGradeFallback": false,
     "anyUnexpectedGoogleRequestDuringGradeWindows": false,
     "anyUnexpectedBackendRequestDuringGradeWindows": false,
-    "anyNativeFallback": false,
-    "totalObservedRequestsDuringGradeWindows": 5
+    "anyNativeFallback": false
   },
   "results": [
     {
       "grade": 0,
       "lessonId": 9001,
       "buttonFound": true,
-      "status": "error",
+      "status": "completed",
       "provider": "static-manifest",
-      "resolvedSource": "web-offline-manifest",
+      "resolvedSource": "web-public-static-manifest",
       "assetKey": "lesson-card:99001",
-      "assetUrl": null,
-      "assetUrlContainsCorrectGrade": false,
+      "assetUrl": "http://127.0.0.1:4174/audio/tts/assets/vi-v1/lesson-card-99001.mp3",
+      "assetUrlReachable": true,
       "noCrossGradeFallback": true,
       "noUnexpectedGoogleRequest": true,
       "noUnexpectedBackendRequest": true,
       "noNativeFallback": true,
-      "reason": "Chưa có file giọng đọc offline cho lớp 0"
+      "reason": null
     },
     {
       "grade": 1,
       "lessonId": 1,
       "buttonFound": true,
-      "status": "error",
+      "status": "completed",
       "provider": "static-manifest",
-      "resolvedSource": "web-offline-manifest",
+      "resolvedSource": "web-public-static-manifest",
       "assetKey": "lesson-card:1",
-      "assetUrl": null,
-      "assetUrlContainsCorrectGrade": false,
+      "assetUrl": "http://127.0.0.1:4174/audio/tts/assets/vi-v1/lesson-card-1.mp3",
+      "assetUrlReachable": true,
       "noCrossGradeFallback": true,
       "noUnexpectedGoogleRequest": true,
       "noUnexpectedBackendRequest": true,
       "noNativeFallback": true,
-      "reason": "Chưa có file giọng đọc offline cho lớp 1"
+      "reason": null
     },
     {
       "grade": 2,
       "lessonId": 21,
       "buttonFound": true,
-      "status": "error",
+      "status": "completed",
       "provider": "static-manifest",
-      "resolvedSource": "web-offline-manifest",
+      "resolvedSource": "web-public-static-manifest",
       "assetKey": "lesson-card:81",
-      "assetUrl": null,
-      "assetUrlContainsCorrectGrade": false,
+      "assetUrl": "http://127.0.0.1:4174/audio/tts/assets/vi-v1/lesson-card-81.mp3",
+      "assetUrlReachable": true,
       "noCrossGradeFallback": true,
       "noUnexpectedGoogleRequest": true,
       "noUnexpectedBackendRequest": true,
       "noNativeFallback": true,
-      "reason": "Chưa có file giọng đọc offline cho lớp 2"
+      "reason": null
     },
     {
       "grade": 3,
       "lessonId": 41,
       "buttonFound": true,
-      "status": "error",
+      "status": "completed",
       "provider": "static-manifest",
-      "resolvedSource": "web-offline-manifest",
+      "resolvedSource": "web-public-static-manifest",
       "assetKey": "lesson-card:881",
-      "assetUrl": null,
-      "assetUrlContainsCorrectGrade": false,
+      "assetUrl": "http://127.0.0.1:4174/audio/tts/assets/vi-v1/lesson-card-881.mp3",
+      "assetUrlReachable": true,
       "noCrossGradeFallback": true,
       "noUnexpectedGoogleRequest": true,
       "noUnexpectedBackendRequest": true,
       "noNativeFallback": true,
-      "reason": "Chưa có file giọng đọc offline cho lớp 3"
+      "reason": null
     },
     {
       "grade": 4,
       "lessonId": 61,
       "buttonFound": true,
-      "status": "error",
+      "status": "completed",
       "provider": "static-manifest",
-      "resolvedSource": "web-offline-manifest",
+      "resolvedSource": "web-public-static-manifest",
       "assetKey": "lesson-card:961",
-      "assetUrl": null,
-      "assetUrlContainsCorrectGrade": false,
+      "assetUrl": "http://127.0.0.1:4174/audio/tts/assets/vi-v1/lesson-card-961.mp3",
+      "assetUrlReachable": true,
       "noCrossGradeFallback": true,
       "noUnexpectedGoogleRequest": true,
       "noUnexpectedBackendRequest": true,
       "noNativeFallback": true,
-      "reason": "Chưa có file giọng đọc offline cho lớp 4"
+      "reason": null
     },
     {
       "grade": 5,
       "lessonId": 81,
       "buttonFound": true,
-      "status": "error",
+      "status": "completed",
       "provider": "static-manifest",
-      "resolvedSource": "web-offline-manifest",
+      "resolvedSource": "web-public-static-manifest",
       "assetKey": "lesson-card:1041",
-      "assetUrl": null,
-      "assetUrlContainsCorrectGrade": false,
+      "assetUrl": "http://127.0.0.1:4174/audio/tts/assets/vi-v1/lesson-card-1041.mp3",
+      "assetUrlReachable": true,
       "noCrossGradeFallback": true,
       "noUnexpectedGoogleRequest": true,
       "noUnexpectedBackendRequest": true,
       "noNativeFallback": true,
-      "reason": "Chưa có file giọng đọc offline cho lớp 5"
+      "reason": null
     }
   ],
-  "failures": [
-    "Cả 6 grade đều dừng ở provider=static-manifest và resolvedSource=web-offline-manifest.",
-    "Không grade nào lấy được assetUrl hợp lệ cho đúng grade; mọi case đều lỗi thiếu offline audio theo đúng lớp đang test.",
-    "Không thấy fallback sang Google TTS, backend TTS hay native/device voice trong cửa sổ kiểm thử theo từng grade.",
-    "Vấn đề hiện tại của web preview là thiếu static offline audio cho lesson-card theo grade, không phải cross-grade fallback."
-  ]
+  "checks": {
+    "noCrossGradeFallback": true,
+    "noUnexpectedGoogleRequest": true,
+    "noUnexpectedBackendRequest": true,
+    "noNativeFallback": true
+  }
 }
