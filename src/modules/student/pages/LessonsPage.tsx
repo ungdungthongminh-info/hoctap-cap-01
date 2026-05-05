@@ -191,7 +191,7 @@ export function LessonsPage() {
 
       <div className="card mb-4">
         <div className="text-sm font-bold mb-2" style={{ color: 'var(--color-primary-dark)' }}>
-          Tinh trang tieng doc theo lop
+          Tinh trang audio bai hoc theo lop
         </div>
 
         {hasDesktopAudioStore ? (
@@ -217,7 +217,7 @@ export function LessonsPage() {
         ) : (
           <>
             <div className="text-xs mb-3" style={{ color: 'var(--color-text-light)' }}>
-              Ban dang hoc tren web. He thong se tai mot goi tieng doc day du cho moi lop va luu tren trinh duyet hien tai.
+              Ban dang hoc tren web. He thong chi tai audio bai hoc theo lop va luu tren trinh duyet hien tai. Audio luyen tap se phat truc tiep tu may chu khi bam Nghe cau hoi.
             </div>
             <div className="p-3 rounded-xl" style={{ border: '1px solid #E5E7EB', background: '#FFFFFF' }}>
               <div className="text-sm font-bold">{getStaticPackRecommendedLabel()}</div>

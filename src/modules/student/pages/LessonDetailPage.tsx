@@ -132,7 +132,7 @@ export function LessonDetailPage() {
       setPackNotice('');
       return true;
     }
-    setPackNotice(`Chưa tải gói giọng đọc lớp ${lesson.grade}. Vui lòng bấm "Tải gói giọng đọc lớp hiện tại".`);
+    setPackNotice(`Chưa tải audio bài học lớp ${lesson.grade}. Vui lòng bấm "Tải audio bài học cho lớp hiện tại". Audio luyện tập sẽ phát trực tiếp khi bấm "Nghe câu hỏi".`);
     return false;
   }, [cards, lesson]);
 
@@ -144,9 +144,9 @@ export function LessonDetailPage() {
       const syncUrl = getStaticPackUrlByGrade(normalizedGrade);
       setStaticPackManifestUrl(syncUrl);
       await syncStaticAudioPack({ manifestUrl: syncUrl });
-      setPackNotice(`Đã tải xong gói giọng đọc lớp ${normalizedGrade}.`);
+      setPackNotice(`Đã tải xong audio bài học lớp ${normalizedGrade}. Audio luyện tập vẫn phát trực tiếp khi bấm "Nghe câu hỏi".`);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Không tải được gói giọng đọc.';
+      const message = error instanceof Error ? error.message : 'Không tải được audio bài học.';
       setPackNotice(message);
     } finally {
       setPackSyncing(false);
@@ -469,7 +469,7 @@ export function LessonDetailPage() {
                 disabled={!lesson || packSyncing}
               >
                 <Download size={16} />
-                {packSyncing ? 'Đang tải gói...' : 'Tải gói giọng đọc lớp hiện tại'}
+                {packSyncing ? 'Đang tải audio bài học...' : 'Tải audio bài học cho lớp hiện tại'}
               </button>
             </div>
             {packNotice && (

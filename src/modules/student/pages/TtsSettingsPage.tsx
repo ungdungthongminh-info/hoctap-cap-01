@@ -68,7 +68,7 @@ const modeOptions: Array<{ value: TtsModeOption; label: string; desc: string }> 
   {
     value: 'static',
     label: 'Mặc định - Audio tĩnh',
-    desc: 'Dùng gói audio tĩnh theo lớp (Drive pack). Nếu thiếu pack sẽ báo tải gói, không fallback sang Google/backend/native.',
+    desc: 'Dùng gói audio bài học theo lớp. Nếu thiếu pack sẽ báo tải audio bài học, không fallback sang Google/backend/native cho luồng này.',
   },
   {
     value: 'advanced',
