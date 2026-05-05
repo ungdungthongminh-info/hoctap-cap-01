@@ -6,8 +6,9 @@
 
 ## Result
 
-- Status: PASS (pipeline complete, manual audible check pending)
-- Pipeline blocker is resolved. Full generation, validation, upload, and public R2 checks have completed for both `vi-v1` and `en-v1` question assets.
+- Status: PARTIAL PASS
+- Data pipeline (generate/validate/upload/R2 public) is PASS for both `vi-v1` and `en-v1` question assets.
+- Production UI click test on `Nghe cau hoi` did not emit observable question-audio network requests in this run, so browser runtime path is not yet fully verified by click-trace.
 
 ## Verification Signals
 
@@ -22,6 +23,20 @@
    - vi-v1 sample-size=50: pass=true
    - en-v1 sample-size=50: pass=true
 - Runtime mapping code is active for question keys via R2 object path pattern.
+- Production practice click test (lesson 1, mode practice_5):
+   - Action: click `Nghe cau hoi`
+   - Observed: no captured request to `audio/tts/assets/*/question/*.mp3` in network instrumentation in this session.
+
+## Sample URLs Tested (Real Production Probe)
+
+- vi-v1 sample URL tested:
+   - `https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/vi-v1/question/1.mp3`
+   - HEAD: status `200`, content-type `audio/mpeg`
+   - GET range probe: status `206`, content-type `audio/mpeg`, HTML sniff `false`
+- en-v1 sample URL tested:
+   - `https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/question/1901.mp3`
+   - HEAD: status `200`, content-type `audio/mpeg`
+   - GET range probe: status `206`, content-type `audio/mpeg`, HTML sniff `false`
 
 ## Failure Classification
 
@@ -30,11 +45,12 @@
 - upload: PASS
 - map: PASS (code mapping implemented)
 - CORS: PASS
-- runtime: PASS (R2 mapping and static path resolution)
-- production: PENDING (manual in-browser audible playback not re-run in this step)
+- runtime: PARTIAL (code path verified, click-trace network for question asset not observed)
+- production: PARTIAL (R2 object URLs healthy; UI click path needs one more browser-verified trace)
 
 ## Next Action
 
 1. Revoke/regenerate exposed Google TTS API key immediately in Google Cloud Console.
-2. Run one manual production audible smoke test on live site for both one `vi-v1` and one `en-v1` question.
-3. Commit code-only changes (scripts/runtime/docs), excluding MP3/ZIP/.env/report artifacts.
+2. Re-run production click-trace with a clean browser profile and capture one concrete request URL from `Nghe cau hoi` button.
+3. For `en-v1` in UI, use account/plan path where English subject is accessible (current Free path locks English and redirects to subjects).
+4. Commit code-only changes (scripts/runtime/docs), excluding MP3/ZIP/.env/report artifacts.
