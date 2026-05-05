@@ -1,0 +1,5190 @@
+{
+  "generatedAt": "2026-05-05T16:15:16.084Z",
+  "scope": "english-lesson-audio-mapping-audit",
+  "constraints": {
+    "noQuestionRemap": true,
+    "noQuestionRegenerate": true,
+    "noGoogleTtsCalls": true,
+    "noQuestionUpload": true
+  },
+  "repoState": {
+    "branch": "clean-main",
+    "dirty": false
+  },
+  "summary": {
+    "englishLessonsTotal": 175,
+    "englishLessonsByGrade": {
+      "1": 35,
+      "2": 35,
+      "3": 35,
+      "4": 35,
+      "5": 35
+    },
+    "englishLessonMissingAudioTotal": 175,
+    "englishLessonMissingAudioByGrade": {
+      "1": 35,
+      "2": 35,
+      "3": 35,
+      "4": 35,
+      "5": 35
+    },
+    "lessonAudioProfileExpected": "en-v1",
+    "questionAudioCheck": {
+      "sampled": 5,
+      "passed": 5
+    },
+    "drivePacksProfile": "vi-v1",
+    "drivePacksContentType": "lesson-card",
+    "hasEnV1LessonPacksInDrivePacks": false
+  },
+  "findings": {
+    "lessonDetailPage": {
+      "langResolver": true,
+      "passesLessonCardAssetKey": true,
+      "speakModeStatic": true,
+      "noNativeFallback": true
+    },
+    "ttsRuntime": {
+      "staticStrictPath": true,
+      "lessonCardR2ForcedVi": true,
+      "questionDirectR2": true
+    }
+  },
+  "questionAudioSamples": [
+    {
+      "grade": 1,
+      "questionId": 6701,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/question/6701.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "playable": true
+    },
+    {
+      "grade": 2,
+      "questionId": 7001,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/question/7001.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "playable": true
+    },
+    {
+      "grade": 3,
+      "questionId": 1901,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/question/1901.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "playable": true
+    },
+    {
+      "grade": 4,
+      "questionId": 6101,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/question/6101.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "playable": true
+    },
+    {
+      "grade": 5,
+      "questionId": 6401,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/question/6401.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "playable": true
+    }
+  ],
+  "missingObjectKeySuggestions": [
+    {
+      "grade": 1,
+      "lessonId": 461,
+      "lessonTitle": "Hello! Hi!",
+      "cardId": 2081,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2081.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 462,
+      "lessonTitle": "Letters A-F",
+      "cardId": 2085,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2085.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 463,
+      "lessonTitle": "Letters G-L",
+      "cardId": 2089,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2089.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 464,
+      "lessonTitle": "Letters M-R",
+      "cardId": 2093,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2093.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 465,
+      "lessonTitle": "Letters S-Z",
+      "cardId": 2097,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2097.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 466,
+      "lessonTitle": "Numbers 1-5",
+      "cardId": 2101,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2101.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 467,
+      "lessonTitle": "Numbers 6-10",
+      "cardId": 2105,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2105.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 468,
+      "lessonTitle": "Colors: Red Blue Yellow",
+      "cardId": 2109,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2109.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 469,
+      "lessonTitle": "Colors: Green Orange Pink",
+      "cardId": 2113,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2113.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 470,
+      "lessonTitle": "My Family: Dad & Mom",
+      "cardId": 2117,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2117.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 471,
+      "lessonTitle": "My Family: Brother & Sister",
+      "cardId": 2121,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2121.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 472,
+      "lessonTitle": "I Love My Family ❤️",
+      "cardId": 2125,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2125.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 473,
+      "lessonTitle": "Pets: Dog & Cat",
+      "cardId": 2129,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2129.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 474,
+      "lessonTitle": "Farm Animals",
+      "cardId": 2133,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2133.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 475,
+      "lessonTitle": "Fruits: Apple & Banana",
+      "cardId": 2137,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2137.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 476,
+      "lessonTitle": "Fruits & Vegetables",
+      "cardId": 2141,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2141.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 477,
+      "lessonTitle": "Stand Up! Sit Down!",
+      "cardId": 2145,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2145.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 478,
+      "lessonTitle": "Open & Close",
+      "cardId": 2149,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2149.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 479,
+      "lessonTitle": "Listen & Speak",
+      "cardId": 2153,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2153.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 480,
+      "lessonTitle": "Review: My First English!",
+      "cardId": 2157,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2157.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20401,
+      "lessonTitle": "Colors — Màu sắc",
+      "cardId": 52481,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52481.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20402,
+      "lessonTitle": "Shapes — Hình dạng",
+      "cardId": 52485,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52485.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20403,
+      "lessonTitle": "My Body",
+      "cardId": 52489,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52489.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20404,
+      "lessonTitle": "Clothes — Quần áo",
+      "cardId": 52493,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52493.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20405,
+      "lessonTitle": "Food and Drink",
+      "cardId": 52497,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52497.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20406,
+      "lessonTitle": "My Classroom",
+      "cardId": 52501,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52501.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20407,
+      "lessonTitle": "Weather — Thời tiết",
+      "cardId": 52505,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52505.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20408,
+      "lessonTitle": "Feelings — Cảm xúc",
+      "cardId": 52509,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52509.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20409,
+      "lessonTitle": "Toys — Đồ chơi",
+      "cardId": 52513,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52513.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20410,
+      "lessonTitle": "Actions — Hành động",
+      "cardId": 52517,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52517.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20411,
+      "lessonTitle": "Pets — Thú cưng",
+      "cardId": 52521,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52521.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20412,
+      "lessonTitle": "English Songs",
+      "cardId": 52525,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52525.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20413,
+      "lessonTitle": "Short Story",
+      "cardId": 52529,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52529.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20414,
+      "lessonTitle": "Review HK1 English 1",
+      "cardId": 52533,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52533.mp3"
+    },
+    {
+      "grade": 1,
+      "lessonId": 20415,
+      "lessonTitle": "Year-end Review Eng 1",
+      "cardId": 52537,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52537.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 481,
+      "lessonTitle": "My Classroom",
+      "cardId": 2161,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2161.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20416,
+      "lessonTitle": "Have / Has",
+      "cardId": 52541,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52541.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 482,
+      "lessonTitle": "School Things",
+      "cardId": 2165,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2165.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20417,
+      "lessonTitle": "Can — I can swim!",
+      "cardId": 52545,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52545.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 483,
+      "lessonTitle": "My Teacher",
+      "cardId": 2169,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2169.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20418,
+      "lessonTitle": "Rooms in a House",
+      "cardId": 52549,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52549.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 484,
+      "lessonTitle": "In My School",
+      "cardId": 2173,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2173.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20419,
+      "lessonTitle": "Furniture — Nội thất",
+      "cardId": 52553,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52553.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 485,
+      "lessonTitle": "My Face",
+      "cardId": 2177,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2177.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20420,
+      "lessonTitle": "What time is it?",
+      "cardId": 52557,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52557.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 486,
+      "lessonTitle": "My Body",
+      "cardId": 2181,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2181.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20421,
+      "lessonTitle": "Daily Routine",
+      "cardId": 52561,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52561.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 487,
+      "lessonTitle": "I Can Jump!",
+      "cardId": 2185,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2185.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20422,
+      "lessonTitle": "Places — Địa điểm",
+      "cardId": 52565,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52565.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 488,
+      "lessonTitle": "How Do You Feel?",
+      "cardId": 2189,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2189.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20423,
+      "lessonTitle": "Left and Right",
+      "cardId": 52569,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52569.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 489,
+      "lessonTitle": "Breakfast Time!",
+      "cardId": 2193,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2193.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20424,
+      "lessonTitle": "Hobbies — sở thích",
+      "cardId": 52573,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52573.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 490,
+      "lessonTitle": "Yummy Lunch!",
+      "cardId": 2197,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2197.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20425,
+      "lessonTitle": "Sports — Thể thao",
+      "cardId": 52577,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52577.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 491,
+      "lessonTitle": "Drinks & Snacks",
+      "cardId": 2201,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2201.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20426,
+      "lessonTitle": "Months of the Year",
+      "cardId": 52581,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52581.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 492,
+      "lessonTitle": "I Like / I Don't Like",
+      "cardId": 2205,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2205.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20427,
+      "lessonTitle": "Seasons — Mùa",
+      "cardId": 52585,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52585.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 493,
+      "lessonTitle": "What's the Weather?",
+      "cardId": 2209,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2209.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20428,
+      "lessonTitle": "Simple Shopping",
+      "cardId": 52589,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52589.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 494,
+      "lessonTitle": "Hot & Cold",
+      "cardId": 2213,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2213.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20429,
+      "lessonTitle": "Review HK1 English 2",
+      "cardId": 52593,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52593.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 495,
+      "lessonTitle": "My Clothes",
+      "cardId": 2217,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2217.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 20430,
+      "lessonTitle": "Year-end Review Eng 2",
+      "cardId": 52597,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52597.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 496,
+      "lessonTitle": "Getting Dressed",
+      "cardId": 2221,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2221.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 497,
+      "lessonTitle": "Good Morning Routine",
+      "cardId": 2225,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2225.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 498,
+      "lessonTitle": "At School",
+      "cardId": 2229,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2229.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 499,
+      "lessonTitle": "Evening Fun",
+      "cardId": 2233,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2233.mp3"
+    },
+    {
+      "grade": 2,
+      "lessonId": 500,
+      "lessonTitle": "Review: My English World!",
+      "cardId": 2237,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2237.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 401,
+      "lessonTitle": "Hello! What's your name?",
+      "cardId": 801,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-801.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 402,
+      "lessonTitle": "How are you?",
+      "cardId": 805,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-805.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 403,
+      "lessonTitle": "Good morning! Good night!",
+      "cardId": 809,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-809.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 404,
+      "lessonTitle": "Numbers 1-10",
+      "cardId": 813,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-813.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 405,
+      "lessonTitle": "My Family",
+      "cardId": 817,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-817.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 406,
+      "lessonTitle": "He is / She is",
+      "cardId": 821,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-821.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 407,
+      "lessonTitle": "How old are you?",
+      "cardId": 825,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-825.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 408,
+      "lessonTitle": "My Best Friend",
+      "cardId": 829,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-829.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 409,
+      "lessonTitle": "Animals I Know",
+      "cardId": 833,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-833.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 410,
+      "lessonTitle": "I like cats!",
+      "cardId": 837,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-837.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 411,
+      "lessonTitle": "Colors everywhere",
+      "cardId": 841,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-841.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 412,
+      "lessonTitle": "What color is it?",
+      "cardId": 845,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-845.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 413,
+      "lessonTitle": "My Classroom",
+      "cardId": 849,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-849.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 414,
+      "lessonTitle": "This is a / That is a",
+      "cardId": 853,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-853.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 415,
+      "lessonTitle": "I can sing!",
+      "cardId": 857,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-857.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 416,
+      "lessonTitle": "Days of the week",
+      "cardId": 861,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-861.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 417,
+      "lessonTitle": "Let's eat! Food I like",
+      "cardId": 865,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-865.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 418,
+      "lessonTitle": "I'm happy! Feelings",
+      "cardId": 869,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-869.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 419,
+      "lessonTitle": "Alphabet Song A-Z",
+      "cardId": 873,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-873.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 420,
+      "lessonTitle": "Let's review! Big Quiz",
+      "cardId": 877,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-877.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20431,
+      "lessonTitle": "Present Continuous",
+      "cardId": 52601,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52601.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20432,
+      "lessonTitle": "Prepositions: in, on, under",
+      "cardId": 52605,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52605.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20433,
+      "lessonTitle": "Jobs and Occupations",
+      "cardId": 52609,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52609.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20434,
+      "lessonTitle": "Transport — Phương tiện",
+      "cardId": 52613,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52613.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20435,
+      "lessonTitle": "Big, bigger, biggest",
+      "cardId": 52617,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52617.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20436,
+      "lessonTitle": "Plurals — Số nhiều",
+      "cardId": 52621,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52621.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20437,
+      "lessonTitle": "Past Simple (intro)",
+      "cardId": 52625,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52625.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20438,
+      "lessonTitle": "There is / There are",
+      "cardId": 52629,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52629.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20439,
+      "lessonTitle": "Reading Comprehension",
+      "cardId": 52633,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52633.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20440,
+      "lessonTitle": "Writing: Short Paragraph",
+      "cardId": 52637,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52637.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20441,
+      "lessonTitle": "Countries — Quốc gia",
+      "cardId": 52641,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52641.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20442,
+      "lessonTitle": "Math in English",
+      "cardId": 52645,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52645.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20443,
+      "lessonTitle": "Story Time",
+      "cardId": 52649,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52649.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20444,
+      "lessonTitle": "Review HK1 English 3",
+      "cardId": 52653,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52653.mp3"
+    },
+    {
+      "grade": 3,
+      "lessonId": 20445,
+      "lessonTitle": "Year-end Review Eng 3",
+      "cardId": 52657,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52657.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 421,
+      "lessonTitle": "My Daily Routine",
+      "cardId": 1921,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1921.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 422,
+      "lessonTitle": "What Time Is It?",
+      "cardId": 1925,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1925.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 423,
+      "lessonTitle": "My Hobbies",
+      "cardId": 1929,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1929.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 424,
+      "lessonTitle": "Sports and Games",
+      "cardId": 1933,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1933.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 425,
+      "lessonTitle": "At the Restaurant",
+      "cardId": 1937,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1937.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 426,
+      "lessonTitle": "Healthy Food",
+      "cardId": 1941,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1941.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 427,
+      "lessonTitle": "Cooking Verbs",
+      "cardId": 1945,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1945.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 428,
+      "lessonTitle": "My Favorite Dish",
+      "cardId": 1949,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1949.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 429,
+      "lessonTitle": "Places in Town",
+      "cardId": 1953,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1953.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 430,
+      "lessonTitle": "Asking for Directions",
+      "cardId": 1957,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1957.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 431,
+      "lessonTitle": "Means of Transport",
+      "cardId": 1961,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1961.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 432,
+      "lessonTitle": "Traveling",
+      "cardId": 1965,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1965.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 433,
+      "lessonTitle": "Weather Forecast",
+      "cardId": 1969,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1969.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 434,
+      "lessonTitle": "Seasons in Vietnam",
+      "cardId": 1973,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1973.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 435,
+      "lessonTitle": "Wild Animals",
+      "cardId": 1977,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1977.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 436,
+      "lessonTitle": "Protect the Earth",
+      "cardId": 1981,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1981.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 437,
+      "lessonTitle": "Vietnamese Festivals",
+      "cardId": 1985,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1985.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 438,
+      "lessonTitle": "Countries & Nationalities",
+      "cardId": 1989,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1989.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 439,
+      "lessonTitle": "Grammar Review 4",
+      "cardId": 1993,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1993.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 440,
+      "lessonTitle": "Final Review Grade 4",
+      "cardId": 1997,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-1997.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20446,
+      "lessonTitle": "Future: will / going to",
+      "cardId": 52661,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52661.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20447,
+      "lessonTitle": "Must / Should",
+      "cardId": 52665,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52665.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20448,
+      "lessonTitle": "Adverbs — Trạng từ",
+      "cardId": 52669,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52669.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20449,
+      "lessonTitle": "And, But, Or, Because",
+      "cardId": 52673,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52673.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20450,
+      "lessonTitle": "The Environment",
+      "cardId": 52677,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52677.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20451,
+      "lessonTitle": "Vietnamese Festivals",
+      "cardId": 52681,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52681.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20452,
+      "lessonTitle": "Writing Email",
+      "cardId": 52685,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52685.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20453,
+      "lessonTitle": "Dialogue Practice",
+      "cardId": 52689,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52689.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20454,
+      "lessonTitle": "Reading: Longer Texts",
+      "cardId": 52693,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52693.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20455,
+      "lessonTitle": "Mini Project",
+      "cardId": 52697,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52697.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20456,
+      "lessonTitle": "Irregular Verbs",
+      "cardId": 52701,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52701.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20457,
+      "lessonTitle": "Wh- Questions",
+      "cardId": 52705,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52705.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20458,
+      "lessonTitle": "Presentation Skills",
+      "cardId": 52709,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52709.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20459,
+      "lessonTitle": "Review HK1 English 4",
+      "cardId": 52713,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52713.mp3"
+    },
+    {
+      "grade": 4,
+      "lessonId": 20460,
+      "lessonTitle": "Year-end Review Eng 4",
+      "cardId": 52717,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52717.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 441,
+      "lessonTitle": "Describing People",
+      "cardId": 2001,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2001.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 442,
+      "lessonTitle": "Jobs & Occupations",
+      "cardId": 2005,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2005.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 443,
+      "lessonTitle": "My Future Plans",
+      "cardId": 2009,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2009.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 444,
+      "lessonTitle": "Feelings & Emotions",
+      "cardId": 2013,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2013.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 445,
+      "lessonTitle": "Parts of the Body",
+      "cardId": 2017,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2017.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 446,
+      "lessonTitle": "At the Doctor",
+      "cardId": 2021,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2021.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 447,
+      "lessonTitle": "Healthy Habits",
+      "cardId": 2025,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2025.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 448,
+      "lessonTitle": "Exercise & Fitness",
+      "cardId": 2029,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2029.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 449,
+      "lessonTitle": "Using the Computer",
+      "cardId": 2033,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2033.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 450,
+      "lessonTitle": "My Favorite Movie",
+      "cardId": 2037,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2037.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 451,
+      "lessonTitle": "Reading Books",
+      "cardId": 2041,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2041.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 452,
+      "lessonTitle": "Online Safety",
+      "cardId": 2045,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2045.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 453,
+      "lessonTitle": "Save Water",
+      "cardId": 2049,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2049.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 454,
+      "lessonTitle": "Reduce, Reuse, Recycle",
+      "cardId": 2053,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2053.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 455,
+      "lessonTitle": "Global Issues",
+      "cardId": 2057,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2057.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 456,
+      "lessonTitle": "International Day",
+      "cardId": 2061,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2061.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 457,
+      "lessonTitle": "Past Tense Basics",
+      "cardId": 2065,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2065.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 458,
+      "lessonTitle": "Comparisons",
+      "cardId": 2069,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2069.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 459,
+      "lessonTitle": "Writing a Paragraph",
+      "cardId": 2073,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2073.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 460,
+      "lessonTitle": "Final Review Grade 5",
+      "cardId": 2077,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-2077.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20461,
+      "lessonTitle": "Passive Voice (intro)",
+      "cardId": 52721,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52721.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20462,
+      "lessonTitle": "Reported Speech (intro)",
+      "cardId": 52725,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52725.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20463,
+      "lessonTitle": "If... (Conditionals 0,1)",
+      "cardId": 52729,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52729.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20464,
+      "lessonTitle": "Who, Which, That (intro)",
+      "cardId": 52733,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52733.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20465,
+      "lessonTitle": "Technology Vocabulary",
+      "cardId": 52737,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52737.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20466,
+      "lessonTitle": "Letter Writing",
+      "cardId": 52741,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52741.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20467,
+      "lessonTitle": "Simple Debate",
+      "cardId": 52745,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52745.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20468,
+      "lessonTitle": "Science in English",
+      "cardId": 52749,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52749.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20469,
+      "lessonTitle": "Exam Preparation",
+      "cardId": 52753,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52753.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20470,
+      "lessonTitle": "Graduation Speech",
+      "cardId": 52757,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52757.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20471,
+      "lessonTitle": "Common Idioms",
+      "cardId": 52761,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52761.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20472,
+      "lessonTitle": "Pronunciation Tips",
+      "cardId": 52765,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52765.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20473,
+      "lessonTitle": "English Through Songs",
+      "cardId": 52769,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52769.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20474,
+      "lessonTitle": "Review HK1 English 5",
+      "cardId": 52773,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52773.mp3"
+    },
+    {
+      "grade": 5,
+      "lessonId": 20475,
+      "lessonTitle": "Year-end Review Eng 5",
+      "cardId": 52777,
+      "objectKey": "audio/tts/assets/en-v1/lesson-card-52777.mp3"
+    }
+  ],
+  "proposedMinimalFix": {
+    "whenEnglishLessonAudioExistsOnR2": [
+      "Add lesson resolver: lesson subjectCode=english => profile en-v1 => lesson-card asset key.",
+      "In LessonDetailPage, pass lesson subject language from current lesson (lesson.subjectCode) rather than only student subject context.",
+      "Ensure runtime lesson-card strict path supports en-v1 for English lesson cards; keep Practice question flow untouched."
+    ],
+    "whenEnglishLessonAudioMissingOnR2": [
+      "Do not generate/upload now.",
+      "Prepare dedicated generation script proposal for English lesson-card only (en-v1, lesson-card:* keys)."
+    ],
+    "nonGoals": [
+      "No changes to PracticePage question button.",
+      "No changes to auto-read behavior.",
+      "No remap/regenerate for question audio."
+    ]
+  },
+  "rows": [
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 461,
+      "lessonTitle": "Hello! Hi!",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2081",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2081.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2081,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 462,
+      "lessonTitle": "Letters A-F",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2085",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2085.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2085,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 463,
+      "lessonTitle": "Letters G-L",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2089",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2089.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2089,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 464,
+      "lessonTitle": "Letters M-R",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2093",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2093.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2093,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 465,
+      "lessonTitle": "Letters S-Z",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2097",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2097.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2097,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 466,
+      "lessonTitle": "Numbers 1-5",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2101",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2101.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2101,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 467,
+      "lessonTitle": "Numbers 6-10",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2105",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2105.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2105,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 468,
+      "lessonTitle": "Colors: Red Blue Yellow",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2109",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2109.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2109,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 469,
+      "lessonTitle": "Colors: Green Orange Pink",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2113",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2113.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2113,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 470,
+      "lessonTitle": "My Family: Dad & Mom",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2117",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2117.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2117,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 471,
+      "lessonTitle": "My Family: Brother & Sister",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2121",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2121.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2121,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 472,
+      "lessonTitle": "I Love My Family ❤️",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2125",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2125.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2125,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 473,
+      "lessonTitle": "Pets: Dog & Cat",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2129",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2129.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2129,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 474,
+      "lessonTitle": "Farm Animals",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2133",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2133.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2133,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 475,
+      "lessonTitle": "Fruits: Apple & Banana",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2137",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2137.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2137,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 476,
+      "lessonTitle": "Fruits & Vegetables",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2141",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2141.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2141,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 477,
+      "lessonTitle": "Stand Up! Sit Down!",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2145",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2145.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2145,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 478,
+      "lessonTitle": "Open & Close",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2149",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2149.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2149,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 479,
+      "lessonTitle": "Listen & Speak",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2153",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2153.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2153,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 480,
+      "lessonTitle": "Review: My First English!",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2157",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2157.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2157,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20401,
+      "lessonTitle": "Colors — Màu sắc",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52481",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52481.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52481,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20402,
+      "lessonTitle": "Shapes — Hình dạng",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52485",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52485.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52485,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20403,
+      "lessonTitle": "My Body",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52489",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52489.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52489,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20404,
+      "lessonTitle": "Clothes — Quần áo",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52493",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52493.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52493,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20405,
+      "lessonTitle": "Food and Drink",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52497",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52497.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52497,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20406,
+      "lessonTitle": "My Classroom",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52501",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52501.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52501,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20407,
+      "lessonTitle": "Weather — Thời tiết",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52505",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52505.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52505,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20408,
+      "lessonTitle": "Feelings — Cảm xúc",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52509",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52509.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52509,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20409,
+      "lessonTitle": "Toys — Đồ chơi",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52513",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52513.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52513,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20410,
+      "lessonTitle": "Actions — Hành động",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52517",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52517.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52517,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20411,
+      "lessonTitle": "Pets — Thú cưng",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52521",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52521.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52521,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20412,
+      "lessonTitle": "English Songs",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52525",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52525.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52525,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20413,
+      "lessonTitle": "Short Story",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52529",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52529.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52529,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20414,
+      "lessonTitle": "Review HK1 English 1",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52533",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52533.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52533,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 1,
+      "subject": "english",
+      "lessonId": 20415,
+      "lessonTitle": "Year-end Review Eng 1",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52537",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52537.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52537,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 481,
+      "lessonTitle": "My Classroom",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2161",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2161.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2161,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20416,
+      "lessonTitle": "Have / Has",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52541",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52541.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52541,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 482,
+      "lessonTitle": "School Things",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2165",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2165.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2165,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20417,
+      "lessonTitle": "Can — I can swim!",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52545",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52545.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52545,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 483,
+      "lessonTitle": "My Teacher",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2169",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2169.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2169,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20418,
+      "lessonTitle": "Rooms in a House",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52549",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52549.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52549,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 484,
+      "lessonTitle": "In My School",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2173",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2173.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2173,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20419,
+      "lessonTitle": "Furniture — Nội thất",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52553",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52553.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52553,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 485,
+      "lessonTitle": "My Face",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2177",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2177.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2177,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20420,
+      "lessonTitle": "What time is it?",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52557",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52557.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52557,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 486,
+      "lessonTitle": "My Body",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2181",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2181.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2181,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20421,
+      "lessonTitle": "Daily Routine",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52561",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52561.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52561,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 487,
+      "lessonTitle": "I Can Jump!",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2185",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2185.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2185,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20422,
+      "lessonTitle": "Places — Địa điểm",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52565",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52565.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52565,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 488,
+      "lessonTitle": "How Do You Feel?",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2189",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2189.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2189,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20423,
+      "lessonTitle": "Left and Right",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52569",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52569.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52569,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 489,
+      "lessonTitle": "Breakfast Time!",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2193",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2193.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2193,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20424,
+      "lessonTitle": "Hobbies — sở thích",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52573",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52573.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52573,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 490,
+      "lessonTitle": "Yummy Lunch!",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2197",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2197.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2197,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20425,
+      "lessonTitle": "Sports — Thể thao",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52577",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52577.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52577,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 491,
+      "lessonTitle": "Drinks & Snacks",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2201",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2201.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2201,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20426,
+      "lessonTitle": "Months of the Year",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52581",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52581.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52581,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 492,
+      "lessonTitle": "I Like / I Don't Like",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2205",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2205.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2205,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20427,
+      "lessonTitle": "Seasons — Mùa",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52585",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52585.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52585,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 493,
+      "lessonTitle": "What's the Weather?",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2209",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2209.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2209,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20428,
+      "lessonTitle": "Simple Shopping",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52589",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52589.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52589,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 494,
+      "lessonTitle": "Hot & Cold",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2213",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2213.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2213,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20429,
+      "lessonTitle": "Review HK1 English 2",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52593",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52593.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52593,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 495,
+      "lessonTitle": "My Clothes",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2217",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2217.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2217,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 20430,
+      "lessonTitle": "Year-end Review Eng 2",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52597",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52597.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52597,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 496,
+      "lessonTitle": "Getting Dressed",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2221",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2221.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2221,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 497,
+      "lessonTitle": "Good Morning Routine",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2225",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2225.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2225,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 498,
+      "lessonTitle": "At School",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2229",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2229.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2229,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 499,
+      "lessonTitle": "Evening Fun",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2233",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2233.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2233,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 2,
+      "subject": "english",
+      "lessonId": 500,
+      "lessonTitle": "Review: My English World!",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2237",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2237.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2237,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 401,
+      "lessonTitle": "Hello! What's your name?",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:801",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-801.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 801,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 402,
+      "lessonTitle": "How are you?",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:805",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-805.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 805,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 403,
+      "lessonTitle": "Good morning! Good night!",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:809",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-809.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 809,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 404,
+      "lessonTitle": "Numbers 1-10",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:813",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-813.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 813,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 405,
+      "lessonTitle": "My Family",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:817",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-817.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 817,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 406,
+      "lessonTitle": "He is / She is",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:821",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-821.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 821,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 407,
+      "lessonTitle": "How old are you?",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:825",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-825.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 825,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 408,
+      "lessonTitle": "My Best Friend",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:829",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-829.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 829,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 409,
+      "lessonTitle": "Animals I Know",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:833",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-833.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 833,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 410,
+      "lessonTitle": "I like cats!",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:837",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-837.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 837,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 411,
+      "lessonTitle": "Colors everywhere",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:841",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-841.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 841,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 412,
+      "lessonTitle": "What color is it?",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:845",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-845.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 845,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 413,
+      "lessonTitle": "My Classroom",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:849",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-849.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 849,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 414,
+      "lessonTitle": "This is a / That is a",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:853",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-853.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 853,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 415,
+      "lessonTitle": "I can sing!",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:857",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-857.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 857,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 416,
+      "lessonTitle": "Days of the week",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:861",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-861.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 861,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 417,
+      "lessonTitle": "Let's eat! Food I like",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:865",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-865.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 865,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 418,
+      "lessonTitle": "I'm happy! Feelings",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:869",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-869.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 869,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 419,
+      "lessonTitle": "Alphabet Song A-Z",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:873",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-873.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 873,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 420,
+      "lessonTitle": "Let's review! Big Quiz",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:877",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-877.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 877,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20431,
+      "lessonTitle": "Present Continuous",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52601",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52601.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52601,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20432,
+      "lessonTitle": "Prepositions: in, on, under",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52605",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52605.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52605,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20433,
+      "lessonTitle": "Jobs and Occupations",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52609",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52609.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52609,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20434,
+      "lessonTitle": "Transport — Phương tiện",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52613",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52613.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52613,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20435,
+      "lessonTitle": "Big, bigger, biggest",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52617",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52617.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52617,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20436,
+      "lessonTitle": "Plurals — Số nhiều",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52621",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52621.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52621,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20437,
+      "lessonTitle": "Past Simple (intro)",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52625",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52625.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52625,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20438,
+      "lessonTitle": "There is / There are",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52629",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52629.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52629,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20439,
+      "lessonTitle": "Reading Comprehension",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52633",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52633.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52633,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20440,
+      "lessonTitle": "Writing: Short Paragraph",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52637",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52637.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52637,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20441,
+      "lessonTitle": "Countries — Quốc gia",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52641",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52641.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52641,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20442,
+      "lessonTitle": "Math in English",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52645",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52645.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52645,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20443,
+      "lessonTitle": "Story Time",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52649",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52649.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52649,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20444,
+      "lessonTitle": "Review HK1 English 3",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52653",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52653.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52653,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 3,
+      "subject": "english",
+      "lessonId": 20445,
+      "lessonTitle": "Year-end Review Eng 3",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52657",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52657.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52657,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 421,
+      "lessonTitle": "My Daily Routine",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1921",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1921.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1921,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 422,
+      "lessonTitle": "What Time Is It?",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1925",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1925.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1925,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 423,
+      "lessonTitle": "My Hobbies",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1929",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1929.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1929,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 424,
+      "lessonTitle": "Sports and Games",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1933",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1933.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1933,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 425,
+      "lessonTitle": "At the Restaurant",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1937",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1937.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1937,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 426,
+      "lessonTitle": "Healthy Food",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1941",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1941.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1941,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 427,
+      "lessonTitle": "Cooking Verbs",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1945",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1945.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1945,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 428,
+      "lessonTitle": "My Favorite Dish",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1949",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1949.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1949,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 429,
+      "lessonTitle": "Places in Town",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1953",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1953.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1953,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 430,
+      "lessonTitle": "Asking for Directions",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1957",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1957.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1957,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 431,
+      "lessonTitle": "Means of Transport",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1961",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1961.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1961,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 432,
+      "lessonTitle": "Traveling",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1965",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1965.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1965,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 433,
+      "lessonTitle": "Weather Forecast",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1969",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1969.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1969,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 434,
+      "lessonTitle": "Seasons in Vietnam",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1973",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1973.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1973,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 435,
+      "lessonTitle": "Wild Animals",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1977",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1977.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1977,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 436,
+      "lessonTitle": "Protect the Earth",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1981",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1981.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1981,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 437,
+      "lessonTitle": "Vietnamese Festivals",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1985",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1985.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1985,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 438,
+      "lessonTitle": "Countries & Nationalities",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1989",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1989.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1989,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 439,
+      "lessonTitle": "Grammar Review 4",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1993",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1993.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1993,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 440,
+      "lessonTitle": "Final Review Grade 4",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:1997",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1997.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 1997,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20446,
+      "lessonTitle": "Future: will / going to",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52661",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52661.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52661,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20447,
+      "lessonTitle": "Must / Should",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52665",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52665.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52665,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20448,
+      "lessonTitle": "Adverbs — Trạng từ",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52669",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52669.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52669,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20449,
+      "lessonTitle": "And, But, Or, Because",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52673",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52673.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52673,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20450,
+      "lessonTitle": "The Environment",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52677",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52677.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52677,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20451,
+      "lessonTitle": "Vietnamese Festivals",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52681",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52681.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52681,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20452,
+      "lessonTitle": "Writing Email",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52685",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52685.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52685,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20453,
+      "lessonTitle": "Dialogue Practice",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52689",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52689.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52689,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20454,
+      "lessonTitle": "Reading: Longer Texts",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52693",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52693.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52693,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20455,
+      "lessonTitle": "Mini Project",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52697",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52697.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52697,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20456,
+      "lessonTitle": "Irregular Verbs",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52701",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52701.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52701,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20457,
+      "lessonTitle": "Wh- Questions",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52705",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52705.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52705,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20458,
+      "lessonTitle": "Presentation Skills",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52709",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52709.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52709,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20459,
+      "lessonTitle": "Review HK1 English 4",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52713",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52713.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52713,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 4,
+      "subject": "english",
+      "lessonId": 20460,
+      "lessonTitle": "Year-end Review Eng 4",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52717",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52717.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52717,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 441,
+      "lessonTitle": "Describing People",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2001",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2001.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2001,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 442,
+      "lessonTitle": "Jobs & Occupations",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2005",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2005.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2005,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 443,
+      "lessonTitle": "My Future Plans",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2009",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2009.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2009,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 444,
+      "lessonTitle": "Feelings & Emotions",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2013",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2013.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2013,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 445,
+      "lessonTitle": "Parts of the Body",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2017",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2017.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2017,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 446,
+      "lessonTitle": "At the Doctor",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2021",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2021.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2021,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 447,
+      "lessonTitle": "Healthy Habits",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2025",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2025.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2025,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 448,
+      "lessonTitle": "Exercise & Fitness",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2029",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2029.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2029,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 449,
+      "lessonTitle": "Using the Computer",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2033",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2033.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2033,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 450,
+      "lessonTitle": "My Favorite Movie",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2037",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2037.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2037,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 451,
+      "lessonTitle": "Reading Books",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2041",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2041.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2041,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 452,
+      "lessonTitle": "Online Safety",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2045",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2045.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2045,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 453,
+      "lessonTitle": "Save Water",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2049",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2049.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2049,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 454,
+      "lessonTitle": "Reduce, Reuse, Recycle",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2053",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2053.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2053,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 455,
+      "lessonTitle": "Global Issues",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2057",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2057.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2057,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 456,
+      "lessonTitle": "International Day",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2061",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2061.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2061,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 457,
+      "lessonTitle": "Past Tense Basics",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2065",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2065.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2065,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 458,
+      "lessonTitle": "Comparisons",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2069",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2069.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2069,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 459,
+      "lessonTitle": "Writing a Paragraph",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2073",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2073.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2073,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 460,
+      "lessonTitle": "Final Review Grade 5",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:2077",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2077.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 2077,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20461,
+      "lessonTitle": "Passive Voice (intro)",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52721",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52721.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52721,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20462,
+      "lessonTitle": "Reported Speech (intro)",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52725",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52725.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52725,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20463,
+      "lessonTitle": "If... (Conditionals 0,1)",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52729",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52729.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52729,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20464,
+      "lessonTitle": "Who, Which, That (intro)",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52733",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52733.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52733,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20465,
+      "lessonTitle": "Technology Vocabulary",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52737",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52737.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52737,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20466,
+      "lessonTitle": "Letter Writing",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52741",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52741.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52741,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20467,
+      "lessonTitle": "Simple Debate",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52745",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52745.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52745,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20468,
+      "lessonTitle": "Science in English",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52749",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52749.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52749,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20469,
+      "lessonTitle": "Exam Preparation",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52753",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52753.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52753,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20470,
+      "lessonTitle": "Graduation Speech",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52757",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52757.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52757,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20471,
+      "lessonTitle": "Common Idioms",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52761",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52761.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52761,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20472,
+      "lessonTitle": "Pronunciation Tips",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52765",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52765.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52765,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20473,
+      "lessonTitle": "English Through Songs",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52769",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52769.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52769,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20474,
+      "lessonTitle": "Review HK1 English 5",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52773",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52773.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52773,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    },
+    {
+      "grade": 5,
+      "subject": "english",
+      "lessonId": 20475,
+      "lessonTitle": "Year-end Review Eng 5",
+      "lessonTextLang": "mixed",
+      "expectedProfile": "en-v1",
+      "expectedAudioKey": "lesson-card:52777",
+      "expectedR2Url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52777.mp3",
+      "existsInManifest": false,
+      "networkPlayable": "no(404,text/plain;charset=utf-8)",
+      "status": "MISSING_MANIFEST_ENTRY",
+      "details": {
+        "cardId": 52777,
+        "cardCount": 4,
+        "manifestProfileId": null,
+        "manifestAssetPath": null,
+        "manifestAvailable": null,
+        "httpStatus": 404,
+        "contentType": "text/plain;charset=UTF-8"
+      }
+    }
+  ]
+}
