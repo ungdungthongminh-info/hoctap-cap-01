@@ -2,12 +2,63 @@ import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAppData } from '../../../shared/providers/AppDataProvider';
 import { ArrowLeft, ArrowRight, CheckCircle, XCircle, Clock, AlertTriangle, Lightbulb, ArrowUp, ArrowDown, Volume2 } from 'lucide-react';
-import { getTtsRuntimeStatus, playCorrect, playWrong, playWarning, playFinish, playClick, speakTextAsync, stopSpeaking, subscribeTtsRuntime } from '../../../shared/utils/sounds';
+import { playCorrect, playWrong, playWarning, playFinish, playClick } from '../../../shared/utils/sounds';
 import { MascotCharacter } from '../../../shared/components';
 import { canAccessLesson, getAccessPlan } from '../../../shared/services/accessControl';
-import { buildQuestionAssetKey } from '../../../shared/services/tts/ttsAssetKeys';
-import { buildQuestionNarrationText } from '../../../shared/services/tts/ttsNarration';
 import '../styles/premiumButtons.css';
+
+// ---------------------------------------------------------------------------
+// Direct R2 question audio – bypasses ttsRuntime chain (which did HEAD inspect
+// before play, causing CORS block that silently stopped all playback).
+// ---------------------------------------------------------------------------
+const QUESTION_R2_BASE =
+  'https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets';
+
+function buildQuestionAudioUrl(profile: string, questionId: number | string): string {
+  return `${QUESTION_R2_BASE}/${profile}/question/${questionId}.mp3`;
+}
+
+let _directQuestionAudio: HTMLAudioElement | null = null;
+
+function stopDirectQuestionAudio() {
+  if (_directQuestionAudio) {
+    _directQuestionAudio.pause();
+    _directQuestionAudio.src = '';
+    _directQuestionAudio = null;
+  }
+}
+
+function playQuestionAudioDirect(
+  questionId: number | string,
+  lang: 'vi' | 'en',
+): Promise<{ ok: boolean; url: string; error?: string }> {
+  const profile = lang === 'en' ? 'en-v1' : 'vi-v1';
+  const url = buildQuestionAudioUrl(profile, questionId);
+  console.info('[question-tts] play direct', { questionId, url });
+
+  stopDirectQuestionAudio();
+
+  return new Promise((resolve) => {
+    const audio = new Audio(url);
+    _directQuestionAudio = audio;
+
+    audio.onended = () => { _directQuestionAudio = null; };
+    audio.onerror = () => {
+      console.error('[question-tts] play error', { questionId, url, error: audio.error });
+      _directQuestionAudio = null;
+      resolve({ ok: false, url, error: 'audio-load-error' });
+    };
+
+    audio.play()
+      .then(() => resolve({ ok: true, url }))
+      .catch((err) => {
+        console.error('[question-tts] play() rejected', { questionId, url, err });
+        _directQuestionAudio = null;
+        resolve({ ok: false, url, error: String(err) });
+      });
+  });
+}
+// ---------------------------------------------------------------------------
 
 type AnswerState = 'unanswered' | 'correct' | 'wrong';
 
@@ -189,34 +240,21 @@ export function PracticePage() {
 
   const speakQuestion = useCallback(async () => {
     if (!currentQuestion) return;
+    const qid = currentQuestion.id;
+    if (!qid) {
+      setQuestionAudioError('Không tìm thấy mã audio luyện tập cho câu này');
+      return;
+    }
     setQuestionAudioPending(true);
     setQuestionAudioError(null);
-    try {
-      const result = await speakTextAsync(buildQuestionNarrationText(currentQuestion), questionLang, {
-        policy: isPreGrade ? 'pre-grade-auto' : 'practice-on-demand',
-        assetKey: buildQuestionAssetKey(currentQuestion.id),
-        currentGrade: lesson?.grade,
-        allowNativeFallback: false,
-        onStatusChange: (status) => {
-          if (status === 'ready' || status === 'playing' || status === 'ended' || status === 'error' || status === 'stopped') {
-            setQuestionAudioPending(false);
-          }
-          if (status === 'error') {
-            setQuestionAudioError('Chưa tải được audio luyện tập');
-          }
-        },
-      });
-      setQuestionAudioPending(false);
-      if (result.status === 'error') {
-        setQuestionAudioError('Chưa tải được audio luyện tập');
-        return;
-      }
-      setQuestionAudioError(null);
-    } catch {
-      setQuestionAudioPending(false);
+    const result = await playQuestionAudioDirect(qid, questionLang);
+    setQuestionAudioPending(false);
+    if (!result.ok) {
       setQuestionAudioError('Chưa tải được audio luyện tập');
+    } else {
+      setQuestionAudioError(null);
     }
-  }, [currentQuestion, isPreGrade, lesson?.grade, questionLang]);
+  }, [currentQuestion, questionLang]);
 
   // Auto-read question for pre-grade students
   useEffect(() => {
@@ -226,29 +264,7 @@ export function PracticePage() {
   }, [currentIndex, isPreGrade, speakQuestion, currentQuestion]);
 
   useEffect(() => {
-    const syncRuntimeState = (status: ReturnType<typeof getTtsRuntimeStatus>) => {
-      if (status.isLoading) {
-        setQuestionAudioPending(true);
-      }
-      if (status.isSpeaking) {
-        setQuestionAudioPending(false);
-        setQuestionAudioError(null);
-      }
-      if (status.error) {
-        setQuestionAudioPending(false);
-        setQuestionAudioError('Chưa tải được audio luyện tập');
-      }
-    };
-
-    syncRuntimeState(getTtsRuntimeStatus());
-    return subscribeTtsRuntime(() => {
-      syncRuntimeState(getTtsRuntimeStatus());
-    });
-  }, [currentQuestion?.id]);
-
-  // Stop TTS on unmount
-  useEffect(() => {
-    return () => { stopSpeaking(); };
+    return () => { stopDirectQuestionAudio(); };
   }, []);
 
   const subjectEmoji = (code: string): string => {
