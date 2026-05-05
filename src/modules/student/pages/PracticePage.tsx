@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAppData } from '../../../shared/providers/AppDataProvider';
 import { ArrowLeft, ArrowRight, CheckCircle, XCircle, Clock, AlertTriangle, Lightbulb, ArrowUp, ArrowDown, Volume2 } from 'lucide-react';
-import { playCorrect, playWrong, playWarning, playFinish, playClick, speakText, stopSpeaking } from '../../../shared/utils/sounds';
+import { getTtsRuntimeStatus, playCorrect, playWrong, playWarning, playFinish, playClick, speakTextAsync, stopSpeaking, subscribeTtsRuntime } from '../../../shared/utils/sounds';
 import { MascotCharacter } from '../../../shared/components';
 import { canAccessLesson, getAccessPlan } from '../../../shared/services/accessControl';
 import { buildQuestionAssetKey } from '../../../shared/services/tts/ttsAssetKeys';
@@ -42,6 +42,8 @@ export function PracticePage() {
   const [timeWarning, setTimeWarning] = useState<string | null>(null);
   const [autoSubmitted, setAutoSubmitted] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [questionAudioPending, setQuestionAudioPending] = useState(false);
+  const [questionAudioError, setQuestionAudioError] = useState<string | null>(null);
   const [answerAnim, setAnswerAnim] = useState<'shake' | 'bounce' | null>(null);
   const [answeredStates, setAnsweredStates] = useState<AnswerState[]>([]);
   const [isInitializing, setIsInitializing] = useState(true);
@@ -59,6 +61,8 @@ export function PracticePage() {
     setAnsweredStates([]);
     setAutoSubmitted(false);
     setShowHint(false);
+    setQuestionAudioPending(false);
+    setQuestionAudioError(null);
   }, [id, mode]);
 
   useEffect(() => {
@@ -183,21 +187,64 @@ export function PracticePage() {
   // Pre-grade helpers (TTS + visual)
   const isPreGrade = lesson?.grade === 0;
 
-  const speakQuestion = useCallback(() => {
+  const speakQuestion = useCallback(async () => {
     if (!currentQuestion) return;
-    speakText(buildQuestionNarrationText(currentQuestion), questionLang, {
-      policy: isPreGrade ? 'pre-grade-auto' : 'practice-on-demand',
-      assetKey: buildQuestionAssetKey(currentQuestion.id),
-      currentGrade: lesson?.grade,
-    });
+    setQuestionAudioPending(true);
+    setQuestionAudioError(null);
+    try {
+      const result = await speakTextAsync(buildQuestionNarrationText(currentQuestion), questionLang, {
+        policy: isPreGrade ? 'pre-grade-auto' : 'practice-on-demand',
+        assetKey: buildQuestionAssetKey(currentQuestion.id),
+        currentGrade: lesson?.grade,
+        allowNativeFallback: false,
+        onStatusChange: (status) => {
+          if (status === 'ready' || status === 'playing' || status === 'ended' || status === 'error' || status === 'stopped') {
+            setQuestionAudioPending(false);
+          }
+          if (status === 'error') {
+            setQuestionAudioError('Chưa tải được audio luyện tập');
+          }
+        },
+      });
+      setQuestionAudioPending(false);
+      if (result.status === 'error') {
+        setQuestionAudioError('Chưa tải được audio luyện tập');
+        return;
+      }
+      setQuestionAudioError(null);
+    } catch {
+      setQuestionAudioPending(false);
+      setQuestionAudioError('Chưa tải được audio luyện tập');
+    }
   }, [currentQuestion, isPreGrade, lesson?.grade, questionLang]);
 
   // Auto-read question for pre-grade students
   useEffect(() => {
     if (!isPreGrade || !currentQuestion) return;
-    const timer = setTimeout(() => speakQuestion(), 350);
+    const timer = setTimeout(() => { void speakQuestion(); }, 350);
     return () => clearTimeout(timer);
   }, [currentIndex, isPreGrade, speakQuestion, currentQuestion]);
+
+  useEffect(() => {
+    const syncRuntimeState = (status: ReturnType<typeof getTtsRuntimeStatus>) => {
+      if (status.isLoading) {
+        setQuestionAudioPending(true);
+      }
+      if (status.isSpeaking) {
+        setQuestionAudioPending(false);
+        setQuestionAudioError(null);
+      }
+      if (status.error) {
+        setQuestionAudioPending(false);
+        setQuestionAudioError('Chưa tải được audio luyện tập');
+      }
+    };
+
+    syncRuntimeState(getTtsRuntimeStatus());
+    return subscribeTtsRuntime(() => {
+      syncRuntimeState(getTtsRuntimeStatus());
+    });
+  }, [currentQuestion?.id]);
 
   // Stop TTS on unmount
   useEffect(() => {
@@ -455,10 +502,11 @@ export function PracticePage() {
           <button
             className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg"
             style={{ background: 'color-mix(in srgb, var(--color-primary-light) 22%, white)', color: 'var(--color-primary-dark)' }}
-            onClick={speakQuestion}
+            onClick={() => void speakQuestion()}
+            disabled={questionAudioPending}
             title={isPreGrade ? 'Nghe lai cau hoi' : 'Nghe cau hoi'}
           >
-            <Volume2 size={13} /> {isPreGrade ? 'Nghe lai' : 'Nghe cau hoi'}
+            <Volume2 size={13} /> {questionAudioPending ? 'Dang tai audio...' : isPreGrade ? 'Nghe lai' : 'Nghe cau hoi'}
           </button>
           {answerState === 'unanswered' && currentQuestion.explanationSimple && (
             <button
@@ -475,6 +523,12 @@ export function PracticePage() {
         {showHint && answerState === 'unanswered' && currentQuestion.explanationSimple && (
           <div className="mb-3 p-2 rounded-lg text-sm" style={{ background: '#FEF3C7', color: '#92400E' }}>
             💡 {currentQuestion.explanationSimple}
+          </div>
+        )}
+
+        {questionAudioError && (
+          <div className="mb-3 p-2 rounded-lg text-sm" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
+            {questionAudioError}
           </div>
         )}
 

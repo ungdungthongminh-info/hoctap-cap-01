@@ -1,0 +1,50 @@
+{
+  "generatedAt": "2026-05-05T00:00:00.000Z",
+  "branch": "clean-main",
+  "summary": {
+    "offlinePackType": "lesson-card",
+    "drivePacksType": "lesson-card",
+    "questionEntriesAvailableInPublicManifest": 0,
+    "questionRuntimeDirectR2ResolverPresentBeforeFix": false,
+    "questionRuntimePlayableBeforeFix": false
+  },
+  "answers": {
+    "currentDownloadButtonLoads": "lesson audio offline pack by grade",
+    "drivePacksJsonDeclares": "lesson-card packs",
+    "staticAudioPackQuestionIndex": "generic asset store exists but no synced question pack/index is currently available",
+    "practicePageCurrentCall": {
+      "entrypoint": "PracticePage -> speakText -> speakTextAsync",
+      "callsStaticAudioAsset": true,
+      "callsBrowserSpeechSynthesis": false,
+      "callsGoogleDriveDirect": false,
+      "callsR2DirectMp3": false,
+      "effectiveBehavior": "runtime is invoked but no playable question audio is resolved"
+    },
+    "questionR2ObjectKeySource": "scripts/export-question-tts-catalog.mjs and scripts/upload-question-tts-to-r2.mjs",
+    "questionIdToR2ManifestAtRuntime": "not available in current public manifest for practice-on-demand",
+    "questionAudioCaches": {
+      "staticPackIndexedDb": "generic blob cache only, currently used by lesson pack flow",
+      "localAudioCache": "backend synth cache by text/voice descriptor, not questionId-based R2 cache"
+    }
+  },
+  "evidence": {
+    "appUpdateManifestUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-grade-1-2026-04-27-v1.zip",
+    "drivePacksContentType": "lesson-card",
+    "publicManifestSummary": {
+      "totalEntries": 24051,
+      "availableEntries": 4302,
+      "practiceOnDemand": {
+        "total": 19043,
+        "available": 0
+      }
+    },
+    "questionObjectKeyTemplate": "audio/tts/assets/<profileId>/question/<questionId>.mp3"
+  },
+  "mvpRecommendation": {
+    "keepLessonOfflinePack": true,
+    "playQuestionDirectFromR2": true,
+    "fallbackToDrive": false,
+    "fallbackToGoogleTtsGeneration": false,
+    "showExplicitErrorOnFailure": "Chưa tải được audio luyện tập"
+  }
+}

@@ -685,7 +685,7 @@ export function TtsSettingsPage() {
       <div className="card mb-4">
         <div className="flex items-center gap-2 mb-3">
           <Download size={18} style={{ color: 'var(--color-primary)' }} />
-          <h3 className="font-bold">Tải gói tiếng đọc cho lớp hiện tại</h3>
+          <h3 className="font-bold">Tải audio bài học cho lớp hiện tại</h3>
         </div>
 
         <div className="mb-3">
@@ -706,7 +706,10 @@ export function TtsSettingsPage() {
         <div className="mb-3 rounded-xl p-3" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
           <div className="text-sm font-bold">Gói đang tải: {selectedPackLabel}</div>
           <div className="text-xs" style={{ color: 'var(--color-text-light)' }}>
-            Gói này chỉ dùng cho lớp đang chọn trên thiết bị hiện tại.
+            Gói này dùng cho bài học của lớp đang chọn trên thiết bị hiện tại.
+          </div>
+          <div className="text-xs mt-1" style={{ color: 'var(--color-text-light)' }}>
+            Audio luyện tập sẽ phát trực tiếp từ máy chủ khi bấm Nghe câu hỏi.
           </div>
           <div className="text-xs mt-1" style={{ color: '#92400E' }}>
             Trình duyệt hiện chỉ lưu 1 lớp offline tại một thời điểm.
@@ -822,7 +825,7 @@ export function TtsSettingsPage() {
             disabled={packSyncing || !online || Boolean(packSyncBlockedReason)}
           >
             <Download size={16} />
-            {packSyncing ? `Đang tải audio cho ${selectedPackLabel}...` : `Tải audio cho ${selectedPackLabel}`}
+            {packSyncing ? `Đang tải audio bài học cho ${selectedPackLabel}...` : `Tải audio bài học cho ${selectedPackLabel}`}
           </button>
           <button
             type="button"
@@ -837,7 +840,7 @@ export function TtsSettingsPage() {
         </div>
 
         <p className="text-xs mt-3" style={{ color: 'var(--color-text-light)' }}>
-          Sau khi tải xong, người học có thể nghe offline cho lớp đang chọn từ dữ liệu đã lưu trên trình duyệt này.
+          Sau khi tải xong, người học có thể nghe offline phần bài học cho lớp đang chọn từ dữ liệu đã lưu trên trình duyệt này.
         </p>
       </div>
       )}

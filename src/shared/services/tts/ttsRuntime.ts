@@ -24,6 +24,7 @@ export type TtsPlaybackResolvedSource =
   | 'web-offline-manifest'
   | 'web-static-manifest'
   | 'web-public-static-manifest'
+  | 'web-public-question-r2'
   | 'online-audio'
   | 'device-voice'
   | 'fallback-device-voice';
@@ -92,6 +93,7 @@ const FEMALE_PREF = '__female__';
 const MALE_PREF = '__male__';
 const DEFAULT_MODE: TtsMode = 'static';
 const DEFAULT_CACHE_MODE: TtsCacheMode = 'balanced';
+const DEFAULT_R2_PUBLIC_BASE_URL = 'https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev';
 
 const GOOGLE_VI_VOICE_OPTIONS: TtsVoiceCatalogOption[] = [
   { id: 'vi-VN-Chirp3-HD-Despina', label: 'Chirp3 HD Despina (Female)' },
@@ -378,6 +380,26 @@ function defaultResolvedSource(provider: TtsPlaybackProvider): TtsPlaybackResolv
   return 'device-voice';
 }
 
+function buildDirectQuestionR2Url(assetKey: string, lang: TtsLang): string {
+  const match = String(assetKey || '').trim().match(/^question:(\d+)$/i);
+  if (!match) {
+    return '';
+  }
+
+  const questionId = Number(match[1]);
+  if (!Number.isFinite(questionId) || questionId <= 0) {
+    return '';
+  }
+
+  const profileId = lang === 'en' ? 'en-v1' : 'vi-v1';
+  const base = String(import.meta.env.VITE_R2_PUBLIC_BASE_URL || DEFAULT_R2_PUBLIC_BASE_URL).trim().replace(/\/+$/, '');
+  if (!base) {
+    return '';
+  }
+
+  return `${base}/audio/tts/assets/${profileId}/question/${questionId}.mp3`;
+}
+
 export function stopSpeaking(): void {
   playbackToken += 1;
 
@@ -594,13 +616,18 @@ function playAudioUrl(
   });
 }
 
-async function inspectPlayableAudioUrl(sourceUrl: string): Promise<{ ok: boolean; reason?: string }> {
+async function inspectPlayableAudioUrl(
+  sourceUrl: string,
+  options: { strict?: boolean } = {},
+): Promise<{ ok: boolean; reason?: string }> {
   const isWebProductionRuntime = (() => {
     if (typeof window === 'undefined') return false;
     const host = String(window.location.hostname || '').toLowerCase();
     if (!host || host === 'localhost' || host === '127.0.0.1' || host === '::1') return false;
     return !(window as any).electronAPI;
   })();
+
+  const strictMode = options.strict === true;
 
   if (typeof fetch !== 'function') {
     return { ok: true };
@@ -618,7 +645,7 @@ async function inspectPlayableAudioUrl(sourceUrl: string): Promise<{ ok: boolean
     const contentType = String(response.headers.get('content-type') || '').toLowerCase();
     const contentLength = Number(response.headers.get('content-length') || 0);
     if (!contentType) {
-      return isWebProductionRuntime
+      return (isWebProductionRuntime || strictMode)
         ? { ok: false, reason: 'r2-content-type-not-audio' }
         : { ok: true };
     }
@@ -655,7 +682,7 @@ async function inspectPlayableAudioUrl(sourceUrl: string): Promise<{ ok: boolean
 
     return { ok: true };
   } catch {
-    return isWebProductionRuntime
+    return (isWebProductionRuntime || strictMode)
       ? { ok: false, reason: 'r2-playback-failed' }
       : { ok: true };
   }
@@ -876,6 +903,78 @@ async function tryPlayFromStaticManifest(
   }
 }
 
+async function tryPlayDirectQuestionR2(
+  assetKey: string | undefined,
+  lang: TtsLang,
+  speed: number,
+  options: SpeakTextOptions,
+  token: number,
+): Promise<TtsPlaybackResult | null> {
+  const safeKey = String(assetKey || '').trim();
+  if (!safeKey.startsWith('question:')) {
+    return null;
+  }
+
+  const sourceUrl = buildDirectQuestionR2Url(safeKey, lang);
+  if (!sourceUrl) {
+    setRuntimeStatus({
+      isLoading: false,
+      isSpeaking: false,
+      error: 'r2-audio-not-found',
+      activeProvider: null,
+      lastCacheStatus: 'fallback',
+    });
+    options.onStatusChange?.('error');
+    return {
+      status: 'error',
+      provider: 'static-manifest',
+      resolvedSource: 'web-public-question-r2',
+      assetKey: safeKey,
+      cacheStatus: 'fallback',
+      fallbackNative: false,
+      error: 'r2-audio-not-found',
+    };
+  }
+
+  const inspect = await inspectPlayableAudioUrl(sourceUrl, { strict: true });
+  if (!inspect.ok) {
+    setRuntimeStatus({
+      isLoading: false,
+      isSpeaking: false,
+      error: inspect.reason || 'r2-playback-failed',
+      activeProvider: null,
+      lastCacheStatus: 'fallback',
+    });
+    options.onStatusChange?.('error');
+    return {
+      status: 'error',
+      provider: 'static-manifest',
+      resolvedSource: 'web-public-question-r2',
+      assetKey: safeKey,
+      assetUrl: sourceUrl,
+      cacheStatus: 'fallback',
+      fallbackNative: false,
+      error: inspect.reason || 'r2-playback-failed',
+    };
+  }
+
+  setRuntimeStatus({
+    lastCacheStatus: 'miss',
+    error: null,
+  });
+  options.onStatusChange?.('ready');
+  return playAudioUrl(
+    sourceUrl,
+    'static-manifest',
+    'miss',
+    speed,
+    options,
+    token,
+    'web-public-question-r2',
+    { assetKey: safeKey, assetUrl: sourceUrl },
+  );
+}
+
 async function cacheAndResolvePlayableUrl(
   descriptor: LocalTtsCacheDescriptor,
   response: TtsSynthesizeResponse,
@@ -917,7 +1016,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
   })();
   const assetKey = String(options.assetKey || '').trim();
   const isLessonCardR2Path = isWebProductionRuntime && lang === 'vi' && assetKey.startsWith('lesson-card:');
-  const isQuestionR2Path = isWebProductionRuntime && (lang === 'vi' || lang === 'en') && assetKey.startsWith('question:');
+  const isQuestionR2Path = (lang === 'vi' || lang === 'en') && assetKey.startsWith('question:');
   const isStrictR2StaticPath = isLessonCardR2Path || isQuestionR2Path;
   const desiredMode = isStrictR2StaticPath ? 'static' : requestedMode;
   const strictOffline = desiredMode === 'static' && Boolean(options.assetKey);
@@ -986,6 +1085,11 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
       error: reason,
     };
   };
+
+  const directQuestionPlayback = await tryPlayDirectQuestionR2(assetKey, lang, speed, options, token);
+  if (directQuestionPlayback) {
+    return directQuestionPlayback;
+  }
 
   const staticPlayback = await tryPlayFromStaticManifest(options.assetKey, speed, options, token);
   if (staticPlayback?.status === 'completed' || staticPlayback?.status === 'stopped') {
