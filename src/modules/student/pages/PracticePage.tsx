@@ -99,6 +99,16 @@ export function PracticePage() {
   const [answeredStates, setAnsweredStates] = useState<AnswerState[]>([]);
   const [isInitializing, setIsInitializing] = useState(true);
   const initKeyRef = useRef<string | null>(null);
+  const autoReadCancelRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Auto-read setting: default OFF; stored in localStorage
+  const [autoReadEnabled, setAutoReadEnabled] = useState<boolean>(
+    () => localStorage.getItem('hhk_practice_auto_read_question') === '1',
+  );
+  const toggleAutoRead = useCallback((val: boolean) => {
+    localStorage.setItem('hhk_practice_auto_read_question', val ? '1' : '0');
+    setAutoReadEnabled(val);
+  }, []);
 
   // Reset local practice state when URL changes to avoid showing stale questions from previous lesson.
   useEffect(() => {
@@ -256,15 +266,25 @@ export function PracticePage() {
     }
   }, [currentQuestion, questionLang]);
 
-  // Auto-read question for pre-grade students
+  // Auto-read: pre-grade always; grades 1-5 only when setting is ON
   useEffect(() => {
-    if (!isPreGrade || !currentQuestion) return;
-    const timer = setTimeout(() => { void speakQuestion(); }, 350);
-    return () => clearTimeout(timer);
-  }, [currentIndex, isPreGrade, speakQuestion, currentQuestion]);
+    if (!currentQuestion) return;
+    const shouldAutoRead = isPreGrade || autoReadEnabled;
+    if (!shouldAutoRead) return;
+    if (autoReadCancelRef.current) clearTimeout(autoReadCancelRef.current);
+    stopDirectQuestionAudio();
+    autoReadCancelRef.current = setTimeout(() => { void speakQuestion(); }, 400);
+    return () => {
+      if (autoReadCancelRef.current) clearTimeout(autoReadCancelRef.current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentQuestion?.id]);
 
   useEffect(() => {
-    return () => { stopDirectQuestionAudio(); };
+    return () => {
+      stopDirectQuestionAudio();
+      if (autoReadCancelRef.current) clearTimeout(autoReadCancelRef.current);
+    };
   }, []);
 
   const subjectEmoji = (code: string): string => {
@@ -505,6 +525,7 @@ export function PracticePage() {
 
       {/* Question card */}
       <div className={`card mb-6 slide-in ${answerAnim === 'shake' ? 'animate-shake' : answerAnim === 'bounce' ? 'animate-bounce-once' : ''}`}>
+        {/* Card header row */}
         <div className="flex items-center gap-2 mb-3">
           <MascotCharacter size="xs" />
           <span className="text-xs font-bold uppercase tracking-wide"
@@ -515,15 +536,6 @@ export function PracticePage() {
             • {({'single_choice':'Chọn 1 đáp án','true_false':'Đúng/Sai','fill_number':'Điền số','fill_text':'Điền chữ','ordering':'Sắp xếp','matching':'Nối cặp','multi_choice':'Chọn nhiều'} as Record<string,string>)[currentQuestion.questionType] || 'Trắc nghiệm'}
           </span>
           <span className="flex-1" />
-          <button
-            className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg"
-            style={{ background: 'color-mix(in srgb, var(--color-primary-light) 22%, white)', color: 'var(--color-primary-dark)' }}
-            onClick={() => void speakQuestion()}
-            disabled={questionAudioPending}
-            title={isPreGrade ? 'Nghe lai cau hoi' : 'Nghe cau hoi'}
-          >
-            <Volume2 size={13} /> {questionAudioPending ? 'Dang tai audio...' : isPreGrade ? 'Nghe lai' : 'Nghe cau hoi'}
-          </button>
           {answerState === 'unanswered' && currentQuestion.explanationSimple && (
             <button
               className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg hover:opacity-80"
@@ -542,12 +554,7 @@ export function PracticePage() {
           </div>
         )}
 
-        {questionAudioError && (
-          <div className="mb-3 p-2 rounded-lg text-sm" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
-            {questionAudioError}
-          </div>
-        )}
-
+        {/* Question text */}
         <div className="mb-4">
           <p
             className="text-lg font-semibold leading-relaxed"
@@ -556,6 +563,65 @@ export function PracticePage() {
             {questionPrompt || 'Câu hỏi đang được cập nhật...'}
           </p>
         </div>
+
+        {/* Speak button — large pill, below question text */}
+        <div className="flex items-center gap-3 mb-4">
+          <button
+            onClick={() => void speakQuestion()}
+            disabled={questionAudioPending}
+            title="Nghe câu hỏi"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              height: '46px',
+              padding: '0 20px',
+              borderRadius: '999px',
+              fontWeight: 600,
+              fontSize: '15px',
+              border: 'none',
+              cursor: questionAudioPending ? 'default' : 'pointer',
+              background: questionAudioPending
+                ? 'color-mix(in srgb, var(--color-primary-light) 30%, white)'
+                : 'var(--color-primary)',
+              color: questionAudioPending ? 'var(--color-primary-dark)' : 'white',
+              opacity: questionAudioPending ? 0.7 : 1,
+              boxShadow: questionAudioPending ? 'none' : '0 2px 8px rgba(0,0,0,0.15)',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <Volume2 size={18} />
+            {questionAudioPending ? 'Đang đọc...' : 'Nghe câu hỏi'}
+          </button>
+          {/* Auto-read toggle — only for grades 1-5 */}
+          {!isPreGrade && (
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '13px',
+                color: 'var(--color-text-light)',
+                cursor: 'pointer',
+                userSelect: 'none',
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={autoReadEnabled}
+                onChange={(e) => toggleAutoRead(e.target.checked)}
+                style={{ accentColor: 'var(--color-primary)', width: '16px', height: '16px' }}
+              />
+              Tự đọc khi sang câu mới
+            </label>
+          )}
+        </div>
+
+        {questionAudioError && (
+          <div className="mb-3 p-2 rounded-lg text-sm" style={{ background: '#FEF2F2', color: '#B91C1C' }}>
+            {questionAudioError}
+          </div>
+        )}
 
         {/* Grade-0: emoji visual */}
         {isPreGrade && (
