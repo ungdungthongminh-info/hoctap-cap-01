@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2026-05-05T05:56:29.788Z",
+  "language": "en-v1",
+  "dryRun": false,
+  "concurrency": 2,
+  "skipExisting": true,
+  "checkpoint": "F:\\1_A_Disk_D\\Tool\\Hoc_Tap\\CAp_01\\question-tts-generate-checkpoint.json",
+  "provider": "google-rest-api-key",
+  "status": "completed",
+  "totalItems": 2725,
+  "generated": 2720,
+  "skipped": 5,
+  "skippedBreakdown": {
+    "checkpoint": 5,
+    "local": 0,
+    "r2": 0
+  },
+  "failed": 0,
+  "failures": []
+}

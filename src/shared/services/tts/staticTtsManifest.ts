@@ -59,14 +59,27 @@ export function invalidateStaticTtsManifestCache(): void {
 
 function withResolvedAudioUrl(entry: Omit<StaticTtsManifestEntry, 'audioUrl'> & { audioUrl?: string }): StaticTtsManifestEntry {
   const assetPath = String(entry.assetPath || '').replace(/^\/+/, '');
+  const key = String(entry.key || '').trim();
+  const profileId = String(entry.profileId || '').trim();
   const host = typeof window !== 'undefined' ? String(window.location.hostname || '').toLowerCase() : '';
   const isWebProduction = Boolean(host && host !== 'localhost' && host !== '127.0.0.1' && host !== '::1' && !(window as any).electronAPI);
   const isLessonCardViV1 = assetPath.startsWith('audio/tts/assets/vi-v1/lesson-card-');
-  const audioUrl = (isWebProduction && R2_PUBLIC_BASE_URL && isLessonCardViV1)
-    ? `${R2_PUBLIC_BASE_URL}/${assetPath}`
-    : (entry.audioUrl || `${import.meta.env.BASE_URL || '/'}${assetPath}`.replace(/([^:]\/)\/+/g, '$1'));
+  const questionMatch = key.match(/^question:(\d+)$/i);
+  const questionId = questionMatch ? Number(questionMatch[1]) : NaN;
+  const isQuestionR2Eligible = Number.isFinite(questionId)
+    && questionId > 0
+    && (profileId === 'vi-v1' || profileId === 'en-v1');
+
+  const resolvedPath = isQuestionR2Eligible
+    ? `audio/tts/assets/${profileId}/question/${questionId}.mp3`
+    : assetPath;
+
+  const audioUrl = (isWebProduction && R2_PUBLIC_BASE_URL && (isLessonCardViV1 || isQuestionR2Eligible))
+    ? `${R2_PUBLIC_BASE_URL}/${resolvedPath}`
+    : (entry.audioUrl || `${import.meta.env.BASE_URL || '/'}${resolvedPath}`.replace(/([^:]\/)\/+/g, '$1'));
   return {
     ...entry,
+    assetPath: resolvedPath,
     audioUrl,
   };
 }

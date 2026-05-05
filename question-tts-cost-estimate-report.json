@@ -1,0 +1,48 @@
+{
+  "generatedAt": "2026-05-05T00:59:49.513Z",
+  "assumptions": {
+    "costPer1mCharsUsd": {
+      "vi-v1": 16,
+      "en-v1": 16
+    },
+    "charsPerSecondByLanguage": {
+      "vi-v1": 11,
+      "en-v1": 13
+    },
+    "mp3BytesPerSecond": 6000,
+    "note": "Estimate only. Real billing depends on Google Cloud SKU, voice tier, and region."
+  },
+  "totalFiles": 19043,
+  "totalCharacters": 1619763,
+  "totalEstimatedBytes": 918966000,
+  "localExisting": 0,
+  "r2Existing": 0,
+  "skippable": 0,
+  "byLanguage": {
+    "vi-v1": {
+      "totalFiles": 16318,
+      "totalCharacters": 1391526,
+      "estimatedBytes": 805608000,
+      "localExisting": 0,
+      "r2Existing": 0,
+      "skippable": 0,
+      "toGenerate": 16318,
+      "estimatedCostUsdAll": 22.2644,
+      "estimatedCostUsdToGenerate": 22.2644
+    },
+    "en-v1": {
+      "totalFiles": 2725,
+      "totalCharacters": 228237,
+      "estimatedBytes": 113358000,
+      "localExisting": 0,
+      "r2Existing": 0,
+      "skippable": 0,
+      "toGenerate": 2725,
+      "estimatedCostUsdAll": 3.6518,
+      "estimatedCostUsdToGenerate": 3.6518
+    }
+  },
+  "estimatedCostUsdAll": 25.9162,
+  "estimatedCostUsdToGenerate": 25.9162,
+  "checkR2Enabled": false
+}

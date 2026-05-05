@@ -829,7 +829,15 @@ async function tryPlayFromStaticManifest(
   }
 
   const entry = await getStaticTtsManifestEntry(assetKey);
-  if (!entry?.available) {
+  if (!entry) {
+    return null;
+  }
+
+  const host = typeof window !== 'undefined' ? String(window.location.hostname || '').toLowerCase() : '';
+  const isWebProductionRuntime = Boolean(host && host !== 'localhost' && host !== '127.0.0.1' && host !== '::1' && !(window as any).electronAPI);
+  const isR2MappedQuestion = isWebProductionRuntime && String(assetKey || '').startsWith('question:');
+  const isR2MappedLessonCard = isWebProductionRuntime && String(assetKey || '').startsWith('lesson-card:');
+  if (!entry.available && !isR2MappedQuestion && !isR2MappedLessonCard) {
     return null;
   }
 
@@ -907,11 +915,14 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
     if (!host || host === 'localhost' || host === '127.0.0.1' || host === '::1') return false;
     return !(window as any).electronAPI;
   })();
-  const isLessonCardR2Path = isWebProductionRuntime && lang === 'vi' && String(options.assetKey || '').startsWith('lesson-card:');
-  const desiredMode = isLessonCardR2Path ? 'static' : requestedMode;
+  const assetKey = String(options.assetKey || '').trim();
+  const isLessonCardR2Path = isWebProductionRuntime && lang === 'vi' && assetKey.startsWith('lesson-card:');
+  const isQuestionR2Path = isWebProductionRuntime && (lang === 'vi' || lang === 'en') && assetKey.startsWith('question:');
+  const isStrictR2StaticPath = isLessonCardR2Path || isQuestionR2Path;
+  const desiredMode = isStrictR2StaticPath ? 'static' : requestedMode;
   const strictOffline = desiredMode === 'static' && Boolean(options.assetKey);
-  const allowManagedFallback = !isLessonCardR2Path && desiredMode !== 'native' && policy.preferBackend;
-  const allowNativeFallback = !isLessonCardR2Path && options.allowNativeFallback !== false;
+  const allowManagedFallback = !isStrictR2StaticPath && desiredMode !== 'native' && policy.preferBackend;
+  const allowNativeFallback = !isStrictR2StaticPath && options.allowNativeFallback !== false;
   const speed = clampTtsSpeed(options.speed ?? getTtsSpeed());
   const backendVoiceId = resolveBackendVoiceId(lang, options.voiceId);
   const ssml = buildAdvancedSsml(cleanedText, lang, policy.id);

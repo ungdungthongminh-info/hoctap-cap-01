@@ -1,96 +1,172 @@
 import path from 'node:path';
-import { REPO_ROOT, nowIso, readJson, writeJson } from './r2-common.mjs';
+import fs from 'node:fs/promises';
+import { HeadObjectCommand } from '@aws-sdk/client-s3';
+import {
+  REPO_ROOT,
+  createR2Client,
+  loadR2Env,
+  nowIso,
+  readJson,
+  resolveScratchPath,
+  writeJson,
+} from './r2-common.mjs';
 
-const CATALOG = path.join(REPO_ROOT, 'tts-question-generation-catalog.json');
-const OUTPUT = path.join(REPO_ROOT, 'tts-question-generation-cost-estimate.json');
+const CATALOG = path.join(REPO_ROOT, 'question-tts-catalog-report.json');
+const OUTPUT = path.join(REPO_ROOT, 'question-tts-cost-estimate-report.json');
 
 const COST_PER_1M_CHARS = {
   'vi-v1': 16,
   'en-v1': 16,
 };
 
-async function main() {
-  const catalog = await readJson(CATALOG);
-  const items = catalog.items || [];
-  const missingBreakdownPath = path.join(REPO_ROOT, 'tts-missing-audio-by-content-type.json');
-  const missingBreakdown = await readJson(missingBreakdownPath).catch(() => null);
+const CHARS_PER_SECOND = {
+  'vi-v1': 11,
+  'en-v1': 13,
+};
 
-  const byProfile = {};
-  const byGrade = {};
-  const bySubject = {};
+const BYTES_PER_SECOND_MP3 = 6000;
+
+function getArg(name, fallback = '') {
+  const raw = process.argv.find((x) => x.startsWith(`--${name}=`));
+  return raw ? raw.slice(name.length + 3) : fallback;
+}
+
+function hasFlag(name) {
+  return process.argv.includes(`--${name}`);
+}
+
+function buildLocalPath(item) {
+  return resolveScratchPath('audio', 'question', String(item.localRelativePath || `${item.profileId}/question/${item.questionId}.mp3`));
+}
+
+async function checkR2Object(client, bucket, key) {
+  try {
+    const head = await client.send(new HeadObjectCommand({ Bucket: bucket, Key: key }));
+    return Number(head?.ContentLength || 0) > 0;
+  } catch {
+    return false;
+  }
+}
+
+async function main() {
+  const checkR2 = hasFlag('check-r2');
+  const sampleLimit = Number(getArg('sample-size', '0')) || 0;
+  const catalog = await readJson(CATALOG);
+  const allItems = Array.isArray(catalog.items) ? catalog.items : [];
+  const items = sampleLimit > 0 ? allItems.slice(0, sampleLimit) : allItems;
+
+  let r2Client = null;
+  let r2Env = null;
+  if (checkR2) {
+    const loaded = await loadR2Env();
+    if (loaded.missing.length === 0) {
+      r2Client = createR2Client(loaded.env);
+      r2Env = loaded.env;
+    }
+  }
+
+  const byLanguage = {};
+  let totalCharacters = 0;
+  let totalEstimatedBytes = 0;
+  let localExisting = 0;
+  let r2Existing = 0;
+  let skippable = 0;
 
   for (const item of items) {
+    const language = String(item.language || item.profileId || 'vi-v1');
     const chars = Number(item.estimatedCharacters || 0);
-    const profile = String(item.profileId || 'unknown');
-    const grade = String(item.grade ?? 'unknown');
-    const subject = String(item.subjectCode || 'unknown');
+    const cps = CHARS_PER_SECOND[language] || 11;
+    const seconds = Math.max(1, Math.ceil(chars / cps));
+    const estimatedBytes = seconds * BYTES_PER_SECOND_MP3;
 
-    byProfile[profile] = byProfile[profile] || { totalItems: 0, totalCharacters: 0, estimatedCostUsd: 0 };
-    byProfile[profile].totalItems += 1;
-    byProfile[profile].totalCharacters += chars;
+    totalCharacters += chars;
+    totalEstimatedBytes += estimatedBytes;
 
-    if (subject !== 'unknown') {
-      bySubject[subject] = bySubject[subject] || { totalItems: 0, totalCharacters: 0 };
-      bySubject[subject].totalItems += 1;
-      bySubject[subject].totalCharacters += chars;
+    byLanguage[language] = byLanguage[language] || {
+      totalFiles: 0,
+      totalCharacters: 0,
+      estimatedBytes: 0,
+      localExisting: 0,
+      r2Existing: 0,
+      skippable: 0,
+      toGenerate: 0,
+      estimatedCostUsdAll: 0,
+      estimatedCostUsdToGenerate: 0,
+    };
+
+    const stat = byLanguage[language];
+    stat.totalFiles += 1;
+    stat.totalCharacters += chars;
+    stat.estimatedBytes += estimatedBytes;
+
+    const localPath = buildLocalPath(item);
+    const hasLocal = await fs.stat(localPath).then(() => true).catch(() => false);
+    if (hasLocal) {
+      localExisting += 1;
+      stat.localExisting += 1;
     }
 
-    if (grade !== 'unknown') {
-      byGrade[grade] = byGrade[grade] || { totalItems: 0, totalCharacters: 0 };
-      byGrade[grade].totalItems += 1;
-      byGrade[grade].totalCharacters += chars;
+    let hasR2 = false;
+    if (r2Client && r2Env?.R2_BUCKET && item.r2Key) {
+      hasR2 = await checkR2Object(r2Client, r2Env.R2_BUCKET, String(item.r2Key));
+      if (hasR2) {
+        r2Existing += 1;
+        stat.r2Existing += 1;
+      }
     }
-  }
 
-  if (Object.keys(byGrade).length <= 3 && missingBreakdown?.byGrade) {
-    Object.keys(byGrade).forEach((k) => delete byGrade[k]);
-    const avgChars = Math.round((items.reduce((sum, x) => sum + Number(x.estimatedCharacters || 0), 0) || 0) / Math.max(items.length, 1));
-    for (const [grade, stat] of Object.entries(missingBreakdown.byGrade)) {
-      const count = Number((stat || {}).question || 0);
-      if (!count) continue;
-      byGrade[grade] = {
-        totalItems: count,
-        totalCharacters: count * avgChars,
-      };
+    const itemSkippable = hasLocal || hasR2;
+    if (itemSkippable) {
+      skippable += 1;
+      stat.skippable += 1;
+    } else {
+      stat.toGenerate += 1;
+      stat.estimatedCostUsdToGenerate += (chars / 1000000) * (COST_PER_1M_CHARS[language] || 16);
     }
+
+    stat.estimatedCostUsdAll += (chars / 1000000) * (COST_PER_1M_CHARS[language] || 16);
   }
 
-  if (Object.keys(bySubject).length === 0 && missingBreakdown?.bySubject) {
-    const avgChars = Math.round((items.reduce((sum, x) => sum + Number(x.estimatedCharacters || 0), 0) || 0) / Math.max(items.length, 1));
-    for (const [subject, stat] of Object.entries(missingBreakdown.bySubject)) {
-      const count = Number((stat?.byVoice?.['vi-v1'] || 0) + (stat?.byVoice?.['en-v1'] || 0));
-      if (!count) continue;
-      bySubject[subject] = {
-        totalItems: count,
-        totalCharacters: count * avgChars,
-      };
-    }
+  for (const value of Object.values(byLanguage)) {
+    value.estimatedCostUsdAll = Number(value.estimatedCostUsdAll.toFixed(4));
+    value.estimatedCostUsdToGenerate = Number(value.estimatedCostUsdToGenerate.toFixed(4));
   }
 
-  for (const [profile, stat] of Object.entries(byProfile)) {
-    const unit = COST_PER_1M_CHARS[profile] ?? 16;
-    stat.estimatedCostUsd = Number(((stat.totalCharacters / 1000000) * unit).toFixed(4));
-  }
-
-  const totalCharacters = items.reduce((sum, x) => sum + Number(x.estimatedCharacters || 0), 0);
-  const estimatedCostUsd = Number(Object.values(byProfile).reduce((sum, x) => sum + Number(x.estimatedCostUsd || 0), 0).toFixed(4));
+  const estimatedCostUsdAll = Number(
+    Object.values(byLanguage).reduce((sum, x) => sum + Number(x.estimatedCostUsdAll || 0), 0).toFixed(4),
+  );
+  const estimatedCostUsdToGenerate = Number(
+    Object.values(byLanguage).reduce((sum, x) => sum + Number(x.estimatedCostUsdToGenerate || 0), 0).toFixed(4),
+  );
 
   const out = {
     generatedAt: nowIso(),
     assumptions: {
       costPer1mCharsUsd: COST_PER_1M_CHARS,
-      note: 'Estimate only. Real billing depends on Google Cloud SKU, voice type, and region.',
+      charsPerSecondByLanguage: CHARS_PER_SECOND,
+      mp3BytesPerSecond: BYTES_PER_SECOND_MP3,
+      note: 'Estimate only. Real billing depends on Google Cloud SKU, voice tier, and region.',
     },
-    totalItems: items.length,
+    totalFiles: items.length,
     totalCharacters,
-    estimatedCostUsd,
-    byProfile,
-    byGrade,
-    bySubject,
+    totalEstimatedBytes,
+    localExisting,
+    r2Existing,
+    skippable,
+    byLanguage,
+    estimatedCostUsdAll,
+    estimatedCostUsdToGenerate,
+    checkR2Enabled: Boolean(checkR2 && r2Client),
   };
 
   await writeJson(OUTPUT, out);
-  console.log(JSON.stringify({ totalItems: out.totalItems, totalCharacters, estimatedCostUsd }, null, 2));
+  console.log(JSON.stringify({
+    totalFiles: out.totalFiles,
+    totalCharacters: out.totalCharacters,
+    localExisting: out.localExisting,
+    r2Existing: out.r2Existing,
+    estimatedCostUsdToGenerate: out.estimatedCostUsdToGenerate,
+  }, null, 2));
 }
 
 main().catch((error) => {

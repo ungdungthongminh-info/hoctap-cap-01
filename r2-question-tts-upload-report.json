@@ -1,0 +1,166 @@
+{
+  "generatedAt": "2026-05-05T01:06:21.962Z",
+  "language": "all",
+  "sample": true,
+  "totalItems": 25,
+  "uploaded": 5,
+  "skipped": 20,
+  "skippedBreakdown": {
+    "matchedBySizeHash": 20,
+    "existingRemote": 0
+  },
+  "missingLocal": 0,
+  "pass": true,
+  "details": [
+    {
+      "key": "question:1",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\1.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/1.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:2",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\2.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/2.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:3",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\3.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/3.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:4",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\4.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/4.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:5",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\5.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/5.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:6",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\6.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/6.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:7",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\7.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/7.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:8",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\8.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/8.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:9",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\9.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/9.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:10",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\10.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/10.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:11",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\11.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/11.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:12",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\12.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/12.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:13",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\13.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/13.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:14",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\14.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/14.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:15",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\15.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/15.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:16",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\16.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/16.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:17",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\17.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/17.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:18",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\18.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/18.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:19",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\19.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/19.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:20",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\vi-v1\\question\\20.mp3",
+      "r2Key": "audio/tts/assets/vi-v1/question/20.mp3",
+      "status": "skipped-matched"
+    },
+    {
+      "key": "question:1901",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\en-v1\\question\\1901.mp3",
+      "r2Key": "audio/tts/assets/en-v1/question/1901.mp3",
+      "status": "uploaded"
+    },
+    {
+      "key": "question:1902",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\en-v1\\question\\1902.mp3",
+      "r2Key": "audio/tts/assets/en-v1/question/1902.mp3",
+      "status": "uploaded"
+    },
+    {
+      "key": "question:1903",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\en-v1\\question\\1903.mp3",
+      "r2Key": "audio/tts/assets/en-v1/question/1903.mp3",
+      "status": "uploaded"
+    },
+    {
+      "key": "question:1904",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\en-v1\\question\\1904.mp3",
+      "r2Key": "audio/tts/assets/en-v1/question/1904.mp3",
+      "status": "uploaded"
+    },
+    {
+      "key": "question:1905",
+      "localPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\audio\\question\\en-v1\\question\\1905.mp3",
+      "r2Key": "audio/tts/assets/en-v1/question/1905.mp3",
+      "status": "uploaded"
+    }
+  ]
+}
