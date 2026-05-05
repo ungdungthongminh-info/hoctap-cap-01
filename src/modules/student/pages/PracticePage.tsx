@@ -100,7 +100,6 @@ export function PracticePage() {
   const [isInitializing, setIsInitializing] = useState(true);
   const initKeyRef = useRef<string | null>(null);
   const autoReadCancelRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const autoReadInitDoneRef = useRef(false);
 
   // Auto-read setting: stored in localStorage
   // Default: ON for grade-0 (pre-grade), OFF for grades 1-5
@@ -268,17 +267,16 @@ export function PracticePage() {
     }
   }, [currentQuestion, questionLang]);
 
-  // Set default ON for pre-grade the first time lesson data resolves
+  // Set default based on grade when lesson loads OR when navigating to a new lesson
+  // (hash-routing keeps component mounted, so we must react to lesson?.id changes)
   useEffect(() => {
-    if (autoReadInitDoneRef.current) return;
-    if (lesson === null || lesson === undefined) return;
-    autoReadInitDoneRef.current = true;
+    if (!lesson) return;
     if (localStorage.getItem('hhk_practice_auto_read_question') === null) {
-      // No explicit stored preference yet — default ON for grade 0
-      const defaultOn = lesson.grade === 0;
-      setAutoReadEnabled(defaultOn);
+      // No explicit user preference — default ON for grade 0 only
+      setAutoReadEnabled(lesson.grade === 0);
     }
-  }, [lesson]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lesson?.id]);
 
   // Auto-read: fire when setting is ON and question changes
   useEffect(() => {
