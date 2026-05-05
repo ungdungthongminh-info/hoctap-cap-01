@@ -557,6 +557,58 @@ export function PracticePage() {
               <Lightbulb size={14} /> Gợi ý
             </button>
           )}
+          {/* Speak button + auto-read toggle — top-right of card header */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '4px' }}>
+            <button
+              onClick={() => void speakQuestion()}
+              disabled={questionAudioPending}
+              title="Nghe câu hỏi"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                height: '32px',
+                padding: '0 12px',
+                borderRadius: '999px',
+                fontWeight: 600,
+                fontSize: '13px',
+                border: 'none',
+                cursor: questionAudioPending ? 'default' : 'pointer',
+                background: questionAudioPending
+                  ? 'color-mix(in srgb, var(--color-primary-light) 30%, white)'
+                  : 'var(--color-primary)',
+                color: questionAudioPending ? 'var(--color-primary-dark)' : 'white',
+                opacity: questionAudioPending ? 0.7 : 1,
+                boxShadow: questionAudioPending ? 'none' : '0 1px 4px rgba(0,0,0,0.15)',
+                transition: 'all 0.15s ease',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <Volume2 size={14} />
+              {questionAudioPending ? 'Đang đọc...' : 'Nghe câu hỏi'}
+            </button>
+            <label
+              title="Tự đọc khi sang câu mới"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontSize: '12px',
+                color: 'var(--color-text-light)',
+                cursor: 'pointer',
+                userSelect: 'none',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={autoReadEnabled}
+                onChange={(e) => toggleAutoRead(e.target.checked)}
+                style={{ accentColor: 'var(--color-primary)', width: '14px', height: '14px' }}
+              />
+              Tự đọc
+            </label>
+          </div>
         </div>
 
         {showHint && answerState === 'unanswered' && currentQuestion.explanationSimple && (
@@ -573,57 +625,6 @@ export function PracticePage() {
           >
             {questionPrompt || 'Câu hỏi đang được cập nhật...'}
           </p>
-        </div>
-
-        {/* Speak button — large pill, below question text */}
-        <div className="flex items-center gap-3 mb-4">
-          <button
-            onClick={() => void speakQuestion()}
-            disabled={questionAudioPending}
-            title="Nghe câu hỏi"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              height: '46px',
-              padding: '0 20px',
-              borderRadius: '999px',
-              fontWeight: 600,
-              fontSize: '15px',
-              border: 'none',
-              cursor: questionAudioPending ? 'default' : 'pointer',
-              background: questionAudioPending
-                ? 'color-mix(in srgb, var(--color-primary-light) 30%, white)'
-                : 'var(--color-primary)',
-              color: questionAudioPending ? 'var(--color-primary-dark)' : 'white',
-              opacity: questionAudioPending ? 0.7 : 1,
-              boxShadow: questionAudioPending ? 'none' : '0 2px 8px rgba(0,0,0,0.15)',
-              transition: 'all 0.15s ease',
-            }}
-          >
-            <Volume2 size={18} />
-            {questionAudioPending ? 'Đang đọc...' : 'Nghe câu hỏi'}
-          </button>
-          {/* Auto-read toggle — shown for all grades */}
-          <label
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              fontSize: '13px',
-              color: 'var(--color-text-light)',
-              cursor: 'pointer',
-              userSelect: 'none',
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={autoReadEnabled}
-              onChange={(e) => toggleAutoRead(e.target.checked)}
-              style={{ accentColor: 'var(--color-primary)', width: '16px', height: '16px' }}
-            />
-            Tự đọc khi sang câu mới
-          </label>
         </div>
 
         {questionAudioError && (
