@@ -100,8 +100,10 @@ export function PracticePage() {
   const [isInitializing, setIsInitializing] = useState(true);
   const initKeyRef = useRef<string | null>(null);
   const autoReadCancelRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoReadInitDoneRef = useRef(false);
 
-  // Auto-read setting: default OFF; stored in localStorage
+  // Auto-read setting: stored in localStorage
+  // Default: ON for grade-0 (pre-grade), OFF for grades 1-5
   const [autoReadEnabled, setAutoReadEnabled] = useState<boolean>(
     () => localStorage.getItem('hhk_practice_auto_read_question') === '1',
   );
@@ -266,11 +268,22 @@ export function PracticePage() {
     }
   }, [currentQuestion, questionLang]);
 
-  // Auto-read: pre-grade always; grades 1-5 only when setting is ON
+  // Set default ON for pre-grade the first time lesson data resolves
+  useEffect(() => {
+    if (autoReadInitDoneRef.current) return;
+    if (lesson === null || lesson === undefined) return;
+    autoReadInitDoneRef.current = true;
+    if (localStorage.getItem('hhk_practice_auto_read_question') === null) {
+      // No explicit stored preference yet — default ON for grade 0
+      const defaultOn = lesson.grade === 0;
+      setAutoReadEnabled(defaultOn);
+    }
+  }, [lesson]);
+
+  // Auto-read: fire when setting is ON and question changes
   useEffect(() => {
     if (!currentQuestion) return;
-    const shouldAutoRead = isPreGrade || autoReadEnabled;
-    if (!shouldAutoRead) return;
+    if (!autoReadEnabled) return;
     if (autoReadCancelRef.current) clearTimeout(autoReadCancelRef.current);
     stopDirectQuestionAudio();
     autoReadCancelRef.current = setTimeout(() => { void speakQuestion(); }, 400);
@@ -593,28 +606,26 @@ export function PracticePage() {
             <Volume2 size={18} />
             {questionAudioPending ? 'Đang đọc...' : 'Nghe câu hỏi'}
           </button>
-          {/* Auto-read toggle — only for grades 1-5 */}
-          {!isPreGrade && (
-            <label
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                fontSize: '13px',
-                color: 'var(--color-text-light)',
-                cursor: 'pointer',
-                userSelect: 'none',
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={autoReadEnabled}
-                onChange={(e) => toggleAutoRead(e.target.checked)}
-                style={{ accentColor: 'var(--color-primary)', width: '16px', height: '16px' }}
-              />
-              Tự đọc khi sang câu mới
-            </label>
-          )}
+          {/* Auto-read toggle — shown for all grades */}
+          <label
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '13px',
+              color: 'var(--color-text-light)',
+              cursor: 'pointer',
+              userSelect: 'none',
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={autoReadEnabled}
+              onChange={(e) => toggleAutoRead(e.target.checked)}
+              style={{ accentColor: 'var(--color-primary)', width: '16px', height: '16px' }}
+            />
+            Tự đọc khi sang câu mới
+          </label>
         </div>
 
         {questionAudioError && (
