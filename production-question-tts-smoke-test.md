@@ -2,55 +2,52 @@
 
 - Date: 2026-05-05
 - URL: https://hoctap-cap-01.vercel.app
-- Scope: question/practice playback via R2 objectKey pattern `audio/tts/assets/<lang>/question/<questionId>.mp3`
+- Runtime account context: da mo du grade 0-5 trong session nay
 
-## Result
+## Overall Verdict
 
-- Status: PARTIAL PASS
-- Data pipeline (generate/validate/upload/R2 public) is PASS for both `vi-v1` and `en-v1` question assets.
-- Production UI click test on `Nghe cau hoi` did not emit observable question-audio network requests in this run, so browser runtime path is not yet fully verified by click-trace.
+- Status: FAIL (strict criteria)
+- Da vao duoc practice cho grade 0-5 va click nut nghe thanh cong.
+- Tuy nhien trong automation session nay khong thu duoc bang chung audio runtime hop le (khong co request mp3/zip, khong co event HTMLMediaElement.play, khong co signal speechSynthesis), nen chua du dieu kien PASS.
+- Human audible check chua the ket luan bang automation-only.
 
-## Verification Signals
+## Required Smoke Table
 
-- Catalog exported with expected totals: 19043 (vi-v1: 16318, en-v1: 2725).
-- Full generation completed:
-   - vi-v1 generated locally and validated: 16318/16318 pass
-   - en-v1 generated locally and validated: 2725/2725 pass
-- Full upload completed:
-   - vi-v1 upload report: totalItems=16318, uploaded=16298, skipped=20, missingLocal=0, pass=true
-   - en-v1 upload report: totalItems=2725, uploaded=2664, skipped=61, missingLocal=0, pass=true
-- Public R2 checks passed:
-   - vi-v1 sample-size=50: pass=true
-   - en-v1 sample-size=50: pass=true
-- Runtime mapping code is active for question keys via R2 object path pattern.
-- Production practice click test (lesson 1, mode practice_5):
-   - Action: click `Nghe cau hoi`
-   - Observed: no captured request to `audio/tts/assets/*/question/*.mp3` in network instrumentation in this session.
+| language | grade | lesson/question screen | questionId | expected key | actual network URL | status | content-type | audible |
+|---|---:|---|---:|---|---|---:|---|---|
+| vi-v1 | 0 | #/lessons/9001/practice (question text: "4 bong it hon 2 bong.") | - | question:{id} | none observed after click | - | - | not proven |
+| vi-v1 | 1 | #/lessons/1/practice (question text: "Dem: 1, 2, ?, 4. So o dau ? la:") | - | question:{id} | none observed after click | - | - | not proven |
+| vi-v1 | 2 | #/lessons/21/practice (question text: "7 + 8 = ?") | - | question:{id} | none observed after click | - | - | not proven |
+| vi-v1 | 3 | #/lessons/41/practice (question text: "25 - 7 = 18.") | - | question:{id} | none observed after click | - | - | not proven |
+| vi-v1 | 4 | #/lessons/61/practice (question text: "Tong 40.000 + 5.000 + 300 + 20 + 1 = ?") | - | question:{id} | none observed after click | - | - | not proven |
+| vi-v1 | 5 | #/lessons/81/practice (question text: "105 + ___ = 155.") | - | question:{id} | none observed after click | - | - | not proven |
 
-## Sample URLs Tested (Real Production Probe)
+## Runtime Probe Detail (Strict)
 
-- vi-v1 sample URL tested:
-   - `https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/vi-v1/question/1.mp3`
-   - HEAD: status `200`, content-type `audio/mpeg`
-   - GET range probe: status `206`, content-type `audio/mpeg`, HTML sniff `false`
-- en-v1 sample URL tested:
-   - `https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/question/1901.mp3`
-   - HEAD: status `200`, content-type `audio/mpeg`
-   - GET range probe: status `206`, content-type `audio/mpeg`, HTML sniff `false`
+- Probe used in browser session:
+  - fetch/XHR interception
+  - performance resource entries delta after click
+  - HTMLMediaElement.play interception
+  - speechSynthesis.speak interception
+- Result: all probes returned no audio activity after click for grades 0-5 in this automation environment.
 
-## Failure Classification
+## CORS Root Cause (Production Config Evidence)
 
-- generate: PASS
-- local: PASS
-- upload: PASS
-- map: PASS (code mapping implemented)
-- CORS: PASS
-- runtime: PARTIAL (code path verified, click-trace network for question asset not observed)
-- production: PARTIAL (R2 object URLs healthy; UI click path needs one more browser-verified trace)
+- `GET /app-update.json` returns `tts.manifestUrl` = `https://drive.usercontent.google.com/download?id=1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq&export=download&confirm=t`
+- `GET /audio/tts/drive-packs.json` shows `sourceProvider: cloudflare-r2` but all packs have `r2PublicUrl: ""`.
+- Đây van la production state hien tai (chua doi).
 
-## Next Action
+## Local Repo Fix Prepared (Pending Deploy)
 
-1. Revoke/regenerate exposed Google TTS API key immediately in Google Cloud Console.
-2. Re-run production click-trace with a clean browser profile and capture one concrete request URL from `Nghe cau hoi` button.
-3. For `en-v1` in UI, use account/plan path where English subject is accessible (current Free path locks English and redirects to subjects).
-4. Commit code-only changes (scripts/runtime/docs), excluding MP3/ZIP/.env/report artifacts.
+- public/app-update.json:
+  - `tts.manifestUrl` da doi sang R2 pack URL grade 1.
+- public/audio/tts/drive-packs.json:
+  - da bo sung `r2PublicUrl` day du cho packs grade 0-5.
+- Luu y: chua deploy nen production URL van tra config cu.
+
+## Delta Conclusion
+
+1. Access route production trong session nay: PASS (vao duoc practice grade 0-5).
+2. Strict audible proof production: FAIL (chua co bang chung network/runtime/human audible).
+3. Config drift production: van tro Drive + r2PublicUrl rong.
+4. Local fix da san sang, can deploy roi retest strict de co the chot PASS.

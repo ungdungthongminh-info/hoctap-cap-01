@@ -9,7 +9,7 @@
       "driveDownloadUrl": "https://drive.google.com/uc?export=download&id=1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN",
       "sourceProvider": "cloudflare-r2",
       "r2Key": "audio/tts/packs/vi-v1-pre-k-2026-04-27-v1.zip",
-      "r2PublicUrl": "",
+      "r2PublicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-pre-k-2026-04-27-v1.zip",
       "sizeBytes": 2544464,
       "sha256": "c195dc5f47597cab7e822f7adc4ba452fe4a30194682bfb2298089dcae4c5f41",
       "assetCount": 88
@@ -21,7 +21,7 @@
       "driveDownloadUrl": "https://drive.google.com/uc?export=download&id=1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq",
       "sourceProvider": "cloudflare-r2",
       "r2Key": "audio/tts/packs/vi-v1-grade-1-2026-04-27-v1.zip",
-      "r2PublicUrl": "",
+      "r2PublicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-grade-1-2026-04-27-v1.zip",
       "sizeBytes": 32997185,
       "sha256": "145315cafee84ca7ca5effcff2dc396d3aef8701837cfaa5029195ba4d214c18",
       "assetCount": 700
@@ -33,7 +33,7 @@
       "driveDownloadUrl": "https://drive.google.com/uc?export=download&id=1VY-VkQ9Wtunydd10rCCp_Xs9cTZRucyh",
       "sourceProvider": "cloudflare-r2",
       "r2Key": "audio/tts/packs/vi-v1-grade-2-2026-04-27-v1.zip",
-      "r2PublicUrl": "",
+      "r2PublicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-grade-2-2026-04-27-v1.zip",
       "sizeBytes": 20101185,
       "sha256": "afc86a6a1307ec4aecbccee6dcfcdd3a7421b121e8b7396ec7c62d045c326baa",
       "assetCount": 700
@@ -45,7 +45,7 @@
       "driveDownloadUrl": "https://drive.google.com/uc?export=download&id=1LKgjUtADcVkbDpvCkfzSNCdNoJG94YQv",
       "sourceProvider": "cloudflare-r2",
       "r2Key": "audio/tts/packs/vi-v1-grade-3-2026-04-27-v1.zip",
-      "r2PublicUrl": "",
+      "r2PublicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-grade-3-2026-04-27-v1.zip",
       "sizeBytes": 23894749,
       "sha256": "89a2aef81014de049dd1077e2b233a24c1cccd8b202f6ffa295e4108c31b6b89",
       "assetCount": 840
@@ -57,7 +57,7 @@
       "driveDownloadUrl": "https://drive.google.com/uc?export=download&id=164Xxc7vlATmrBqSHd9EWSXnvk9Q37rFk",
       "sourceProvider": "cloudflare-r2",
       "r2Key": "audio/tts/packs/vi-v1-grade-4-2026-04-27-v1.zip",
-      "r2PublicUrl": "",
+      "r2PublicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-grade-4-2026-04-27-v1.zip",
       "sizeBytes": 28703782,
       "sha256": "dbd22e5d6da7f289668f955f9a702e25421e9268c722c4b58a1f0756ac18919c",
       "assetCount": 980
@@ -69,7 +69,7 @@
       "driveDownloadUrl": "https://drive.google.com/uc?export=download&id=1PinMxVGHSl-GkekhSvTYp5rLgmcUFOQV",
       "sourceProvider": "cloudflare-r2",
       "r2Key": "audio/tts/packs/vi-v1-grade-5-2026-04-27-v1.zip",
-      "r2PublicUrl": "",
+      "r2PublicUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-grade-5-2026-04-27-v1.zip",
       "sizeBytes": 28945703,
       "sha256": "a955f4c22f057988f1579a1dd4f8f03b56acc04e4ccff6cbe6832d27c955ecfc",
       "assetCount": 980

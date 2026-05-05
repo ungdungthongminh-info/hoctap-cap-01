@@ -3,8 +3,8 @@
 | Scope | Expected | Generated Local | Uploaded R2 | Public 200 | Runtime Mapped | Production Audible |
 |---|---:|---:|---:|---:|---:|---:|
 | vi-v1 lesson-card | 4288 | 4288 | 4288 | pass | pass | pass |
-| vi-v1 question | 16318 | 16318 | 16318 | pass | pass | pending |
-| en-v1 question | 2725 | 2725 | 2725 | pass | pass | pending |
+| vi-v1 question | 16318 | 16318 | 16318 | pass | pass | fail (strict) |
+| en-v1 question | 2725 | 2725 | 2725 | pass | pass | blocked |
 
 ## Notes (2026-05-05)
 
@@ -21,4 +21,13 @@
 - Runtime question mapping to R2 path is enabled in production web:
   - audio/tts/assets/vi-v1/question/<questionId>.mp3
   - audio/tts/assets/en-v1/question/<questionId>.mp3
-- Production audible check remains pending manual browser playback verification.
+- Production smoke test (strict re-test) update:
+  - lop 0/1/2/3/4/5 (`#/lessons/9001|1|21|41|61|81/practice`): da vao duoc practice va click `Nghe cau hoi` thanh cong.
+  - Tuy nhien session automation khong bat duoc request mp3/zip, cung khong bat duoc event `HTMLMediaElement.play` hay `speechSynthesis.speak` sau click => chua du bang chung de danh dau audible PASS.
+  - en-v1 UI: bi gioi han goi Free (mon Tieng Anh bi khoa), chua co click-path production trong session nay.
+- Production CORS source confirmed:
+  - `/app-update.json` dang tra `tts.manifestUrl` tro toi `drive.usercontent.google.com`.
+  - `/audio/tts/drive-packs.json` dang de `r2PublicUrl` rong cho cac pack.
+- Local repo fix prepared (pending deploy):
+  - `public/app-update.json` da doi `tts.manifestUrl` sang R2 URL.
+  - `public/audio/tts/drive-packs.json` da bo sung `r2PublicUrl` cho packs grade 0-5.
