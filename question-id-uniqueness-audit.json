@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-05-05T11:30:00.841Z",
+  "source": "src/data/seedData.ts (seedQuestions)",
+  "verdict": "GLOBALLY_UNIQUE",
+  "total": 19043,
+  "unique": 19043,
+  "duplicates": 0,
+  "duplicateIdCount": 0,
+  "crossLessonCount": 0,
+  "crossGradeCount": 0,
+  "idRangeMin": 1,
+  "idRangeMax": 199132,
+  "gradeCounts": {
+    "0": 132,
+    "1": 3278,
+    "2": 3259,
+    "3": 3786,
+    "4": 4323,
+    "5": 4265
+  },
+  "subjectCounts": {
+    "math": 2769,
+    "vietnamese": 2651,
+    "nature": 1635,
+    "ethics": 2698,
+    "english": 2725,
+    "science": 1090,
+    "history_geo": 1088,
+    "informatics": 1633,
+    "art": 2754
+  },
+  "duplicateSamples": [],
+  "crossLessonSamples": [],
+  "crossGradeSamples": []
+}

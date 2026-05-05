@@ -1,0 +1,102 @@
+{
+  "meta": {
+    "generatedAt": "2026-05-05T11:30:00.841Z",
+    "auditScript": "scripts/audit-question-uniqueness.ts",
+    "source": "src/data/seedData.ts (seedQuestions merged from all sprint data files)",
+    "auditedBy": "GitHub Copilot audit pipeline",
+    "branch": "clean-main"
+  },
+  "verdict": "GLOBALLY_UNIQUE",
+  "verdictReason": "Every questionId appears exactly once across all 19,043 questions in the entire curriculum, spanning all 6 grades (0–5) and 9 subjects. No questionId is shared between any two lessons or grades.",
+  "hierarchyRemapRequired": false,
+  "hierarchyRemapJustification": "Per the governing rule: if questionId is globally unique across all questions, the exception applies and the current flat key schema (question:{questionId}) is valid and safe. Full hierarchy objectKey (language/grade/lesson/question) is NOT required.",
+  "totals": {
+    "totalQuestions": 19043,
+    "uniqueIds": 19043,
+    "duplicateIds": 0,
+    "duplicateIdCount": 0,
+    "crossLessonConflicts": 0,
+    "crossGradeConflicts": 0,
+    "globalUniquenessProven": true
+  },
+  "idRange": {
+    "min": 1,
+    "max": 199132,
+    "note": "ID range is intentionally non-contiguous — gaps exist due to curriculum-organized block allocation per grade/subject/sprint."
+  },
+  "byGrade": [
+    { "grade": 0, "label": "Tiền lớp 1 (Pre-Grade)", "totalQuestions": 132 },
+    { "grade": 1, "label": "Lớp 1", "totalQuestions": 3278 },
+    { "grade": 2, "label": "Lớp 2", "totalQuestions": 3259 },
+    { "grade": 3, "label": "Lớp 3", "totalQuestions": 3786 },
+    { "grade": 4, "label": "Lớp 4", "totalQuestions": 4323 },
+    { "grade": 5, "label": "Lớp 5", "totalQuestions": 4265 }
+  ],
+  "bySubject": [
+    { "subjectCode": "math", "totalQuestions": 2769 },
+    { "subjectCode": "vietnamese", "totalQuestions": 2651 },
+    { "subjectCode": "nature", "totalQuestions": 1635 },
+    { "subjectCode": "ethics", "totalQuestions": 2698 },
+    { "subjectCode": "english", "totalQuestions": 2725 },
+    { "subjectCode": "science", "totalQuestions": 1090 },
+    { "subjectCode": "history_geo", "totalQuestions": 1088 },
+    { "subjectCode": "informatics", "totalQuestions": 1633 },
+    { "subjectCode": "art", "totalQuestions": 2754 }
+  ],
+  "ttsKeySchema": {
+    "currentSchema": "question:{questionId}",
+    "currentObjectKey": "audio/tts/assets/{profileId}/question/{questionId}.mp3",
+    "proposedHierarchySchema": "audio/tts/assets/{profileId}/{lang}/{grade}/{lessonId}/{questionId}.mp3",
+    "schemaDecision": "RETAIN_CURRENT",
+    "schemaDecisionReason": "Global uniqueness proven. Flat key is safe, unambiguous, and maps 1:1 to a physical audio file. Hierarchy is only required when a questionId could appear in multiple lessons/grades — which this audit proves does not happen.",
+    "breakingChangeIfRemapped": true,
+    "breakingChangeNote": "Remap would require: (1) regenerate all 19,043 audio files from scratch or rename + re-upload, (2) update every runtime key resolution call in staticTtsManifest.ts and ttsAssetKeys.ts, (3) update all 4 pipeline scripts (export/generate/upload/test), (4) invalidate all existing cached R2 CDN URLs. Total risk: HIGH. Benefit: NONE (no uniqueness problem to solve)."
+  },
+  "runtimeKeyResolutionChain": {
+    "step1_uiInvocation": "PracticePage.tsx > speakQuestion() calls speakText(text, lang, { assetKey: buildQuestionAssetKey(question.id) })",
+    "step2_keyBuilder": "ttsAssetKeys.ts > buildQuestionAssetKey(questionId) returns 'question:{questionId}'",
+    "step3_manifestLookup": "staticTtsManifest.ts > getStaticTtsManifestEntry('question:{questionId}') looks up manifest.entries[key]",
+    "step4_urlResolution": "staticTtsManifest.ts > withResolvedAudioUrl() — for question keys: resolvedPath = 'audio/tts/assets/{profileId}/question/{questionId}.mp3'; in isWebProduction + R2 eligible: audioUrl = '{R2_PUBLIC_BASE_URL}/{resolvedPath}'",
+    "step5_playback": "ttsRuntime.ts > speakText() uses the resolved audioUrl from manifest entry to play audio via HTMLAudioElement",
+    "conclusion": "Each step is keyed exclusively by questionId (numeric). No lessonId or grade scoping in the runtime key path. This is correct and safe because questionIds are globally unique."
+  },
+  "pipelineKeySchema": {
+    "catalogExport": "export-question-tts-catalog.mjs: objectKey = 'audio/tts/assets/{profileId}/question/{questionId}.mp3'",
+    "generation": "generate-question-tts-google.mjs: local path = '{scratchDir}/audio/question/{profileId}/question/{questionId}.mp3'",
+    "upload": "upload-question-tts-to-r2.mjs: r2Key = item.r2Key = objectKey from catalog",
+    "publicUrlPattern": "{R2_PUBLIC_BASE_URL}/audio/tts/assets/{profileId}/question/{questionId}.mp3",
+    "r2TestVerified": "r2-question-tts-asset-check.json: 40/40 samples pass (200, audio/mpeg, not HTML)"
+  },
+  "orphanAnalysis": {
+    "orphanQuestions": 0,
+    "orphanNote": "All questions in seedQuestions have a valid lessonId. The runtime getLessonQuestions() filters by q.lessonId === lessonId, so no orphan question can ever be served in practice."
+  },
+  "evidence": [
+    {
+      "file": "question-id-uniqueness-audit.json",
+      "description": "Machine-generated audit by scripts/audit-question-uniqueness.ts",
+      "verdict": "GLOBALLY_UNIQUE",
+      "total": 19043,
+      "unique": 19043,
+      "duplicates": 0
+    },
+    {
+      "file": "r2-question-tts-asset-check.json",
+      "description": "R2 CDN sanity check: all sampled question audio file URLs return 200 audio/mpeg",
+      "total": 40,
+      "pass": 40
+    },
+    {
+      "file": "question-tts-validate-report.json (vi-v1)",
+      "description": "Local file validation: all vi-v1 question mp3 pass MP3 magic and size checks",
+      "total": 16318,
+      "pass": 16318
+    },
+    {
+      "file": "question-tts-validate-report.json (en-v1)",
+      "description": "Local file validation: all en-v1 question mp3 pass MP3 magic and size checks",
+      "total": 2725,
+      "pass": 2725
+    }
+  ]
+}
