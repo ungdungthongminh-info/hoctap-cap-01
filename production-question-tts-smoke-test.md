@@ -6,35 +6,35 @@
 
 ## Result
 
-- Status: FAIL (blocked before production-audible check)
-- Primary blocker: missing Google TTS credentials in local environment (`GOOGLE_TTS_API_KEY` or `GOOGLE_APPLICATION_CREDENTIALS`).
+- Status: PASS (pipeline complete, manual audible check pending)
+- Pipeline blocker is resolved. Full generation, validation, upload, and public R2 checks have completed for both `vi-v1` and `en-v1` question assets.
 
 ## Verification Signals
 
 - Catalog exported with expected totals: 19043 (vi-v1: 16318, en-v1: 2725).
-- Runtime mapping code updated to map question keys to R2 object paths.
-- Sample generate did not produce files because credentials are missing.
-- Sample validate report: 25/25 missing local files.
-- Sample upload report: 0 uploaded, 25 missing local.
-- Sample R2 asset check: 404 HTML for sample question objects.
+- Full generation completed:
+   - vi-v1 generated locally and validated: 16318/16318 pass
+   - en-v1 generated locally and validated: 2725/2725 pass
+- Full upload completed:
+   - vi-v1 upload report: totalItems=16318, uploaded=16298, skipped=20, missingLocal=0, pass=true
+   - en-v1 upload report: totalItems=2725, uploaded=2664, skipped=61, missingLocal=0, pass=true
+- Public R2 checks passed:
+   - vi-v1 sample-size=50: pass=true
+   - en-v1 sample-size=50: pass=true
+- Runtime mapping code is active for question keys via R2 object path pattern.
 
 ## Failure Classification
 
-- generate: FAIL (credentials missing)
-- local: FAIL (no sample MP3 generated)
-- upload: FAIL (no local files to upload)
+- generate: PASS
+- local: PASS
+- upload: PASS
 - map: PASS (code mapping implemented)
-- CORS: PASS for pack ZIP origin test
-- runtime: PENDING (needs generated+uploaded question assets)
-- production: PENDING (blocked by missing assets)
+- CORS: PASS
+- runtime: PASS (R2 mapping and static path resolution)
+- production: PENDING (manual in-browser audible playback not re-run in this step)
 
 ## Next Action
 
-1. Set local Google TTS credential (API key or service account) without committing to git.
-2. Re-run sample commands:
-   - `node scripts/generate-question-tts-google.mjs --language=vi-v1 --limit=20 --voice=vi-VN-Chirp3-HD-Despina --skip-existing --concurrency=2 --checkpoint`
-   - `node scripts/generate-question-tts-google.mjs --language=en-v1 --limit=5 --skip-existing --concurrency=2 --checkpoint`
-   - `node scripts/validate-question-audio.mjs --sample`
-   - `node scripts/upload-question-tts-to-r2.mjs --sample --skip-existing`
-   - `node scripts/test-r2-question-assets.mjs --sample`
-3. Continue full run only after sample passes.
+1. Revoke/regenerate exposed Google TTS API key immediately in Google Cloud Console.
+2. Run one manual production audible smoke test on live site for both one `vi-v1` and one `en-v1` question.
+3. Commit code-only changes (scripts/runtime/docs), excluding MP3/ZIP/.env/report artifacts.
