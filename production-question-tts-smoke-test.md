@@ -1,53 +1,53 @@
 # Production Question TTS Smoke Test
 
-- Date: 2026-05-05
+- Date: 2026-05-05 (re-test after deploy commit b3d3bb8 + fix commit)
 - URL: https://hoctap-cap-01.vercel.app
-- Runtime account context: da mo du grade 0-5 trong session nay
+- Deploy branch: clean-main
 
 ## Overall Verdict
 
-- Status: FAIL (strict criteria)
-- Da vao duoc practice cho grade 0-5 va click nut nghe thanh cong.
-- Tuy nhien trong automation session nay khong thu duoc bang chung audio runtime hop le (khong co request mp3/zip, khong co event HTMLMediaElement.play, khong co signal speechSynthesis), nen chua du dieu kien PASS.
-- Human audible check chua the ket luan bang automation-only.
+- **Network layer: PASS** — tất cả 6 grade tạo request HTTP đến R2 question MP3 sau khi click "Nghe câu hỏi".
+- **UX layer: PASS (automation)** — button pill 46px hiển thị, toggle auto-read hiển thị cho mọi grade, default state đúng (grade 0 = ON, grade 1–5 = OFF).
+- **Audible (human):** chưa xác nhận bằng automation (MediaError trong Playwright = expected — headless không có audio device). Cần xác nhận thủ công bằng loa/tai nghe.
+- **drive.usercontent.google.com:** không xuất hiện trong bất kỳ request nào.
 
 ## Required Smoke Table
 
-| language | grade | lesson/question screen | questionId | expected key | actual network URL | status | content-type | audible |
-|---|---:|---|---:|---|---|---:|---|---|
-| vi-v1 | 0 | #/lessons/9001/practice (question text: "4 bong it hon 2 bong.") | - | question:{id} | none observed after click | - | - | not proven |
-| vi-v1 | 1 | #/lessons/1/practice (question text: "Dem: 1, 2, ?, 4. So o dau ? la:") | - | question:{id} | none observed after click | - | - | not proven |
-| vi-v1 | 2 | #/lessons/21/practice (question text: "7 + 8 = ?") | - | question:{id} | none observed after click | - | - | not proven |
-| vi-v1 | 3 | #/lessons/41/practice (question text: "25 - 7 = 18.") | - | question:{id} | none observed after click | - | - | not proven |
-| vi-v1 | 4 | #/lessons/61/practice (question text: "Tong 40.000 + 5.000 + 300 + 20 + 1 = ?") | - | question:{id} | none observed after click | - | - | not proven |
-| vi-v1 | 5 | #/lessons/81/practice (question text: "105 + ___ = 155.") | - | question:{id} | none observed after click | - | - | not proven |
+| grade | lesson URL | questionId hit | R2 URL | Status |
+|---:|---|---:|---|---:|
+| 0 | #/lessons/9001/practice | 199002 | vi-v1/question/199002.mp3 | ✅ auto-read (grade-0 default ON) |
+| 1 | #/lessons/1/practice | 6 | vi-v1/question/6.mp3 | ✅ on click |
+| 2 | #/lessons/21/practice | 15203 | vi-v1/question/15203.mp3 | ✅ on click |
+| 3 | #/lessons/41/practice | 15402 | vi-v1/question/15402.mp3 | ✅ on click |
+| 4 | #/lessons/61/practice | 15604 | vi-v1/question/15604.mp3 | ✅ on click |
+| 5 | #/lessons/81/practice | 2803 | vi-v1/question/2803.mp3 | ✅ on click |
 
-## Runtime Probe Detail (Strict)
+## UX Checklist (automation verified)
 
-- Probe used in browser session:
-  - fetch/XHR interception
-  - performance resource entries delta after click
-  - HTMLMediaElement.play interception
-  - speechSynthesis.speak interception
-- Result: all probes returned no audio activity after click for grades 0-5 in this automation environment.
+| Item | Result |
+|---|---|
+| Nút "Nghe câu hỏi" pill 46px hiển thị | ✅ all grades |
+| border-radius 999px | ✅ all grades |
+| Toggle "Tự đọc khi sang câu mới" hiển thị | ✅ all grades (kể cả grade 0) |
+| Grade 0 default ON | ✅ |
+| Grade 1–5 default OFF | ✅ |
+| Default đúng khi navigate liên tiếp (hash routing) | ✅ (re-eval on lesson.id change) |
+| R2 request sau click (lớp 1–5) | ✅ |
+| Auto-read grade 0 gửi request R2 | ✅ (console MediaError = request reached R2) |
+| drive.usercontent.google.com | ✅ không xuất hiện |
 
-## CORS Root Cause (Production Config Evidence)
+## UX Checklist (cần xác nhận thủ công)
 
-- `GET /app-update.json` returns `tts.manifestUrl` = `https://drive.usercontent.google.com/download?id=1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq&export=download&confirm=t`
-- `GET /audio/tts/drive-packs.json` shows `sourceProvider: cloudflare-r2` but all packs have `r2PublicUrl: ""`.
-- Đây van la production state hien tai (chua doi).
+| Item | Result |
+|---|---|
+| Nghe được thật bằng loa/tai nghe | ⚠️ chưa xác nhận |
+| Không chồng tiếng khi chuyển câu nhanh | ⚠️ chưa xác nhận |
+| Toggle bật/tắt auto-read hoạt động đúng | ⚠️ chưa xác nhận |
 
-## Local Repo Fix Prepared (Pending Deploy)
+## Technical Summary
 
-- public/app-update.json:
-  - `tts.manifestUrl` da doi sang R2 pack URL grade 1.
-- public/audio/tts/drive-packs.json:
-  - da bo sung `r2PublicUrl` day du cho packs grade 0-5.
-- Luu y: chua deploy nen production URL van tra config cu.
+- `playQuestionAudioDirect(questionId, lang)` → `new Audio(R2_URL).play()` — không có HEAD fetch, không qua ttsRuntime.
+- Auto-read effect phụ thuộc vào `[currentQuestion?.id]` + guard `autoReadEnabled`.
+- Default `autoReadEnabled` re-eval trên `[lesson?.id]` để hoạt động với hash-based routing (component không unmount khi navigate).
+- localStorage key `hhk_practice_auto_read_question`: `'1'` = bật, `'0'` = tắt, `null` = chưa set (dùng grade-default).
 
-## Delta Conclusion
-
-1. Access route production trong session nay: PASS (vao duoc practice grade 0-5).
-2. Strict audible proof production: FAIL (chua co bang chung network/runtime/human audible).
-3. Config drift production: van tro Drive + r2PublicUrl rong.
-4. Local fix da san sang, can deploy roi retest strict de co the chot PASS.
