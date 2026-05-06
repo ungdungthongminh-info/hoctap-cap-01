@@ -146,13 +146,13 @@ export const PRICING_PLANS: PricingPlan[] = [
     name: 'Gói theo lớp',
     emoji: '📘',
     monthlyPrice: 0,
-    yearlyPrice: 299000,
+    yearlyPrice: 199000,
     lifetimePrice: 0,
     color: '#2F6CB2',
     bgColor: '#E9F2FF',
     features: [
       'Mua đúng lớp cần học trong năm',
-      'Lớp Lá / Tiền tiểu học: 299.000đ/năm',
+      'Lớp Lá / Tiền tiểu học: 199.000đ/năm',
       'Lớp 01: 299.000đ/năm',
       'Lớp 02: 299.000đ/năm',
       'Lớp 03: 349.000đ/năm',
@@ -1603,7 +1603,7 @@ export function PricingPage() {
                   {plan.id === 'standard_1year_1grade' ? 'Gói theo lớp' : plan.name}
                 </div>
                 <div className="pricing-plan-price" style={{ color: plan.id === 'premium' ? '#8b5cf6' : plan.id === 'standard' ? '#f3c05b' : '#ffffff' }}>
-                  {plan.id === 'standard_1year_1grade' ? 'Từ 299.000đ' : formatVND(price)}
+                  {plan.id === 'standard_1year_1grade' ? 'Từ 199.000đ' : formatVND(price)}
                 </div>
                 <div className="pricing-plan-cycle">
                   {price === 0 ? 'dùng ngay' : '/ năm'}

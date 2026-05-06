@@ -56,7 +56,7 @@ export const PRICING_PLANS = {
     name: 'Standard 01 nam - 01 lop',
     currency: 'VND',
     billingCycles: {
-      yearly: 299000
+      yearly: 199000
     },
     features: {
       subjects: null,
