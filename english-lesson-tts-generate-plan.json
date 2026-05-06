@@ -1,0 +1,105 @@
+{
+  "generatedAt": "2026-05-06T01:41:14.548Z",
+  "mode": "dry-run",
+  "catalogPath": "F:\\1_A_Disk_D\\Tool\\Hoc_Tap\\CAp_01\\english-lesson-tts-catalog.json",
+  "profile": "en-v1",
+  "subject": "english",
+  "expectedTotal": 700,
+  "catalogTotal": 700,
+  "alreadyLocal": 0,
+  "toGenerate": 700,
+  "missingText": 0,
+  "duplicateCardId": 0,
+  "outputDir": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\en-v1\\lesson-card",
+  "estimatedCostUsd": 0.7413,
+  "voice": {
+    "selected": null,
+    "candidates": [
+      "en-US-Neural2-F",
+      "en-US-Neural2-J",
+      "en-US-Neural2-A"
+    ]
+  },
+  "sample10": [
+    {
+      "cardId": 801,
+      "lessonId": 401,
+      "lessonTitle": "Hello! What's your name?",
+      "text": "Let's say Hello!. Khi gặp ai, chúng ta nói \"Hello!\" hoặc \"Hi!\" để chào. Sau đó giới thiệu tên: \"My name is...\"",
+      "outputPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\en-v1\\lesson-card\\lesson-card-801.mp3",
+      "existsLocal": false
+    },
+    {
+      "cardId": 802,
+      "lessonId": 401,
+      "lessonTitle": "Hello! What's your name?",
+      "text": "Cách chào hỏi. \"Hello!\" bằng Xin chào! \"Hi!\" bằng Chào! \"My name is Minh\" bằng Tên tôi là Minh. \"What's your name?\" bằng Bạn tên gì?",
+      "outputPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\en-v1\\lesson-card\\lesson-card-802.mp3",
+      "existsLocal": false
+    },
+    {
+      "cardId": 803,
+      "lessonId": 401,
+      "lessonTitle": "Hello! What's your name?",
+      "text": "Hội thoại mẫu. - Hello! My name is Lan. What's your name? - Hi! My name is Minh. Nice to meet you! - Nice to meet you too!",
+      "outputPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\en-v1\\lesson-card\\lesson-card-803.mp3",
+      "existsLocal": false
+    },
+    {
+      "cardId": 804,
+      "lessonId": 401,
+      "lessonTitle": "Hello! What's your name?",
+      "text": "Mẹo nhớ. Tập nói \"Hello, my name is...\" trước gương mỗi ngày. Nhớ cười khi chào nhé!",
+      "outputPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\en-v1\\lesson-card\\lesson-card-804.mp3",
+      "existsLocal": false
+    },
+    {
+      "cardId": 805,
+      "lessonId": 402,
+      "lessonTitle": "How are you?",
+      "text": "How are you?. Sau khi chào, người ta hay hỏi \"How are you?\" (Bạn khỏe không?)",
+      "outputPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\en-v1\\lesson-card\\lesson-card-805.mp3",
+      "existsLocal": false
+    },
+    {
+      "cardId": 806,
+      "lessonId": 402,
+      "lessonTitle": "How are you?",
+      "text": "Cách trả lời. \"I'm fine, thank you!\" bằng Tôi khỏe, cảm ơn! \"I'm good!\" bằng Tôi tốt! \"I'm great!\" bằng Tôi rất tốt! \"So-so\" bằng Bình thường",
+      "outputPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\en-v1\\lesson-card\\lesson-card-806.mp3",
+      "existsLocal": false
+    },
+    {
+      "cardId": 807,
+      "lessonId": 402,
+      "lessonTitle": "How are you?",
+      "text": "Hội thoại mẫu. - Hi Lan! How are you? - I'm fine, thank you! And you? - I'm great!",
+      "outputPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\en-v1\\lesson-card\\lesson-card-807.mp3",
+      "existsLocal": false
+    },
+    {
+      "cardId": 808,
+      "lessonId": 402,
+      "lessonTitle": "How are you?",
+      "text": "Mẹo nhớ. Hỏi bố mẹ mỗi sáng: \"Good morning! How are you?\" - họ sẽ rất vui!",
+      "outputPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\en-v1\\lesson-card\\lesson-card-808.mp3",
+      "existsLocal": false
+    },
+    {
+      "cardId": 809,
+      "lessonId": 403,
+      "lessonTitle": "Good morning! Good night!",
+      "text": "Chào theo giờ. Tiếng Anh có nhiều cách chào tùy thời gian trong ngày!",
+      "outputPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\en-v1\\lesson-card\\lesson-card-809.mp3",
+      "existsLocal": false
+    },
+    {
+      "cardId": 810,
+      "lessonId": 403,
+      "lessonTitle": "Good morning! Good night!",
+      "text": "Các cách chào. Sáng: \"Good morning!\" ️ Trưa chia chiều: \"Good afternoon!\" ️ Tối: \"Good evening!\" Đi ngủ: \"Good night!\" Tạm biệt: \"Goodbye!\" chia \"Bye bye!\"",
+      "outputPath": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\en-v1\\lesson-card\\lesson-card-810.mp3",
+      "existsLocal": false
+    }
+  ]
+}

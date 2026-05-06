@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-05-06T02:24:15.261Z",
+  "mode": "apply",
+  "status": "completed",
+  "provider": "google-rest-api-key",
+  "profile": "en-v1",
+  "subject": "english",
+  "voice": "en-US-Neural2-F",
+  "outputDir": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\en-v1\\lesson-card",
+  "expectedTotal": 700,
+  "catalogTotal": 700,
+  "generated": 700,
+  "alreadyLocal": 0,
+  "missingText": 0,
+  "duplicateCardId": 0,
+  "failed": 0,
+  "failures": []
+}

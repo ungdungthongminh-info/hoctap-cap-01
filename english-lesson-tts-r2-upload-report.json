@@ -1,0 +1,175 @@
+{
+  "generatedAt": "2026-05-06T02:54:44.639Z",
+  "profile": "en-v1",
+  "subject": "english",
+  "outputDir": "F:\\1_A_Disk_D\\Khương Bình\\hhk-tts-audio\\en-v1\\lesson-card",
+  "totalItems": 700,
+  "uploaded": 700,
+  "skippedMatched": 0,
+  "missingLocal": 0,
+  "probeSampleCount": 20,
+  "probeSamples": [
+    {
+      "cardId": 2081,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2081.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 2116,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2116.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 2151,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2151.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 52506,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52506.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 2161,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2161.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 2196,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2196.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 2231,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2231.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 52566,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52566.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 801,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-801.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 836,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-836.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 871,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-871.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 52626,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52626.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 1921,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1921.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 1956,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1956.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 1991,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-1991.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 52686,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52686.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 2001,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2001.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 2036,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2036.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 2071,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-2071.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    },
+    {
+      "cardId": 52746,
+      "url": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets/en-v1/lesson-card-52746.mp3",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "isHtml": false,
+      "magic": "s"
+    }
+  ],
+  "pass": true,
+  "invalidProbeCount": 0
+}
