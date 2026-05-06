@@ -8,13 +8,15 @@ const { pathToFileURL } = require('url');
 const INDEX_FILE_NAME = 'index.json';
 const SCHEMA_VERSION = 1;
 
+const R2_BASE_URL = 'https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev';
+
 const GRADE_PACKS = {
-  0: { grade: 0, label: 'Tien tieu hoc', fileId: '1tPIXTZ50LqgQxhutmvx8QE7IEc8uybTN', fileName: 'vi-v1-grade-0-pre-k.zip' },
-  1: { grade: 1, label: 'Lop 1', fileId: '1xhb4KGGklpH9U2Kl0tA1ER8CWSE3czmq', fileName: 'vi-v1-grade-1.zip' },
-  2: { grade: 2, label: 'Lop 2', fileId: '1VY-VkQ9Wtunydd10rCCp_Xs9cTZRucyh', fileName: 'vi-v1-grade-2.zip' },
-  3: { grade: 3, label: 'Lop 3', fileId: '1LKgjUtADcVkbDpvCkfzSNCdNoJG94YQv', fileName: 'vi-v1-grade-3.zip' },
-  4: { grade: 4, label: 'Lop 4', fileId: '164Xxc7vlATmrBqSHd9EWSXnvk9Q37rFk', fileName: 'vi-v1-grade-4.zip' },
-  5: { grade: 5, label: 'Lop 5', fileId: '1PinMxVGHSl-GkekhSvTYp5rLgmcUFOQV', fileName: 'vi-v1-grade-5.zip' },
+  0: { grade: 0, label: 'Tien tieu hoc', fileName: 'vi-v1-pre-k-2026-04-27-v1.zip', r2Url: `${R2_BASE_URL}/audio/tts/packs/vi-v1-pre-k-2026-04-27-v1.zip` },
+  1: { grade: 1, label: 'Lop 1',         fileName: 'vi-v1-grade-1-2026-04-27-v1.zip', r2Url: `${R2_BASE_URL}/audio/tts/packs/vi-v1-grade-1-2026-04-27-v1.zip` },
+  2: { grade: 2, label: 'Lop 2',         fileName: 'vi-v1-grade-2-2026-04-27-v1.zip', r2Url: `${R2_BASE_URL}/audio/tts/packs/vi-v1-grade-2-2026-04-27-v1.zip` },
+  3: { grade: 3, label: 'Lop 3',         fileName: 'vi-v1-grade-3-2026-04-27-v1.zip', r2Url: `${R2_BASE_URL}/audio/tts/packs/vi-v1-grade-3-2026-04-27-v1.zip` },
+  4: { grade: 4, label: 'Lop 4',         fileName: 'vi-v1-grade-4-2026-04-27-v1.zip', r2Url: `${R2_BASE_URL}/audio/tts/packs/vi-v1-grade-4-2026-04-27-v1.zip` },
+  5: { grade: 5, label: 'Lop 5',         fileName: 'vi-v1-grade-5-2026-04-27-v1.zip', r2Url: `${R2_BASE_URL}/audio/tts/packs/vi-v1-grade-5-2026-04-27-v1.zip` },
 };
 
 function nowIso() {
@@ -150,12 +152,7 @@ function toRelative(rootPath, targetPath) {
   return path.relative(rootPath, targetPath).replace(/\\/g, '/');
 }
 
-function buildDownloadCandidates(fileId) {
-  return [
-    `https://drive.usercontent.google.com/download?id=${encodeURIComponent(fileId)}&export=download&confirm=t`,
-    `https://drive.google.com/uc?export=download&id=${encodeURIComponent(fileId)}`,
-  ];
-}
+
 
 function isZipHeader(buffer) {
   return buffer.length >= 4
@@ -232,21 +229,14 @@ async function streamDownload(url, outputPath, onProgress) {
 
 async function downloadGradeZip({ grade, zipPath, onProgress }) {
   const config = GRADE_PACKS[grade];
-  const candidates = buildDownloadCandidates(config.fileId);
-  let lastError = null;
-
-  for (const candidateUrl of candidates) {
-    try {
-      const result = await streamDownload(candidateUrl, zipPath, onProgress);
-      await assertZipFile(zipPath);
-      return result;
-    } catch (error) {
-      await fsp.rm(zipPath, { force: true }).catch(() => undefined);
-      lastError = error;
-    }
+  try {
+    const result = await streamDownload(config.r2Url, zipPath, onProgress);
+    await assertZipFile(zipPath);
+    return result;
+  } catch (error) {
+    await fsp.rm(zipPath, { force: true }).catch(() => undefined);
+    throw error;
   }
-
-  throw lastError || new Error('Khong the tai file zip tu Drive.');
 }
 
 function upsertPack(indexData, nextPack) {
@@ -399,8 +389,8 @@ async function downloadPack({ grade, replace = false, onProgress }) {
     installedAt: nowIso(),
     updatedAt: nowIso(),
     source: {
-      type: 'drive-proxy',
-      fileId: packCfg.fileId,
+      type: 'r2-cdn',
+      r2Url: packCfg.r2Url,
     },
     manifestFile: manifestAbsolutePath ? toRelative(rootPath, manifestAbsolutePath) : '',
     packInfoFile: `${getGradeFolderName(normalizedGrade)}/pack-info.json`,
@@ -513,8 +503,8 @@ async function verifyPack({ grade }) {
       installedAt: nowIso(),
       updatedAt: nowIso(),
       source: {
-        type: 'drive-proxy',
-        fileId: GRADE_PACKS[normalizedGrade].fileId,
+        type: 'r2-cdn',
+        r2Url: GRADE_PACKS[normalizedGrade].r2Url,
       },
     }),
     status: availableEntries > 0

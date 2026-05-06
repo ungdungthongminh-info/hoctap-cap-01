@@ -213,6 +213,7 @@ async function runDesktopRuntimeAudit(windowRef) {
     if (offlineMode && isHttp) {
       networkEvents.push({
         type: 'blocked',
+        mode: 'offline',
         url,
         timestamp: new Date().toISOString(),
       });
@@ -222,6 +223,7 @@ async function runDesktopRuntimeAudit(windowRef) {
     if (isHttp) {
       networkEvents.push({
         type: 'allowed',
+        mode: offlineMode ? 'offline' : 'online',
         url,
         timestamp: new Date().toISOString(),
       });
@@ -350,8 +352,9 @@ async function runDesktopRuntimeAudit(windowRef) {
       const keyOk = completed?.assetKey === 'lesson-card:1';
       const assetUrl = String(completed?.assetUrl || '');
       const assetUrlOk = assetUrl.length > 0;
-      const hasGoogle = networkEvents.some((evt) => /googleapis|gstatic|google\.com/i.test(String(evt.url || '')));
-      const hasBackend = networkEvents.some((evt) => /api\/v1\/tts|ungdungthongminh\.shop|127\.0\.0\.1:5000/i.test(String(evt.url || '')));
+      const offlineEvents = networkEvents.filter((evt) => evt.mode === 'offline');
+      const hasGoogle = offlineEvents.some((evt) => evt.type === 'allowed' && /googleapis|gstatic|google\.com/i.test(String(evt.url || '')));
+      const hasBackend = offlineEvents.some((evt) => evt.type === 'allowed' && /api\/v1\/tts|ungdungthongminh\.shop|127\.0\.0\.1:5000/i.test(String(evt.url || '')));
 
       report.pass = Boolean(providerOk && sourceOk && keyOk && assetUrlOk && !hasGoogle && !hasBackend);
       report.reason = report.pass
@@ -465,7 +468,7 @@ async function runDesktopAcceptanceAudit(windowRef) {
 
   function buildPackSourceLabel(pack) {
     const sourceType = String(pack?.source?.type || '').trim();
-    if (sourceType === 'drive-proxy') {
+    if (sourceType === 'r2-cdn' || sourceType === 'drive-proxy') {
       return 'Drive/CDN';
     }
     return sourceType || 'unknown';

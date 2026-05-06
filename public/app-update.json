@@ -1,13 +1,13 @@
 {
   "appId": "hoc-tap-cap-01",
   "channel": "stable",
-  "latestVersion": "0.1.1",
+  "latestVersion": "0.1.2",
   "minimumSupportedVersion": "0.1.0",
-  "publishedAt": "2026-05-02T11:30:00+07:00",
-  "title": "Ban phat hanh on dinh",
+  "publishedAt": "2026-05-04T10:00:00+07:00",
+  "title": "Ban cap nhat on dinh 0.1.2",
   "notes": [
+    "Sua loi dong goi desktop: loai bo file audio khoi installer de giam dung luong.",
     "Toi uu flow kich hoat key va phan quyen theo goi.",
-    "Bo sung co che kiem tra cap nhat va thong bao ban moi.",
     "Cai thien do on dinh audio offline."
   ],
   "tts": {
@@ -15,5 +15,5 @@
     "offlineSyncReason": "",
     "manifestUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-grade-1-2026-04-27-v1.zip"
   },
-  "downloadUrl": "https://github.com/ungdungthongminh-info/hoctap-cap-01/releases/latest/download/HocHungKhoi_Desktopapp-Win.exe"
+  "downloadUrl": "https://github.com/ungdungthongminh-info/hoctap-cap-01/releases/latest/download/HocHungKhoi_Desktopapp-Win-0.1.2.exe"
 }
