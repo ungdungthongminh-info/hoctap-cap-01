@@ -40,3 +40,20 @@ hhk-tts-audio/
 F:/1_A_Disk_D/Khương Bình/hhk-tts-audio/
 
 .vercel
+
+# Additional generated TTS artifacts and secrets
+.env*
+.env.r2
+*.wav
+*.m4a
+*.ogg
+*.zip
+.vercel/
+.vercel/output/
+backend/.vercel/
+audio/tts/generated/
+public/audio/tts/assets/**/*.mp3
+public/audio/tts/packs/**/*.zip
+public/audio/tts/packs/**/*.mp3
+acceptance-audit-report-*.json
+desktop-acceptance-report-*.json

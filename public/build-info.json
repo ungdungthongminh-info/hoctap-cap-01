@@ -1,0 +1,9 @@
+{
+  "branch": "clean-main",
+  "baseCommitAtMarkerCreation": "9f303f2",
+  "mustIncludeFixCommit": "9f303f2",
+  "previousBadProductionCommit": "d2bf9d4",
+  "feature": "Fix static manifest fallback for direct R2 TTS assets",
+  "updatedAt": "2026-05-06 14:40:07",
+  "note": "Production must be newer than d2bf9d4 and include 9f303f2 or later before English lesson audio playback test."
+}
