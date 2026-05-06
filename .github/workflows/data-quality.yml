@@ -25,6 +25,8 @@ jobs:
         run: npm ci
 
       - name: Curriculum Audit
+        env:
+          MIN_QUESTIONS_PER_LESSON: 1
         run: npm run data:audit
 
       - name: Curriculum Check (baseline gate)
