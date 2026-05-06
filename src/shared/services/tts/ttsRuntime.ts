@@ -767,6 +767,7 @@ async function tryPlayFromLocalCache(
 
 async function tryPlayFromStaticManifest(
   assetKey: string | undefined,
+  lang: TtsLang,
   speed: number,
   options: SpeakTextOptions,
   token: number,
@@ -855,7 +856,7 @@ async function tryPlayFromStaticManifest(
     }
   }
 
-  const entry = await getStaticTtsManifestEntry(assetKey);
+  const entry = await getStaticTtsManifestEntry(assetKey, { lang });
   if (!entry) {
     return null;
   }
@@ -1015,7 +1016,9 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
     return !(window as any).electronAPI;
   })();
   const assetKey = String(options.assetKey || '').trim();
-  const isLessonCardR2Path = isWebProductionRuntime && lang === 'vi' && assetKey.startsWith('lesson-card:');
+  const isLessonCardR2Path = isWebProductionRuntime
+    && (lang === 'vi' || lang === 'en')
+    && assetKey.startsWith('lesson-card:');
   const isQuestionR2Path = (lang === 'vi' || lang === 'en') && assetKey.startsWith('question:');
   const isStrictR2StaticPath = isLessonCardR2Path || isQuestionR2Path;
   const desiredMode = isStrictR2StaticPath ? 'static' : requestedMode;
@@ -1091,7 +1094,7 @@ export async function speakTextAsync(text: string, lang: TtsLang = 'vi', options
     return directQuestionPlayback;
   }
 
-  const staticPlayback = await tryPlayFromStaticManifest(options.assetKey, speed, options, token);
+  const staticPlayback = await tryPlayFromStaticManifest(options.assetKey, lang, speed, options, token);
   if (staticPlayback?.status === 'completed' || staticPlayback?.status === 'stopped') {
     return staticPlayback;
   }
@@ -1226,7 +1229,7 @@ export async function prefetchText(text: string, lang: TtsLang = 'vi', options: 
       };
     }
 
-    const staticEntry = await prefetchStaticTtsAsset(options.assetKey);
+    const staticEntry = await prefetchStaticTtsAsset(options.assetKey, { lang });
     if (staticEntry?.available) {
       return {
         status: 'prefetched',
@@ -1243,7 +1246,7 @@ export async function prefetchText(text: string, lang: TtsLang = 'vi', options: 
   }
 
   if (options.assetKey) {
-    const staticEntry = await prefetchStaticTtsAsset(options.assetKey);
+    const staticEntry = await prefetchStaticTtsAsset(options.assetKey, { lang });
     if (staticEntry?.available) {
       return {
         status: 'prefetched',

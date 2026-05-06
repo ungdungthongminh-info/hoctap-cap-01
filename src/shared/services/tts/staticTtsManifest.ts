@@ -57,24 +57,37 @@ export function invalidateStaticTtsManifestCache(): void {
   manifestPromise = null;
 }
 
-function withResolvedAudioUrl(entry: Omit<StaticTtsManifestEntry, 'audioUrl'> & { audioUrl?: string }): StaticTtsManifestEntry {
+function withResolvedAudioUrl(
+  entry: Omit<StaticTtsManifestEntry, 'audioUrl'> & { audioUrl?: string },
+  options: { preferredProfileId?: string } = {},
+): StaticTtsManifestEntry {
   const assetPath = String(entry.assetPath || '').replace(/^\/+/, '');
   const key = String(entry.key || '').trim();
   const profileId = String(entry.profileId || '').trim();
+  const preferredProfileId = String(options.preferredProfileId || '').trim();
   const host = typeof window !== 'undefined' ? String(window.location.hostname || '').toLowerCase() : '';
   const isWebProduction = Boolean(host && host !== 'localhost' && host !== '127.0.0.1' && host !== '::1' && !(window as any).electronAPI);
-  const isLessonCardViV1 = assetPath.startsWith('audio/tts/assets/vi-v1/lesson-card-');
+  const lessonCardMatch = key.match(/^lesson-card:(\d+)$/i);
+  const lessonCardId = lessonCardMatch ? Number(lessonCardMatch[1]) : NaN;
+  const lessonCardProfileId = preferredProfileId === 'en-v1' || preferredProfileId === 'vi-v1'
+    ? preferredProfileId
+    : profileId;
+  const isLessonCardR2Eligible = Number.isFinite(lessonCardId)
+    && lessonCardId > 0
+    && (lessonCardProfileId === 'vi-v1' || lessonCardProfileId === 'en-v1');
   const questionMatch = key.match(/^question:(\d+)$/i);
   const questionId = questionMatch ? Number(questionMatch[1]) : NaN;
   const isQuestionR2Eligible = Number.isFinite(questionId)
     && questionId > 0
     && (profileId === 'vi-v1' || profileId === 'en-v1');
 
-  const resolvedPath = isQuestionR2Eligible
-    ? `audio/tts/assets/${profileId}/question/${questionId}.mp3`
-    : assetPath;
+  const resolvedPath = isLessonCardR2Eligible
+    ? `audio/tts/assets/${lessonCardProfileId}/lesson-card-${lessonCardId}.mp3`
+    : (isQuestionR2Eligible
+      ? `audio/tts/assets/${profileId}/question/${questionId}.mp3`
+      : assetPath);
 
-  const audioUrl = (isWebProduction && R2_PUBLIC_BASE_URL && (isLessonCardViV1 || isQuestionR2Eligible))
+  const audioUrl = (isWebProduction && R2_PUBLIC_BASE_URL && (isLessonCardR2Eligible || isQuestionR2Eligible))
     ? `${R2_PUBLIC_BASE_URL}/${resolvedPath}`
     : (entry.audioUrl || `${import.meta.env.BASE_URL || '/'}${resolvedPath}`.replace(/([^:]\/)\/+/g, '$1'));
   return {
@@ -119,18 +132,28 @@ export async function loadStaticTtsManifest(force = false): Promise<StaticTtsMan
   return manifest;
 }
 
-export async function getStaticTtsManifestEntry(assetKey?: string): Promise<StaticTtsManifestEntry | null> {
+export async function getStaticTtsManifestEntry(
+  assetKey?: string,
+  options: { lang?: 'vi' | 'en' } = {},
+): Promise<StaticTtsManifestEntry | null> {
   if (!assetKey) {
     return null;
   }
 
   const manifest = await loadStaticTtsManifest();
   const raw = manifest?.entries?.[assetKey];
-  return raw ? withResolvedAudioUrl(raw) : null;
+  return raw
+    ? withResolvedAudioUrl(raw, {
+      preferredProfileId: options.lang === 'en' ? 'en-v1' : 'vi-v1',
+    })
+    : null;
 }
 
-export async function prefetchStaticTtsAsset(assetKey?: string): Promise<StaticTtsManifestEntry | null> {
-  const entry = await getStaticTtsManifestEntry(assetKey);
+export async function prefetchStaticTtsAsset(
+  assetKey?: string,
+  options: { lang?: 'vi' | 'en' } = {},
+): Promise<StaticTtsManifestEntry | null> {
+  const entry = await getStaticTtsManifestEntry(assetKey, options);
   if (!entry?.available) {
     return entry;
   }

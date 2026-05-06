@@ -115,7 +115,7 @@ export function LessonDetailPage() {
   const cardsKey = cards.map((card) => `${card.id}:${card.title}`).join('|');
   const questionCount = getLessonQuestions(id).length;
   const progress = getLessonProgress(id);
-  const lang = state.student.subjectCode === 'english' ? 'en' : 'vi';
+  const lang = lesson?.subjectCode === 'english' ? 'en' : 'vi';
   const hasDesktopAudioStore = typeof window !== 'undefined' && Boolean(window.electronAPI?.audioPacks);
 
   const setCardStatus = useCallback((cardId: number, status: LessonCardAudioState) => {
@@ -125,6 +125,10 @@ export function LessonDetailPage() {
   const ensureCurrentGradePackReady = useCallback(async () => {
     if (!lesson || cards.length === 0) {
       return false;
+    }
+    if (lesson.subjectCode === 'english') {
+      setPackNotice('');
+      return true;
     }
     const probeAssetKey = buildLessonCardAssetKey(cards[0].id);
     const probeBlob = await getStaticPackAudioBlob(probeAssetKey);
