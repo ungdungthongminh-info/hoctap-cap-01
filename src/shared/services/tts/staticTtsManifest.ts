@@ -142,11 +142,29 @@ export async function getStaticTtsManifestEntry(
 
   const manifest = await loadStaticTtsManifest();
   const raw = manifest?.entries?.[assetKey];
-  return raw
-    ? withResolvedAudioUrl(raw, {
-      preferredProfileId: options.lang === 'en' ? 'en-v1' : 'vi-v1',
-    })
-    : null;
+  const preferredProfileId = options.lang === 'en' ? 'en-v1' : 'vi-v1';
+  if (raw) {
+    return withResolvedAudioUrl(raw, { preferredProfileId });
+  }
+
+  // Synthesize minimal entries for direct R2 mapping when key is not present in static manifest.
+  const lessonCardMatch = assetKey.match(/^lesson-card:(\d+)$/i);
+  const questionMatch = assetKey.match(/^question:(\d+)$/i);
+  if (!lessonCardMatch && !questionMatch) {
+    return null;
+  }
+
+  const fallbackEntry: Omit<StaticTtsManifestEntry, 'audioUrl'> = {
+    key: assetKey,
+    assetPath: '',
+    lang: options.lang === 'en' ? 'en-US' : 'vi-VN',
+    usage: lessonCardMatch ? 'lesson-card' : 'question',
+    profileId: preferredProfileId,
+    contentVersion: manifest?.summary?.contentVersion || import.meta.env.VITE_APP_CONTENT_VERSION || '2026-04-27-v1',
+    available: true,
+    textHash: '',
+  };
+  return withResolvedAudioUrl(fallbackEntry, { preferredProfileId });
 }
 
 export async function prefetchStaticTtsAsset(
