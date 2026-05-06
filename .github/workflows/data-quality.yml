@@ -20,6 +20,8 @@ jobs:
           cache: npm
 
       - name: Install
+        env:
+          ELECTRON_SKIP_BINARY_DOWNLOAD: 1
         run: npm ci
 
       - name: Curriculum Audit
