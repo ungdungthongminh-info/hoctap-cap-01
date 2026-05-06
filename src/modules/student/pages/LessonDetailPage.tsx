@@ -116,6 +116,7 @@ export function LessonDetailPage() {
   const questionCount = getLessonQuestions(id).length;
   const progress = getLessonProgress(id);
   const lang = lesson?.subjectCode === 'english' ? 'en' : 'vi';
+  const shouldShowOfflineLessonDownload = lang !== 'en';
   const hasDesktopAudioStore = typeof window !== 'undefined' && Boolean(window.electronAPI?.audioPacks);
 
   const setCardStatus = useCallback((cardId: number, status: LessonCardAudioState) => {
@@ -466,15 +467,17 @@ export function LessonDetailPage() {
                 <Download size={16} />
                 {isPrefetching ? 'Đang tạo audio...' : 'Tạo sẵn audio'}
               </button>
-              <button
-                className="btn flex items-center gap-2"
-                style={{ background: 'var(--color-surface)', color: 'var(--color-primary-dark)', border: '1px solid var(--color-primary)' }}
-                onClick={() => void downloadCurrentGradePack()}
-                disabled={!lesson || packSyncing}
-              >
-                <Download size={16} />
-                {packSyncing ? 'Đang tải audio bài học...' : 'Tải audio bài học cho lớp hiện tại'}
-              </button>
+              {shouldShowOfflineLessonDownload && (
+                <button
+                  className="btn flex items-center gap-2"
+                  style={{ background: 'var(--color-surface)', color: 'var(--color-primary-dark)', border: '1px solid var(--color-primary)' }}
+                  onClick={() => void downloadCurrentGradePack()}
+                  disabled={!lesson || packSyncing}
+                >
+                  <Download size={16} />
+                  {packSyncing ? 'Đang tải audio bài học...' : 'Tải audio bài học cho lớp hiện tại'}
+                </button>
+              )}
             </div>
             {packNotice && (
               <div
