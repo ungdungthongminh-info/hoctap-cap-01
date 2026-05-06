@@ -3,6 +3,7 @@ import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from './shared/themes';
 import { AppDataProvider } from './shared/providers/AppDataProvider';
 import { ToastProvider } from './shared/components/Toast';
+import { StaticAudioSyncBanner } from './shared/components/StaticAudioSyncBanner';
 import { isAdminUnlocked, unlockAdmin } from './shared/utils/adminAccess';
 import { STORAGE_KEYS } from './shared/constants/storageKeys';
 import { AppRoutes } from './routes/appRoutes';
@@ -182,6 +183,7 @@ export function App() {
         <AppDataProvider>
           <LicenseHeartbeat />
           <ToastProvider>
+            <StaticAudioSyncBanner />
             <HashRouter>
               <AppRoutes AdminGate={AdminGate} AdminErrorBoundary={AdminErrorBoundary} />
             </HashRouter>
