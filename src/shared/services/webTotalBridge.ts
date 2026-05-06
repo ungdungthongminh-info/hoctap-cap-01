@@ -465,7 +465,7 @@ export function isCacheWithinGrace(): boolean {
  */
 export async function fetchAndCacheLicenses(customerId: string, appId?: string): Promise<LicenseCache> {
   const bridgeToken = getBridgeToken();
-  const aid = appId || 'hoctap-cap-01';
+  const aid = appId || 'app-study-12';
   let res: Response;
   let payload: any = {};
 
@@ -557,8 +557,8 @@ export async function verifyLicenseKey(params: {
 }): Promise<VerifyLicenseResult> {
   const bridgeToken = getBridgeToken();
   const runtimeProfile = params.clientProfile || getRuntimeClientProfile();
-  const normalizedAppId = String(params?.appId || 'hoctap-cap-01').trim().toLowerCase();
-  const isCap01 = normalizedAppId === 'hoctap-cap-01' || normalizedAppId === 'app-study-12';
+  const normalizedAppId = String(params?.appId || 'app-study-12').trim().toLowerCase();
+  const isCap01 = normalizedAppId === 'app-study-12';
   let result;
 
   try {
@@ -571,7 +571,7 @@ export async function verifyLicenseKey(params: {
       },
       body: JSON.stringify({
         licenseKey: String(params.licenseKey || '').trim().toUpperCase(),
-        appId: isCap01 ? 'hoctap-cap-01' : String(params.appId || '').trim() || 'hoctap-cap-01',
+        appId: isCap01 ? 'app-study-12' : String(params.appId || '').trim() || 'app-study-12',
         ...(params.customerId ? { customerId: String(params.customerId).trim() } : {}),
         ...(params.customerEmail ? { customerEmail: String(params.customerEmail).trim().toLowerCase() } : {}),
         ...(params.deviceId ? { deviceId: params.deviceId } : {}),
@@ -653,7 +653,7 @@ export async function verifyLicenseKey(params: {
       status: res.status,
       backendError,
       clientProfile: runtimeProfile,
-      appId: isCap01 ? 'hoctap-cap-01' : String(params.appId || ''),
+      appId: isCap01 ? 'app-study-12' : String(params.appId || ''),
       hasCustomerEmail: Boolean(params.customerEmail),
     });
 
@@ -714,7 +714,7 @@ export async function verifyLicenseKey(params: {
   };
 }
 
-export async function renewCurrentLicenseLease(appId = 'hoctap-cap-01'): Promise<VerifyLicenseResult | null> {
+export async function renewCurrentLicenseLease(appId = 'app-study-12'): Promise<VerifyLicenseResult | null> {
   const licenseKey = getStoredLicenseKey();
   if (!licenseKey) {
     return null;
@@ -723,7 +723,7 @@ export async function renewCurrentLicenseLease(appId = 'hoctap-cap-01'): Promise
   // Cap01: NEVER auto-verify when offline. Desktop uses local cache with grace period.
   // Only verify when explicitly activated on /license/activate page.
   const normalizedAppId = String(appId || '').trim().toLowerCase();
-  const isCap01 = normalizedAppId === 'hoctap-cap-01' || normalizedAppId === 'app-study-12';
+  const isCap01 = normalizedAppId === 'app-study-12';
   
   // Check both navigator.onLine AND localStorage desktop offline flag (for acceptance audit)
   let isOffline = false;
@@ -756,7 +756,7 @@ export async function renewCurrentLicenseLease(appId = 'hoctap-cap-01'): Promise
   });
 }
 
-export async function refreshCurrentLicenseState(appId = 'hoctap-cap-01'): Promise<{
+export async function refreshCurrentLicenseState(appId = 'app-study-12'): Promise<{
   verified: boolean;
   downgraded: boolean;
   reason?: string;

@@ -1,7 +1,7 @@
 import { BACKEND_API_BASE } from './webTotalBridge';
 import { getDeviceId } from '../utils/deviceFingerprint';
 
-const APP_ID = 'hoctap-cap-01';
+const APP_ID = 'app-study-12';
 const CACHE_KEY = 'hhk_cap01_license_cache';
 const LAST_VERIFY_KEY = 'hhk_cap01_last_verify_at';
 const VERIFY_INTERVAL_MS = 24 * 60 * 60 * 1000;
