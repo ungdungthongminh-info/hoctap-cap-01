@@ -8,6 +8,7 @@ const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..');
 const OUTPUT_JSON = path.join(REPO_ROOT, 'english-lesson-tts-catalog.json');
 const OUTPUT_MD = path.join(REPO_ROOT, 'english-lesson-tts-catalog.md');
+const OUTPUT_CSV = path.join(REPO_ROOT, 'english-lesson-tts-catalog.csv');
 
 const PROFILE_ID = 'en-v1';
 const SUBJECT_CODE = 'english';
@@ -41,6 +42,13 @@ function gradeSort(a, b) {
     || Number(a.cardId) - Number(b.cardId);
 }
 
+function parseArgs(argv) {
+  const args = new Set(argv.slice(2));
+  return {
+    noProbe: args.has('--no-probe'),
+  };
+}
+
 async function probeHead(url) {
   try {
     const res = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
@@ -68,8 +76,10 @@ function buildMarkdown(report) {
   lines.push('');
   lines.push(`- Generated at: ${report.generatedAt}`);
   lines.push('- Mode: dry-run only (no Google TTS, no upload, no runtime/manifest edits).');
-  lines.push(`- Profile: ${report.scope.profile}`);
+  lines.push(`- profile: ${report.scope.profile}`);
   lines.push(`- Subject: ${report.scope.subject}`);
+  lines.push(`- Probe mode: ${report.probeMode}`);
+  lines.push('- Output files: english-lesson-tts-catalog.json, english-lesson-tts-catalog.md, english-lesson-tts-catalog.csv');
   lines.push('');
   lines.push('## Dry-run Metrics');
   lines.push('');
@@ -101,7 +111,32 @@ function buildMarkdown(report) {
   return `${lines.join('\n')}\n`;
 }
 
+function toCsvCell(value) {
+  const text = String(value ?? '');
+  if (!/[",\n\r]/.test(text)) return text;
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+function buildCsv(items) {
+  const header = 'grade,lessonId,cardId,subject,lessonTitle,text,profile,expectedObjectKey,expectedR2Url';
+  const rows = items.map((item) => [
+    item.grade,
+    item.lessonId,
+    item.cardId,
+    item.subject,
+    item.lessonTitle,
+    item.text,
+    item.profile,
+    item.expectedObjectKey,
+    item.expectedR2Url,
+  ].map(toCsvCell).join(','));
+  return `${[header, ...rows].join('\n')}\n`;
+}
+
 async function main() {
+  const cli = parseArgs(process.argv);
+  const shouldProbe = !cli.noProbe;
+
   const lessons = seedLessons
     .filter((lesson) => Number(lesson.isActive) !== 0)
     .filter((lesson) => lesson.subjectCode === SUBJECT_CODE)
@@ -141,12 +176,14 @@ async function main() {
   const tooLongText = rows.filter((row) => row.text.length > TOO_LONG_THRESHOLD).length;
 
   const probeResults = [];
-  for (const row of rows) {
-    const head = await probeHead(row.expectedR2Url);
-    probeResults.push({
-      cardId: row.cardId,
-      ...head,
-    });
+  if (shouldProbe) {
+    for (const row of rows) {
+      const head = await probeHead(row.expectedR2Url);
+      probeResults.push({
+        cardId: row.cardId,
+        ...head,
+      });
+    }
   }
 
   const probeMap = new Map(probeResults.map((result) => [result.cardId, result]));
@@ -195,6 +232,7 @@ async function main() {
   const report = {
     generatedAt: nowIso(),
     mode: 'dry-run',
+    probeMode: shouldProbe ? 'enabled' : 'disabled (--no-probe)',
     scope: {
       profile: PROFILE_ID,
       subject: SUBJECT_CODE,
@@ -225,15 +263,20 @@ async function main() {
     generatedAt: report.generatedAt,
     scope: report.scope,
     metrics: report.metrics,
+    probeMode: report.probeMode,
     items: enrichedRows,
   });
+  const csv = buildCsv(enrichedRows);
 
   await writeFile(OUTPUT_JSON, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
   await writeFile(OUTPUT_MD, markdown, 'utf8');
+  await writeFile(OUTPUT_CSV, csv, 'utf8');
 
   console.log(JSON.stringify({
     outputJson: OUTPUT_JSON,
     outputMarkdown: OUTPUT_MD,
+    outputCsv: OUTPUT_CSV,
+    probeMode: report.probeMode,
     totalLessons: report.metrics.totalLessons,
     totalCards: report.metrics.totalCards,
     existingR2Objects: report.metrics.existingR2Objects,

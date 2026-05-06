@@ -1,9 +1,11 @@
 # English Lesson TTS Catalog (Dry Run)
 
-- Generated at: 2026-05-05T16:36:12.894Z
+- Generated at: 2026-05-06T01:29:29.242Z
 - Mode: dry-run only (no Google TTS, no upload, no runtime/manifest edits).
-- Profile: en-v1
+- profile: en-v1
 - Subject: english
+- Probe mode: disabled (--no-probe)
+- Output files: english-lesson-tts-catalog.json, english-lesson-tts-catalog.md, english-lesson-tts-catalog.csv
 
 ## Dry-run Metrics
 
