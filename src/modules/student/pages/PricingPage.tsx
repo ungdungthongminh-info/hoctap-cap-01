@@ -768,7 +768,7 @@ export function PricingPage() {
     {
       id: 'standard_1year_1grade',
       title: 'Gói theo lớp',
-      badge: 'Từ 299.000đ/năm',
+      badge: 'Từ 199.000đ/năm',
       description: 'Mua đúng 1 lớp bé cần học trong năm.',
       billingCycle: 'yearly' as const,
       productUrl: WEB_TOTAL_PRODUCT_URLS.standard_1year_1grade.yearly,
@@ -1564,7 +1564,7 @@ export function PricingPage() {
         </div>
 
         <div className="text-sm font-semibold" style={{ color: '#475569' }}>
-          Gói theo lớp từ 299.000đ/năm, Standard 3 lớp 599.000đ/năm.
+          Gói theo lớp từ 199.000đ/năm, Standard 3 lớp 599.000đ/năm.
         </div>
       </section>
 
