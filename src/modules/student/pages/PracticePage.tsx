@@ -2,9 +2,10 @@ import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAppData } from '../../../shared/providers/AppDataProvider';
 import { ArrowLeft, ArrowRight, CheckCircle, XCircle, Clock, AlertTriangle, Lightbulb, ArrowUp, ArrowDown, Volume2 } from 'lucide-react';
-import { playCorrect, playWrong, playWarning, playFinish, playClick, speakTextAsync, getPreferredVoice } from '../../../shared/utils/sounds';
+import { playCorrect, playWrong, playWarning, playFinish, playClick, speakTextAsync } from '../../../shared/utils/sounds';
 import { MascotCharacter } from '../../../shared/components';
 import { canAccessLesson, getAccessPlan } from '../../../shared/services/accessControl';
+import { getDefaultStaticVoiceProfile } from '../../../shared/services/tts/ttsVoiceProfiles';
 import '../styles/premiumButtons.css';
 
 // ---------------------------------------------------------------------------
@@ -19,6 +20,7 @@ function buildQuestionAudioUrl(profile: string, questionId: number | string): st
 }
 
 let _directQuestionAudio: HTMLAudioElement | null = null;
+const PRIMARY_ENGLISH_VOICE_ID = getDefaultStaticVoiceProfile('en-US').voiceId;
 
 function stopDirectQuestionAudio() {
   if (_directQuestionAudio) {
@@ -252,7 +254,6 @@ export function PracticePage() {
   const speakQuestion = useCallback(async () => {
     if (!currentQuestion) return;
     const qid = currentQuestion.id;
-    const preferredEnVoice = String(getPreferredVoice('en') || '').trim();
 
     if (questionLang === 'en') {
       const text = String(currentQuestion.questionText || '').trim();
@@ -264,14 +265,34 @@ export function PracticePage() {
       setQuestionAudioPending(true);
       setQuestionAudioError(null);
       try {
-        const playback = await speakTextAsync(text, 'en', {
+        const managedPlayback = await speakTextAsync(text, 'en', {
           policy: 'practice-on-demand',
           mode: 'advanced',
-          voiceId: preferredEnVoice || 'en-US-Neural2-F',
+          voiceId: PRIMARY_ENGLISH_VOICE_ID,
+          allowNativeFallback: false,
+          currentGrade: lesson?.grade,
+        });
+        if (managedPlayback.status === 'completed' || managedPlayback.status === 'stopped') {
+          setQuestionAudioError(null);
+          return;
+        }
+
+        if (qid) {
+          const directResult = await playQuestionAudioDirect(qid, 'en');
+          if (directResult.ok) {
+            setQuestionAudioError(null);
+            return;
+          }
+        }
+
+        const fallbackPlayback = await speakTextAsync(text, 'en', {
+          policy: 'practice-on-demand',
+          mode: 'advanced',
+          voiceId: PRIMARY_ENGLISH_VOICE_ID,
           allowNativeFallback: true,
           currentGrade: lesson?.grade,
         });
-        if (playback.status === 'error') {
+        if (fallbackPlayback.status === 'error') {
           setQuestionAudioError('Chưa tải được audio luyện tập');
           return;
         }
@@ -302,8 +323,8 @@ export function PracticePage() {
       try {
         const fallback = await speakTextAsync(text, questionLang, {
           policy: 'practice-on-demand',
-          mode: questionLang === 'en' ? 'advanced' : 'static',
-          allowNativeFallback: questionLang === 'en',
+          mode: 'static',
+          allowNativeFallback: false,
           currentGrade: lesson?.grade,
         });
         if (fallback.status === 'error') {

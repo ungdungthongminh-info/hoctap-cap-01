@@ -14,6 +14,7 @@ import { MascotCharacter } from '../../../shared/components';
 import { canAccessLesson, getAccessPlan } from '../../../shared/services/accessControl';
 import { buildLessonCardAssetKey } from '../../../shared/services/tts/ttsAssetKeys';
 import { buildLessonCardNarrationText } from '../../../shared/services/tts/ttsNarration';
+import { getDefaultStaticVoiceProfile } from '../../../shared/services/tts/ttsVoiceProfiles';
 
 type LessonCardAudioState = 'idle' | 'loading' | 'ready' | 'playing';
 type LessonCardSourceState = 'unknown' | 'desktop-offline' | 'web-offline' | 'online' | 'device';
@@ -40,6 +41,62 @@ const audioStateMeta: Record<LessonCardAudioState, { label: string; bg: string; 
   ready: { label: 'Đã sẵn sàng', bg: '#D1FAE5', color: '#047857' },
   playing: { label: 'Đang phát', bg: '#DBEAFE', color: '#1D4ED8' },
 };
+
+const PRIMARY_ENGLISH_VOICE_ID = getDefaultStaticVoiceProfile('en-US').voiceId;
+const LESSON_CARD_R2_BASE = 'https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/assets';
+
+let directLessonAudio: HTMLAudioElement | null = null;
+let directLessonResolver: ((result: { status: 'completed' | 'error' | 'stopped'; url: string; error?: string }) => void) | null = null;
+
+function stopDirectLessonAudio() {
+  if (directLessonAudio) {
+    directLessonAudio.pause();
+    directLessonAudio.src = '';
+    directLessonAudio = null;
+  }
+  if (directLessonResolver) {
+    directLessonResolver({ status: 'stopped', url: '' });
+    directLessonResolver = null;
+  }
+}
+
+function playLessonCardAudioDirect(cardId: number | string, lang: 'vi' | 'en'):
+Promise<{ status: 'completed' | 'error' | 'stopped'; url: string; error?: string }> {
+  const profile = lang === 'en' ? 'en-v1' : 'vi-v1';
+  const url = `${LESSON_CARD_R2_BASE}/${profile}/lesson-card-${cardId}.mp3`;
+
+  stopDirectLessonAudio();
+
+  return new Promise((resolve) => {
+    const audio = new Audio(url);
+    directLessonAudio = audio;
+    directLessonResolver = resolve;
+
+    audio.onended = () => {
+      if (directLessonResolver === resolve) {
+        directLessonResolver = null;
+      }
+      directLessonAudio = null;
+      resolve({ status: 'completed', url });
+    };
+
+    audio.onerror = () => {
+      if (directLessonResolver === resolve) {
+        directLessonResolver = null;
+      }
+      directLessonAudio = null;
+      resolve({ status: 'error', url, error: 'audio-load-error' });
+    };
+
+    void audio.play().catch((error) => {
+      if (directLessonResolver === resolve) {
+        directLessonResolver = null;
+      }
+      directLessonAudio = null;
+      resolve({ status: 'error', url, error: String(error) });
+    });
+  });
+}
 
 const sourceStateMeta: Record<LessonCardSourceState, { label: string; bg: string; color: string }> = {
   unknown: { label: 'Nguồn đọc: Chưa đọc', bg: '#F3F4F6', color: '#6B7280' },
@@ -166,6 +223,7 @@ export function LessonDetailPage() {
 
   const resetPlaybackState = useCallback(() => {
     runRef.current += 1;
+    stopDirectLessonAudio();
     stopSpeaking();
     setSpeakingCardId(null);
     setIsReadingAll(false);
@@ -207,6 +265,7 @@ export function LessonDetailPage() {
   useEffect(() => {
     return () => {
       runRef.current += 1;
+      stopDirectLessonAudio();
       stopSpeaking();
     };
   }, []);
@@ -288,12 +347,35 @@ export function LessonDetailPage() {
       return;
     }
 
+    if (isEnglishLesson) {
+      setCardStatus(card.id, 'loading');
+      const direct = await playLessonCardAudioDirect(card.id, 'en');
+      if (currentRun !== runRef.current || direct.status === 'stopped') {
+        return;
+      }
+      if (direct.status === 'completed') {
+        logPlaybackRuntime({
+          cardId: card.id,
+          assetKey,
+          provider: 'static-manifest',
+          resolvedSource: 'web-public-static-manifest',
+          assetUrl: direct.url,
+          status: 'completed',
+        });
+        setSpeakingCardId(null);
+        setCardStatus(card.id, 'ready');
+        setCardSources((prev) => ({ ...prev, [card.id]: 'online' }));
+        return;
+      }
+    }
+
     const result = await speakTextAsync(buildLessonCardNarrationText(card), lang, {
       policy: 'lesson-read-all',
       mode: isEnglishLesson ? 'advanced' : 'static',
+      voiceId: isEnglishLesson ? PRIMARY_ENGLISH_VOICE_ID : undefined,
       assetKey,
       currentGrade: lesson?.grade,
-      allowNativeFallback: isEnglishLesson,
+      allowNativeFallback: !isEnglishLesson,
       onStatusChange: (status) => {
         if (currentRun !== runRef.current) return;
         if (status === 'loading' || status === 'fallback-native') {
@@ -345,12 +427,35 @@ export function LessonDetailPage() {
 
       setSpeakingCardId(card.id);
       const assetKey = buildLessonCardAssetKey(card.id);
+
+      if (isEnglishLesson) {
+        setCardStatus(card.id, 'loading');
+        const direct = await playLessonCardAudioDirect(card.id, 'en');
+        if (currentRun !== runRef.current || direct.status === 'stopped') {
+          break;
+        }
+        if (direct.status === 'completed') {
+          logPlaybackRuntime({
+            cardId: card.id,
+            assetKey,
+            provider: 'static-manifest',
+            resolvedSource: 'web-public-static-manifest',
+            assetUrl: direct.url,
+            status: 'completed',
+          });
+          setCardStatus(card.id, 'ready');
+          setCardSources((prev) => ({ ...prev, [card.id]: 'online' }));
+          continue;
+        }
+      }
+
       const result = await speakTextAsync(buildLessonCardNarrationText(card), lang, {
         policy: 'lesson-read-all',
         mode: isEnglishLesson ? 'advanced' : 'static',
+        voiceId: isEnglishLesson ? PRIMARY_ENGLISH_VOICE_ID : undefined,
         assetKey,
         currentGrade: lesson?.grade,
-        allowNativeFallback: isEnglishLesson,
+        allowNativeFallback: !isEnglishLesson,
         onStatusChange: (status) => {
           if (currentRun !== runRef.current) return;
           if (status === 'loading' || status === 'fallback-native') {
