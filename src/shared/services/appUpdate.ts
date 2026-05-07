@@ -309,7 +309,12 @@ export async function checkAppUpdate(): Promise<AppUpdateCheckResult> {
 }
 
 export function getAppUpdateDownloadUrl(result: AppUpdateCheckResult | null): string {
-  if (result?.manifest?.downloadUrl) return result.manifest.downloadUrl;
-  return getWindowsAppDownloadUrl(result?.latestVersion || result?.manifest?.latestVersion);
+  const resolvedVersion = String(result?.latestVersion || result?.manifest?.latestVersion || '').trim();
+  const manifestUrl = String(result?.manifest?.downloadUrl || '').trim();
+  if (resolvedVersion) {
+    return getWindowsAppDownloadUrl(resolvedVersion);
+  }
+  if (manifestUrl) return manifestUrl;
+  return getWindowsAppDownloadUrl(undefined);
 }
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAppData } from '../../../shared/providers/AppDataProvider';
 import { ArrowLeft, ArrowRight, CheckCircle, XCircle, Clock, AlertTriangle, Lightbulb, ArrowUp, ArrowDown, Volume2 } from 'lucide-react';
-import { playCorrect, playWrong, playWarning, playFinish, playClick } from '../../../shared/utils/sounds';
+import { playCorrect, playWrong, playWarning, playFinish, playClick, speakTextAsync } from '../../../shared/utils/sounds';
 import { MascotCharacter } from '../../../shared/components';
 import { canAccessLesson, getAccessPlan } from '../../../shared/services/accessControl';
 import '../styles/premiumButtons.css';
@@ -261,11 +261,31 @@ export function PracticePage() {
     const result = await playQuestionAudioDirect(qid, questionLang);
     setQuestionAudioPending(false);
     if (!result.ok) {
-      setQuestionAudioError('Chưa tải được audio luyện tập');
-    } else {
-      setQuestionAudioError(null);
+      const text = String(currentQuestion.questionText || '').trim();
+      if (!text) {
+        setQuestionAudioError('Chưa tải được audio luyện tập');
+        return;
+      }
+
+      try {
+        const fallback = await speakTextAsync(text, questionLang, {
+          policy: 'practice-on-demand',
+          mode: questionLang === 'en' ? 'advanced' : 'static',
+          allowNativeFallback: questionLang === 'en',
+          currentGrade: lesson?.grade,
+        });
+        if (fallback.status === 'error') {
+          setQuestionAudioError('Chưa tải được audio luyện tập');
+          return;
+        }
+        setQuestionAudioError(null);
+      } catch {
+        setQuestionAudioError('Chưa tải được audio luyện tập');
+      }
+      return;
     }
-  }, [currentQuestion, questionLang]);
+    setQuestionAudioError(null);
+  }, [currentQuestion, lesson?.grade, questionLang]);
 
   // Set default based on grade when lesson loads OR when navigating to a new lesson
   // (hash-routing keeps component mounted, so we must react to lesson?.id changes)
