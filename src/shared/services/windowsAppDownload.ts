@@ -21,5 +21,28 @@ export function getWindowsAppDownloadUrl(version?: string | null): string {
 }
 
 export function openWindowsAppDownload(version?: string | null): void {
-  window.location.assign(getWindowsAppDownloadUrl(version));
+  const url = getWindowsAppDownloadUrl(version);
+  if (typeof window === 'undefined') return;
+
+  const popup = window.open(url, '_blank', 'noopener,noreferrer');
+  if (popup) {
+    popup.opener = null;
+    return;
+  }
+
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.target = '_blank';
+  anchor.rel = 'noopener noreferrer';
+  anchor.download = '';
+  anchor.style.display = 'none';
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+
+  window.setTimeout(() => {
+    if (document.visibilityState === 'visible') {
+      window.location.assign(url);
+    }
+  }, 250);
 }

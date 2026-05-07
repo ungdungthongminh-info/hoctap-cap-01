@@ -1,10 +1,10 @@
 {
   "appId": "hoc-tap-cap-01",
   "channel": "stable",
-  "latestVersion": "0.1.5",
+  "latestVersion": "0.1.11",
   "minimumSupportedVersion": "0.1.0",
-  "publishedAt": "2026-05-07T06:49:11.198Z",
-  "title": "Ban cap nhat on dinh 0.1.5",
+  "publishedAt": "2026-05-07T09:33:05.558Z",
+  "title": "Ban cap nhat on dinh 0.1.11",
   "notes": [
     "Sua loi dong goi desktop: loai bo file audio khoi installer de giam dung luong.",
     "Toi uu flow kich hoat key va phan quyen theo goi.",

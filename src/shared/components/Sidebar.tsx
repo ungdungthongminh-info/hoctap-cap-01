@@ -160,6 +160,20 @@ export function Sidebar() {
   const readySubjects = gradeSubjects.filter((s) =>
     state.lessons.some((l) => l.grade === state.student.grade && l.subjectCode === s.code),
   );
+  const planLabel = currentPlan === 'free' ? 'Free' : currentPlan === 'standard' ? 'Standard' : 'Premium';
+  const mobileDockItems: NavItem[] = [
+    { to: '/home', icon: Home, label: 'Trang chủ' },
+    { to: '/lessons', icon: BookOpen, label: 'Học' },
+    { to: '/quiz', icon: PenTool, label: 'Luyện' },
+  ];
+  const mobileQuickItems: NavItem[] = [
+    { to: '/profiles', icon: UserCircle, label: 'Hồ sơ' },
+    { to: '/desktop-audio', icon: Download, label: 'Audio offline' },
+    { to: '/progress', icon: TrendingUp, label: 'Tiến bộ' },
+    { to: '/parent', icon: Users, label: 'Phụ huynh' },
+    { to: '/themes', icon: Palette, label: 'Giao diện' },
+    { to: '/pricing', icon: Crown, label: 'Gói dịch vụ' },
+  ];
 
   const lessonCountByGrade = (g: number) => state.lessons.filter((l) => l.grade === g).length;
 
@@ -329,6 +343,11 @@ export function Sidebar() {
     }
   };
 
+  const openWindowsDownload = () => {
+    openWindowsAppDownload();
+    handleNavItemClick();
+  };
+
   return (
     <>
       {isMobileNav && isMobileMenuOpen && (
@@ -340,144 +359,300 @@ export function Sidebar() {
         />
       )}
       <aside className={`app-sidebar ${isMobileMenuOpen ? 'mobile-nav-open' : ''}`}>
-      <button
-        type="button"
-        className="sidebar-mobile-toggle"
-        aria-label={isMobileMenuOpen ? 'Đóng menu' : 'Mở menu'}
-        aria-expanded={isMobileMenuOpen}
-        onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-      >
-        {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-        <span>{isMobileMenuOpen ? 'Đóng menu' : 'Menu'}</span>
-      </button>
-      <div className="sidebar-brand-card">
-        <div className="sidebar-brand-main">
-          <MascotCharacter size="sm" />
-          <div>
-            <div className="sidebar-brand-title">Học Hứng Khởi</div>
-            <div className="sidebar-brand-subtitle">Cùng {theme.mascotName} học nào!</div>
-          </div>
-        </div>
+        {!isMobileNav && (
+          <>
+            <div className="sidebar-brand-card">
+              <div className="sidebar-brand-main">
+                <MascotCharacter size="sm" />
+                <div>
+                  <div className="sidebar-brand-title">Học Hứng Khởi</div>
+                  <div className="sidebar-brand-subtitle">Cùng {theme.mascotName} học nào!</div>
+                </div>
+              </div>
 
-        <div className="sidebar-status-row">
-          <span className="sidebar-status-chip" data-online={online}>
-            {online ? <Wifi size={12} /> : <WifiOff size={12} />}
-            {online ? 'Trực tuyến' : 'Ngoại tuyến'}
-          </span>
-          <NavLink to="/pricing" className="sidebar-plan-chip">
-            <Crown size={12} />
-            {currentPlan === 'free' ? 'Free' : currentPlan === 'standard' ? 'Standard' : 'Premium'}
-          </NavLink>
-        </div>
+              <div className="sidebar-status-row">
+                <span className="sidebar-status-chip" data-online={online}>
+                  {online ? <Wifi size={12} /> : <WifiOff size={12} />}
+                  {online ? 'Trực tuyến' : 'Ngoại tuyến'}
+                </span>
+                <NavLink to="/pricing" className="sidebar-plan-chip">
+                  <Crown size={12} />
+                  {planLabel}
+                </NavLink>
+              </div>
 
-        <div className="sidebar-study-context">
-          <label>
-            <span>Lớp hiện tại</span>
-            <select value={state.student.grade} onChange={(event) => handleGradeChange(event.target.value)}>
-              {[0, 1, 2, 3, 4, 5].map((g) => {
-                const gradeReady = lessonCountByGrade(g) > 0;
-                const unlocked = unlockedGrades.includes(g);
-                return (
-                  <option key={g} value={g} disabled={!gradeReady || !unlocked}>
-                    {getGradeLabel(g)}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
-          <label>
-            <span>Môn đang học</span>
-            <select
-              value={state.student.subjectCode}
-              onChange={(event) => updateStudent({ subjectCode: event.target.value })}
-            >
-              {(readySubjects.length > 0 ? readySubjects : gradeSubjects).map((s) => (
-                <option key={s.code} value={s.code}>
-                  {s.emoji} {s.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
+              <div className="sidebar-study-context">
+                <label>
+                  <span>Lớp hiện tại</span>
+                  <select value={state.student.grade} onChange={(event) => handleGradeChange(event.target.value)}>
+                    {[0, 1, 2, 3, 4, 5].map((g) => {
+                      const gradeReady = lessonCountByGrade(g) > 0;
+                      const unlocked = unlockedGrades.includes(g);
+                      return (
+                        <option key={g} value={g} disabled={!gradeReady || !unlocked}>
+                          {getGradeLabel(g)}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </label>
+                <label>
+                  <span>Môn đang học</span>
+                  <select
+                    value={state.student.subjectCode}
+                    onChange={(event) => updateStudent({ subjectCode: event.target.value })}
+                  >
+                    {(readySubjects.length > 0 ? readySubjects : gradeSubjects).map((s) => (
+                      <option key={s.code} value={s.code}>
+                        {s.emoji} {s.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
 
-        <NavLink to="/profiles" className="sidebar-profile-card" onClick={handleNavItemClick}>
-          <span className="sidebar-profile-avatar">
-            <UserCircle size={34} />
-            {hasUpdateNotice ? <span className="sidebar-update-dot" aria-hidden="true" /> : null}
-          </span>
-          <span>
-            <strong>{state.student.fullName}</strong>
-            <small>{getGradeLabel(state.student.grade)} · {subject?.name || 'Toán'}</small>
-          </span>
-          <ChevronDown size={14} />
-        </NavLink>
+              <NavLink to="/profiles" className="sidebar-profile-card" onClick={handleNavItemClick}>
+                <span className="sidebar-profile-avatar">
+                  <UserCircle size={34} />
+                  {hasUpdateNotice ? <span className="sidebar-update-dot" aria-hidden="true" /> : null}
+                </span>
+                <span>
+                  <strong>{state.student.fullName}</strong>
+                  <small>{getGradeLabel(state.student.grade)} · {subject?.name || 'Toán'}</small>
+                </span>
+                <ChevronDown size={14} />
+              </NavLink>
 
-        <button
-          type="button"
-          className="sidebar-download-app-btn"
-          onClick={() => {
-            openWindowsAppDownload();
-            handleNavItemClick();
-          }}
-        >
-          <Download size={14} />
-          <span>Tải app Windows</span>
-        </button>
-      </div>
+              <button
+                type="button"
+                className="sidebar-download-app-btn"
+                onClick={openWindowsDownload}
+              >
+                <Download size={14} />
+                <span>Tải app Windows</span>
+              </button>
+            </div>
 
-      <nav className="sidebar-nav">
-        <div className="sidebar-primary-nav">
-          {primaryItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === '/home'}
-              data-group="primary"
-              onClick={handleNavItemClick}
-              className={({ isActive }) => `nav-item nav-item-primary ${isActive ? 'active' : ''}`}
-            >
-              <item.icon size={20} />
-              <span>{item.label}</span>
-            </NavLink>
-          ))}
-        </div>
+            <nav className="sidebar-nav">
+              <div className="sidebar-primary-nav">
+                {primaryItems.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    end={item.to === '/home'}
+                    data-group="primary"
+                    onClick={handleNavItemClick}
+                    className={({ isActive }) => `nav-item nav-item-primary ${isActive ? 'active' : ''}`}
+                  >
+                    <item.icon size={20} />
+                    <span>{item.label}</span>
+                  </NavLink>
+                ))}
+              </div>
 
-        <div className="sidebar-secondary-nav">
-          {visibleGroups.map((group) => {
-            const isOpen = openGroups.has(group.id);
-            const hasActive = groupContainsPath(group, location.pathname);
-            return (
-              <div key={group.id} className={`nav-group nav-group-${group.id}`}>
-                <button
-                  className={`nav-group-header ${hasActive && !isOpen ? 'has-active' : ''}`}
-                  onClick={() => toggleGroup(group.id)}
-                >
-                  <span className="nav-group-emoji">{group.emoji}</span>
-                  <span className="nav-group-label">{group.label}</span>
-                  <ChevronDown size={14} className={`nav-group-chevron ${isOpen ? 'open' : ''}`} />
-                </button>
-                {(isOpen || isMobileNav) && (
-                  <div className="nav-group-items">
-                    {group.items.map((item) => (
+              <div className="sidebar-secondary-nav">
+                {visibleGroups.map((group) => {
+                  const isOpen = openGroups.has(group.id);
+                  const hasActive = groupContainsPath(group, location.pathname);
+                  return (
+                    <div key={group.id} className={`nav-group nav-group-${group.id}`}>
+                      <button
+                        className={`nav-group-header ${hasActive && !isOpen ? 'has-active' : ''}`}
+                        onClick={() => toggleGroup(group.id)}
+                      >
+                        <span className="nav-group-emoji">{group.emoji}</span>
+                        <span className="nav-group-label">{group.label}</span>
+                        <ChevronDown size={14} className={`nav-group-chevron ${isOpen ? 'open' : ''}`} />
+                      </button>
+                      {isOpen && (
+                        <div className="nav-group-items">
+                          {group.items.map((item) => (
+                            <NavLink
+                              key={item.to}
+                              to={item.to}
+                              data-group={group.id}
+                              onClick={handleNavItemClick}
+                              className={({ isActive }) => `nav-item nav-item-child ${isActive ? 'active' : ''}`}
+                            >
+                              <item.icon size={16} />
+                              <span className="nav-item-label">{item.label}</span>
+                              {item.badge ? <span className="nav-item-badge">{item.badge}</span> : null}
+                            </NavLink>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </nav>
+          </>
+        )}
+
+        {isMobileNav && (
+          <>
+            {isMobileMenuOpen && (
+              <div className="sidebar-mobile-sheet" role="dialog" aria-modal="true" aria-label="Menu nhanh">
+                <div className="sidebar-mobile-sheet__grab" />
+                <div className="sidebar-mobile-sheet__header">
+                  <div>
+                    <div className="sidebar-mobile-sheet__title">Menu nhanh</div>
+                    <div className="sidebar-mobile-sheet__subtitle">Gọn hơn, dễ bấm hơn trên điện thoại</div>
+                  </div>
+                  <button
+                    type="button"
+                    className="sidebar-mobile-sheet__close"
+                    aria-label="Đóng menu"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                <div className="sidebar-mobile-summary-card">
+                  <div className="sidebar-mobile-summary-head">
+                    <MascotCharacter size="sm" />
+                    <div>
+                      <div className="sidebar-mobile-summary-title">Học Hứng Khởi</div>
+                      <div className="sidebar-mobile-summary-subtitle">{state.student.fullName} · hồ sơ đang học</div>
+                    </div>
+                  </div>
+                  <div className="sidebar-mobile-summary-chips">
+                    <span className="sidebar-status-chip" data-online={online}>
+                      {online ? <Wifi size={12} /> : <WifiOff size={12} />}
+                      {online ? 'Trực tuyến' : 'Ngoại tuyến'}
+                    </span>
+                    <NavLink to="/pricing" className="sidebar-plan-chip" onClick={handleNavItemClick}>
+                      <Crown size={12} />
+                      {planLabel}
+                    </NavLink>
+                  </div>
+                  <div className="sidebar-mobile-context-bar">
+                    <div>
+                      <strong>{getGradeLabel(state.student.grade)} · {subject?.name || 'Toán'}</strong>
+                      <small>Đổi lớp, môn học và hồ sơ trong một chỗ</small>
+                    </div>
+                    <NavLink to="/profiles" className="sidebar-mobile-context-link" onClick={handleNavItemClick}>
+                      Hồ sơ
+                    </NavLink>
+                  </div>
+                  <div className="sidebar-mobile-study-context">
+                    <label>
+                      <span>Lớp hiện tại</span>
+                      <select value={state.student.grade} onChange={(event) => handleGradeChange(event.target.value)}>
+                        {[0, 1, 2, 3, 4, 5].map((g) => {
+                          const gradeReady = lessonCountByGrade(g) > 0;
+                          const unlocked = unlockedGrades.includes(g);
+                          return (
+                            <option key={g} value={g} disabled={!gradeReady || !unlocked}>
+                              {getGradeLabel(g)}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </label>
+                    <label>
+                      <span>Môn đang học</span>
+                      <select
+                        value={state.student.subjectCode}
+                        onChange={(event) => updateStudent({ subjectCode: event.target.value })}
+                      >
+                        {(readySubjects.length > 0 ? readySubjects : gradeSubjects).map((s) => (
+                          <option key={s.code} value={s.code}>
+                            {s.emoji} {s.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="sidebar-mobile-shortcuts">
+                  {mobileQuickItems.map((item) => (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      onClick={handleNavItemClick}
+                      className={({ isActive }) => `sidebar-mobile-shortcut ${isActive ? 'active' : ''}`}
+                    >
+                      <item.icon size={18} />
+                      <span>{item.label}</span>
+                    </NavLink>
+                  ))}
+                  <button type="button" className="sidebar-mobile-shortcut" onClick={openWindowsDownload}>
+                    <Download size={18} />
+                    <span>Tải app Windows</span>
+                  </button>
+                </div>
+
+                <div className="sidebar-mobile-section">
+                  <div className="sidebar-mobile-section__label">Đi nhanh</div>
+                  <div className="sidebar-mobile-grid-nav">
+                    {primaryItems.map((item) => (
                       <NavLink
                         key={item.to}
                         to={item.to}
-                        data-group={group.id}
+                        end={item.to === '/home'}
                         onClick={handleNavItemClick}
-                        className={({ isActive }) => `nav-item nav-item-child ${isActive ? 'active' : ''}`}
+                        className={({ isActive }) => `sidebar-mobile-grid-item ${isActive ? 'active' : ''}`}
                       >
-                        <item.icon size={16} />
-                        <span className="nav-item-label">{item.label}</span>
-                        {item.badge ? <span className="nav-item-badge">{item.badge}</span> : null}
+                        <item.icon size={18} />
+                        <span>{item.label}</span>
                       </NavLink>
                     ))}
                   </div>
-                )}
+                </div>
+
+                <div className="sidebar-mobile-groups">
+                  {visibleGroups.map((group) => (
+                    <section key={group.id} className="sidebar-mobile-group-card">
+                      <div className="sidebar-mobile-group-title">{group.emoji} {group.label}</div>
+                      <div className="sidebar-mobile-group-grid">
+                        {group.items.map((item) => (
+                          <NavLink
+                            key={item.to}
+                            to={item.to}
+                            onClick={handleNavItemClick}
+                            className={({ isActive }) => `sidebar-mobile-group-item ${isActive ? 'active' : ''}`}
+                          >
+                            <item.icon size={16} />
+                            <span>{item.label}</span>
+                            {item.badge ? <small>{item.badge}</small> : null}
+                          </NavLink>
+                        ))}
+                      </div>
+                    </section>
+                  ))}
+                </div>
               </div>
-            );
-          })}
-        </div>
-      </nav>
+            )}
+
+            <nav className="sidebar-mobile-dock" aria-label="Điều hướng nhanh">
+              {mobileDockItems.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.to === '/home'}
+                  onClick={handleNavItemClick}
+                  className={({ isActive }) => `sidebar-mobile-dock__item ${isActive ? 'active' : ''}`}
+                >
+                  <span className="sidebar-mobile-dock__icon"><item.icon size={18} /></span>
+                  <span>{item.label}</span>
+                </NavLink>
+              ))}
+              <button
+                type="button"
+                className={`sidebar-mobile-dock__item sidebar-mobile-dock__menu ${isMobileMenuOpen ? 'active' : ''}`}
+                aria-expanded={isMobileMenuOpen}
+                aria-label={isMobileMenuOpen ? 'Đóng menu' : 'Mở menu'}
+                onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+              >
+                <span className="sidebar-mobile-dock__icon">{isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}</span>
+                <span>Menu</span>
+              </button>
+            </nav>
+          </>
+        )}
 
       </aside>
     </>

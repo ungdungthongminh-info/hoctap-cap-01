@@ -1,6 +1,6 @@
 {
   "name": "hoc-hung-khoi",
-  "version": "0.1.5",
+  "version": "0.1.11",
   "productName": "Học Hứng Khởi Tiểu Học",
   "main": "electron/main.js",
   "scripts": {

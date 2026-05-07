@@ -71,7 +71,7 @@ function resolveBackendApiBase() {
 }
 
 export const BACKEND_API_BASE = resolveBackendApiBase();
-const BACKEND_API_BASE_CANDIDATES = buildBackendApiBases();
+export const BACKEND_API_BASE_CANDIDATES = buildBackendApiBases();
 const INTERNAL_BUILD = import.meta.env.VITE_INTERNAL_BUILD === 'true';
 const BRIDGE_TOKEN_KEY = 'hhk_web_total_bridge_token';
 const BRIDGE_CUSTOMER_KEY = 'hhk_web_total_customer';

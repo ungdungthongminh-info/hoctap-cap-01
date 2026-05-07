@@ -4,6 +4,7 @@ const UPDATE_FEED_URL_KEY = 'hhk_update_feed_url';
 const UPDATE_DISMISSED_VERSION_KEY = 'hhk_update_dismissed_version';
 
 const FALLBACK_UPDATE_FEED_URL = 'https://hoctap-cap-01-livid.vercel.app/app-update.json';
+const DESKTOP_UPDATE_YML_URL = 'https://pub-90b335e287f24c92bbd5856cb9f116d9.r2.dev/app-updates/app-study-12/latest.yml';
 
 export interface AppUpdateManifest {
   appId?: string;
@@ -166,6 +167,38 @@ async function fetchManifestFromUrl(url: string): Promise<AppUpdateManifest> {
   }
 }
 
+function parseLatestVersionFromYml(raw: string): string {
+  const match = String(raw || '').match(/^version:\s*(.+)$/m);
+  return String(match?.[1] || '').trim();
+}
+
+async function fetchManifestFromDesktopLatestYml(): Promise<AppUpdateManifest | null> {
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 10_000);
+  try {
+    const res = await fetch(DESKTOP_UPDATE_YML_URL, {
+      method: 'GET',
+      cache: 'no-store',
+      signal: controller.signal,
+    });
+    if (!res.ok) return null;
+    const raw = await res.text();
+    const latestVersion = parseLatestVersionFromYml(raw);
+    if (!latestVersion) return null;
+    return {
+      appId: 'hoc-tap-cap-01',
+      channel: 'stable',
+      latestVersion,
+      title: `Ban cap nhat on dinh ${latestVersion}`,
+      downloadUrl: getWindowsAppDownloadUrl(latestVersion),
+    };
+  } catch {
+    return null;
+  } finally {
+    window.clearTimeout(timeout);
+  }
+}
+
 export async function checkAppUpdate(): Promise<AppUpdateCheckResult> {
   const currentVersion = getCurrentAppVersion();
   const checkedAt = new Date().toISOString();
@@ -181,6 +214,12 @@ export async function checkAppUpdate(): Promise<AppUpdateCheckResult> {
       const compareMinimum = minimumSupportedVersion
         ? compareVersion(minimumSupportedVersion, currentVersion)
         : -1;
+
+      // Skip stale feeds (older than app currently running), keep searching next candidate.
+      if (compareLatest < 0) {
+        lastError = `Stale update feed: ${url}`;
+        continue;
+      }
 
       if (compareMinimum > 0 || manifest.forceUpdate) {
         return {
@@ -220,6 +259,35 @@ export async function checkAppUpdate(): Promise<AppUpdateCheckResult> {
       };
     } catch (error: any) {
       lastError = String(error?.message || 'Không đọc được update manifest');
+    }
+  }
+
+  const ymlManifest = await fetchManifestFromDesktopLatestYml();
+  if (ymlManifest) {
+    const latestVersion = String(ymlManifest.latestVersion || '').trim();
+    const compareLatest = compareVersion(latestVersion, currentVersion);
+    if (compareLatest > 0) {
+      return {
+        state: 'update-available',
+        currentVersion,
+        latestVersion,
+        sourceUrl: DESKTOP_UPDATE_YML_URL,
+        checkedAt,
+        manifest: ymlManifest,
+        message: 'Đã có bản desktop mới từ kênh cập nhật R2.',
+      };
+    }
+
+    if (compareLatest === 0) {
+      return {
+        state: 'up-to-date',
+        currentVersion,
+        latestVersion,
+        sourceUrl: DESKTOP_UPDATE_YML_URL,
+        checkedAt,
+        manifest: ymlManifest,
+        message: 'Bạn đang dùng bản mới nhất.',
+      };
     }
   }
 
