@@ -77,9 +77,9 @@ interface Subscription {
 const WEB_TOTAL_SITE_URL = 'https://www.ungdungthongminh.shop';
 const WEB_TOTAL_PRODUCT_URLS = {
   standard: {
-    monthly: `${WEB_TOTAL_SITE_URL}/product/prod-study-month`,
-    yearly: `${WEB_TOTAL_SITE_URL}/product/prod-study-year`,
-    lifetime: `${WEB_TOTAL_SITE_URL}/product/prod-study-standard-lifetime`,
+    monthly: `${WEB_TOTAL_SITE_URL}/product/cap01_standard_1year_3grades`,
+    yearly: `${WEB_TOTAL_SITE_URL}/product/cap01_standard_1year_3grades`,
+    lifetime: `${WEB_TOTAL_SITE_URL}/product/cap01_standard_1year_3grades`,
   },
   standard_1year_1grade: {
     monthly: '',

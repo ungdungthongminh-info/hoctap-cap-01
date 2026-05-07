@@ -3,7 +3,7 @@ import { Lock, Shield, Sparkles } from 'lucide-react';
 import { useAppData } from '../providers/AppDataProvider';
 import { canAccessLesson, getAccessPlan, hasRequiredPlan, isInternalBuild, type AccessPlan } from '../services/accessControl';
 
-const WEB_TOTAL_PRODUCTS_URL = 'https://www.ungdungthongminh.shop/product/prod-study-month';
+const WEB_TOTAL_PRODUCTS_URL = 'https://www.ungdungthongminh.shop/product/cap01_standard_1year_3grades';
 
 export function LoginGuard({ children }: { children: React.ReactNode }) {
   useLocation();
