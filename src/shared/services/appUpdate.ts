@@ -241,6 +241,7 @@ export async function checkAppUpdate(): Promise<AppUpdateCheckResult> {
 }
 
 export function getAppUpdateDownloadUrl(result: AppUpdateCheckResult | null): string {
+  if (result?.manifest?.downloadUrl) return result.manifest.downloadUrl;
   return getWindowsAppDownloadUrl(result?.latestVersion || result?.manifest?.latestVersion);
 }
 

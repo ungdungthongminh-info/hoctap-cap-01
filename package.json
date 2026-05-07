@@ -13,6 +13,7 @@
     "electron:dev": "cross-env ELECTRON_RUN_AS_NODE=0 VITE_DEV_SERVER_URL=http://127.0.0.1:5190 concurrently \"vite --host 127.0.0.1 --port 5190 --strictPort\" \"wait-on http://127.0.0.1:5190 && electron .\"",
     "desktop:clean-artifacts": "node scripts/cleanup-desktop-artifacts.js",
     "electron:build": "npm run desktop:clean-artifacts && npm run build && electron-builder",
+    "desktop:upload-r2": "node scripts/upload-desktop-update-to-r2.mjs",
     "db:seed": "node scripts/seed.js",
     "data:audit": "tsx scripts/audit-curriculum.ts",
     "data:check": "cross-env STRICT_DATA_CHECK=1 tsx scripts/audit-curriculum.ts",
@@ -73,9 +74,8 @@
     },
     "publish": [
       {
-        "provider": "github",
-        "owner": "ungdungthongminh-info",
-        "repo": "hoctap-cap-01"
+        "provider": "generic",
+        "url": "https://pub-90b335e287f24c92bbd5856cb9f116d9.r2.dev/app-updates/app-study-12"
       }
     ],
     "mac": {
