@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAppData } from '../../../shared/providers/AppDataProvider';
 import { ArrowLeft, ArrowRight, CheckCircle, XCircle, Clock, AlertTriangle, Lightbulb, ArrowUp, ArrowDown, Volume2 } from 'lucide-react';
-import { playCorrect, playWrong, playWarning, playFinish, playClick, speakTextAsync } from '../../../shared/utils/sounds';
+import { playCorrect, playWrong, playWarning, playFinish, playClick, speakTextAsync, getPreferredVoice } from '../../../shared/utils/sounds';
 import { MascotCharacter } from '../../../shared/components';
 import { canAccessLesson, getAccessPlan } from '../../../shared/services/accessControl';
 import '../styles/premiumButtons.css';
@@ -252,6 +252,38 @@ export function PracticePage() {
   const speakQuestion = useCallback(async () => {
     if (!currentQuestion) return;
     const qid = currentQuestion.id;
+    const preferredEnVoice = String(getPreferredVoice('en') || '').trim();
+
+    if (questionLang === 'en') {
+      const text = String(currentQuestion.questionText || '').trim();
+      if (!text) {
+        setQuestionAudioError('Chưa tải được audio luyện tập');
+        return;
+      }
+
+      setQuestionAudioPending(true);
+      setQuestionAudioError(null);
+      try {
+        const playback = await speakTextAsync(text, 'en', {
+          policy: 'practice-on-demand',
+          mode: 'advanced',
+          voiceId: preferredEnVoice || 'en-US-Neural2-F',
+          allowNativeFallback: true,
+          currentGrade: lesson?.grade,
+        });
+        if (playback.status === 'error') {
+          setQuestionAudioError('Chưa tải được audio luyện tập');
+          return;
+        }
+        setQuestionAudioError(null);
+      } catch {
+        setQuestionAudioError('Chưa tải được audio luyện tập');
+      } finally {
+        setQuestionAudioPending(false);
+      }
+      return;
+    }
+
     if (!qid) {
       setQuestionAudioError('Không tìm thấy mã audio luyện tập cho câu này');
       return;
