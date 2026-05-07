@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { Check, X, Unlock, Gift, Shield, Copy, CheckCircle, RefreshCw, Clock, AlertTriangle, CreditCard, ExternalLink } from 'lucide-react';
 import { useAppData } from '../../../shared/providers/AppDataProvider';
 import { getGradeLabel, getSubjectsForGrade } from '../../../data/subjects';
+import { writeCap01LicenseCache } from '../../../shared/services/cap01License';
 import {
   fetchPricingPlans,
   fetchAndCacheLicenses,
@@ -666,6 +667,63 @@ async function dbGet(sql: string, params: any[] = []): Promise<any> {
   return null;
 }
 
+function mapStoragePlanToProductId(storagePlanId: 'standard' | 'standard_1year_1grade' | 'standard_1year_3grade' | 'premium', cycle: 'monthly' | 'yearly' | 'lifetime'): string {
+  if (storagePlanId === 'standard_1year_1grade') return 'standard_1year_1grade';
+  if (storagePlanId === 'standard_1year_3grade') return 'cap01_standard_1year_3grades';
+  if (storagePlanId === 'premium') {
+    if (cycle === 'monthly') return 'prod-study-premium-month';
+    if (cycle === 'lifetime') return 'prod-study-premium-lifetime';
+    return 'prod-study-premium-year';
+  }
+  if (cycle === 'monthly') return 'prod-study-month';
+  if (cycle === 'lifetime') return 'prod-study-standard-lifetime';
+  return 'prod-study-year';
+}
+
+async function persistCap01EntitlementCache(params: {
+  licenseKey: string;
+  storagePlanId: 'standard' | 'standard_1year_1grade' | 'standard_1year_3grade' | 'premium';
+  cycle: 'monthly' | 'yearly' | 'lifetime';
+  expiresAt: string | null;
+  allowedGrades: number[];
+  graceOfflineUntil?: string | null;
+  productId?: string | null;
+}): Promise<void> {
+  const normalizedGrades = Array.from(new Set((params.allowedGrades || [])
+    .map((grade) => Number(grade))
+    .filter((grade) => Number.isInteger(grade) && grade >= 0 && grade <= 5)))
+    .sort((a, b) => a - b);
+  const offlineValidUntil = String(params.graceOfflineUntil || '').trim()
+    || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  await writeCap01LicenseCache({
+    licenseKey: params.licenseKey.trim().toUpperCase(),
+    deviceId: getDeviceId(),
+    deviceName: `${navigator.platform} / ${navigator.userAgent.slice(0, 80)}`,
+    appId: 'app-study-12',
+    lastVerifiedAt: new Date().toISOString(),
+    offlineValidUntil,
+    entitlement: {
+      appId: 'app-study-12',
+      productId: String(params.productId || '').trim() || mapStoragePlanToProductId(params.storagePlanId, params.cycle),
+      plan: params.storagePlanId,
+      status: 'active',
+      allowedGrades: params.storagePlanId === 'premium' ? [0, 1, 2, 3, 4, 5] : normalizedGrades,
+      features: {
+        desktopOfflineTts: true,
+        downloadByGrade: true,
+        downloadAllGrades: params.storagePlanId === 'premium',
+        aiTutor: params.storagePlanId === 'premium',
+      },
+      license: {
+        deviceLimit: params.storagePlanId === 'premium' ? 2 : 1,
+        offlineGraceDays: 7,
+        expiresAt: params.expiresAt,
+      },
+    },
+  });
+}
+
 // ==================== COMPONENT ====================
 export function PricingPage() {
   const navigate = useNavigate();
@@ -940,6 +998,13 @@ export function PricingPage() {
       expiresAt: pendingStandardActivation.expiresAt,
       standardGrades: saved.grades,
     });
+    await persistCap01EntitlementCache({
+      licenseKey: pendingStandardActivation.key,
+      storagePlanId: pendingStandardActivation.storagePlanId,
+      cycle: pendingStandardActivation.cycle,
+      expiresAt: pendingStandardActivation.expiresAt,
+      allowedGrades: saved.grades,
+    });
     setPendingStandardActivation(null);
     setActivateMsg({ type: 'success', text: `✅ Đã xác nhận và kích hoạt thành công với các lớp: ${saved.grades.map((grade) => getGradeLabel(grade)).join(', ')}.` });
     setTimeout(() => setActivateMsg(null), 4000);
@@ -1140,13 +1205,23 @@ export function PricingPage() {
       ? persistUnlockedGrades([...ALL_GRADE_OPTIONS], 'premium', state.student.grade)
       : persistUnlockedGrades(standardGrades, 'standard', state.student.grade);
 
-    await dbRun(`UPDATE subscriptions SET status = 'expired', updatedAt = datetime('now') WHERE status = 'active'`);
+    await dbRun(`UPDATE subscriptions SET status = 'expired', updatedAt = datetime('now') WHERE status = 'active' AND licenseKey <> ?`, [key]);
 
-    await dbRun(
-      `INSERT INTO subscriptions (planId, billingCycle, licenseKey, amount, status, activatedAt, expiresAt, paymentMethod, refundDeadline)
-       VALUES (?, ?, ?, ?, 'active', datetime('now'), ?, 'license_key', ?)`,
-      [storagePlanId, cycle, key, amount, expiresAt, refundDeadline],
-    );
+    const existingSub = await dbGet(`SELECT id FROM subscriptions WHERE licenseKey = ? LIMIT 1`, [key]);
+    if (existingSub?.id) {
+      await dbRun(
+        `UPDATE subscriptions
+         SET planId = ?, billingCycle = ?, amount = ?, status = 'active', activatedAt = datetime('now'), expiresAt = ?, paymentMethod = 'license_key', refundDeadline = ?, updatedAt = datetime('now')
+         WHERE id = ?`,
+        [storagePlanId, cycle, amount, expiresAt, refundDeadline, existingSub.id],
+      );
+    } else {
+      await dbRun(
+        `INSERT INTO subscriptions (planId, billingCycle, licenseKey, amount, status, activatedAt, expiresAt, paymentMethod, refundDeadline)
+         VALUES (?, ?, ?, ?, 'active', datetime('now'), ?, 'license_key', ?)`,
+        [storagePlanId, cycle, key, amount, expiresAt, refundDeadline],
+      );
+    }
 
     persistPaidPlan(storagePlanId, key, expiresAt, cycle);
     setActivationGrades(unlockedGrades);
@@ -1340,6 +1415,16 @@ export function PricingPage() {
         cycle,
         expiresAt,
         standardGrades: standardGradesToUse,
+      });
+
+      await persistCap01EntitlementCache({
+        licenseKey: key,
+        storagePlanId: finalStoragePlanId,
+        cycle,
+        expiresAt,
+        allowedGrades: finalPlanId === 'premium' ? [0, 1, 2, 3, 4, 5] : standardGradesToUse,
+        graceOfflineUntil: verifyResult.grace?.offlineUntil || null,
+        productId: String(verifyResult.license?.productId || '').trim() || null,
       });
 
       // Đồng bộ lại licenses/features vào cache ngay sau khi verify thành công,

@@ -146,6 +146,11 @@ export function LessonDetailPage() {
     setPackSyncing(true);
     try {
       const normalizedGrade = setStaticPackSelectedGrade(lesson.grade);
+      if (hasDesktopAudioStore && window.electronAPI?.audioPacks) {
+        await window.electronAPI.audioPacks.download({ grade: normalizedGrade, replace: true });
+        setPackNotice(`Đã tải xong audio bài học lớp ${normalizedGrade} vào bộ nhớ offline của desktop.`);
+        return;
+      }
       const syncUrl = getStaticPackUrlByGrade(normalizedGrade);
       setStaticPackManifestUrl(syncUrl);
       await syncStaticAudioPack({ manifestUrl: syncUrl });
@@ -156,7 +161,7 @@ export function LessonDetailPage() {
     } finally {
       setPackSyncing(false);
     }
-  }, [lesson]);
+  }, [hasDesktopAudioStore, lesson]);
 
   const resetPlaybackState = useCallback(() => {
     runRef.current += 1;

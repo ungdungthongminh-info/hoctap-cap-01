@@ -5,6 +5,7 @@ const APP_ID = 'app-study-12';
 const CACHE_KEY = 'hhk_cap01_license_cache';
 const LAST_VERIFY_KEY = 'hhk_cap01_last_verify_at';
 const VERIFY_INTERVAL_MS = 24 * 60 * 60 * 1000;
+const DESKTOP_AUDIO_PACK_GRADES = [0, 1, 2, 3, 4, 5] as const;
 
 const STORAGE_KEYS = {
   plan: 'hhk_plan',
@@ -62,12 +63,12 @@ function parseJson<T>(raw: string | null): T | null {
 }
 
 function normalizeAllowedGrades(input: unknown): number[] {
-  if (!Array.isArray(input)) return [1, 2];
+  if (!Array.isArray(input)) return [];
   const normalized = input
     .map((value) => Number(value))
     .filter((value, index, arr) => Number.isInteger(value) && value >= 0 && value <= 12 && arr.indexOf(value) === index)
     .sort((a, b) => a - b);
-  return normalized.length > 0 ? normalized : [1, 2];
+  return normalized;
 }
 
 function inferPlanFromProduct(productIdRaw: string): string {
@@ -355,5 +356,11 @@ export function isDesktopOfflineTtsEnabled(cache: Cap01LicenseCache | null): boo
 }
 
 export function resolveAllowedGrades(cache: Cap01LicenseCache | null): number[] {
-  return normalizeAllowedGrades(cache?.entitlement?.allowedGrades || [1, 2]);
+  if (!cache?.entitlement) {
+    return [];
+  }
+  if (cache.entitlement.features?.downloadAllGrades) {
+    return [...DESKTOP_AUDIO_PACK_GRADES];
+  }
+  return normalizeAllowedGrades(cache.entitlement.allowedGrades);
 }
