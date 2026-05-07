@@ -62,6 +62,9 @@ if (!versionMatch) {
 const VERSION = versionMatch[1].trim();
 console.log(`Detected version: ${VERSION}`);
 
+const stableExeName = 'HocHungKhoi_Desktopapp-Win.exe';
+const stableBlockmapName = 'HocHungKhoi_Desktopapp-Win.exe.blockmap';
+
 // ── Files to upload ──────────────────────────────────────────────────────────
 const EXE_NAME      = `HocHungKhoi_Desktopapp-Win-${VERSION}.exe`;
 const BLOCKMAP_NAME = `HocHungKhoi_Desktopapp-Win-${VERSION}.exe.blockmap`;
@@ -69,6 +72,8 @@ const BLOCKMAP_NAME = `HocHungKhoi_Desktopapp-Win-${VERSION}.exe.blockmap`;
 const uploads = [
   { localPath: path.join(RELEASE_DIR, EXE_NAME),      r2Key: `${R2_PREFIX}/${EXE_NAME}`,      contentType: 'application/octet-stream' },
   { localPath: path.join(RELEASE_DIR, BLOCKMAP_NAME), r2Key: `${R2_PREFIX}/${BLOCKMAP_NAME}`, contentType: 'application/octet-stream' },
+  { localPath: path.join(RELEASE_DIR, EXE_NAME),      r2Key: `${R2_PREFIX}/${stableExeName}`, contentType: 'application/octet-stream' },
+  { localPath: path.join(RELEASE_DIR, BLOCKMAP_NAME), r2Key: `${R2_PREFIX}/${stableBlockmapName}`, contentType: 'application/octet-stream' },
   { localPath: latestYmlPath,                          r2Key: `${R2_PREFIX}/latest.yml`,        contentType: 'text/yaml; charset=utf-8' },
 ].filter(({ localPath }) => {
   if (!fs.existsSync(localPath)) {

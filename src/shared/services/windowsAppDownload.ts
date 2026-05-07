@@ -5,8 +5,7 @@ export const TTS_AUDIO_BASE_URL = 'https://pub-e3dfe5c479f44fbc906aae6c475603db.
 export const DESKTOP_UPDATE_BASE_URL = 'https://pub-90b335e287f24c92bbd5856cb9f116d9.r2.dev/app-updates/app-study-12';
 
 const WINDOWS_APP_ASSET_PREFIX = 'HocHungKhoi_Desktopapp-Win';
-// Keep in sync with latestVersion in public/app-update.json
-const CURRENT_RELEASE_VERSION = '0.1.2';
+const WINDOWS_APP_STABLE_ASSET_NAME = `${WINDOWS_APP_ASSET_PREFIX}.exe`;
 
 function normalizeReleaseVersion(version?: string | null): string {
   const normalized = String(version || '').trim().replace(/^v/i, '');
@@ -14,7 +13,10 @@ function normalizeReleaseVersion(version?: string | null): string {
 }
 
 export function getWindowsAppDownloadUrl(version?: string | null): string {
-  const v = normalizeReleaseVersion(version) || CURRENT_RELEASE_VERSION;
+  const v = normalizeReleaseVersion(version);
+  if (!v) {
+    return `${DESKTOP_UPDATE_BASE_URL}/${WINDOWS_APP_STABLE_ASSET_NAME}`;
+  }
   return `${DESKTOP_UPDATE_BASE_URL}/${WINDOWS_APP_ASSET_PREFIX}-${v}.exe`;
 }
 

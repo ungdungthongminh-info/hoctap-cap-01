@@ -1,12 +1,13 @@
 {
   "name": "hoc-hung-khoi",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "productName": "Học Hứng Khởi Tiểu Học",
   "main": "electron/main.js",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "build:web": "cross-env VITE_WEB=true tsc && vite build",
+    "desktop:sync-update-manifest": "node scripts/sync-web-app-update-manifest.mjs",
+    "build": "npm run desktop:sync-update-manifest && tsc && vite build",
+    "build:web": "cross-env VITE_WEB=true npm run desktop:sync-update-manifest && tsc && vite build",
     "preview": "vite preview --host",
     "preview:local": "npm run build && vite preview --host",
     "build:strict": "npm run data:check && npm run build",
