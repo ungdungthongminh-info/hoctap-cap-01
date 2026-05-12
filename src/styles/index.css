@@ -419,6 +419,29 @@ body.pattern-sunny::before {
   opacity: 0.85;
 }
 
+/* ============================================
+   ROOT LANDING PAGE
+   ============================================ */
+.root-landing-simple {
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.root-landing-simple header {
+  min-height: 64px;
+}
+
+.root-landing-simple button:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.8);
+  outline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .root-landing-simple {
+    background: #ffffff;
+  }
+}
+
 .global-grade-pill--pre {
   background: #FFFCED;
   color: #92400E;
