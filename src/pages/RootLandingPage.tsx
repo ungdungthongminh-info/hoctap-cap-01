@@ -1,20 +1,20 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, BookOpen, Laptop2, Monitor, Sparkles, Users } from 'lucide-react';
+import { ArrowRight, BookOpen, Monitor, Sparkles, Users } from 'lucide-react';
 
 const BENEFITS = [
   {
     title: 'Dễ dùng trên máy tính',
-    description: 'Giao diện tối giản, nút lớn để bé dùng nhanh.',
+    description: 'Giao diện máy tính dễ dùng.',
     icon: Monitor,
   },
   {
     title: 'Học thử miễn phí',
-    description: 'Vào app ngay, trải nghiệm miễn phí trước khi kích hoạt.',
+    description: 'Học thử miễn phí trước khi kích hoạt.',
     icon: Sparkles,
   },
   {
-    title: 'Phụ huynh dễ đồng hành',
-    description: 'Theo dõi tiến độ và hỗ trợ con mỗi buổi học.',
+    title: 'Phụ huynh đồng hành',
+    description: 'Phụ huynh cũng theo dõi tiến độ.',
     icon: Users,
   },
 ];
@@ -38,13 +38,13 @@ export function RootLandingPage() {
 
           <div className="flex flex-wrap items-center gap-3">
             <button
-              className="rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
+              className="rounded-full border border-slate-300 bg-white px-6 py-3 text-base font-semibold text-slate-900 transition hover:bg-slate-100"
               onClick={() => navigate('/home')}
             >
               Học miễn phí
             </button>
             <button
-              className="rounded-full bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
+              className="rounded-full bg-amber-400 px-6 py-3 text-base font-semibold text-slate-950 transition hover:bg-amber-300"
               onClick={() => navigate('/license/activate')}
             >
               Kích hoạt key
@@ -61,21 +61,21 @@ export function RootLandingPage() {
                 Học Cấp 01
               </span>
               <h1 className="mt-6 max-w-2xl text-4xl font-bold leading-tight text-slate-950 sm:text-5xl">
-                Công cụ hỗ trợ phụ huynh đồng hành cùng con học tiểu học
+                Công cụ phụ huynh đồng hành cùng con học tiểu học
               </h1>
               <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 sm:text-lg">
-                Học thử miễn phí, theo dõi tiến độ và kích hoạt key khi cần mở thêm tính năng cho con.
+                Ứng dụng học trực quan, bài học bám sát sách giáo khoa và khơi gợi hứng thú cho bé ngay lần đầu dùng.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <button
-                  className="inline-flex min-w-[180px] items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-base font-semibold text-white shadow-button transition hover:bg-slate-800"
+                  className="root-landing-primary-btn inline-flex min-w-[180px] items-center justify-center bg-slate-950 text-white transition hover:bg-slate-800"
                   onClick={() => navigate('/home')}
                 >
                   Học miễn phí ngay
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </button>
                 <button
-                  className="inline-flex min-w-[180px] items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-base font-semibold text-slate-950 transition hover:bg-slate-100"
+                  className="root-landing-primary-btn inline-flex min-w-[180px] items-center justify-center border border-slate-300 bg-white text-slate-950 transition hover:bg-slate-100"
                   onClick={() => navigate('/license/activate')}
                 >
                   Kích hoạt key
@@ -85,7 +85,7 @@ export function RootLandingPage() {
               <div className="mt-10 grid gap-3 sm:grid-cols-3">
                 <div className="flex items-start gap-3 rounded-[24px] bg-white px-4 py-4 shadow-sm">
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-100 text-sky-700">
-                    <Laptop2 className="h-5 w-5" />
+                    <Monitor className="h-5 w-5" />
                   </span>
                   <div>
                     <p className="text-sm font-semibold text-slate-950">Dễ dùng trên máy tính</p>
@@ -113,16 +113,14 @@ export function RootLandingPage() {
               </div>
             </div>
 
-            <div className="relative z-10 overflow-hidden rounded-[32px] border border-white/20 bg-slate-950 p-4 shadow-lg">
-              <div className="absolute -right-10 top-10 h-32 w-32 rounded-full bg-sky-500/30 blur-3xl" />
-              <div className="absolute left-6 bottom-6 h-28 w-28 rounded-full bg-amber-400/20 blur-3xl" />
-              <div className="relative overflow-hidden rounded-[28px] bg-slate-950">
-                <img
-                  src="/mockup-ui.jpg"
-                  alt="Trẻ em và phụ huynh học cùng laptop"
-                  className="h-full min-h-[360px] w-full object-cover"
-                />
-              </div>
+            <div className="root-landing-visual">
+              <img
+                src="/image/landing-hero.jpg"
+                alt="Phụ huynh đồng hành cùng con học tiểu học"
+                className="root-landing-hero-image"
+                loading="eager"
+                decoding="async"
+              />
             </div>
           </div>
         </section>
@@ -167,9 +165,11 @@ export function RootLandingPage() {
               Giao diện app
             </div>
             <img
-              src="/mockup-ui.jpg"
-              alt="Screenshot app preview"
-              className="w-full rounded-[22px] object-cover"
+              src="/image/landing-app-preview.jpg"
+              alt="Giao diện app Học Cấp 01"
+              className="root-landing-preview-image"
+              loading="lazy"
+              decoding="async"
             />
             <p className="mt-4 text-sm leading-6 text-slate-600">
               Mockup giao diện giúp phụ huynh thấy app thật sự rõ ràng và hiện đại.
@@ -185,13 +185,13 @@ export function RootLandingPage() {
             </div>
             <div className="flex flex-wrap gap-3">
               <button
-                className="inline-flex min-w-[160px] items-center justify-center rounded-full bg-amber-400 px-6 py-3 text-base font-semibold text-slate-950 shadow-button transition hover:bg-amber-300"
+                className="root-landing-primary-btn inline-flex min-w-[160px] items-center justify-center bg-amber-400 text-slate-950 transition hover:bg-amber-300"
                 onClick={() => navigate('/home')}
               >
                 Học miễn phí
               </button>
               <button
-                className="inline-flex min-w-[160px] items-center justify-center rounded-full border border-white/20 bg-white/10 px-6 py-3 text-base font-semibold text-white transition hover:bg-white/15"
+                className="root-landing-primary-btn inline-flex min-w-[160px] items-center justify-center border border-white/20 bg-white/10 text-white transition hover:bg-white/15"
                 onClick={() => navigate('/license/activate')}
               >
                 Kích hoạt key
