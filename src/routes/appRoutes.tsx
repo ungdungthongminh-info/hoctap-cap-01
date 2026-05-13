@@ -39,6 +39,7 @@ const MemoryRoomPage       = lazy(() => import('@student/pages/MemoryRoomPage').
 const AvatarShopPage       = lazy(() => import('@student/pages/AvatarShopPage').then(m => ({ default: m.AvatarShopPage })));
 const CompetitionPage      = lazy(() => import('@student/pages/CompetitionPage').then(m => ({ default: m.CompetitionPage })));
 const PwaSettingsPage      = lazy(() => import('@student/pages/PwaSettingsPage').then(m => ({ default: m.PwaSettingsPage })));
+const SettingsPage         = lazy(() => import('@student/pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
 const SmartReviewPage      = lazy(() => import('@student/pages/SmartReviewPage').then(m => ({ default: m.SmartReviewPage })));
 const CurriculumPage       = lazy(() => import('@student/pages/CurriculumPage').then(m => ({ default: m.CurriculumPage })));
 const LearningAssistantPage = lazy(() => import('@student/pages/LearningAssistantPage').then(m => ({ default: m.LearningAssistantPage })));
@@ -154,6 +155,7 @@ export function AppRoutes({ AdminGate, AdminErrorBoundary }: AppRoutesProps) {
           <Route path="/data"                element={<FeatureGuard requiredPlan="standard" title="Quan ly du lieu dang bi khoa" description="Xuat nhap du lieu va sao luu thuoc goi Standard/Premium. Free chi dung du lieu mac dinh san co trong app."><DataPage /></FeatureGuard>} />
           <Route path="/themes"              element={<ThemePage />} />
         </Route>
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/license/activate" element={<Navigate to="/pricing" replace />} />
         <Route path="/license/status" element={<LicenseStatusPage />} />
