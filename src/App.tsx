@@ -4,6 +4,7 @@ import { ThemeProvider } from './shared/themes';
 import { AppDataProvider } from './shared/providers/AppDataProvider';
 import { ToastProvider } from './shared/components/Toast';
 import { StaticAudioSyncBanner } from './shared/components/StaticAudioSyncBanner';
+import { ZaloSupportWidget } from './shared/components/ZaloSupportWidget';
 import { isAdminUnlocked, unlockAdmin } from './shared/utils/adminAccess';
 import { STORAGE_KEYS } from './shared/constants/storageKeys';
 import { AppRoutes } from './routes/appRoutes';
@@ -178,10 +179,15 @@ function LicenseHeartbeat() {
 
 function AppContent({ AdminGate, AdminErrorBoundary }: { AdminGate: React.ComponentType<{ children: React.ReactNode }>; AdminErrorBoundary: React.ComponentType<{ children: React.ReactNode }>; }) {
   const location = useLocation();
+  const hash = location.hash || '';
+  const isRootHash = hash === '' || hash === '#/' || hash === '#';
+  const isPricingHash = hash.startsWith('#/pricing');
+  const showZaloSupport = location.pathname === '/' && (isRootHash || isPricingHash);
 
   return (
     <>
       {location.pathname !== '/' && <StaticAudioSyncBanner />}
+      {showZaloSupport && <ZaloSupportWidget />}
       <AppRoutes AdminGate={AdminGate} AdminErrorBoundary={AdminErrorBoundary} />
     </>
   );

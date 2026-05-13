@@ -28,6 +28,7 @@ import {
   Smartphone,
   Download,
   ChevronDown,
+  Settings,
   RefreshCw,
   Network,
   UserCircle,
@@ -123,6 +124,7 @@ const navGroups: NavGroup[] = [
     label: 'Cài đặt',
     emoji: '⚙️',
     items: [
+      { to: '/settings', icon: Settings, label: 'Tổng quan' },
       { to: '/tts-settings', icon: Volume2, label: 'Giọng đọc' },
       { to: '/desktop-audio', icon: Download, label: 'Quản lý offline' },
       { to: '/ai-settings', icon: Sparkles, label: 'Cài đặt AI' },
