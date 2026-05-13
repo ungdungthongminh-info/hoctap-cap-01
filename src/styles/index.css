@@ -59,6 +59,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.root-landing-page {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(14, 165, 233, 0.15), transparent 28%),
+    radial-gradient(circle at 85% 15%, rgba(236, 72, 153, 0.08), transparent 24%),
+    radial-gradient(circle at 80% 70%, rgba(34, 197, 94, 0.08), transparent 22%);
+}
+
+.shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+.shadow-hover {
+  box-shadow: var(--shadow-hover);
+}
+
+.shadow-button {
+  box-shadow: var(--shadow-button);
+}
+
 /* ============================================
    BACKGROUND PATTERNS — thú cưng / vui nhộn
    Mỗi theme có pattern riêng bằng CSS
