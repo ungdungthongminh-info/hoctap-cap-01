@@ -1,5 +1,5 @@
 import { useState, useEffect, Component } from 'react';
-import { HashRouter } from 'react-router-dom';
+import { HashRouter, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './shared/themes';
 import { AppDataProvider } from './shared/providers/AppDataProvider';
 import { ToastProvider } from './shared/components/Toast';
@@ -176,6 +176,17 @@ function LicenseHeartbeat() {
   return null;
 }
 
+function AppContent({ AdminGate, AdminErrorBoundary }: { AdminGate: React.ComponentType<{ children: React.ReactNode }>; AdminErrorBoundary: React.ComponentType<{ children: React.ReactNode }>; }) {
+  const location = useLocation();
+
+  return (
+    <>
+      {location.pathname !== '/' && <StaticAudioSyncBanner />}
+      <AppRoutes AdminGate={AdminGate} AdminErrorBoundary={AdminErrorBoundary} />
+    </>
+  );
+}
+
 export function App() {
   return (
     <RootErrorBoundary>
@@ -183,9 +194,8 @@ export function App() {
         <AppDataProvider>
           <LicenseHeartbeat />
           <ToastProvider>
-            <StaticAudioSyncBanner />
             <HashRouter>
-              <AppRoutes AdminGate={AdminGate} AdminErrorBoundary={AdminErrorBoundary} />
+              <AppContent AdminGate={AdminGate} AdminErrorBoundary={AdminErrorBoundary} />
             </HashRouter>
           </ToastProvider>
         </AppDataProvider>

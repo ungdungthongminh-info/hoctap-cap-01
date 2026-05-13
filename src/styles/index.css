@@ -59,6 +59,74 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.root-landing-page {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(14, 165, 233, 0.15), transparent 28%),
+    radial-gradient(circle at 85% 15%, rgba(236, 72, 153, 0.08), transparent 24%),
+    radial-gradient(circle at 80% 70%, rgba(34, 197, 94, 0.08), transparent 22%);
+}
+
+.root-landing-visual {
+  position: relative;
+  overflow: hidden;
+  border-radius: 36px;
+  min-height: 460px;
+  background: #dbeafe;
+  box-shadow: 0 32px 80px rgba(15, 23, 42, 0.14);
+}
+
+.root-landing-hero-image {
+  width: 100%;
+  height: 100%;
+  min-height: 460px;
+  display: block;
+  object-fit: cover;
+}
+
+.root-landing-preview-image {
+  width: 100%;
+  display: block;
+  border-radius: 28px;
+  object-fit: cover;
+}
+
+.root-landing-primary-btn,
+.root-landing-secondary-btn {
+  min-height: 54px;
+  padding: 0 32px;
+  border-radius: 999px;
+  font-size: 17px;
+  font-weight: 800;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+}
+
+.root-landing-secondary-btn {
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+@media (max-width: 768px) {
+  .root-landing-visual {
+    min-height: 300px;
+    border-radius: 28px;
+  }
+
+  .root-landing-hero-image {
+    min-height: 300px;
+  }
+}
+
+.shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+.shadow-hover {
+  box-shadow: var(--shadow-hover);
+}
+
+.shadow-button {
+  box-shadow: var(--shadow-button);
+}
+
 /* ============================================
    BACKGROUND PATTERNS — thú cưng / vui nhộn
    Mỗi theme có pattern riêng bằng CSS
@@ -417,6 +485,29 @@ body.pattern-sunny::before {
   font-size: 10px;
   font-weight: 600;
   opacity: 0.85;
+}
+
+/* ============================================
+   ROOT LANDING PAGE
+   ============================================ */
+.root-landing-simple {
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.root-landing-simple header {
+  min-height: 64px;
+}
+
+.root-landing-simple button:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.8);
+  outline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .root-landing-simple {
+    background: #ffffff;
+  }
 }
 
 .global-grade-pill--pre {

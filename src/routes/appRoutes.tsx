@@ -8,7 +8,7 @@ import { AppLayout, FeatureGuard, LessonAccessGuard } from '@shared/components';
 
 // ── Admin ───────────────────────────────────────────────────
 const AdminDashboardPage  = lazy(() => import('@student/pages/AdminDashboardPage').then(m => ({ default: m.AdminDashboardPage })));
-const WelcomePage         = lazy(() => import('@student/pages/WelcomePage').then(m => ({ default: m.WelcomePage })));
+const RootLandingPage     = lazy(() => import('../pages/RootLandingPage').then(m => ({ default: m.RootLandingPage })));
 
 // ── Student pages ────────────────────────────────────────────
 const HomePage             = lazy(() => import('@student/pages/HomePage').then(m => ({ default: m.HomePage })));
@@ -104,7 +104,7 @@ export function AppRoutes({ AdminGate, AdminErrorBoundary }: AppRoutesProps) {
   return (
     <Suspense fallback={<PageSkeleton />}>
       <Routes>
-        <Route path="/" element={<WelcomePage />} />
+        <Route path="/" element={<RootLandingPage />} />
         <Route
           path="/admin"
           element={
