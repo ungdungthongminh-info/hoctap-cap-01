@@ -414,6 +414,17 @@ export function Sidebar() {
               <NavLink to="/profiles" className="sidebar-profile-card" onClick={handleNavItemClick}>
                 <span className="sidebar-profile-avatar">
                   <UserCircle size={34} />
+                  <a
+                    className="sidebar-support-badge"
+                    href="https://zalo.me/9892964685"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Admin hỗ trợ qua Zalo"
+                    title="Admin hỗ trợ qua Zalo"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    Hỗ trợ
+                  </a>
                   {hasUpdateNotice ? <span className="sidebar-update-dot" aria-hidden="true" /> : null}
                 </span>
                 <span>
