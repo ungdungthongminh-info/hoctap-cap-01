@@ -259,8 +259,9 @@ export function WelcomePage() {
       }}
     >
       <div className="w-full min-h-screen px-3 pb-10 pt-3 sm:px-4 md:px-8 md:pt-6 xl:px-12">
+        {/* DESKTOP ONLY - Old layout hidden on mobile */}
         <section
-          className="w-full rounded-2xl md:rounded-[30px] px-4 py-5 sm:px-5 sm:py-6 md:px-8 lg:px-10"
+          className="hidden md:block w-full rounded-2xl md:rounded-[30px] px-4 py-5 sm:px-5 sm:py-6 md:px-8 lg:px-10"
           style={{
             background: 'linear-gradient(112deg, #03142F 0%, #072B5D 48%, #0F3A79 100%)',
             border: '1px solid rgba(201,160,70,0.32)',
@@ -358,7 +359,8 @@ export function WelcomePage() {
           </div>
         </section>
 
-        <section id="welcome-features" className="mt-5 sm:mt-6 w-full rounded-[20px] md:rounded-[24px] p-3.5 sm:p-4 md:p-6 lg:p-7" style={{ background: 'rgba(255,255,255,0.9)', border: '1px solid #CFDDF6', boxShadow: '0 20px 44px rgba(12,35,75,0.18)' }}>
+        {/* DESKTOP ONLY - Old features section */}
+        <section id="welcome-features" className="hidden md:block mt-5 sm:mt-6 w-full rounded-[20px] md:rounded-[24px] p-3.5 sm:p-4 md:p-6 lg:p-7" style={{ background: 'rgba(255,255,255,0.9)', border: '1px solid #CFDDF6', boxShadow: '0 20px 44px rgba(12,35,75,0.18)' }}>
           <div className="text-xs uppercase tracking-[0.18em] font-bold" style={{ color: '#6B7FA3' }}>Bắt đầu nhanh</div>
           <div className="text-[1.65rem] leading-tight sm:text-2xl md:text-4xl font-bold tracking-[-0.03em]" style={{ color: '#123E72' }}>
             2 bước để dùng đầy đủ tính năng
@@ -408,9 +410,9 @@ export function WelcomePage() {
           </div>
         </section>
 
-        {/* ===================== MASCOT WELCOME SHOWCASE ===================== */}
+        {/* ===================== MASCOT WELCOME SHOWCASE (DESKTOP ONLY) ===================== */}
         <section
-          className="mt-5 sm:mt-6 w-full rounded-[22px] md:rounded-[28px] px-4 py-7 sm:px-5 sm:py-10 md:px-10 md:py-12 text-center overflow-hidden relative"
+          className="hidden md:block mt-5 sm:mt-6 w-full rounded-[22px] md:rounded-[28px] px-4 py-7 sm:px-5 sm:py-10 md:px-10 md:py-12 text-center overflow-hidden relative"
           style={{
             background: 'linear-gradient(135deg, #04122B 0%, #081F4A 48%, #0C2E68 100%)',
             border: '1px solid rgba(140,185,255,0.18)',
