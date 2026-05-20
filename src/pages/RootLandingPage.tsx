@@ -48,18 +48,18 @@ function MiniButton({ children, variant = 'blue', onClick }: { children: React.R
 }
 
 // ===== Icon3D Component =====
-function Icon3D({ type, tone = 'from-blue-500 to-sky-300', size = 'md' }: { type: Icon3DType; tone?: Icon3DTone; size?: Icon3DSize }) {
-  const box = size === 'lg' ? 'h-20 w-20' : size === 'sm' ? 'h-12 w-12' : 'h-16 w-16';
-  const inner = size === 'lg' ? 'scale-110' : size === 'sm' ? 'scale-75' : 'scale-100';
+function Icon3D({ type, tone = 'from-blue-500 to-sky-300', size = 'md' }: { type: Icon3DType; tone?: Icon3DTone; size?: Icon3DSize | 'xs' }) {
+  const box = size === 'lg' ? 'h-20 w-20' : size === 'sm' ? 'h-12 w-12' : size === 'xs' ? 'h-10 w-10' : 'h-16 w-16';
+  const inner = size === 'lg' ? 'scale-110' : size === 'sm' ? 'scale-75' : size === 'xs' ? 'scale-60' : 'scale-100';
 
-  const base = `relative ${box} shrink-0 rounded-[1.25rem] bg-gradient-to-br ${tone} shadow-[inset_0_2px_8px_rgba(255,255,255,.65),0_14px_22px_rgba(15,23,42,.12)]`;
+  const base = `relative ${box} shrink-0 rounded-[1.25rem] bg-gradient-to-br ${tone} shadow-[inset_0_2px_8px_rgba(255,255,255,.65),0_14px_22px_rgba(15,23,42,.12)] overflow-hidden`;
 
   return (
     <div className={base}>
       <div className="absolute inset-x-2 top-1 h-4 rounded-full bg-white/35 blur-sm" />
       <div className={`absolute inset-0 flex items-center justify-center ${inner}`}>
         {type === 'key' && <div className="relative h-7 w-10 rounded-full border-[7px] border-white/95"><span className="absolute left-7 top-1/2 h-2 w-8 -translate-y-1/2 rounded-full bg-white" /><span className="absolute left-12 top-1/2 h-3 w-1.5 -translate-y-1/2 rounded-full bg-white" /></div>}
-        {type === 'bigKey' && <div className="relative h-9 w-14 rounded-full border-[9px] border-white/95"><span className="absolute left-9 top-1/2 h-3 w-12 -translate-y-1/2 rounded-full bg-white" /><span className="absolute left-[68px] top-1/2 h-5 w-2 -translate-y-1/2 rounded-full bg-white" /></div>}
+        {type === 'bigKey' && <div className="relative h-9 w-14 rounded-full border-[9px] border-white/95"><span className="absolute left-9 top-1/2 h-3 w-12 -translate-y-1/2 rounded-full bg-white" /><span className="absolute left-14 top-1/2 h-5 w-2 -translate-y-1/2 rounded-full bg-white" /></div>}
         {type === 'cap' && <><div className="h-8 w-12 rotate-[-8deg] rounded-md bg-white/95 shadow-sm" /><div className="absolute mt-7 h-2 w-10 rounded-full bg-white/90" /><div className="absolute right-4 top-8 h-6 w-1 rounded-full bg-white/90" /></>}
         {type === 'download' && <><div className="absolute bottom-4 h-4 w-11 rounded-lg bg-white/90" /><div className="h-10 w-4 rounded-full bg-white" /><div className="absolute mt-8 h-5 w-5 rotate-45 rounded-br bg-white" /></>}
         {type === 'book' && <><div className="h-10 w-8 rounded-l-lg rounded-r-sm bg-white/95 shadow-sm" /><div className="ml-1 h-10 w-8 rounded-l-sm rounded-r-lg bg-white/80 shadow-sm" /><span className="absolute h-8 w-0.5 bg-blue-300/50" /></>}
@@ -126,7 +126,7 @@ export function RootLandingPage() {
       </div>
 
       {/* ===================== MOBILE ONLY (md:hidden) ===================== */}
-      <div className="md:hidden min-h-screen bg-slate-100">
+      <div className="md:hidden min-h-screen w-full max-w-full overflow-x-hidden bg-slate-100 pb-28">
         {/* Mobile Header */}
         <header className="sticky top-0 z-20 flex items-center justify-between bg-white/90 px-4 py-3 backdrop-blur">
           <div className="flex items-center gap-3">
@@ -143,106 +143,63 @@ export function RootLandingPage() {
           </button>
         </header>
 
-        {/* Mobile Hero */}
-        <section className="relative overflow-hidden bg-gradient-to-b from-sky-50 via-white to-white px-4 pb-5 pt-4">
-          <div className="pointer-events-none absolute right-4 top-10 h-40 w-40 rounded-full bg-blue-100/60 blur-2xl" />
-          <div className="pointer-events-none absolute -bottom-8 -right-8 h-44 w-44 rounded-full bg-yellow-100/70 blur-2xl" />
+        {/* Mobile Hero - Simplified */}
+        <section className="relative w-full max-w-full overflow-hidden bg-gradient-to-b from-sky-50 via-white to-white px-4 pb-5 pt-4">
+          <div className="pointer-events-none absolute right-4 top-10 h-32 w-32 rounded-full bg-blue-100/60 blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-8 -right-8 h-36 w-36 rounded-full bg-yellow-100/70 blur-2xl" />
 
-          <div className="relative">
-            <div className="max-w-[330px]">
-              <h1 className="text-[42px] font-black leading-none tracking-tight text-blue-700">
-                HỌC CẤP 01
-              </h1>
+          <div className="relative w-full max-w-full">
+            <h1 className="text-[36px] font-black leading-none tracking-tight text-blue-700">
+              HỌC CẤP 01
+            </h1>
 
-              <h2 className="mt-4 text-[23px] font-extrabold leading-tight text-slate-950">
-                Công cụ đồng hành tin cậy cho phụ huynh tiểu học
-              </h2>
+            <h2 className="mt-3 text-lg font-extrabold leading-snug text-slate-950">
+              Công cụ đồng hành tin cậy cho phụ huynh tiểu học
+            </h2>
 
-              <div className="mt-4 space-y-2.5 text-sm font-medium text-slate-700">
-                <p className="flex items-start gap-2">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-green-500" />
-                  <span>Kho bài giảng & đề luyện chuẩn chương trình</span>
-                </p>
-                <p className="flex items-start gap-2">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500" />
-                  <span>Học hiệu quả, dễ hiểu, dễ nhớ</span>
-                </p>
-                <p className="flex items-start gap-2">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500" />
-                  <span>An toàn, lành mạnh, không quảng cáo độc hại</span>
-                </p>
-              </div>
-
-              <div className="mt-5 grid grid-cols-2 gap-3">
-                <MiniButton onClick={() => navigate('/home')}>▶ Học thử</MiniButton>
-                <MiniButton variant="yellow" onClick={() => navigate('/pricing')}>🔑 Kích hoạt</MiniButton>
-              </div>
+            <div className="mt-4 space-y-2 text-sm font-medium text-slate-700">
+              <p className="flex items-start gap-2">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-green-500" />
+                <span className="leading-snug">Kho bài giảng & đề luyện chuẩn chương trình</span>
+              </p>
+              <p className="flex items-start gap-2">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500" />
+                <span className="leading-snug">Học hiệu quả, dễ hiểu, dễ nhớ</span>
+              </p>
+              <p className="flex items-start gap-2">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500" />
+                <span className="leading-snug">An toàn, lành mạnh, không quảng cáo độc hại</span>
+              </p>
             </div>
 
-            {/* Illustration Card */}
-            <div className="mt-5 overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-blue-50 via-white to-amber-50 p-4 shadow-sm ring-1 ring-slate-100">
-              <div className="relative min-h-[190px]">
-                <div className="absolute right-4 top-2 text-3xl">💡</div>
-                <div className="absolute left-4 top-8 text-xl">⭐</div>
-                <div className="absolute bottom-4 right-6 text-xl">✨</div>
-
-                <div className="absolute bottom-0 left-0 w-[42%] rounded-3xl bg-white p-3 shadow-md">
-                  <div className="mb-2 flex gap-1">
-                    <span className="h-2 w-2 rounded-full bg-red-300" />
-                    <span className="h-2 w-2 rounded-full bg-yellow-300" />
-                    <span className="h-2 w-2 rounded-full bg-green-300" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {['📘', '🧮', '✍️', '🏆'].map((item) => (
-                      <div key={item} className="flex h-10 items-center justify-center rounded-2xl bg-slate-50 text-lg">
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-3 h-2 rounded-full bg-blue-100" />
-                  <div className="mt-2 h-2 w-2/3 rounded-full bg-slate-100" />
-                </div>
-
-                <div className="absolute bottom-0 right-0 w-[58%] rounded-[1.5rem] bg-white p-3 shadow-md">
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-4xl">👩‍👦</div>
-                    <div className="space-y-2">
-                      <div className="h-3 w-20 rounded-full bg-blue-100" />
-                      <div className="h-3 w-16 rounded-full bg-amber-100" />
-                    </div>
-                  </div>
-                  <div className="mt-4 rounded-2xl bg-amber-100 px-3 py-3">
-                    <div className="h-2 rounded-full bg-amber-200" />
-                    <div className="mt-2 h-2 w-2/3 rounded-full bg-amber-200" />
-                  </div>
-                </div>
-              </div>
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <MiniButton onClick={() => navigate('/home')}>▶ Học thử</MiniButton>
+              <MiniButton variant="yellow" onClick={() => navigate('/pricing')}>🔑 Kích hoạt</MiniButton>
             </div>
           </div>
         </section>
 
         {/* Quick Actions */}
-        <section className="px-4 py-4">
-          <div className="rounded-[1.5rem] bg-white p-4 shadow-sm ring-1 ring-slate-100">
-            <h3 className="text-xl font-black text-slate-900">Thao tác nhanh</h3>
+        <section className="w-full max-w-full px-4 py-4">
+          <div className="w-full max-w-full rounded-[1.5rem] bg-white p-4 shadow-sm ring-1 ring-slate-100">
+            <h3 className="text-lg font-black text-slate-900">Thao tác nhanh</h3>
             <div className="mt-4 grid grid-cols-2 gap-3">
-              {quickActions.map((item, index) => (
+              {quickActions.map((item) => (
                 <button
                   key={item.title}
                   onClick={() => {
                     if (item.title.includes('Kích hoạt')) navigate('/pricing');
                     else if (item.title.includes('Học')) navigate('/home');
                     else if (item.title.includes('Tải')) {
-                      // Open Windows download - use direct link or navigate
                       window.open('https://hoctap.ungdungthongminh.info/download', '_blank');
                     }
                     else window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                   }}
-                  className={`${index === 4 ? 'col-span-2' : ''} rounded-2xl bg-white p-4 text-left shadow-sm ring-1 ring-slate-100 transition active:scale-[0.99]`}
+                  className="flex flex-col items-center rounded-2xl bg-white p-3 text-center shadow-sm ring-1 ring-slate-100 transition active:scale-[0.99]"
                 >
-                  <Icon3D type={item.icon} tone={item.tone} size="sm" />
-                  <p className="mt-2 text-sm font-extrabold">{item.title}</p>
-                  <p className="mt-0.5 text-xs text-slate-500">{item.desc}</p>
+                  <Icon3D type={item.icon} tone={item.tone} size="xs" />
+                  <p className="mt-2 text-sm font-extrabold leading-tight">{item.title}</p>
+                  <p className="mt-0.5 text-xs text-slate-500 leading-tight">{item.desc}</p>
                 </button>
               ))}
             </div>
@@ -250,59 +207,57 @@ export function RootLandingPage() {
         </section>
 
         {/* Vì sao tin tưởng */}
-        <section className="px-4 py-2">
-          <h3 className="text-center text-xl font-black text-blue-950">Vì sao phụ huynh tin tưởng Học Cấp 01?</h3>
-          <div className="mt-4 grid grid-cols-2 gap-3">
+        <section className="w-full max-w-full px-4 py-2">
+          <h3 className="text-center text-lg font-black text-blue-950 leading-tight px-2">Vì sao phụ huynh tin tưởng Học Cấp 01?</h3>
+          <div className="mt-4 grid grid-cols-1 gap-3">
             {reasons.map((item) => (
-              <article key={item.title} className={`rounded-2xl ${item.bg} p-4 ring-1 ring-slate-100`}>
-                <Icon3D type={item.icon} tone={item.tone} size="sm" />
-                <h4 className="mt-3 text-sm font-extrabold leading-snug">{item.title}</h4>
-                <p className="mt-1 text-xs leading-5 text-slate-600">{item.desc}</p>
+              <article key={item.title} className={`flex items-start gap-3 rounded-2xl ${item.bg} p-3 ring-1 ring-slate-100`}>
+                <div className="shrink-0">
+                  <Icon3D type={item.icon} tone={item.tone} size="xs" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-sm font-extrabold leading-snug">{item.title}</h4>
+                  <p className="mt-0.5 text-xs leading-5 text-slate-600">{item.desc}</p>
+                </div>
               </article>
             ))}
           </div>
         </section>
 
         {/* 3 Bước */}
-        <section className="px-4 py-5">
-          <h3 className="text-center text-xl font-black text-blue-950">Bắt đầu chỉ với 3 bước đơn giản</h3>
-          <div className="mt-4 grid gap-3">
+        <section className="w-full max-w-full px-4 py-5">
+          <h3 className="text-center text-lg font-black text-blue-950 leading-tight px-2">Bắt đầu chỉ với 3 bước đơn giản</h3>
+          <div className="mt-4 grid grid-cols-1 gap-3">
             {steps.map((step) => (
               <article key={step.no} className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-black text-white">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-black text-white">
                     {step.no}
                   </div>
-                  <Icon3D type={step.icon} tone={step.tone} size="sm" />
-                  <h4 className="flex-1 text-sm font-extrabold leading-snug">{step.title}</h4>
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-sm font-extrabold leading-snug">{step.title}</h4>
+                    <p className="mt-1 text-xs leading-5 text-slate-600">{step.desc}</p>
+                  </div>
                 </div>
-                <p className="mt-2 text-xs leading-5 text-slate-600">{step.desc}</p>
               </article>
             ))}
           </div>
         </section>
 
         {/* CTA Section */}
-        <section className="px-4 py-3 pb-28">
-          <div className="overflow-hidden rounded-[1.75rem] bg-gradient-to-r from-blue-700 to-sky-500 p-4 text-white shadow-xl shadow-blue-100">
-            <div className="grid grid-cols-[0.9fr_1.2fr] items-center gap-3">
-              <div className="rounded-3xl bg-white/15 p-3">
-                <Icon3D type="boyLaptop" tone="from-yellow-300 to-orange-200" size="lg" />
-              </div>
-              <div>
-                <h3 className="text-xl font-black leading-tight">Bắt đầu cho bé học miễn phí ngay hôm nay!</h3>
-                <p className="mt-2 text-xs leading-5 text-blue-50">Đồng hành cùng con, học vui mỗi ngày, tiến bộ từng bước nhỏ.</p>
-              </div>
-            </div>
+        <section className="w-full max-w-full px-4 py-3">
+          <div className="w-full max-w-full overflow-hidden rounded-[1.5rem] bg-gradient-to-r from-blue-700 to-sky-500 p-4 text-white shadow-xl shadow-blue-100">
+            <h3 className="text-lg font-black leading-tight">Bắt đầu cho bé học miễn phí ngay!</h3>
+            <p className="mt-2 text-xs leading-5 text-blue-50">Đồng hành cùng con, học vui mỗi ngày.</p>
             <div className="mt-4 grid grid-cols-2 gap-3">
-              <button onClick={() => navigate('/home')} className="h-11 rounded-2xl bg-white px-3 text-[13px] font-bold text-blue-700 transition active:scale-[0.98]">▶ Học miễn phí</button>
-              <button onClick={() => navigate('/pricing')} className="h-11 rounded-2xl bg-yellow-400 px-3 text-[13px] font-bold text-slate-950 transition active:scale-[0.98]">🔑 Kích hoạt</button>
+              <button onClick={() => navigate('/home')} className="h-11 rounded-2xl bg-white px-3 text-sm font-bold text-blue-700 transition active:scale-[0.98]">▶ Học miễn phí</button>
+              <button onClick={() => navigate('/pricing')} className="h-11 rounded-2xl bg-yellow-400 px-3 text-sm font-bold text-slate-950 transition active:scale-[0.98]">🔑 Kích hoạt</button>
             </div>
           </div>
         </section>
 
         {/* Mobile Footer */}
-        <footer className="px-4 py-6 text-center text-sm text-slate-500">
+        <footer className="w-full max-w-full px-4 py-6 text-center text-sm text-slate-500">
           Học Cấp 01 © 2026. Thiết kế dành cho phụ huynh và học sinh tiểu học.
         </footer>
       </div>

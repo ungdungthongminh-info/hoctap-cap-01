@@ -2014,8 +2014,9 @@ export function PricingPage() {
           >
             {detectedKeyDetailText}
           </div>
-        </div>
-        <div ref={gradePickerRef} className="mb-4 rounded-2xl p-4 activation-grade-card" style={{ background: '#F8FBFF', border: '2px solid #93C5FD', opacity: isPremiumKeyFlow ? 0.72 : 1 }}>
+
+          {/* Grade Selection - Moved inside main card with mt-5 spacing */}
+          <div ref={gradePickerRef} className="mt-5 rounded-2xl p-4 activation-grade-card" style={{ background: '#F8FBFF', border: '2px solid #93C5FD', opacity: isPremiumKeyFlow ? 0.72 : 1 }}>
           <div className="activation-grade-header">
             <div>
               <div className="activation-grade-step">Bước 2</div>
@@ -2109,7 +2110,10 @@ export function PricingPage() {
                   ? 'Lựa chọn lớp đã được xác nhận. Bạn có thể kích hoạt key.'
                 : 'Lớp đứng đầu danh sách sẽ là lớp hiện tại sau khi kích hoạt.'}
           </div>
-        </div>
+        </div>{/* End of grade card */}
+
+        </div>{/* End of activation-key-spotlight */}
+
         {activateMsg && (
           <div className="mt-3 flex flex-col gap-2">
             <div className="rounded-xl px-3 py-2 text-sm font-bold" style={{
