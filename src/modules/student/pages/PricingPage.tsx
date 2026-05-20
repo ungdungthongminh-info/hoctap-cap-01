@@ -1918,7 +1918,7 @@ export function PricingPage() {
         </div>
       )}
 
-      {/* Activate license */}
+      {/* Activate license - Main Card */}
       <div id="activate-section" className="pricing-activation-card pricing-block-activate card w-full p-6">
         <div className="pricing-activation-head">
           <div>
@@ -1931,63 +1931,8 @@ export function PricingPage() {
             </p>
           </div>
         </div>
-        <div className="pricing-activation-shortcut-grid">
-          {activationShortcutPlans.map((item) => (
-            <article key={item.id} className={`pricing-activation-shortcut pricing-activation-shortcut--${item.id}`}>
-              <div className="pricing-activation-shortcut__badge">{item.badge}</div>
-              <div className="pricing-activation-shortcut__title">{item.title}</div>
-              <div className="pricing-activation-shortcut__price">
-                {item.priceLabel}
-                <span>{item.cycleLabel}</span>
-              </div>
-              <p>{item.description}</p>
-              <button
-                className={`${premiumButtonPrimaryClass} w-full`}
-                style={item.plan ? getPlanPrimaryButtonStyle(item.plan) : topPrimaryButtonStyle}
-                onClick={() => window.open(item.productUrl, '_blank', 'noopener,noreferrer')}
-              >
-                <ExternalLink size={15} /> Mở trên Web Tổng
-              </button>
-            </article>
-          ))}
-        </div>
-        <div className="pricing-activation-meta-grid">
-          {clientProfile === 'desktop' ? (
-            <div className="pricing-activation-meta-card">
-              <div className="pricing-activation-meta-label">ID máy hiện tại</div>
-              <div className="pricing-activation-meta-value">{currentDeviceId}</div>
-              <p>Dùng để khóa 1 key cho đúng 1 thiết bị ở lần kích hoạt đầu tiên.</p>
-              <button
-                className={`${premiumButtonBaseClass} px-3 py-2 text-xs whitespace-nowrap`}
-                style={neutralGhostButtonStyle}
-                onClick={copyDeviceId}
-                title="Copy ID máy"
-              >
-                {copiedDeviceId ? <CheckCircle size={14} /> : <Copy size={14} />}
-                {copiedDeviceId ? 'Đã copy' : 'Copy ID máy'}
-              </button>
-            </div>
-          ) : (
-            <div className="pricing-activation-meta-card">
-              <div className="pricing-activation-meta-label">Đăng nhập web app</div>
-              <div className="pricing-activation-meta-value">Email mua hàng + license key</div>
-              <p>Đã mua gói? Mở app desktop, vào Kích hoạt bản quyền và nhập license key.</p>
-            </div>
-          )}
-          <div className="pricing-activation-meta-card">
-            <div className="pricing-activation-meta-label">Định dạng key</div>
-            <div className="pricing-activation-meta-list">
-              <span>Standard: HHK-STANDARD-XXXXXXXX</span>
-              <span>1 khóa: HHK-STANDARD-1Y1G-XXXXXXXX</span>
-              <span>Standard 01 năm - 03 lớp: WSTL-XXXXXXXX-XXXXXX</span>
-            </div>
-            {shouldShowRecognizedKeyHint && (
-              <div className="pricing-activation-recognized-badge" style={detectedKeyBadgeStyle}>
-                {detectedKeyBadgeText}
-              </div>
-            )}
-          </div>
-        </div>
+
+        {/* Main Activation Card - Email, Key, Grade Selection */}
         <div className="mb-4 rounded-2xl p-4 activation-key-spotlight" style={{ background: 'linear-gradient(135deg, #FFF7E6 0%, #FFFFFF 60%, #EFF6FF 100%)', border: '2px solid #FDBA74', boxShadow: '0 14px 30px rgba(217,119,6,0.16)' }}>
           <div className="text-[13px] font-extrabold tracking-[0.02em]" style={{ color: '#9A3412' }}>Nhập email và mã key</div>
           {clientProfile === 'web' && (
@@ -2187,6 +2132,67 @@ export function PricingPage() {
             )}
           </div>
         )}
+      </div>
+
+      {/* Shortcut Plans - Moved below main activation */}
+      <div className="pricing-activation-shortcut-grid mb-4">
+        {activationShortcutPlans.map((item) => (
+          <article key={item.id} className={`pricing-activation-shortcut pricing-activation-shortcut--${item.id}`}>
+            <div className="pricing-activation-shortcut__badge">{item.badge}</div>
+            <div className="pricing-activation-shortcut__title">{item.title}</div>
+            <div className="pricing-activation-shortcut__price">
+              {item.priceLabel}
+              <span>{item.cycleLabel}</span>
+            </div>
+            <p>{item.description}</p>
+            <button
+              className={`${premiumButtonPrimaryClass} w-full`}
+              style={item.plan ? getPlanPrimaryButtonStyle(item.plan) : topPrimaryButtonStyle}
+              onClick={() => window.open(item.productUrl, '_blank', 'noopener,noreferrer')}
+            >
+              <ExternalLink size={15} /> Mở trên Web Tổng
+            </button>
+          </article>
+        ))}
+      </div>
+
+      {/* Meta Cards - Device ID and Key Format */}
+      <div className="pricing-activation-meta-grid mb-4">
+        {clientProfile === 'desktop' ? (
+          <div className="pricing-activation-meta-card">
+            <div className="pricing-activation-meta-label">ID máy hiện tại</div>
+            <div className="pricing-activation-meta-value">{currentDeviceId}</div>
+            <p>Dùng để khóa 1 key cho đúng 1 thiết bị ở lần kích hoạt đầu tiên.</p>
+            <button
+              className={`${premiumButtonBaseClass} px-3 py-2 text-xs whitespace-nowrap`}
+              style={neutralGhostButtonStyle}
+              onClick={copyDeviceId}
+              title="Copy ID máy"
+            >
+              {copiedDeviceId ? <CheckCircle size={14} /> : <Copy size={14} />}
+              {copiedDeviceId ? 'Đã copy' : 'Copy ID máy'}
+            </button>
+          </div>
+        ) : (
+          <div className="pricing-activation-meta-card">
+            <div className="pricing-activation-meta-label">Đăng nhập web app</div>
+            <div className="pricing-activation-meta-value">Email mua hàng + license key</div>
+            <p>Đã mua gói? Mở app desktop, vào Kích hoạt bản quyền và nhập license key.</p>
+          </div>
+        )}
+        <div className="pricing-activation-meta-card">
+          <div className="pricing-activation-meta-label">Định dạng key</div>
+          <div className="pricing-activation-meta-list">
+            <span>Standard: HHK-STANDARD-XXXXXXXX</span>
+            <span>1 khóa: HHK-STANDARD-1Y1G-XXXXXXXX</span>
+            <span>Standard 01 năm - 03 lớp: WSTL-XXXXXXXX-XXXXXX</span>
+          </div>
+          {shouldShowRecognizedKeyHint && (
+            <div className="pricing-activation-recognized-badge" style={detectedKeyBadgeStyle}>
+              {detectedKeyBadgeText}
+            </div>
+          )}
+        </div>
       </div>
 
       {showGradeConfirmModal && (

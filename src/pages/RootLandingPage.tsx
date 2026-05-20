@@ -254,14 +254,10 @@ export function RootLandingPage() {
           <h3 className="text-center text-xl font-black text-blue-950">Vì sao phụ huynh tin tưởng Học Cấp 01?</h3>
           <div className="mt-4 grid grid-cols-2 gap-3">
             {reasons.map((item) => (
-              <article key={item.title} className={`rounded-2xl ${item.bg} p-3 ring-1 ring-slate-100`}>
-                <div className="flex items-start gap-3">
-                  <Icon3D type={item.icon} tone={item.tone} />
-                  <div className="min-w-0 pt-1">
-                    <h4 className="text-sm font-extrabold leading-tight">{item.title}</h4>
-                    <p className="mt-1 text-xs leading-5 text-slate-600">{item.desc}</p>
-                  </div>
-                </div>
+              <article key={item.title} className={`rounded-2xl ${item.bg} p-4 ring-1 ring-slate-100`}>
+                <Icon3D type={item.icon} tone={item.tone} size="sm" />
+                <h4 className="mt-3 text-sm font-extrabold leading-snug">{item.title}</h4>
+                <p className="mt-1 text-xs leading-5 text-slate-600">{item.desc}</p>
               </article>
             ))}
           </div>
@@ -272,17 +268,15 @@ export function RootLandingPage() {
           <h3 className="text-center text-xl font-black text-blue-950">Bắt đầu chỉ với 3 bước đơn giản</h3>
           <div className="mt-4 grid gap-3">
             {steps.map((step) => (
-              <article key={step.no} className="relative flex gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-black text-white">
-                  {step.no}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <Icon3D type={step.icon} tone={step.tone} size="sm" />
-                    <h4 className="text-sm font-extrabold leading-tight">{step.title}</h4>
+              <article key={step.no} className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-black text-white">
+                    {step.no}
                   </div>
-                  <p className="mt-2 text-xs leading-5 text-slate-600">{step.desc}</p>
+                  <Icon3D type={step.icon} tone={step.tone} size="sm" />
+                  <h4 className="flex-1 text-sm font-extrabold leading-snug">{step.title}</h4>
                 </div>
+                <p className="mt-2 text-xs leading-5 text-slate-600">{step.desc}</p>
               </article>
             ))}
           </div>
@@ -313,13 +307,15 @@ export function RootLandingPage() {
         </footer>
       </div>
 
-      {/* Floating Support Button - Mobile Only */}
-      <button
-        onClick={() => navigate('/pricing')}
+      {/* Floating Support Button - Mobile Only - Zalo Link */}
+      <a
+        href="https://zalo.me/0902964685"
+        target="_blank"
+        rel="noopener noreferrer"
         className="fixed bottom-5 left-1/2 z-50 inline-flex h-12 -translate-x-1/2 items-center justify-center gap-2 rounded-2xl bg-blue-600 px-5 text-sm font-bold text-white shadow-xl shadow-blue-300/50 transition active:scale-[0.98] md:hidden"
       >
         🎧 Hỗ trợ mua key
-      </button>
+      </a>
     </main>
   );
 }
