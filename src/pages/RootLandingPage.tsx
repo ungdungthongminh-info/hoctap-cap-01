@@ -3,8 +3,6 @@ import { BookOpen } from 'lucide-react';
 
 // ===== 3D Icon Types =====
 type Icon3DType = 'key' | 'bigKey' | 'cap' | 'download' | 'book' | 'star' | 'target' | 'reader' | 'chart' | 'devices' | 'giftKey' | 'shield' | 'laptop' | 'boyLaptop';
-type Icon3DSize = 'sm' | 'md' | 'lg';
-type Icon3DTone = string;
 
 // ===== Data for mobile sections =====
 const quickActions = [
@@ -30,49 +28,66 @@ const steps = [
   { no: '3', icon: 'boyLaptop' as Icon3DType, title: 'Bé bắt đầu học', desc: 'Chọn môn học yêu thích và học đều mỗi ngày.', tone: 'from-orange-400 to-amber-200' },
 ];
 
-// ===== MiniButton Component =====
-function MiniButton({ children, variant = 'blue', onClick }: { children: React.ReactNode; variant?: 'blue' | 'yellow'; onClick?: () => void }) {
-  const styles =
-    variant === 'yellow'
-      ? 'bg-yellow-400 text-slate-950 shadow-yellow-200/70'
-      : 'bg-blue-600 text-white shadow-blue-200/70';
+// ===== Depth Button Components =====
+const btnBase = 'inline-flex h-11 min-h-11 w-full items-center justify-center gap-2 rounded-2xl px-4 text-sm font-bold transition-all duration-200 focus:outline-none focus-visible:ring-4';
 
+function BtnBlue({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
     <button
       onClick={onClick}
-      className={`inline-flex h-11 items-center justify-center gap-1.5 rounded-2xl px-3 text-[13px] font-bold shadow-md transition active:scale-[0.98] sm:h-12 sm:px-6 sm:text-base ${styles}`}
+      className={`${btnBase} bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[0_10px_22px_rgba(37,99,235,0.28),inset_0_1px_0_rgba(255,255,255,0.35)] ring-1 ring-blue-400/30 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(37,99,235,0.34)] active:translate-y-0 active:scale-[0.98] active:shadow-[0_6px_14px_rgba(37,99,235,0.24)] focus-visible:ring-blue-300/50`}
     >
       {children}
     </button>
   );
 }
 
-// ===== Icon3D Component =====
-function Icon3D({ type, tone = 'from-blue-500 to-sky-300', size = 'md' }: { type: Icon3DType; tone?: Icon3DTone; size?: Icon3DSize | 'xs' }) {
-  const box = size === 'lg' ? 'h-20 w-20' : size === 'sm' ? 'h-12 w-12' : size === 'xs' ? 'h-10 w-10' : 'h-16 w-16';
-  const inner = size === 'lg' ? 'scale-110' : size === 'sm' ? 'scale-75' : size === 'xs' ? 'scale-60' : 'scale-100';
-
-  const base = `relative ${box} shrink-0 rounded-[1.25rem] bg-gradient-to-br ${tone} shadow-[inset_0_2px_8px_rgba(255,255,255,.65),0_14px_22px_rgba(15,23,42,.12)] overflow-hidden`;
-
+function BtnYellow({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
-    <div className={base}>
-      <div className="absolute inset-x-2 top-1 h-4 rounded-full bg-white/35 blur-sm" />
-      <div className={`absolute inset-0 flex items-center justify-center ${inner}`}>
-        {type === 'key' && <div className="relative h-7 w-10 rounded-full border-[7px] border-white/95"><span className="absolute left-7 top-1/2 h-2 w-8 -translate-y-1/2 rounded-full bg-white" /><span className="absolute left-12 top-1/2 h-3 w-1.5 -translate-y-1/2 rounded-full bg-white" /></div>}
-        {type === 'bigKey' && <div className="relative h-9 w-14 rounded-full border-[9px] border-white/95"><span className="absolute left-9 top-1/2 h-3 w-12 -translate-y-1/2 rounded-full bg-white" /><span className="absolute left-14 top-1/2 h-5 w-2 -translate-y-1/2 rounded-full bg-white" /></div>}
-        {type === 'cap' && <><div className="h-8 w-12 rotate-[-8deg] rounded-md bg-white/95 shadow-sm" /><div className="absolute mt-7 h-2 w-10 rounded-full bg-white/90" /><div className="absolute right-4 top-8 h-6 w-1 rounded-full bg-white/90" /></>}
-        {type === 'download' && <><div className="absolute bottom-4 h-4 w-11 rounded-lg bg-white/90" /><div className="h-10 w-4 rounded-full bg-white" /><div className="absolute mt-8 h-5 w-5 rotate-45 rounded-br bg-white" /></>}
-        {type === 'book' && <><div className="h-10 w-8 rounded-l-lg rounded-r-sm bg-white/95 shadow-sm" /><div className="ml-1 h-10 w-8 rounded-l-sm rounded-r-lg bg-white/80 shadow-sm" /><span className="absolute h-8 w-0.5 bg-blue-300/50" /></>}
-        {type === 'star' && <div className="text-4xl drop-shadow-sm">★</div>}
-        {type === 'target' && <><div className="absolute h-12 w-12 rounded-full bg-white shadow-sm" /><div className="absolute h-8 w-8 rounded-full bg-blue-400" /><div className="absolute h-4 w-4 rounded-full bg-white" /><div className="absolute h-2 w-2 rounded-full bg-red-400" /><div className="absolute right-2 top-3 h-1.5 w-10 rotate-[-30deg] rounded-full bg-red-400" /></>}
-        {type === 'reader' && <><div className="absolute top-2 h-8 w-8 rounded-full bg-amber-200" /><div className="absolute top-5 h-4 w-10 rounded-t-full bg-slate-800" /><div className="absolute bottom-4 left-3 h-8 w-7 rotate-[-8deg] rounded-lg bg-white/95" /><div className="absolute bottom-4 right-3 h-8 w-7 rotate-[8deg] rounded-lg bg-white/85" /><div className="absolute right-2 top-1 text-xl">💡</div></>}
-        {type === 'chart' && <><span className="absolute bottom-4 left-4 h-6 w-3 rounded-t bg-white/75" /><span className="absolute bottom-4 left-8 h-9 w-3 rounded-t bg-white/85" /><span className="absolute bottom-4 left-12 h-12 w-3 rounded-t bg-white" /><span className="absolute right-3 top-4 h-2 w-9 rotate-[-35deg] rounded-full bg-white" /><span className="absolute right-2 top-3 h-4 w-4 rotate-45 rounded-tr bg-white" /></>}
-        {type === 'devices' && <><div className="absolute bottom-4 left-3 h-9 w-12 rounded-lg bg-slate-800 shadow-md"><div className="m-1 h-6 rounded bg-white/90" /></div><div className="absolute bottom-3 right-4 h-11 w-6 rounded-lg bg-white shadow-md"><div className="m-1 h-8 rounded bg-blue-100" /></div></>}
-        {type === 'giftKey' && <><div className="absolute bottom-4 h-10 w-12 rounded-xl bg-white/90" /><div className="absolute bottom-8 h-3 w-14 rounded bg-white" /><div className="absolute bottom-4 h-10 w-2 bg-rose-300" /><div className="absolute right-2 top-8 h-5 w-7 rounded-full border-[5px] border-yellow-300"><span className="absolute left-5 top-1/2 h-1.5 w-8 -translate-y-1/2 rounded-full bg-yellow-300" /></div></>}
-        {type === 'shield' && <><div className="absolute h-12 w-11 rounded-t-2xl bg-white/90 shadow-sm" style={{ clipPath: 'polygon(50% 0%, 92% 18%, 84% 78%, 50% 100%, 16% 78%, 8% 18%)' }} /><div className="absolute text-2xl text-green-500">♥</div></>}
-        {type === 'laptop' && <><div className="absolute top-4 h-10 w-14 rounded-lg bg-slate-800 shadow-md"><div className="m-1 flex h-7 items-center justify-center rounded bg-blue-100 text-blue-600">↓</div></div><div className="absolute bottom-4 h-2 w-16 rounded-full bg-white/90" /></>}
-        {type === 'boyLaptop' && <><div className="absolute top-3 h-9 w-9 rounded-full bg-amber-200" /><div className="absolute top-4 h-5 w-11 rounded-t-full bg-slate-800" /><div className="absolute bottom-4 h-8 w-14 rounded-lg bg-slate-700 shadow-md"><div className="m-1 h-5 rounded bg-white/80" /></div></>}
-      </div>
+    <button
+      onClick={onClick}
+      className={`${btnBase} bg-gradient-to-b from-yellow-300 to-amber-500 text-slate-950 shadow-[0_10px_22px_rgba(245,158,11,0.28),inset_0_1px_0_rgba(255,255,255,0.45)] ring-1 ring-amber-300/50 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(245,158,11,0.34)] active:translate-y-0 active:scale-[0.98] active:shadow-[0_6px_14px_rgba(245,158,11,0.24)] focus-visible:ring-amber-300/50`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function BtnWhite({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`${btnBase} bg-white text-blue-700 shadow-[0_10px_22px_rgba(255,255,255,0.28),inset_0_1px_0_rgba(255,255,255,0.8)] ring-1 ring-white/50 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(255,255,255,0.34)] active:translate-y-0 active:scale-[0.98] active:shadow-[0_6px_14px_rgba(255,255,255,0.24)] focus-visible:ring-white/50`}
+    >
+      {children}
+    </button>
+  );
+}
+
+// ===== Safe Icon3D Component =====
+// Uses emoji/icons instead of complex shapes to prevent overflow issues
+const iconEmoji: Record<Icon3DType, string> = {
+  key: '🔑',
+  bigKey: '🗝️',
+  cap: '🎓',
+  download: '⬇️',
+  book: '📚',
+  star: '⭐',
+  target: '🎯',
+  reader: '📖',
+  chart: '📊',
+  devices: '💻',
+  giftKey: '🎁',
+  shield: '🛡️',
+  laptop: '💻',
+  boyLaptop: '👨‍💻',
+};
+
+function Icon3D({ type, size = 'md' }: { type: Icon3DType; size?: 'xs' | 'sm' | 'md' | 'lg' }) {
+  const box = size === 'lg' ? 'h-16 w-16 text-3xl' : size === 'sm' ? 'h-11 w-11 text-xl' : size === 'xs' ? 'h-10 w-10 text-lg' : 'h-14 w-14 text-2xl';
+  return (
+    <div className={`${box} shrink-0 overflow-hidden rounded-[1.1rem] bg-gradient-to-br from-slate-100 to-slate-200 shadow-[0_4px_12px_rgba(15,23,42,0.08)] ring-1 ring-slate-200/50 flex items-center justify-center`}>
+      <span className="drop-shadow-sm">{iconEmoji[type]}</span>
     </div>
   );
 }
@@ -121,69 +136,68 @@ export function RootLandingPage() {
         </section>
 
         <footer className="mt-10 py-6 text-center text-sm text-slate-500">
-          Học Cấp 01 © 2026. Thiết kế dành cho phụ huynh và học sinh tiểu học.
+          Học Cấp 01 2026. Thiết kế dành cho phụ huynh và học sinh tiểu học.
         </footer>
       </div>
 
       {/* ===================== MOBILE ONLY (md:hidden) ===================== */}
-      <div className="md:hidden min-h-screen w-full max-w-full overflow-x-hidden bg-slate-100 pb-28">
+      <div className="md:hidden min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 pb-28">
         {/* Mobile Header */}
-        <header className="sticky top-0 z-20 flex items-center justify-between bg-white/90 px-4 py-3 backdrop-blur">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-700 text-2xl text-white shadow-lg shadow-blue-100">
+        <header className="sticky top-0 z-20 flex w-full items-center justify-between bg-white/95 px-4 py-3 backdrop-blur-sm shadow-[0_2px_12px_rgba(15,23,42,0.04)]">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 text-xl text-white shadow-lg shadow-blue-200/50">
               📖
             </div>
-            <div>
-              <p className="text-sm font-extrabold uppercase tracking-[0.16em] text-blue-700">Học Cấp 01</p>
-              <p className="text-xs font-medium text-slate-600">Phụ huynh đồng hành cùng con</p>
+            <div className="min-w-0">
+              <p className="text-sm font-extrabold uppercase tracking-[0.12em] text-blue-700">Học Cấp 01</p>
+              <p className="truncate text-xs font-medium text-slate-600">Phụ huynh đồng hành cùng con</p>
             </div>
           </div>
-          <button className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-2xl shadow-sm ring-1 ring-slate-100">
+          <button className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white text-lg shadow-sm ring-1 ring-slate-200 transition active:scale-95">
             ☰
           </button>
         </header>
 
-        {/* Mobile Hero - Simplified */}
-        <section className="relative w-full max-w-full overflow-hidden bg-gradient-to-b from-sky-50 via-white to-white px-4 pb-5 pt-4">
-          <div className="pointer-events-none absolute right-4 top-10 h-32 w-32 rounded-full bg-blue-100/60 blur-2xl" />
-          <div className="pointer-events-none absolute -bottom-8 -right-8 h-36 w-36 rounded-full bg-yellow-100/70 blur-2xl" />
+        {/* Mobile Hero */}
+        <section className="relative w-full overflow-hidden bg-gradient-to-b from-sky-50 via-white to-white px-4 py-6">
+          <div className="pointer-events-none absolute right-2 top-4 h-28 w-28 rounded-full bg-blue-100/50 blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-4 -right-4 h-32 w-32 rounded-full bg-yellow-100/60 blur-2xl" />
 
-          <div className="relative w-full max-w-full">
-            <h1 className="text-[36px] font-black leading-none tracking-tight text-blue-700">
+          <div className="relative">
+            <h1 className="text-[32px] font-black leading-none tracking-tight text-blue-700">
               HỌC CẤP 01
             </h1>
-
-            <h2 className="mt-3 text-lg font-extrabold leading-snug text-slate-950">
+            <h2 className="mt-3 text-base font-extrabold leading-snug text-slate-900">
               Công cụ đồng hành tin cậy cho phụ huynh tiểu học
             </h2>
 
             <div className="mt-4 space-y-2 text-sm font-medium text-slate-700">
-              <p className="flex items-start gap-2">
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-green-500" />
+              <p className="flex items-start gap-2.5">
+                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-green-500" />
                 <span className="leading-snug">Kho bài giảng & đề luyện chuẩn chương trình</span>
               </p>
-              <p className="flex items-start gap-2">
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500" />
+              <p className="flex items-start gap-2.5">
+                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-blue-500" />
                 <span className="leading-snug">Học hiệu quả, dễ hiểu, dễ nhớ</span>
               </p>
-              <p className="flex items-start gap-2">
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500" />
-                <span className="leading-snug">An toàn, lành mạnh, không quảng cáo độc hại</span>
+              <p className="flex items-start gap-2.5">
+                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-orange-500" />
+                <span className="leading-snug">An toàn, lành mạnh, không quảng cáo</span>
               </p>
             </div>
 
             <div className="mt-5 grid grid-cols-2 gap-3">
-              <MiniButton onClick={() => navigate('/home')}>▶ Học thử</MiniButton>
-              <MiniButton variant="yellow" onClick={() => navigate('/pricing')}>🔑 Kích hoạt</MiniButton>
+              <BtnBlue onClick={() => navigate('/home')}>▶ Học thử</BtnBlue>
+              <BtnYellow onClick={() => navigate('/pricing')}>🔑 Kích hoạt</BtnYellow>
             </div>
           </div>
         </section>
 
         {/* Quick Actions */}
-        <section className="w-full max-w-full px-4 py-4">
-          <div className="w-full max-w-full rounded-[1.5rem] bg-white p-4 shadow-sm ring-1 ring-slate-100">
-            <h3 className="text-lg font-black text-slate-900">Thao tác nhanh</h3>
-            <div className="mt-4 grid grid-cols-2 gap-3">
+        <section className="w-full px-4 py-5">
+          <div className="w-full rounded-[22px] bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.06)] ring-1 ring-slate-100">
+            <h3 className="text-[17px] font-black text-slate-900">Thao tác nhanh</h3>
+            <div className="mt-4 grid grid-cols-2 gap-4">
               {quickActions.map((item) => (
                 <button
                   key={item.title}
@@ -195,11 +209,11 @@ export function RootLandingPage() {
                     }
                     else window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                   }}
-                  className="flex flex-col items-center rounded-2xl bg-white p-3 text-center shadow-sm ring-1 ring-slate-100 transition active:scale-[0.99]"
+                  className="flex flex-col items-center rounded-[18px] bg-white p-4 text-center shadow-[0_2px_8px_rgba(15,23,42,0.04)] ring-1 ring-slate-100 transition active:scale-[0.98]"
                 >
-                  <Icon3D type={item.icon} tone={item.tone} size="xs" />
-                  <p className="mt-2 text-sm font-extrabold leading-tight">{item.title}</p>
-                  <p className="mt-0.5 text-xs text-slate-500 leading-tight">{item.desc}</p>
+                  <Icon3D type={item.icon} size="sm" />
+                  <p className="mt-3 text-sm font-bold leading-tight">{item.title}</p>
+                  <p className="mt-1 text-[13px] leading-4 text-slate-500">{item.desc}</p>
                 </button>
               ))}
             </div>
@@ -207,17 +221,22 @@ export function RootLandingPage() {
         </section>
 
         {/* Vì sao tin tưởng */}
-        <section className="w-full max-w-full px-4 py-2">
-          <h3 className="text-center text-lg font-black text-blue-950 leading-tight px-2">Vì sao phụ huynh tin tưởng Học Cấp 01?</h3>
-          <div className="mt-4 grid grid-cols-1 gap-3">
+        <section className="w-full px-4 py-5">
+          <h3 className="px-2 text-center text-[17px] font-black leading-snug text-slate-900">
+            Vì sao phụ huynh tin tưởng?
+          </h3>
+          <div className="mt-4 grid grid-cols-1 gap-4">
             {reasons.map((item) => (
-              <article key={item.title} className={`flex items-start gap-3 rounded-2xl ${item.bg} p-3 ring-1 ring-slate-100`}>
+              <article
+                key={item.title}
+                className="flex items-start gap-3 rounded-[22px] bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.06)] ring-1 ring-slate-100"
+              >
                 <div className="shrink-0">
-                  <Icon3D type={item.icon} tone={item.tone} size="xs" />
+                  <Icon3D type={item.icon} size="sm" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-sm font-extrabold leading-snug">{item.title}</h4>
-                  <p className="mt-0.5 text-xs leading-5 text-slate-600">{item.desc}</p>
+                  <h4 className="text-[15px] font-bold leading-snug text-slate-900">{item.title}</h4>
+                  <p className="mt-1 text-[13px] leading-5 text-slate-600">{item.desc}</p>
                 </div>
               </article>
             ))}
@@ -225,18 +244,23 @@ export function RootLandingPage() {
         </section>
 
         {/* 3 Bước */}
-        <section className="w-full max-w-full px-4 py-5">
-          <h3 className="text-center text-lg font-black text-blue-950 leading-tight px-2">Bắt đầu chỉ với 3 bước đơn giản</h3>
-          <div className="mt-4 grid grid-cols-1 gap-3">
+        <section className="w-full px-4 py-5">
+          <h3 className="px-2 text-center text-[17px] font-black leading-snug text-slate-900">
+            Bắt đầu chỉ với 3 bước đơn giản
+          </h3>
+          <div className="mt-4 grid grid-cols-1 gap-4">
             {steps.map((step) => (
-              <article key={step.no} className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100">
+              <article
+                key={step.no}
+                className="rounded-[22px] bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.06)] ring-1 ring-slate-100"
+              >
                 <div className="flex items-start gap-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-black text-white">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-700 text-sm font-black text-white shadow-md shadow-blue-200">
                     {step.no}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h4 className="text-sm font-extrabold leading-snug">{step.title}</h4>
-                    <p className="mt-1 text-xs leading-5 text-slate-600">{step.desc}</p>
+                    <h4 className="text-[15px] font-bold leading-snug text-slate-900">{step.title}</h4>
+                    <p className="mt-1 text-[13px] leading-5 text-slate-600">{step.desc}</p>
                   </div>
                 </div>
               </article>
@@ -245,20 +269,21 @@ export function RootLandingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="w-full max-w-full px-4 py-3">
-          <div className="w-full max-w-full overflow-hidden rounded-[1.5rem] bg-gradient-to-r from-blue-700 to-sky-500 p-4 text-white shadow-xl shadow-blue-100">
-            <h3 className="text-lg font-black leading-tight">Bắt đầu cho bé học miễn phí ngay!</h3>
-            <p className="mt-2 text-xs leading-5 text-blue-50">Đồng hành cùng con, học vui mỗi ngày.</p>
+        <section className="w-full px-4 py-5">
+          <div className="w-full overflow-hidden rounded-[22px] bg-gradient-to-br from-blue-600 to-sky-500 p-5 text-white shadow-[0_12px_32px_rgba(37,99,235,0.25)]">
+            <h3 className="text-[17px] font-black leading-snug">Bắt đầu cho bé học miễn phí ngay!</h3>
+            <p className="mt-2 text-sm leading-5 text-blue-50">Đồng hành cùng con, học vui mỗi ngày.</p>
             <div className="mt-4 grid grid-cols-2 gap-3">
-              <button onClick={() => navigate('/home')} className="h-11 rounded-2xl bg-white px-3 text-sm font-bold text-blue-700 transition active:scale-[0.98]">▶ Học miễn phí</button>
-              <button onClick={() => navigate('/pricing')} className="h-11 rounded-2xl bg-yellow-400 px-3 text-sm font-bold text-slate-950 transition active:scale-[0.98]">🔑 Kích hoạt</button>
+              <BtnWhite onClick={() => navigate('/home')}>▶ Học miễn phí</BtnWhite>
+              <BtnYellow onClick={() => navigate('/pricing')}>🔑 Kích hoạt</BtnYellow>
             </div>
           </div>
         </section>
 
         {/* Mobile Footer */}
-        <footer className="w-full max-w-full px-4 py-6 text-center text-sm text-slate-500">
-          Học Cấp 01 © 2026. Thiết kế dành cho phụ huynh và học sinh tiểu học.
+        <footer className="w-full px-4 py-8 text-center text-sm text-slate-500">
+          <p>Học Cấp 01 2026</p>
+          <p className="mt-1 text-xs">Thiết kế dành cho phụ huynh và học sinh tiểu học</p>
         </footer>
       </div>
 
@@ -267,7 +292,7 @@ export function RootLandingPage() {
         href="https://zalo.me/0902964685"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-5 left-1/2 z-50 inline-flex h-12 -translate-x-1/2 items-center justify-center gap-2 rounded-2xl bg-blue-600 px-5 text-sm font-bold text-white shadow-xl shadow-blue-300/50 transition active:scale-[0.98] md:hidden"
+        className="fixed bottom-5 left-1/2 z-50 inline-flex h-11 -translate-x-1/2 items-center justify-center gap-2 rounded-2xl bg-gradient-to-b from-blue-500 to-blue-700 px-5 text-sm font-bold text-white shadow-[0_14px_30px_rgba(37,99,235,0.35),inset_0_1px_0_rgba(255,255,255,0.35)] ring-1 ring-blue-300/40 transition-all duration-200 active:scale-[0.98] focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300/50 md:hidden"
       >
         🎧 Hỗ trợ mua key
       </a>

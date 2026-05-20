@@ -1957,7 +1957,8 @@ export function PricingPage() {
           <label className="block px-2 pb-1 text-[12px] font-bold" style={{ color: '#7C2D12' }}>
             Mã kích hoạt / License Key
           </label>
-          <div className={`flex gap-2 items-stretch rounded-2xl p-2 activation-key-input-shell ${activateMsg?.type === 'error' ? 'is-error' : activateMsg?.type === 'success' ? 'is-success' : ''}`} style={{
+          {/* License Key Input - Full width on mobile */}
+          <div className={`flex flex-col sm:flex-row gap-2 sm:gap-3 items-stretch rounded-2xl p-3 activation-key-input-shell ${activateMsg?.type === 'error' ? 'is-error' : activateMsg?.type === 'success' ? 'is-success' : ''}`} style={{
             background: '#FFFFFF',
             border: activateMsg?.type === 'error' ? '1px solid #FCA5A5' : activateMsg?.type === 'success' ? '1px solid #86EFAC' : '1px solid #FED7AA',
             boxShadow: activateMsg?.type === 'error'
@@ -1966,16 +1967,21 @@ export function PricingPage() {
                 ? '0 10px 24px rgba(16,185,129,0.15)'
                 : '0 10px 24px rgba(251,146,60,0.14)',
           }}>
-          <input
-            type="text"
-            className={`premium-input flex-1 px-4 py-3 rounded-xl text-sm uppercase ${activateMsg?.type === 'error' ? 'activation-key-input-error' : activateMsg?.type === 'success' ? 'activation-key-input-success' : ''}`}
-            placeholder="KB-XXXX-XXXX-XXXX"
-            value={licenseKey}
-            onChange={e => setLicenseKey(e.target.value.toUpperCase())}
-            maxLength={25}
-            disabled={isActivating}
-          />
-            <button className={`${premiumButtonPrimaryClass} activation-key-primary-btn`} onClick={activateLicense} disabled={!licenseKey.trim() || (clientProfile === 'web' && !activationEmail.trim()) || isActivating} style={{ ...darkPrimaryButtonStyle, minWidth: 170 }}>
+            <input
+              type="text"
+              className={`premium-input flex-1 min-w-0 px-4 py-3 rounded-xl text-sm uppercase ${activateMsg?.type === 'error' ? 'activation-key-input-error' : activateMsg?.type === 'success' ? 'activation-key-input-success' : ''}`}
+              placeholder="KB-XXXX-XXXX-XXXX"
+              value={licenseKey}
+              onChange={e => setLicenseKey(e.target.value.toUpperCase())}
+              maxLength={25}
+              disabled={isActivating}
+            />
+            <button
+              className={`${premiumButtonPrimaryClass} activation-key-primary-btn w-full sm:w-auto whitespace-nowrap`}
+              onClick={activateLicense}
+              disabled={!licenseKey.trim() || (clientProfile === 'web' && !activationEmail.trim()) || isActivating}
+              style={{ ...darkPrimaryButtonStyle, minWidth: 'unset' }}
+            >
               {isActivating ? <RefreshCw size={16} className="animate-spin" /> : <Unlock size={16} />}
               {isActivating ? 'Đang xác minh...' : 'Kích hoạt ngay'}
             </button>
@@ -1988,6 +1994,7 @@ export function PricingPage() {
               Đang kiểm tra key với hệ thống, vui lòng không tắt ứng dụng...
             </div>
           )}
+          {/* Links row */}
           <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
             <button className="pricing-inline-link" onClick={() => navigate('/pricing#activate-section')}>
               Đã kích hoạt rồi? Đăng nhập
@@ -1996,6 +2003,8 @@ export function PricingPage() {
               Chưa có key? Xem bảng giá
             </button>
           </div>
+
+          {/* Key hint */}
           <div
             className="text-xs mt-2 rounded-xl px-3 py-2 font-bold"
             style={
@@ -2015,8 +2024,8 @@ export function PricingPage() {
             {detectedKeyDetailText}
           </div>
 
-          {/* Grade Selection - Moved inside main card with mt-5 spacing */}
-          <div ref={gradePickerRef} className="mt-5 rounded-2xl p-4 activation-grade-card" style={{ background: '#F8FBFF', border: '2px solid #93C5FD', opacity: isPremiumKeyFlow ? 0.72 : 1 }}>
+          {/* Grade Selection - Inside main card with mt-5 spacing */}
+          <div ref={gradePickerRef} className="mt-5 rounded-[18px] p-4 activation-grade-card" style={{ background: '#F8FBFF', border: '2px solid #93C5FD', opacity: isPremiumKeyFlow ? 0.72 : 1 }}>
           <div className="activation-grade-header">
             <div>
               <div className="activation-grade-step">Bước 2</div>
