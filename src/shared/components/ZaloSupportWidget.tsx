@@ -1,6 +1,5 @@
 import { useState, type MouseEvent } from 'react';
-
-const ZALO_URL = 'https://zalo.me/9892964685';
+import { SUPPORT_ZALO_URL } from '../constants/support';
 
 export function ZaloSupportWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +38,7 @@ export function ZaloSupportWidget() {
             </p>
             <a
               className="zalo-support-widget__button"
-              href={ZALO_URL}
+              href={SUPPORT_ZALO_URL}
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleLinkClick}

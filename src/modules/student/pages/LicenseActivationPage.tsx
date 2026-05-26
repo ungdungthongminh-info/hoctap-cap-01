@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { activateCap01License } from '../../../shared/services/cap01License';
+import { SUPPORT_PHONE_TEL, SUPPORT_ZALO_URL } from '../../../shared/constants/support';
 
 export function LicenseActivationPage() {
   const navigate = useNavigate();
@@ -102,6 +103,30 @@ export function LicenseActivationPage() {
           >
             Vào học Free
           </button>
+        </div>
+
+        {/* Support Section */}
+        <div className="pt-3 mt-3 border-t" style={{ borderColor: 'var(--color-border, #E5E7EB)' }}>
+          <p className="text-sm mb-2" style={{ color: 'var(--color-text-light)' }}>
+            Cần hỗ trợ kích hoạt? Liên hệ chúng tôi.
+          </p>
+          <div className="flex gap-2">
+            <a
+              href={SUPPORT_PHONE_TEL}
+              className="btn btn-primary text-sm"
+            >
+              Gọi hỗ trợ
+            </a>
+            <a
+              href={SUPPORT_ZALO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn text-sm"
+              style={{ background: 'var(--color-surface)' }}
+            >
+              Chat Zalo
+            </a>
+          </div>
         </div>
       </div>
     </div>
