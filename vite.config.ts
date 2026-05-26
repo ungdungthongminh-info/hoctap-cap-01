@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
 const isWebBuild = process.env.VITE_WEB === 'true';
+const webBasePath = process.env.VITE_BASE_PATH || '/';
 const appVersion = process.env.npm_package_version || process.env.VITE_APP_VERSION || '0.1.0';
 
 export default defineConfig({
@@ -15,7 +16,7 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
   },
-  base: isWebBuild ? '/' : './',
+  base: isWebBuild ? webBasePath : './',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
