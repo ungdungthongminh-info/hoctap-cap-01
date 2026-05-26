@@ -74,22 +74,52 @@ interface Subscription {
   createdAt: string;
 }
 
-const WEB_TOTAL_SITE_URL = 'https://www.ungdungthongminh.shop';
+const WEB_TOTAL_SITE_URL = 'https://hochungkhoi.site';
 const WEB_TOTAL_PRODUCT_URLS = {
   standard: {
-    monthly: `${WEB_TOTAL_SITE_URL}/product/cap01_standard_1year_3grades`,
-    yearly: `${WEB_TOTAL_SITE_URL}/product/cap01_standard_1year_3grades`,
-    lifetime: `${WEB_TOTAL_SITE_URL}/product/cap01_standard_1year_3grades`,
+    monthly: `${WEB_TOTAL_SITE_URL}`,
+    yearly: `${WEB_TOTAL_SITE_URL}`,
+    lifetime: `${WEB_TOTAL_SITE_URL}`,
   },
   standard_1year_1grade: {
     monthly: '',
-    yearly: `${WEB_TOTAL_SITE_URL}/product/standard_1year_1grade`,
+    yearly: `${WEB_TOTAL_SITE_URL}`,
     lifetime: '',
   },
   premium: {
-    monthly: `${WEB_TOTAL_SITE_URL}/product/prod-study-premium-month`,
-    yearly: `${WEB_TOTAL_SITE_URL}/product/prod-study-premium-year`,
-    lifetime: `${WEB_TOTAL_SITE_URL}/product/prod-study-premium-lifetime`,
+    monthly: `${WEB_TOTAL_SITE_URL}`,
+    yearly: `${WEB_TOTAL_SITE_URL}`,
+    lifetime: `${WEB_TOTAL_SITE_URL}`,
+  },
+  bundle_3_grades: {
+    monthly: '',
+    yearly: `${WEB_TOTAL_SITE_URL}`,
+    lifetime: '',
+  },
+  leaf_grade1: {
+    monthly: '',
+    yearly: `${WEB_TOTAL_SITE_URL}`,
+    lifetime: '',
+  },
+  grade2: {
+    monthly: '',
+    yearly: `${WEB_TOTAL_SITE_URL}`,
+    lifetime: '',
+  },
+  grade3: {
+    monthly: '',
+    yearly: `${WEB_TOTAL_SITE_URL}`,
+    lifetime: '',
+  },
+  grade4: {
+    monthly: '',
+    yearly: `${WEB_TOTAL_SITE_URL}`,
+    lifetime: '',
+  },
+  grade5: {
+    monthly: '',
+    yearly: `${WEB_TOTAL_SITE_URL}`,
+    lifetime: '',
   },
 } as const;
 

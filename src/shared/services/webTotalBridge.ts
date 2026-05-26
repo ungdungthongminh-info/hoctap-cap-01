@@ -13,7 +13,7 @@ function isCommonDevPort(port: string): boolean {
   return ['3000', '3900', '4173', '5173', '5174'].includes(port);
 }
 
-const PRODUCTION_BRIDGE_BASE = 'https://www.ungdungthongminh.shop/api/v1';
+const PRODUCTION_BRIDGE_BASE = 'https://hochungkhoi.site/api';
 
 function normalizeApiBase(value?: string | null): string {
   return String(value || '').trim().replace(/\/+$/, '');
@@ -53,8 +53,8 @@ function buildBackendApiBases(): string[] {
     }
 
     if (protocol === 'http:' || protocol === 'https:') {
-      if (/ungdungthongminh\.shop$/i.test(hostname)) {
-        pushBase(`${origin.replace(/\/+$/, '')}/api/v1`);
+      if (/hochungkhoi\.site$/i.test(hostname)) {
+        pushBase(`${origin.replace(/\/+$/, '')}/api`);
       }
       pushBase(PRODUCTION_BRIDGE_BASE);
       return bases;
