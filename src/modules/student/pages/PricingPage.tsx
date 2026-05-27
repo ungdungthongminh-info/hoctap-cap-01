@@ -768,7 +768,6 @@ export function PricingPage() {
   const [activationGrades, setActivationGrades] = useState<number[]>(() => getUnlockedGrades(state.student.grade, getAccessPlan()));
   const [activateMsg, setActivateMsg] = useState<{ type: 'success' | 'error'; text: string; actionLabel?: string; actionUrl?: string } | null>(null);
   const [showComparison, setShowComparison] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [copiedDeviceId, setCopiedDeviceId] = useState(false);
   const [copiedActiveKey, setCopiedActiveKey] = useState(false);
   const [isActivating, setIsActivating] = useState(false);
@@ -1503,13 +1502,6 @@ export function PricingPage() {
     setTimeout(() => setActivateMsg(null), 6000);
   };
 
-  const copyContact = () => {
-    navigator.clipboard.writeText('hotro@hochungkhoi.vn').then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }).catch(() => {});
-  };
-
   const copyDeviceId = () => {
     navigator.clipboard.writeText(currentDeviceId).then(() => {
       setCopiedDeviceId(true);
@@ -1673,52 +1665,149 @@ export function PricingPage() {
         </div>
       </section>
 
-      {/* Simplified Pricing Section */}
-      <section className="pricing-simplified w-full space-y-4">
-        <div className="card">
-          <h2 className="text-xl font-bold mb-2">Gói học & kích hoạt</h2>
-          <p className="text-sm" style={{ color: 'var(--color-text-light)' }}>
-            Để mua gói mới, vui lòng truy cập web Học Chung Khối.
-            Nếu đã có mã kích hoạt, hãy nhập mã tại trang Kích hoạt.
-          </p>
+      <section className="pricing-pro-heading pricing-block-plan-heading w-full">
+        <div>
+          <div className="pricing-section-kicker">Gói sử dụng</div>
+          <h2>3 nhóm gói chính cho phụ huynh dễ chọn.</h2>
         </div>
 
-        <div className="card space-y-3">
-          <div className="flex gap-2">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => navigate('/license/activate')}
-            >
-              <Unlock size={16} /> Kích hoạt mã
-            </button>
-            <a
-              href="https://hochungkhoi.site"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn"
-              style={{ background: 'var(--color-surface)' }}
-            >
-              <ExternalLink size={16} /> Mua gói học
-            </a>
-          </div>
+        <div className="text-sm font-semibold" style={{ color: '#475569' }}>
+          Gói theo lớp từ 199.000đ/năm, Standard 3 lớp 599.000đ/năm.
+        </div>
+      </section>
 
-          <div className="pt-3 mt-3 border-t" style={{ borderColor: 'var(--color-border, #E5E7EB)' }}>
-            <p className="text-sm mb-2" style={{ color: 'var(--color-text-light)' }}>
-              Cần hỗ trợ kích hoạt? Liên hệ chúng tôi.
-            </p>
-            <div className="flex gap-2">
-              <a href={SUPPORT_PHONE_TEL} className="btn btn-primary text-sm">Gọi hỗ trợ</a>
-              <a
-                href={SUPPORT_ZALO_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn text-sm"
-                style={{ background: 'var(--color-surface)' }}
-              >
-                Chat Zalo
-              </a>
+      <section className="pricing-grid-modern pricing-pro-grid pricing-block-plan-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 w-full items-stretch">
+        {visiblePlans.map(plan => {
+          const isActive = plan.id === currentPlan || (plan.id === 'standard_1year_1grade' && currentPlanStorageId === 'standard_1year_1grade');
+          const price = getPrice(plan);
+          const savings = getSavings(plan);
+          const productUrl = WEB_TOTAL_PRODUCT_URLS[plan.id as keyof typeof WEB_TOTAL_PRODUCT_URLS]?.[billing];
+          const canCheckout = plan.id !== 'free' && plan.pricingSource !== 'local-fallback' && Boolean(productUrl);
+          const highlightedFeatures = plan.features.slice(0, MAX_PLAN_BULLETS);
+          const detailedFeatures = plan.features.slice(MAX_PLAN_BULLETS);
+
+          return (
+            <div
+              key={plan.id}
+              className={`pricing-pro-card pricing-pro-card-${plan.id} flex flex-col relative overflow-hidden ${isActive ? 'is-active' : ''}`}
+              style={{
+                borderColor: isActive ? plan.color : plan.popular ? plan.color : undefined,
+              }}
+            >
+              {plan.popular && (
+                <div className="pricing-popular-badge">
+                  {plan.id === 'standard' ? 'Tiết kiệm nhất' : 'Phổ biến nhất'}
+                </div>
+              )}
+              {isActive && (
+                <div className="pricing-active-badge">
+                  Đang dùng
+                </div>
+              )}
+
+              <div className="pricing-pro-card-head">
+                <div className="pricing-plan-icon">{plan.emoji}</div>
+                <div className="pricing-plan-name" style={{ color: plan.color }}>
+                  {plan.id === 'standard_1year_1grade' ? 'Gói theo lớp' : plan.name}
+                </div>
+                <div className="pricing-plan-price" style={{ color: plan.id === 'premium' ? '#8b5cf6' : plan.id === 'standard' ? '#f3c05b' : '#ffffff' }}>
+                  {plan.id === 'standard_1year_1grade' ? 'Từ 199.000đ' : formatVND(price)}
+                </div>
+                <div className="pricing-plan-cycle">
+                  {price === 0 ? 'dùng ngay' : '/ năm'}
+                </div>
+                {savings > 0 && <div className="pricing-savings">Tiết kiệm {savings}%</div>}
+              </div>
+
+              <ul className="pricing-feature-list flex-1">
+                {(plan.id === 'standard_1year_1grade' ? plan.features : highlightedFeatures).map((f, i) => (
+                  <li key={i}>
+                    <span className="feature-check" style={{ background: plan.color }}>
+                      <Check size={12} />
+                    </span>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {detailedFeatures.length > 0 && (
+                <details className="pricing-plan-details">
+                  <summary>Xem chi tiết</summary>
+                  <ul>
+                    {detailedFeatures.map((feature) => (
+                      <li key={feature}>{feature}</li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+
+              {!isActive && plan.id !== 'free' ? (
+                <div className="pricing-card-actions">
+                  {canCheckout ? (
+                    <button
+                      className={`${premiumButtonPrimaryClass} w-full pricing-card-main-btn`}
+                      style={getPlanPrimaryButtonStyle(plan)}
+                      onClick={() => openQRPayment(plan)}
+                    >
+                      <ExternalLink size={14} /> {plan.id === 'standard_1year_1grade' ? 'Chọn lớp muốn mua' : 'Chọn gói 3 lớp'}
+                    </button>
+                  ) : (
+                    <div
+                      className="w-full py-2.5 rounded-xl font-bold text-xs text-center"
+                      style={{ background: '#FEF3C7', color: '#92400E' }}
+                    >
+                      {plan.id === 'standard_1year_1grade'
+                        ? 'Gói này chỉ bán theo năm trên Web Tổng'
+                        : 'Chưa mở bán trực tuyến trên Web tổng'}
+                    </div>
+                  )}
+                </div>
+              ) : plan.id === 'free' ? (
+                <button
+                  className={`${premiumButtonPrimaryClass} w-full pricing-card-main-btn`}
+                  style={darkPrimaryButtonStyle}
+                  onClick={() => {
+                    persistFreePlan();
+                    setCurrentPlan('free');
+                    setActiveSub(null);
+                    setSubExpiry(null);
+                    setActivationGrades(getUnlockedGrades(state.student.grade, 'free'));
+                    setLicenseKey('');
+                    navigate('/home');
+                  }}
+                >
+                  Dùng thử miễn phí
+                </button>
+              ) : (
+                <button className={`${premiumButtonPrimaryClass} w-full pricing-card-main-btn`} style={topPrimaryButtonStyle} onClick={() => navigate('/home')}>
+                  Đang dùng
+                </button>
+              )}
             </div>
+          );
+        })}
+      </section>
+
+      <section className="pricing-proof-row pricing-block-proof w-full">
+        <div className="proof-item">
+          <div className="proof-icon">⚡</div>
+          <div>
+            <strong>Tải về là dùng được ngay</strong>
+            <p>Không cần tạo tài khoản. Mở app lên là vào được gói Free để trải nghiệm tức thì.</p>
+          </div>
+        </div>
+        <div className="proof-item">
+          <div className="proof-icon proof-icon-gold">🎯</div>
+          <div>
+            <strong>Gói theo lớp: mua đúng lớp cần học</strong>
+            <p>Hiển thị đủ 6 lớp với giá theo từng lớp để phụ huynh chọn nhanh.</p>
+          </div>
+        </div>
+        <div className="proof-item">
+          <div className="proof-icon proof-icon-green">🔑</div>
+          <div>
+            <strong>Standard 3 lớp: tiết kiệm nhất</strong>
+            <p>Chọn đúng 3 lớp, hỗ trợ 3 hồ sơ học sinh và tải offline cho lớp đã mua.</p>
           </div>
         </div>
       </section>
@@ -2242,16 +2331,32 @@ export function PricingPage() {
           </div>
         </div>
 
-        {/* Contact */}
-        <div className="mt-4 p-3 rounded-lg flex items-center gap-3" style={{ background: 'var(--color-primary-light)', color: 'var(--color-primary-dark)' }}>
+        {/* Support Buttons */}
+        <div className="mt-4 p-3 rounded-lg flex flex-col sm:flex-row items-center gap-3" style={{ background: 'var(--color-primary-light)', color: 'var(--color-primary-dark)' }}>
           <span className="text-2xl">📞</span>
-          <div className="flex-1 text-xs">
-            <strong>Liên hệ mua hàng & hỗ trợ:</strong><br />
-            Zalo: 0901234567 · Email: hotro@hochungkhoi.vn
+          <div className="flex-1 text-xs text-center sm:text-left">
+            <strong>Cần hỗ trợ? Liên hệ ngay:</strong>
           </div>
-          <button className={`${premiumButtonBaseClass} p-2 text-xs`} style={neutralGhostButtonStyle} onClick={copyContact} title="Copy email">
-            {copied ? <CheckCircle size={16} /> : <Copy size={16} />}
-          </button>
+          <div className="flex gap-2">
+            <a
+              href={SUPPORT_PHONE_TEL}
+              className={`${premiumButtonBaseClass} p-2 text-xs`}
+              style={neutralGhostButtonStyle}
+              title="Gọi hỗ trợ"
+            >
+              📞 Gọi hỗ trợ
+            </a>
+            <a
+              href={SUPPORT_ZALO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${premiumButtonBaseClass} p-2 text-xs`}
+              style={{ ...neutralGhostButtonStyle, background: 'linear-gradient(180deg, #EEEEEE 0%, #E0E0E0 100%)', color: '#1565C0' }}
+              title="Chat Zalo"
+            >
+              💬 Chat Zalo
+            </a>
+          </div>
         </div>
       </div>
 
