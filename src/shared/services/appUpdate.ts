@@ -3,7 +3,7 @@ import { getWindowsAppDownloadUrl } from './windowsAppDownload';
 const UPDATE_FEED_URL_KEY = 'hhk_update_feed_url';
 const UPDATE_DISMISSED_VERSION_KEY = 'hhk_update_dismissed_version';
 
-const FALLBACK_UPDATE_FEED_URL = 'https://hoctap-cap-01-livid.vercel.app/app-update.json';
+const FALLBACK_UPDATE_FEED_URL = 'https://app.hochungkhoi.site/cap-01/app-update.json';
 const DESKTOP_UPDATE_YML_URL = 'https://pub-90b335e287f24c92bbd5856cb9f116d9.r2.dev/app-updates/app-study-12/latest.yml';
 
 export interface AppUpdateManifest {

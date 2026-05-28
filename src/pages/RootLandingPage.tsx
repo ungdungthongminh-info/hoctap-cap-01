@@ -234,7 +234,7 @@ export function RootLandingPage() {
                     if (item.title.includes('Kích hoạt')) navigate('/pricing');
                     else if (item.title.includes('Học')) navigate('/home');
                     else if (item.title.includes('Tải')) {
-                      window.open('https://hoctap.ungdungthongminh.info/download', '_blank');
+                      window.open('https://hochungkhoi.site', '_blank');
                     }
                     else window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                   }}

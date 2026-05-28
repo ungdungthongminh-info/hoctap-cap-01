@@ -4,7 +4,7 @@
  */
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
-import { ExternalLink, AlertCircle, Loader2, Lock, ShoppingCart } from 'lucide-react';
+import { ExternalLink, AlertCircle, Loader2, Lock } from 'lucide-react';
 
 const WEB_TOTAL_SITE_URL = 'https://hochungkhoi.site';
 const CAP01_RETURN_TO = encodeURIComponent('/cap-01/');
@@ -43,7 +43,7 @@ function NotLoggedInScreen({ onLogin }: { onLogin: () => void }) {
         </h1>
 
         <p className="text-gray-600 mb-6">
-          Bạn cần đăng nhập bằng tài khoản đã mua gói học trên web chủ để sử dụng App Cấp 01.
+          Bạn cần đăng nhập để sử dụng App Cấp 01. Nếu chưa mua gói, bạn vẫn có thể học ở chế độ Free.
         </p>
 
         <div className="space-y-3">
@@ -71,7 +71,7 @@ function NotLoggedInScreen({ onLogin }: { onLogin: () => void }) {
             rel="noopener noreferrer"
             className="text-blue-600 hover:underline"
           >
-            Đăng ký tại web chủ
+            Đăng ký tài khoản
           </a>
         </p>
       </div>
@@ -80,86 +80,41 @@ function NotLoggedInScreen({ onLogin }: { onLogin: () => void }) {
 }
 
 /**
- * Màn hình chưa có license
+ * Banner nhẹ hiển thị góc trên - đang dùng gói Free
  */
-function NoLicenseScreen({ email }: { email?: string }) {
-  const navigate = useNavigate();
-
+export function FreeBanner({ email, onUpgrade }: { email?: string; onUpgrade?: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-4">
-      <div className="card p-8 max-w-md w-full text-center">
-        <div className="mx-auto w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mb-6">
-          <ShoppingCart className="w-8 h-8 text-orange-600" />
-        </div>
-
-        <h1 className="text-2xl font-bold text-gray-800 mb-3">
-          Tài khoản chưa có gói học
-        </h1>
-
-        <p className="text-gray-600 mb-2">
-          {email ? (
-            <>Tài khoản <strong>{email}</strong> chưa mua gói học nào.</>
-          ) : (
-            'Tài khoản của bạn chưa mua gói học nào.'
-          )}
-        </p>
-
-        <p className="text-sm text-gray-500 mb-6">
-          Vui lòng mua gói học để sử dụng App Cấp 01.
-        </p>
-
-        <button
-          onClick={() => window.open(WEB_TOTAL_SITE_URL, '_blank', 'noopener,noreferrer')}
-          className="btn-primary w-full py-3 text-base mb-3"
-        >
-          <ExternalLink className="w-4 h-4 mr-2" />
-          Mua gói học trên Web Tổng
-        </button>
-
-        <button
-          onClick={() => navigate('/')}
-          className="btn-outline w-full py-3 text-base"
-        >
-          Về trang chủ
-        </button>
-      </div>
+    <div className="fixed top-0 left-0 right-0 z-50 bg-amber-50 border-b border-amber-200 px-4 py-2 flex items-center justify-between text-sm">
+      <span className="text-amber-800">
+        {email ? <><strong>{email}</strong> — </> : ''}
+        Đang dùng <strong>Gói Free</strong>. Nâng cấp để mở đầy đủ tính năng.
+      </span>
+      <button
+        onClick={onUpgrade ?? (() => window.open(WEB_TOTAL_SITE_URL, '_blank', 'noopener,noreferrer'))}
+        className="ml-4 shrink-0 rounded-lg bg-amber-500 px-3 py-1 text-xs font-semibold text-white hover:bg-amber-600"
+      >
+        Nâng cấp
+      </button>
     </div>
   );
 }
 
 /**
- * Màn hình lỗi
+ * Banner cảnh báo nhẹ khi check entitlements lỗi - vẫn vào Free
  */
-function ErrorScreen({ message, onRetry }: { message: string; onRetry: () => void }) {
+function ErrorBanner({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-4">
-      <div className="card p-8 max-w-md w-full text-center">
-        <div className="mx-auto w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mb-6">
-          <AlertCircle className="w-8 h-8 text-red-600" />
-        </div>
-
-        <h1 className="text-2xl font-bold text-gray-800 mb-3">
-          Không kiểm tra được quyền học
-        </h1>
-
-        <p className="text-gray-600 mb-6">
-          {message || 'Đã xảy ra lỗi khi kiểm tra quyền học. Vui lòng thử lại.'}
-        </p>
-
-        <button
-          onClick={onRetry}
-          className="btn-primary w-full py-3 text-base mb-3"
-        >
-          Thử lại
-        </button>
-
-        <button
-          onClick={() => window.location.reload()}
-          className="btn-outline w-full py-3 text-base"
-        >
-          Tải lại trang
-        </button>
-      </div>
+    <div className="fixed top-0 left-0 right-0 z-50 bg-red-50 border-b border-red-200 px-4 py-2 flex items-center justify-between text-sm">
+      <span className="text-red-700 flex items-center gap-2">
+        <AlertCircle className="w-4 h-4 shrink-0" />
+        Không kiểm tra được quyền học ({message || 'lỗi mạng'}). Đang dùng chế độ Free.
+      </span>
+      <button
+        onClick={onRetry}
+        className="ml-4 shrink-0 rounded-lg bg-red-500 px-3 py-1 text-xs font-semibold text-white hover:bg-red-600"
+      >
+        Thử lại
+      </button>
     </div>
   );
 }
@@ -167,6 +122,10 @@ function ErrorScreen({ message, onRetry }: { message: string; onRetry: () => voi
 /**
  * Main AppAuthGate Component
  * Kiểm tra auth/license từ Clerk session
+ * - Chưa login: chặn, hiện màn đăng nhập
+ * - Đã login, chưa mua: vào Free mode (banner nhẹ)
+ * - Đã login, có license: vào paid mode
+ * - Lỗi check: vào Free mode (banner cảnh báo)
  */
 export default function AppAuthGate({ children }: AppAuthGateProps) {
   const { isLoaded, isSignedIn, getToken } = useAuth();
@@ -268,18 +227,28 @@ export default function AppAuthGate({ children }: AppAuthGateProps) {
     );
   }
 
-  // No license - show purchase screen
+  // No license - allow Free mode with upgrade banner
   if (authState.status === 'no_license') {
-    return <NoLicenseScreen email={authState.email} />;
+    return (
+      <>
+        <FreeBanner email={authState.email} />
+        <div className="pt-10">{children}</div>
+      </>
+    );
   }
 
-  // Error - show error screen with retry
+  // Error checking entitlements - allow Free mode with warning banner
   if (authState.status === 'error') {
     const retry = () => setAuthState({ status: 'idle' });
-    return <ErrorScreen message={authState.message ?? ''} onRetry={retry} />;
+    return (
+      <>
+        <ErrorBanner message={authState.message ?? ''} onRetry={retry} />
+        <div className="pt-10">{children}</div>
+      </>
+    );
   }
 
-  // Has license - show children
+  // Has license - show children normally
   return <>{children}</>;
 }
 

@@ -118,9 +118,9 @@ let globalSyncStatus: StaticPackGlobalSyncStatus = {
 
 const ALL_GRADES_BUNDLE_URL = 'bundle://tts-static-pack/all-grades';
 const ALL_GRADE_PACKS = [0, 1, 2, 3, 4, 5] as const;
-const PRODUCTION_TTS_PACK_API_BASE = 'https://www.ungdungthongminh.shop/api/v1';
+const PRODUCTION_TTS_PACK_API_BASE = 'https://hochungkhoi.site/api/v1';
 const MAX_MANIFEST_SOURCE_FAILURES_BEFORE_ABORT = 25;
-const FALLBACK_UPDATE_FEED_URL = 'https://hoctap-cap-01-livid.vercel.app/app-update.json';
+const FALLBACK_UPDATE_FEED_URL = 'https://app.hochungkhoi.site/cap-01/app-update.json';
 const REMOTE_TTS_POLICY_TTL_MS = 5 * 60 * 1000;
 const DEFAULT_R2_PUBLIC_BASE_URL = 'https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev';
 
