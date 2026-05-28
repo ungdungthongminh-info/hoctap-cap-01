@@ -3,7 +3,7 @@
  * Kiểm tra login/license trước khi cho vào app học
  */
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@clerk/clerk-react';
+import { useAuth, useClerk } from '@clerk/clerk-react';
 import { ExternalLink, AlertCircle, Loader2, Lock } from 'lucide-react';
 
 const WEB_TOTAL_SITE_URL = 'https://hochungkhoi.site';
@@ -30,6 +30,7 @@ function AuthLoadingScreen() {
  */
 function NotLoggedInScreen({ onLogin }: { onLogin: () => void }) {
   const navigate = useNavigate();
+  void navigate;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-4">
@@ -55,7 +56,7 @@ function NotLoggedInScreen({ onLogin }: { onLogin: () => void }) {
           </button>
 
           <button
-            onClick={() => navigate('/')}
+            onClick={() => window.location.href = 'https://hochungkhoi.site'}
             className="btn-outline w-full py-3 text-base"
           >
             <ExternalLink className="w-4 h-4 mr-2" />
@@ -129,7 +130,9 @@ function ErrorBanner({ message, onRetry }: { message: string; onRetry: () => voi
  */
 export default function AppAuthGate({ children }: AppAuthGateProps) {
   const { isLoaded, isSignedIn, getToken } = useAuth();
+  const { openSignIn } = useClerk();
   const location = useLocation();
+  void location;
 
   // State để tracking auth status
   const [authState, setAuthState] = useState<{
@@ -221,8 +224,7 @@ export default function AppAuthGate({ children }: AppAuthGateProps) {
   if (authState.status === 'not_logged_in') {
     return (
       <NotLoggedInScreen onLogin={() => {
-        // Clerk sẽ redirect về trang hiện tại sau login
-        window.location.href = `/sign-in?redirect_url=${encodeURIComponent(location.pathname)}`;
+        openSignIn({ afterSignInUrl: window.location.href });
       }} />
     );
   }

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@clerk/clerk-react';
+import { useAuth, useClerk } from '@clerk/clerk-react';
 import { BookOpen } from 'lucide-react';
 
 // ===== 3D Icon Types =====
@@ -96,6 +96,7 @@ function Icon3D({ type, size = 'md' }: { type: Icon3DType; size?: 'xs' | 'sm' | 
 export function RootLandingPage() {
   const navigate = useNavigate();
   const { isLoaded, isSignedIn } = useAuth();
+  const { openSignIn } = useClerk();
 
   // Chưa load xong Clerk → loading
   if (!isLoaded) {
@@ -129,12 +130,12 @@ export function RootLandingPage() {
               <p className="text-sm font-semibold text-slate-950">Phụ huynh đồng hành cùng con</p>
             </div>
           </div>
-          <a
-            href="/sign-in"
+          <button
+            onClick={() => openSignIn({ afterSignInUrl: window.location.href })}
             className="ml-auto rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition"
           >
             Đăng nhập
-          </a>
+          </button>
         </header>
 
         <section className="relative overflow-hidden rounded-[36px] shadow-card">
