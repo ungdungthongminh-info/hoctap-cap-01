@@ -5189,7 +5189,18 @@ body.sidebar-menu-open .chat-panel {
   }
 
   .home-plan-pill {
-    min-width: min(100%, 280px);
+    min-width: 0;
+    width: 100%;
+  }
+
+  .home-hero-actions {
+    width: 100%;
+    justify-items: stretch;
+  }
+
+  .home-board-mini {
+    width: 100%;
+    min-width: 0;
   }
 
   .home-stats,
@@ -5323,5 +5334,20 @@ body.sidebar-menu-open .chat-panel {
 
   .home-hero-chip {
     min-width: calc(50% - 6px);
+  }
+
+  .home-plan-pill {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .home-hero-actions {
+    width: 100%;
+    justify-items: stretch;
+  }
+
+  .home-board-mini {
+    width: 100%;
+    min-width: 0;
   }
 }

@@ -24,7 +24,7 @@ export function StaticAudioSyncBanner() {
     }
     const timer = window.setTimeout(() => {
       dismissStaticPackGlobalSyncStatus();
-    }, 6500);
+    }, 4000);
     return () => window.clearTimeout(timer);
   }, [status.phase, status.updatedAt]);
 
@@ -81,13 +81,14 @@ export function StaticAudioSyncBanner() {
       };
 
   return (
-    <div style={{ position: 'sticky', top: 8, zIndex: 60 }}>
+    <div style={{ position: 'fixed', top: 8, left: 8, right: 8, zIndex: 60, maxWidth: 'calc(100vw - 16px)', margin: '0 auto', pointerEvents: 'none' }}>
       <div
-        className="mx-3 mb-3 p-3 rounded-xl"
+        className="p-3 rounded-xl"
         style={{
           background: tone.bg,
           border: `1px solid ${tone.border}`,
           boxShadow: '0 8px 24px rgba(15, 23, 42, 0.08)',
+          pointerEvents: 'auto',
         }}
       >
         <div className="flex items-start gap-3">
