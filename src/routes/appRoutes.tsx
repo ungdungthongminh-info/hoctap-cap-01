@@ -5,6 +5,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { AppLayout, FeatureGuard, LessonAccessGuard } from '@shared/components';
+import AppAuthGate from '@shared/components/AppAuthGate';
 
 // ── Admin ───────────────────────────────────────────────────
 const AdminDashboardPage  = lazy(() => import('@student/pages/AdminDashboardPage').then(m => ({ default: m.AdminDashboardPage })));
@@ -116,7 +117,11 @@ export function AppRoutes({ AdminGate, AdminErrorBoundary }: AppRoutesProps) {
             </AdminGate>
           }
         />
-        <Route element={<AppLayout />}>
+        <Route element={
+          <AppAuthGate>
+            <AppLayout />
+          </AppAuthGate>
+        }>
           <Route path="/home"                element={<HomePage />} />
           <Route path="/subjects"            element={<SubjectPage />} />
           <Route path="/lessons"             element={<LessonsPage />} />

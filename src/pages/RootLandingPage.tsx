@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@clerk/clerk-react';
 import { BookOpen } from 'lucide-react';
 
 // ===== 3D Icon Types =====
@@ -94,6 +95,25 @@ function Icon3D({ type, size = 'md' }: { type: Icon3DType; size?: 'xs' | 'sm' | 
 
 export function RootLandingPage() {
   const navigate = useNavigate();
+  const { isLoaded, isSignedIn } = useAuth();
+
+  // Chưa load xong Clerk → loading
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-4 border-slate-200 border-t-blue-500 rounded-full animate-spin" />
+          <p className="text-sm text-slate-500">Đang tải...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Đã login → vào thẳng /home
+  if (isSignedIn) {
+    navigate('/home', { replace: true });
+    return null;
+  }
 
   return (
     <main className="root-landing-page relative min-h-screen overflow-y-auto bg-slate-50 text-slate-950">
@@ -109,6 +129,12 @@ export function RootLandingPage() {
               <p className="text-sm font-semibold text-slate-950">Phụ huynh đồng hành cùng con</p>
             </div>
           </div>
+          <a
+            href="/sign-in"
+            className="ml-auto rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition"
+          >
+            Đăng nhập
+          </a>
         </header>
 
         <section className="relative overflow-hidden rounded-[36px] shadow-card">
@@ -127,7 +153,7 @@ export function RootLandingPage() {
             </button>
           </div>
           <img
-            src="/image/landing-hero.jpg"
+            src={`${import.meta.env.BASE_URL}image/landing-hero.jpg`}
             alt="Phụ huynh đồng hành cùng con học tiểu học"
             className="root-landing-hero-image"
             loading="eager"
@@ -153,7 +179,10 @@ export function RootLandingPage() {
               <p className="truncate text-xs font-medium text-slate-600">Phụ huynh đồng hành cùng con</p>
             </div>
           </div>
-          <button className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white text-lg shadow-sm ring-1 ring-slate-200 transition active:scale-95">
+          <button
+            onClick={() => navigate('/home')}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white text-lg shadow-sm ring-1 ring-slate-200 transition active:scale-95"
+          >
             ☰
           </button>
         </header>

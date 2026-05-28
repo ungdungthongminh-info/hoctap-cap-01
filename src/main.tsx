@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { App } from './App';
+import { ClerkProvider } from '@clerk/clerk-react';
 import { ensureStaticPackAutoSync } from './shared/services/tts/staticAudioPack';
 import './styles/index.css';
+
+// Clerk publishable key — cùng instance với web chủ
+const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || '';
 
 document.title = import.meta.env.VITE_APP_TITLE || 'Học Hứng Khởi Tiểu Học';
 
@@ -81,7 +85,9 @@ async function boot() {
 
     ReactDOM.createRoot(rootEl).render(
       <React.StrictMode>
-        <App />
+        <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY} afterSignInUrl="/cap-01/" afterSignOutUrl="/cap-01/">
+          <App />
+        </ClerkProvider>
       </React.StrictMode>,
     );
 
