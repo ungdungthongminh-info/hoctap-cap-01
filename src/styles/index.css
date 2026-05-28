@@ -2298,6 +2298,12 @@ body.sidebar-menu-open .chat-panel {
     width: 56px;
     height: 56px;
   }
+  html, body, #root {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: auto;
+    min-height: 100%;
+  }
   .app-layout {
     flex-direction: column;
     min-height: 100dvh;
@@ -2330,7 +2336,7 @@ body.sidebar-menu-open .chat-panel {
     padding: 16px 12px 128px;
     height: auto;
     min-height: 100dvh;
-    overflow-y: auto;
+    overflow-y: visible;
   }
 
   .global-grade-panel {
@@ -2422,6 +2428,11 @@ body.sidebar-menu-open .chat-panel {
 }
 
 @media (max-width: 480px) {
+  html, body, #root {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: auto;
+  }
   .app-sidebar {
     min-height: 0;
     padding: 0 8px calc(env(safe-area-inset-bottom) + 8px);
@@ -2429,6 +2440,7 @@ body.sidebar-menu-open .chat-panel {
   .app-main {
     padding: 12px 8px 122px;
     min-height: 100dvh;
+    overflow-y: visible;
   }
 
   .sidebar-mobile-dock {
