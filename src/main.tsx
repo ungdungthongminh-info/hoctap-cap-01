@@ -85,7 +85,7 @@ async function boot() {
 
     ReactDOM.createRoot(rootEl).render(
       <React.StrictMode>
-        <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY} afterSignInUrl="/cap-01/" afterSignOutUrl="/cap-01/">
+        <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY} afterSignInUrl="/cap-01/" afterSignUpUrl="/cap-01/" afterSignOutUrl="/cap-01/">
           <App />
         </ClerkProvider>
       </React.StrictMode>,

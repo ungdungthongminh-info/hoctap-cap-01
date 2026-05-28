@@ -7,7 +7,6 @@ import { useAuth, useClerk } from '@clerk/clerk-react';
 import { ExternalLink, AlertCircle, Loader2, Lock } from 'lucide-react';
 
 const WEB_TOTAL_SITE_URL = 'https://hochungkhoi.site';
-const CAP01_RETURN_TO = encodeURIComponent('/cap-01/');
 
 interface AppAuthGateProps {
   children: React.ReactNode;
@@ -28,7 +27,7 @@ function AuthLoadingScreen() {
 /**
  * Màn hình yêu cầu đăng nhập
  */
-function NotLoggedInScreen({ onLogin }: { onLogin: () => void }) {
+function NotLoggedInScreen({ onLogin, onSignUp }: { onLogin: () => void; onSignUp: () => void }) {
   const navigate = useNavigate();
   void navigate;
 
@@ -66,14 +65,12 @@ function NotLoggedInScreen({ onLogin }: { onLogin: () => void }) {
 
         <p className="text-xs text-gray-500 mt-6">
           Chưa có tài khoản?{' '}
-          <a
-            href={`${WEB_TOTAL_SITE_URL}/sign-up?redirect_url=${CAP01_RETURN_TO}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:underline"
+          <button
+            onClick={onSignUp}
+            className="text-blue-600 hover:underline bg-transparent border-none p-0 cursor-pointer"
           >
             Đăng ký tài khoản
-          </a>
+          </button>
         </p>
       </div>
     </div>
@@ -85,9 +82,9 @@ function NotLoggedInScreen({ onLogin }: { onLogin: () => void }) {
  */
 export function FreeBanner({ email, onUpgrade }: { email?: string; onUpgrade?: () => void }) {
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-amber-50 border-b border-amber-200 px-4 py-2 flex items-center justify-between text-sm">
-      <span className="text-amber-800">
-        {email ? <><strong>{email}</strong> — </> : ''}
+    <div className="fixed top-0 left-0 right-0 z-50 bg-amber-50 border-b border-amber-200 px-3 py-2 flex items-center justify-between text-sm overflow-hidden">
+      <span className="text-amber-800 min-w-0 truncate">
+        {email ? <><strong className="truncate">{email}</strong> — </> : ''}
         Đang dùng <strong>Gói Free</strong>. Nâng cấp để mở đầy đủ tính năng.
       </span>
       <button
@@ -104,15 +101,16 @@ export function FreeBanner({ email, onUpgrade }: { email?: string; onUpgrade?: (
  * Banner cảnh báo nhẹ khi check entitlements lỗi - vẫn vào Free
  */
 function ErrorBanner({ message, onRetry }: { message: string; onRetry: () => void }) {
+  if (message) console.warn('[AppAuthGate] entitlement check error:', message);
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-red-50 border-b border-red-200 px-4 py-2 flex items-center justify-between text-sm">
-      <span className="text-red-700 flex items-center gap-2">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-amber-50 border-b border-amber-200 px-3 py-2 flex items-center justify-between text-sm overflow-hidden">
+      <span className="text-amber-800 flex items-center gap-2 min-w-0 truncate">
         <AlertCircle className="w-4 h-4 shrink-0" />
-        Không kiểm tra được quyền học ({message || 'lỗi mạng'}). Đang dùng chế độ Free.
+        <span className="truncate">Đang dùng chế độ Free. Không kiểm tra được quyền học.</span>
       </span>
       <button
         onClick={onRetry}
-        className="ml-4 shrink-0 rounded-lg bg-red-500 px-3 py-1 text-xs font-semibold text-white hover:bg-red-600"
+        className="ml-3 shrink-0 rounded-lg bg-amber-500 px-2 py-1 text-xs font-semibold text-white hover:bg-amber-600"
       >
         Thử lại
       </button>
@@ -130,7 +128,7 @@ function ErrorBanner({ message, onRetry }: { message: string; onRetry: () => voi
  */
 export default function AppAuthGate({ children }: AppAuthGateProps) {
   const { isLoaded, isSignedIn, getToken } = useAuth();
-  const { openSignIn } = useClerk();
+  const { openSignIn, openSignUp } = useClerk();
   const location = useLocation();
   void location;
 
@@ -221,11 +219,14 @@ export default function AppAuthGate({ children }: AppAuthGateProps) {
   }
 
   // Not logged in - show login screen
+  const cap01Url = `${window.location.origin}/cap-01/`;
+
   if (authState.status === 'not_logged_in') {
     return (
-      <NotLoggedInScreen onLogin={() => {
-        openSignIn({ afterSignInUrl: window.location.href });
-      }} />
+      <NotLoggedInScreen
+        onLogin={() => openSignIn({ afterSignInUrl: cap01Url })}
+        onSignUp={() => openSignUp({ afterSignUpUrl: cap01Url })}
+      />
     );
   }
 
