@@ -57,3 +57,7 @@ public/audio/tts/packs/**/*.zip
 public/audio/tts/packs/**/*.mp3
 acceptance-audit-report-*.json
 desktop-acceptance-report-*.json
+
+# Key/secret docs - never commit
+keys.md
+docs/keys.md
