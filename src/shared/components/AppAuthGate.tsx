@@ -224,8 +224,8 @@ export default function AppAuthGate({ children }: AppAuthGateProps) {
   if (authState.status === 'not_logged_in') {
     return (
       <NotLoggedInScreen
-        onLogin={() => openSignIn({ afterSignInUrl: cap01Url })}
-        onSignUp={() => openSignUp({ afterSignUpUrl: cap01Url })}
+        onLogin={() => openSignIn({ fallbackRedirectUrl: cap01Url, forceRedirectUrl: cap01Url })}
+        onSignUp={() => openSignUp({ fallbackRedirectUrl: cap01Url, forceRedirectUrl: cap01Url })}
       />
     );
   }
