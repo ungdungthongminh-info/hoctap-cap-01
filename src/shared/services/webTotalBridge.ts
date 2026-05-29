@@ -471,7 +471,7 @@ export async function fetchAndCacheLicenses(customerId: string, appId?: string):
 
   try {
     const result = await fetchBridgeResponse(
-      `/ai-app/customers/${encodeURIComponent(customerId)}/licenses?appId=${encodeURIComponent(aid)}`,
+      `/customers/${encodeURIComponent(customerId)}/licenses?appId=${encodeURIComponent(aid)}`,
       bridgeToken ? { headers: { Authorization: `Bearer ${bridgeToken}` } } : {},
       { retryOnNotFound: true },
     );
@@ -562,11 +562,11 @@ export async function verifyLicenseKey(params: {
   let result;
 
   try {
-    result = await fetchBridgeResponse('/ai-app/licenses/verify', {
+    result = await fetchBridgeResponse('/licenses/verify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-ai-app-profile': runtimeProfile,
+        'x-app-profile': runtimeProfile,
         ...(bridgeToken ? { Authorization: `Bearer ${bridgeToken}` } : {}),
       },
       body: JSON.stringify({
@@ -599,7 +599,7 @@ export async function verifyLicenseKey(params: {
   const dataNode = (payload?.data && typeof payload.data === 'object') ? payload.data : payload;
 
   if (isCap01 && res.ok && isSuccess) {
-    // Ưu tiên format mới /api/v1/ai-app/licenses/verify: { success, data: { license, features, grace } }
+    // Ưu tiên format mới /api/licenses/verify: { success, data: { license, features, grace } }
     if (payload?.data?.license && typeof payload.data.license === 'object') {
       return {
         ok: true,
@@ -649,7 +649,7 @@ export async function verifyLicenseKey(params: {
     // Log debug để dễ trace lỗi
     console.error('[verifyLicenseKey] Verify thất bại:', {
       apiBase: resolvedBase,
-      endpoint: '/ai-app/licenses/verify',
+      endpoint: '/licenses/verify',
       status: res.status,
       backendError,
       clientProfile: runtimeProfile,
@@ -696,7 +696,7 @@ export async function verifyLicenseKey(params: {
     ) {
       throw new Error(
         `Đang gọi sai endpoint backend/bridge (base hiện tại: ${resolvedBase}). `
-        + 'App Học cần route /api/v1/ai-app/licenses/verify từ backend hoạt động. '
+        + 'App Học cần route /api/licenses/verify từ backend hoạt động. '
         + 'Vui lòng cấu hình VITE_BACKEND_API_BASE đúng môi trường deploy và làm mới app để bỏ cache cũ.',
       );
     }
@@ -816,7 +816,7 @@ export async function lockStandardGrades(params: {
   let result;
 
   try {
-    result = await fetchBridgeResponse('/ai-app/licenses/lock-standard-grades', {
+    result = await fetchBridgeResponse('/licenses/lock-standard-grades', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -862,7 +862,7 @@ export async function lockStandardGrades(params: {
     ) {
       throw new Error(
         `Đang gọi sai endpoint khóa lớp trên backend/bridge (base hiện tại: ${resolvedBase}). `
-        + 'App cần trỏ tới backend có route /api/v1/ai-app/licenses/lock-standard-grades.',
+        + 'App cần trỏ tới backend có route /api/licenses/lock-standard-grades.',
       );
     }
 
