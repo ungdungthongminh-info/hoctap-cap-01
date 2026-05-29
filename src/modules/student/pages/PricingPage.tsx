@@ -11,14 +11,11 @@ import { useNavigate } from 'react-router-dom';
 import { Check, X, Unlock, Gift, Shield, Copy, CheckCircle, RefreshCw, Clock, AlertTriangle, CreditCard, ExternalLink } from 'lucide-react';
 import { useAppData } from '../../../shared/providers/AppDataProvider';
 import { getGradeLabel, getSubjectsForGrade } from '../../../data/subjects';
-import { writeCap01LicenseCache } from '../../../shared/services/cap01License';
+import { writeCap01LicenseCache, activateCap01License, inferPlanFromProduct } from '../../../shared/services/cap01License';
 import {
   fetchPricingPlans,
-  fetchAndCacheLicenses,
-  getBridgeCustomer,
-  setBridgeCustomer,
   lockStandardGrades,
-  verifyLicenseKey,
+  getBridgeCustomer,
   type PricingPlanCatalogEntry,
 } from '../../../shared/services/webTotalBridge';
 import { getAccessPlan, getUnlockedGrades, persistUnlockedGrades } from '../../../shared/services/accessControl';
@@ -501,116 +498,6 @@ function normalizePlanId(planId: string | null | undefined): 'free' | 'standard'
   if (planId === 'premium') return 'premium';
   if (isStandardLikePlanId(planId)) return 'standard';
   return 'free';
-}
-
-function resolvePlanFromLicensePayload(
-  license: Record<string, unknown> | undefined,
-  featureList: string[] = [],
-): 'standard' | 'standard_1year_1grade' | 'standard_1year_3grade' | 'premium' | null {
-  const metadata = (license?.metadata && typeof license.metadata === 'object')
-    ? (license.metadata as Record<string, unknown>)
-    : undefined;
-
-  const strongVariantCandidates = [
-    metadata?.planId,
-    license?.planId,
-    license?.planCode,
-    metadata?.productId,
-    license?.productId,
-    metadata?.productCode,
-    license?.productCode,
-  ];
-
-  const normalizeTokens = (value: unknown): string => String(value || '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim();
-
-  for (const value of strongVariantCandidates) {
-    const text = normalizeTokens(value);
-    if (!text) continue;
-
-    if (/\b(standard\s*1\s*year\s*1\s*grade|standard\s*1y\s*1g|1grade|single\s?grade|1lop|one\s?class|standard_1year_1grade|one_grade_year_299|beta_year_299|cap01_beta_year_299|beta299|leaf\s*grade1)\b/.test(text)) {
-      return 'standard_1year_1grade';
-    }
-
-    if (/\b(standard\s*1\s*year\s*3\s*grade|standard\s*1y\s*3g|3grade|three\s?grade|3lop|three\s?class|standard_1year_3grade)\b/.test(text)) {
-      return 'standard_1year_3grade';
-    }
-
-    // Legacy Web Tong SKU for standard yearly 3-grade.
-    if (/\bprod\s*study\s*year\b/.test(text)) {
-      return 'standard_1year_3grade';
-    }
-
-    if (/\b(premium|vip|advanced)\b/.test(text)) {
-      return 'premium';
-    }
-
-    if (/\b(standard|basic|starter|std)\b/.test(text)) {
-      return 'standard';
-    }
-  }
-
-  const explicitPlanCandidates = [
-    license?.planCode,
-    license?.plan,
-    license?.tier,
-    license?.planId,
-    license?.licenseKey,
-  ];
-
-  const weakPlanCandidates = [
-    license?.productCode,
-    license?.productId,
-  ];
-
-  const detectPlanFromText = (text: string): 'standard' | 'premium' | null => {
-    if (!text) return null;
-    if (/\b(premium|vip|advanced)\b/.test(text)) return 'premium';
-    if (/\b(standard|basic|starter|std)\b/.test(text)) return 'standard';
-    return null;
-  };
-
-  // Ưu tiên tuyệt đối các field mô tả plan/tier hoặc chính license key.
-  for (const value of explicitPlanCandidates) {
-    const detected = detectPlanFromText(normalizeTokens(value));
-    if (detected) return detected;
-  }
-
-  // Field productId/productCode thường chứa chuỗi "prod", không dùng keyword "pro" để tránh false-positive premium.
-  for (const value of weakPlanCandidates) {
-    const detected = detectPlanFromText(normalizeTokens(value));
-    if (detected) return detected;
-  }
-
-  // Không nâng quyền chỉ dựa vào features.
-  // Silent launch yêu cầu payload phải cung cấp planCode/planId rõ ràng.
-
-  // Legacy fallback giữ tương thích cho payload cũ.
-  const candidates = [
-    license?.planCode,
-    license?.plan,
-    license?.tier,
-    license?.planId,
-    license?.productCode,
-    license?.productId,
-  ];
-
-  for (const value of candidates) {
-    const text = String(value || '').toLowerCase();
-    if (!text) continue;
-    if (/(premium|vip|advanced)/.test(text)) return 'premium';
-    if (/(standard|basic|std|starter)/.test(text)) return 'standard';
-  }
-
-  const normalizedFeatures = featureList.map((feature) => String(feature || '').toLowerCase());
-  const featureText = normalizedFeatures.join('|');
-  if (/(priority_support|premium)/.test(featureText) && explicitPlanCandidates.some((value) => String(value || '').trim())) {
-    return 'premium';
-  }
-
-  return null;
 }
 
 function persistFreePlan(): void {
@@ -1324,7 +1211,7 @@ export function PricingPage() {
     if (!key) return;
     if (clientProfile === 'web') {
       if (!normalizedActivationEmail) {
-        setActivateMsg({ type: 'error', text: '❌ Web app yêu cầu nhập email mua hàng trước khi xác minh key.' });
+        setActivateMsg({ type: 'error', text: '❌ Web app yêu cầu nhập email mua hàng trước khi kích hoạt key.' });
         setTimeout(() => setActivateMsg(null), 5000);
         return;
       }
@@ -1336,193 +1223,131 @@ export function PricingPage() {
       }
     }
     setIsActivating(true);
-    setActivateMsg({ type: 'success', text: '⏳ Đang xác minh key, vui lòng chờ...' });
+    setActivateMsg({ type: 'success', text: '⏳ Đang kích hoạt key, vui lòng chờ...' });
+
+    let cache;
+    try {
+      cache = await activateCap01License(key);
+    } catch (error) {
+      const message = (error as any)?.message ? String((error as any).message) : 'Không kết nối được server kích hoạt.';
+      setActivateMsg({ type: 'error', text: `❌ Kích hoạt thất bại: ${message}` });
+      playActivationTone('error');
+      setTimeout(() => setActivateMsg(null), 7000);
+      setIsActivating(false);
+      return;
+    }
 
     try {
-      const bridgeCustomerId = getBridgeCustomer()?.id ? String(getBridgeCustomer()!.id) : undefined;
-      const verifyResult = await verifyLicenseKey({
-        licenseKey: key,
-        ...(WEB_TOTAL_APP_ID ? { appId: WEB_TOTAL_APP_ID } : {}),
-        ...(bridgeCustomerId ? { customerId: bridgeCustomerId } : {}),
-        ...(clientProfile === 'web' && normalizedActivationEmail ? { customerEmail: normalizedActivationEmail } : {}),
-        deviceId: getDeviceId(),
-        deviceName: `${navigator.platform} / ${navigator.userAgent.slice(0, 80)}`,
-        clientProfile,
-      });
+      const ent = cache.entitlement;
+      const productId = String(ent?.productId || '').trim();
+      const allowedGrades = Array.from(new Set((ent?.allowedGrades || [])
+        .map((g) => Number(g))
+        .filter((g) => Number.isInteger(g) && g >= 0 && g <= 5)));
 
-      const resolvedCustomerId = String(verifyResult.license?.customerId || bridgeCustomerId || '').trim();
-      if (resolvedCustomerId) {
-        const bridgeCustomer = getBridgeCustomer();
-        if (!bridgeCustomer?.id || String(bridgeCustomer.id).trim() !== resolvedCustomerId) {
-          setBridgeCustomer({
-            ...(bridgeCustomer || {}),
-            ...(clientProfile === 'web' && normalizedActivationEmail ? { email: normalizedActivationEmail } : {}),
-            id: resolvedCustomerId,
-          });
-        }
-      }
+      // Determine plan type from productId
+      const planFromProduct = inferPlanFromProduct(productId);
+      const isPredefinedSingleGrade = productId.includes('grade') && !productId.includes('leaf') && allowedGrades.length === 1;
+      const isLeafGrade1 = productId.includes('leaf_grade1') || (productId.includes('leaf') && productId.includes('grade1'));
+      const isPremium = planFromProduct.includes('premium');
+      const isPredefinedProduct = allowedGrades.length > 0 && (isPredefinedSingleGrade || isLeafGrade1 || planFromProduct === 'standard');
 
-      const wasAlreadyActivated = String(verifyResult.license?.status || '').trim().toLowerCase() === 'active'
-        && Boolean(verifyResult.license?.activatedAt);
+      if (isPredefinedProduct && !isPremium) {
+        // Direct activation: no grade selection needed
+        const productName = getProductDisplayName(productId);
+        const expiresAt = ent?.license?.expiresAt || null;
+        const storagePlanId: 'standard_1year_1grade' | 'standard_1year_3grade' | 'standard' =
+          isLeafGrade1 ? 'standard_1year_1grade' : (isPredefinedSingleGrade ? 'standard_1year_1grade' : 'standard');
 
-      // Safe fallback: try multiple possible locations for entitlement data
-      const entitlementLike =
-        (verifyResult as any).entitlement ||
-        (verifyResult as any).license?.entitlement ||
-        (verifyResult as any).data?.entitlement ||
-        (verifyResult as any).data?.license ||
-        (verifyResult as any).license ||
-        {};
+        await completeActivation({
+          key,
+          planId: 'standard',
+          storagePlanId,
+          cycle: 'yearly',
+          expiresAt,
+          standardGrades: allowedGrades,
+        });
 
-      const licensePayload = verifyResult.license as unknown as Record<string, unknown>;
-      const resolvedPlan = resolvePlanFromLicensePayload(licensePayload, verifyResult.features || []);
-      const detectedPlanByKey = detectPlanFlowFromKey(key);
-      const isStandardYearOneGrade = resolvedPlan === 'standard_1year_1grade';
-      const isStandardYearThreeGrade = resolvedPlan === 'standard_1year_3grade';
-      const detectedBasePlan = detectedPlanByKey === 'premium' ? 'premium' : detectedPlanByKey ? 'standard' : null;
-      const resolvedBasePlan = resolvedPlan ? normalizePlanId(resolvedPlan) : null;
-      const planId = resolvedBasePlan || detectedBasePlan || normalizePlanId(String(verifyResult.license?.planCode || '').toLowerCase());
-
-      // Detect predefined product from API (leaf_grade1_12m, grade2_12m, etc.)
-      // Try multiple possible locations: entitlementLike.productId or license.productId
-      const apiProductId = String(
-        entitlementLike.productId ||
-        verifyResult.license?.productId ||
-        entitlementLike.plan ||
-        verifyResult.license?.planCode ||
-        ''
-      ).trim();
-      const apiAllowedGrades = Array.isArray((entitlementLike as any).allowedGrades)
-        ? (entitlementLike as any).allowedGrades
-            .map((g: unknown) => Number(g))
-            .filter((g: number) => Number.isFinite(g) && ALL_GRADE_OPTIONS.includes(g as any))
-        : [];
-      const hasPredefinedProduct = apiProductId && apiAllowedGrades.length > 0;
-      const predefinedProductName = hasPredefinedProduct
-        ? (String((entitlementLike as any).productName || '').trim() || getProductDisplayName(apiProductId))
-        : '';
-      if (!planId || !['standard', 'premium'].includes(planId)) {
-        const debugPlanCode = String(
-          (verifyResult.license as any)?.metadata?.planId
-          || (verifyResult.license as any)?.planId
-          || (verifyResult.license as any)?.planCode
-          || (verifyResult.license as any)?.plan
-          || (verifyResult.license as any)?.tier
-          || 'n/a',
-        );
-        setActivateMsg({ type: 'error', text: `❌ Key hợp lệ nhưng app chưa map được gói trả về (plan=${debugPlanCode}). Vui lòng gửi ảnh lỗi này để cập nhật mapping.` });
-        playActivationTone('error');
+        setActivateMsg({
+          type: 'success',
+          text: `✅ Kích hoạt thành công ${productName}! Đã mở khóa ${allowedGrades.map((grade) => getGradeLabel(grade)).join(', ')}. ${expiresAt ? `Còn ${daysLeft(expiresAt)} ngày (đến ${formatDate(expiresAt)})` : '(Trọn đời)'}`,
+        });
+        playActivationTone('success');
         setTimeout(() => setActivateMsg(null), 6000);
+        setIsActivating(false);
         return;
       }
 
-      let standardGradesToUse = activationGrades;
-
-      // For predefined products (leaf_grade1_12m, grade2_12m, etc.), use apiAllowedGrades directly
-      if (hasPredefinedProduct && planId === 'standard') {
-        standardGradesToUse = apiAllowedGrades;
-      } else if (planId === 'standard') {
-        const serverLockedGrades = Array.isArray((verifyResult.license as any)?.metadata?.standardGrades)
-          ? (verifyResult.license as any).metadata.standardGrades
-              .map((grade: unknown) => Number(grade))
-              .filter((grade: number) => Number.isInteger(grade) && ALL_GRADE_OPTIONS.includes(grade as (typeof ALL_GRADE_OPTIONS)[number]))
-          : [];
-        const requiredGradeCount = isStandardYearOneGrade ? 1 : 3;
-        const serverRequiredGradeCount = Number((verifyResult.license as any)?.metadata?.standardGradesRequiredCount || 0);
-        const effectiveRequiredCount = Number.isInteger(serverRequiredGradeCount) && serverRequiredGradeCount > 0
-          ? serverRequiredGradeCount
-          : (serverLockedGrades.length > 0 ? serverLockedGrades.length : requiredGradeCount);
-
-        if (serverLockedGrades.length > 0) {
-          const saved = saveStandardGradeLock(key, currentDeviceId, serverLockedGrades, effectiveRequiredCount);
-          standardGradesToUse = saved.grades;
-        } else {
-        const existingLock = getStandardGradeLock(key, currentDeviceId, requiredGradeCount);
-        if (existingLock) {
-          standardGradesToUse = existingLock.grades;
-        } else {
-          const cycle = normalizeBillingCycle(verifyResult.license?.billingCycle);
-          const expiresAt = verifyResult.license?.expiresAt || null;
-          const storagePlanId: 'standard_1year_1grade' | 'standard_1year_3grade' | 'standard' =
-            isStandardYearOneGrade ? 'standard_1year_1grade' : (isStandardYearThreeGrade ? 'standard_1year_3grade' : 'standard');
-
-          setPendingStandardActivation({
-            key,
-            cycle,
-            expiresAt,
-            storagePlanId,
-            requiredGradeCount,
-          });
-          setActivationGrades([]);
-          setGradeConfirmationChecked(false);
-          setIsGradeSelectionConfirmed(false);
-          setGradeConfirmDone(false);
-          setActivateMsg({
-            type: 'success',
-            text: isStandardYearOneGrade
-              ? '✅ Kích hoạt key thành công. Vui lòng chọn 1 lớp, tick xác nhận và bấm "Xác nhận lựa chọn lớp".'
-              : '✅ Kích hoạt key thành công. Vui lòng chọn lớp theo gói, tick xác nhận và bấm "Xác nhận lựa chọn lớp".',
-          });
-          playActivationTone('success');
-          setTimeout(() => setActivateMsg(null), 7000);
-          return;
-        }
-        }
+      if (isPremium) {
+        const expiresAt = ent?.license?.expiresAt || null;
+        await completeActivation({
+          key,
+          planId: 'premium',
+          storagePlanId: 'premium',
+          cycle: 'yearly',
+          expiresAt,
+          standardGrades: [0, 1, 2, 3, 4, 5],
+        });
+        setActivateMsg({
+          type: 'success',
+          text: `✅ Kích hoạt thành công Gói Cao cấp! Đã mở toàn bộ lớp. ${expiresAt ? `Còn ${daysLeft(expiresAt)} ngày (đến ${formatDate(expiresAt)})` : '(Trọn đời)'}`,
+        });
+        playActivationTone('success');
+        setTimeout(() => setActivateMsg(null), 6000);
+        setIsActivating(false);
+        return;
       }
 
-      const cycle = normalizeBillingCycle(verifyResult.license?.billingCycle);
-      const expiresAt = verifyResult.license?.expiresAt || null;
-      const storagePlanId = planId === 'standard'
-        ? (isStandardYearOneGrade ? 'standard_1year_1grade' : (isStandardYearThreeGrade ? 'standard_1year_3grade' : 'standard'))
-        : planId;
+      // Standard 3-grade / flexible grade selection flow
+      const expiresAt = ent?.license?.expiresAt || null;
+      const isStandardYearOneGrade = isPredefinedSingleGrade || planFromProduct === 'standard_1year_1grade';
+      const requiredGradeCount = isStandardYearOneGrade ? 1 : 3;
 
-      const finalPlanId: 'standard' | 'premium' = planId === 'premium' ? 'premium' : 'standard';
-      const finalStoragePlanId: 'standard' | 'standard_1year_1grade' | 'standard_1year_3grade' | 'premium' =
-        finalPlanId === 'premium'
-          ? 'premium'
-          : (isStandardYearOneGrade ? 'standard_1year_1grade' : (isStandardYearThreeGrade ? 'standard_1year_3grade' : 'standard'));
+      // Check if server already locked grades for this key
+      if (allowedGrades.length >= requiredGradeCount) {
+        const saved = saveStandardGradeLock(key, currentDeviceId, allowedGrades, requiredGradeCount);
+        await completeActivation({
+          key,
+          planId: 'standard',
+          storagePlanId: isStandardYearOneGrade ? 'standard_1year_1grade' : 'standard_1year_3grade',
+          cycle: 'yearly',
+          expiresAt,
+          standardGrades: saved.grades,
+        });
+        setActivateMsg({
+          type: 'success',
+          text: `✅ Kích hoạt thành công! Đã mở khóa ${saved.grades.map((grade) => getGradeLabel(grade)).join(', ')}. ${expiresAt ? `Còn ${daysLeft(expiresAt)} ngày (đến ${formatDate(expiresAt)})` : '(Trọn đời)'}`,
+        });
+        playActivationTone('success');
+        setTimeout(() => setActivateMsg(null), 6000);
+        setIsActivating(false);
+        return;
+      }
 
-      await completeActivation({
+      // Need grade selection — set pending activation
+      const storagePlanId: 'standard_1year_1grade' | 'standard_1year_3grade' | 'standard' =
+        isStandardYearOneGrade ? 'standard_1year_1grade' : 'standard';
+
+      setPendingStandardActivation({
         key,
-        planId: finalPlanId,
-        storagePlanId: finalStoragePlanId,
-        cycle,
+        cycle: 'yearly',
         expiresAt,
-        standardGrades: standardGradesToUse,
+        storagePlanId,
+        requiredGradeCount,
       });
-
-      await persistCap01EntitlementCache({
-        licenseKey: key,
-        storagePlanId: finalStoragePlanId,
-        cycle,
-        expiresAt,
-        allowedGrades: finalPlanId === 'premium' ? [0, 1, 2, 3, 4, 5] : standardGradesToUse,
-        graceOfflineUntil: verifyResult.grace?.offlineUntil || null,
-        productId: String(verifyResult.license?.productId || '').trim() || null,
-      });
-
-      // Đồng bộ lại licenses/features vào cache ngay sau khi verify thành công,
-      // tránh trạng thái UI yêu cầu kích hoạt lặp lại ở các màn hình có gate theo cache.
-      if (resolvedCustomerId) {
-        try {
-          await fetchAndCacheLicenses(resolvedCustomerId, WEB_TOTAL_APP_ID);
-        } catch {
-          // Không chặn flow kích hoạt local nếu refresh cache tạm thời lỗi mạng.
-        }
-      }
-
-      // Use predefined product name if available, otherwise fall back to plan name
-      const displayProductName = hasPredefinedProduct
-        ? predefinedProductName
-        : (pricingPlans.find((p) => p.id === storagePlanId)?.name || pricingPlans.find((p) => p.id === planId)?.name || planId);
+      setActivationGrades([]);
+      setGradeConfirmationChecked(false);
+      setIsGradeSelectionConfirmed(false);
+      setGradeConfirmDone(false);
       setActivateMsg({
         type: 'success',
-        text: `${wasAlreadyActivated ? '✅ Key này đã kích hoạt trước đó.' : '✅ Kích hoạt thành công'} ${displayProductName}! ${planId === 'standard' ? `Đã mở khóa ${standardGradesToUse.map((grade) => getGradeLabel(grade)).join(', ')}.` : 'Đã mở toàn bộ lớp. Mời vào học ngay.'} ${expiresAt ? `Còn ${daysLeft(expiresAt)} ngày (đến ${formatDate(expiresAt)})` : '(Trọn đời)'}`,
+        text: isStandardYearOneGrade
+          ? '✅ Kích hoạt key thành công. Vui lòng chọn 1 lớp, tick xác nhận và bấm "Xác nhận lựa chọn lớp".'
+          : '✅ Kích hoạt key thành công. Vui lòng chọn lớp theo gói, tick xác nhận và bấm "Xác nhận lựa chọn lớp".',
       });
       playActivationTone('success');
-      setTimeout(() => setActivateMsg(null), 6000);
+      setTimeout(() => setActivateMsg(null), 7000);
     } catch (error) {
-      const message = (error as any)?.message ? String((error as any).message) : 'Không thể xác minh key. Vui lòng kiểm tra mạng hoặc thử lại sau.';
+      const message = (error as any)?.message ? String((error as any).message) : 'Lỗi không xác định khi xử lý kích hoạt.';
       setActivateMsg({ type: 'error', text: `❌ Kích hoạt thất bại: ${message}` });
       playActivationTone('error');
       setTimeout(() => setActivateMsg(null), 7000);

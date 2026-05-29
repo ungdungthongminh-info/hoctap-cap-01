@@ -71,7 +71,7 @@ function normalizeAllowedGrades(input: unknown): number[] {
   return normalized;
 }
 
-function inferPlanFromProduct(productIdRaw: string): string {
+export function inferPlanFromProduct(productIdRaw: string): string {
   const productId = String(productIdRaw || '').trim().toLowerCase();
   if (productId === 'prod-study-month') return 'standard_month';
   if (productId === 'prod-study-year') return 'standard_year';
