@@ -530,7 +530,7 @@ function resolvePlanFromLicensePayload(
     const text = normalizeTokens(value);
     if (!text) continue;
 
-    if (/\b(standard\s*1\s*year\s*1\s*grade|standard\s*1y\s*1g|1grade|single\s?grade|1lop|one\s?class|standard_1year_1grade|one_grade_year_299|beta_year_299|cap01_beta_year_299|beta299)\b/.test(text)) {
+    if (/\b(standard\s*1\s*year\s*1\s*grade|standard\s*1y\s*1g|1grade|single\s?grade|1lop|one\s?class|standard_1year_1grade|one_grade_year_299|beta_year_299|cap01_beta_year_299|beta299|leaf\s*grade1)\b/.test(text)) {
       return 'standard_1year_1grade';
     }
 
