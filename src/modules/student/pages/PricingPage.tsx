@@ -444,6 +444,18 @@ function hasRecognizableLicensePrefix(inputKey: string): boolean {
   return normalized.startsWith('WSTL-') || normalized.startsWith('HHK-');
 }
 
+function getProductDisplayName(productId: string): string {
+  const id = String(productId || '').toLowerCase();
+  if (id.includes('leaf_grade1')) return 'Lớp Lá + Lớp 1';
+  if (id.includes('grade2')) return 'Lớp 2';
+  if (id.includes('grade3')) return 'Lớp 3';
+  if (id.includes('grade4')) return 'Lớp 4';
+  if (id.includes('grade5')) return 'Lớp 5';
+  if (id.includes('grade1')) return 'Lớp 1';
+  if (id.includes('leaf')) return 'Lớp Lá';
+  return 'Gói học';
+}
+
 function playActivationTone(type: 'success' | 'error'): void {
   try {
     const AudioContextRef = (window as any).AudioContext || (window as any).webkitAudioContext;
@@ -1353,6 +1365,15 @@ export function PricingPage() {
       const wasAlreadyActivated = String(verifyResult.license?.status || '').trim().toLowerCase() === 'active'
         && Boolean(verifyResult.license?.activatedAt);
 
+      // Safe fallback: try multiple possible locations for entitlement data
+      const entitlementLike =
+        (verifyResult as any).entitlement ||
+        (verifyResult as any).license?.entitlement ||
+        (verifyResult as any).data?.entitlement ||
+        (verifyResult as any).data?.license ||
+        (verifyResult as any).license ||
+        {};
+
       const licensePayload = verifyResult.license as unknown as Record<string, unknown>;
       const resolvedPlan = resolvePlanFromLicensePayload(licensePayload, verifyResult.features || []);
       const detectedPlanByKey = detectPlanFlowFromKey(key);
@@ -1361,6 +1382,25 @@ export function PricingPage() {
       const detectedBasePlan = detectedPlanByKey === 'premium' ? 'premium' : detectedPlanByKey ? 'standard' : null;
       const resolvedBasePlan = resolvedPlan ? normalizePlanId(resolvedPlan) : null;
       const planId = resolvedBasePlan || detectedBasePlan || normalizePlanId(String(verifyResult.license?.planCode || '').toLowerCase());
+
+      // Detect predefined product from API (leaf_grade1_12m, grade2_12m, etc.)
+      // Try multiple possible locations: entitlementLike.productId or license.productId
+      const apiProductId = String(
+        entitlementLike.productId ||
+        verifyResult.license?.productId ||
+        entitlementLike.plan ||
+        verifyResult.license?.planCode ||
+        ''
+      ).trim();
+      const apiAllowedGrades = Array.isArray((entitlementLike as any).allowedGrades)
+        ? (entitlementLike as any).allowedGrades
+            .map((g: unknown) => Number(g))
+            .filter((g: number) => Number.isFinite(g) && ALL_GRADE_OPTIONS.includes(g as any))
+        : [];
+      const hasPredefinedProduct = apiProductId && apiAllowedGrades.length > 0;
+      const predefinedProductName = hasPredefinedProduct
+        ? (String((entitlementLike as any).productName || '').trim() || getProductDisplayName(apiProductId))
+        : '';
       if (!planId || !['standard', 'premium'].includes(planId)) {
         const debugPlanCode = String(
           (verifyResult.license as any)?.metadata?.planId
@@ -1377,7 +1417,11 @@ export function PricingPage() {
       }
 
       let standardGradesToUse = activationGrades;
-      if (planId === 'standard') {
+
+      // For predefined products (leaf_grade1_12m, grade2_12m, etc.), use apiAllowedGrades directly
+      if (hasPredefinedProduct && planId === 'standard') {
+        standardGradesToUse = apiAllowedGrades;
+      } else if (planId === 'standard') {
         const serverLockedGrades = Array.isArray((verifyResult.license as any)?.metadata?.standardGrades)
           ? (verifyResult.license as any).metadata.standardGrades
               .map((grade: unknown) => Number(grade))
@@ -1467,9 +1511,13 @@ export function PricingPage() {
         }
       }
 
+      // Use predefined product name if available, otherwise fall back to plan name
+      const displayProductName = hasPredefinedProduct
+        ? predefinedProductName
+        : (pricingPlans.find((p) => p.id === storagePlanId)?.name || pricingPlans.find((p) => p.id === planId)?.name || planId);
       setActivateMsg({
         type: 'success',
-        text: `${wasAlreadyActivated ? '✅ Key này đã kích hoạt trước đó.' : '✅ Kích hoạt thành công'} Gói ${pricingPlans.find((p) => p.id === storagePlanId)?.name || pricingPlans.find((p) => p.id === planId)?.name || planId}! ${planId === 'standard' ? `Đã mở khóa ${standardGradesToUse.map((grade) => getGradeLabel(grade)).join(', ')}.` : 'Đã mở toàn bộ lớp. Mời vào học ngay.'} ${expiresAt ? `Còn ${daysLeft(expiresAt)} ngày (đến ${formatDate(expiresAt)})` : '(Trọn đời)'}`,
+        text: `${wasAlreadyActivated ? '✅ Key này đã kích hoạt trước đó.' : '✅ Kích hoạt thành công'} ${displayProductName}! ${planId === 'standard' ? `Đã mở khóa ${standardGradesToUse.map((grade) => getGradeLabel(grade)).join(', ')}.` : 'Đã mở toàn bộ lớp. Mời vào học ngay.'} ${expiresAt ? `Còn ${daysLeft(expiresAt)} ngày (đến ${formatDate(expiresAt)})` : '(Trọn đời)'}`,
       });
       playActivationTone('success');
       setTimeout(() => setActivateMsg(null), 6000);
