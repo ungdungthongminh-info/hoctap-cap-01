@@ -232,7 +232,7 @@ async function postLicense(path: '/licenses/activate' | '/licenses/verify', lice
 
   const payload = await res.json().catch(() => ({}));
   return {
-    success: Boolean(payload?.success),
+    success: Boolean(payload?.success ?? payload?.ok),
     status: String(payload?.status || ''),
     entitlement: payload?.entitlement,
     offlineValidUntil: payload?.offlineValidUntil,
