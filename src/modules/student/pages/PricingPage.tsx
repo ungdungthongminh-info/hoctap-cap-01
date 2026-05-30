@@ -696,7 +696,8 @@ export function PricingPage() {
   const hasTypedLicenseKey = normalizedInputKey.length > 0;
   const requiredGradeCountFromInput = isStandardYearOneGradeKeyFlow ? 1 : 3;
   const pendingRequiredGradeCount = pendingStandardActivation?.requiredGradeCount || null;
-  const requiredGradeCountForInput = pendingRequiredGradeCount || requiredGradeCountFromInput;
+  const baseRequiredGradeCount = pendingRequiredGradeCount || requiredGradeCountFromInput;
+  const requiredGradeCountForInput = Math.max(baseRequiredGradeCount, activationGrades.length);
   const shouldEvaluateStandardLock = hasTypedLicenseKey && !isPremiumKeyFlow;
   const lockedStandardGradeSelection = shouldEvaluateStandardLock
     ? getStandardGradeLock(normalizedInputKey, currentDeviceId, requiredGradeCountForInput)

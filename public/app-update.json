@@ -1,19 +1,19 @@
 {
   "appId": "hoc-tap-cap-01",
   "channel": "stable",
-  "latestVersion": "0.1.17",
+  "latestVersion": "0.1.18",
   "minimumSupportedVersion": "0.1.0",
-  "publishedAt": "2026-05-30T13:44:40.129Z",
-  "title": "Ban cap nhat on dinh 0.1.17",
+  "publishedAt": "2026-05-30T16:30:00.000Z",
+  "title": "Ban cap nhat on dinh 0.1.18",
   "notes": [
-    "Sua loi dong goi desktop: loai bo file audio khoi installer de giam dung luong.",
-    "Toi uu flow kich hoat key va phan quyen theo goi.",
-    "Cai thien do on dinh audio offline."
+    "Sua loi logic cap nhat quyen loi goi leaf_grade1_12m (Lop La + Lop 1)",
+    "Hien thi dung so luong lop duoc mo tren UI",
+    "Toi uu flow kich hoat key va phan quyen theo goi."
   ],
   "tts": {
     "offlineSyncEnabled": true,
     "offlineSyncReason": "",
     "manifestUrl": "https://pub-e3dfe5c479f44fbc906aae6c475603db.r2.dev/audio/tts/packs/vi-v1-grade-1-2026-04-27-v1.zip"
   },
-  "downloadUrl": "https://pub-90b335e287f24c92bbd5856cb9f116d9.r2.dev/app-updates/app-study-12/HocHungKhoi_Desktopapp-Win-0.1.17.exe"
+  "downloadUrl": "https://pub-90b335e287f24c92bbd5856cb9f116d9.r2.dev/app-updates/app-study-12/HocHungKhoi_Desktopapp-Win-0.1.18.exe"
 }

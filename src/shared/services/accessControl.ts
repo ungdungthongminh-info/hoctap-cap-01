@@ -241,7 +241,12 @@ export function getUnlockedGrades(currentGrade = getCurrentStudentGradeFallback(
   try {
     const raw = localStorage.getItem(UNLOCKED_GRADES_KEY);
     const parsed = raw ? JSON.parse(raw) : [];
-    return normalizeUnlockedGrades(Array.isArray(parsed) ? parsed : [], slots, currentGrade);
+    const savedArray = Array.isArray(parsed) ? parsed : [];
+    
+    // If the user has more grades saved than the default plan slots (e.g. leaf_grade1_12m grants [0,1]),
+    // we should trust the saved array because it was set by persistUnlockedGrades from an entitlement.
+    const actualSlots = savedArray.length > (slots as number) ? savedArray.length : slots;
+    return normalizeUnlockedGrades(savedArray, actualSlots, currentGrade);
   } catch {
     return normalizeUnlockedGrades([], slots, currentGrade);
   }
