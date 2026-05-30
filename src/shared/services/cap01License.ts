@@ -1,5 +1,6 @@
 import { BACKEND_API_BASE } from './webTotalBridge';
 import { getDeviceId } from '../utils/deviceFingerprint';
+import { persistUnlockedGrades, getAccessPlan } from '../services/accessControl';
 
 const APP_ID = 'app-cap-01';
 const CACHE_KEY = 'hhk_cap01_license_cache';
@@ -193,12 +194,23 @@ export async function clearCap01LicenseCache(): Promise<void> {
 }
 
 function persistLocalPlanFromEntitlement(cache: Cap01LicenseCache): void {
-  localStorage.setItem(STORAGE_KEYS.plan, mapStoragePlanId(cache.entitlement));
+  const planId = mapStoragePlanId(cache.entitlement);
+  localStorage.setItem(STORAGE_KEYS.plan, planId);
   localStorage.setItem(STORAGE_KEYS.status, 'active');
   localStorage.setItem(STORAGE_KEYS.source, 'license_key');
   localStorage.setItem(STORAGE_KEYS.license, cache.licenseKey);
   if (cache.entitlement.license.expiresAt) {
     localStorage.setItem(STORAGE_KEYS.expiry, cache.entitlement.license.expiresAt);
+  }
+
+  // CRITICAL: Also persist unlocked grades so all allowed grades are accessible
+  // With standard plan, getGradeSlotsForPlan respects 1-grade limit only for one-grade plans
+  // For leaf_grade1_12m which has 2 grades [0,1], we need to set the grades explicitly
+  const allowedGrades = normalizeAllowedGrades(cache.entitlement.allowedGrades);
+  if (allowedGrades.length > 0) {
+    // Get plan from storage (now set) to use proper slot logic
+    const plan = getAccessPlan();
+    persistUnlockedGrades(allowedGrades, plan);
   }
 }
 

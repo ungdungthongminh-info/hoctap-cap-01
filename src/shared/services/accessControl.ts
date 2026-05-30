@@ -249,11 +249,28 @@ export function getUnlockedGrades(currentGrade = getCurrentStudentGradeFallback(
 
 export function persistUnlockedGrades(grades: number[], plan: AccessPlan = getAccessPlan(), currentGrade = getCurrentStudentGradeFallback()): number[] {
   const slots = getGradeSlotsForPlan(plan);
+  // If entitlement explicitly grants multiple grades, unlock ALL of them — don't slice by slot limit
+  // For example, leaf_grade1_12m bundle grants allowedGrades=[0,1] meaning Lớp Lá + Lớp 1
+  // The slot limit should only restrict when user is selecting grades, not when product grants multiple
   const normalized = normalizeUnlockedGrades(grades, slots, currentGrade);
 
   if (slots === 'all') {
     localStorage.removeItem(UNLOCKED_GRADES_KEY);
     return [...ALL_GRADES];
+  }
+
+  // IMPORTANT FIX: When product grants multiple grades in allowedGrades (e.g. [0,1]),
+  // unlock ALL of them even if plan type is "one-grade plan".
+  // The one-grade plan slot limit applies to selection UI, not to product entitlements.
+  if (grades.length > 1 && normalized.length === 1) {
+    // Product grants multiple grades but slot limit sliced it - restore all entitlement grades
+    const productGrades = grades
+      .filter(g => ALL_GRADES.includes(g as (typeof ALL_GRADES)[number]))
+      .sort((a, b) => a - b);
+    if (productGrades.length > 0) {
+      localStorage.setItem(UNLOCKED_GRADES_KEY, JSON.stringify(productGrades));
+      return productGrades;
+    }
   }
 
   localStorage.setItem(UNLOCKED_GRADES_KEY, JSON.stringify(normalized));
