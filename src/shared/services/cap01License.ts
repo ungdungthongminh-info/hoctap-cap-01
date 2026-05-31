@@ -83,6 +83,7 @@ export function inferPlanFromProduct(productIdRaw: string): string {
   if (productId === 'prod-study-premium-lifetime') return 'premium_lifetime';
   // New subscription-style product IDs (leaf_grade1_12m, grade2_12m, grade3_12m, etc.)
   if (productId === 'leaf_grade1_12m') return 'standard_1year_1grade';
+  if (productId === 'bundle_3_grades_12m') return 'standard_1year_3grade';
   if (productId.includes('_12m') && !productId.startsWith('leaf') && /grade\d/.test(productId)) {
     return 'standard_1year_1grade';
   }
@@ -95,10 +96,16 @@ export function inferPlanFromProduct(productIdRaw: string): string {
 function mapStoragePlanId(entitlement: Cap01Entitlement): string {
   const rawPlan = String(entitlement?.plan || '').trim().toLowerCase();
   const fallbackPlan = inferPlanFromProduct(entitlement?.productId || '');
-  const plan = rawPlan || fallbackPlan;
-  if (['beta_year_299', 'cap01_beta_year_299', 'one_grade_year_299', 'standard_1year_1grade', 'standard_1year_1grade_month'].includes(plan)) return 'standard';
-  if (['standard_year', 'standard_month', 'standard_1year_3grade', 'standard_lifetime'].includes(plan)) return 'standard';
-  if (plan.startsWith('premium')) return 'premium';
+  
+  const resolvePlan = (p: string) => {
+    if (['beta_year_299', 'cap01_beta_year_299', 'one_grade_year_299', 'standard_1year_1grade', 'standard_1year_1grade_month'].includes(p)) return 'standard';
+    if (['standard_year', 'standard_month', 'standard_1year_3grade', 'standard_lifetime'].includes(p)) return 'standard';
+    if (p.startsWith('premium')) return 'premium';
+    return null;
+  };
+
+  const resolved = resolvePlan(rawPlan) || resolvePlan(fallbackPlan);
+  if (resolved) return resolved;
   return 'free';
 }
 
